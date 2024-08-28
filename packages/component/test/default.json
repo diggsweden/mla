@@ -1,0 +1,1037 @@
+{
+    "Version": "0.1",
+    "Theme": {
+        "Primary": "rgb(68, 105, 149)",
+        "CustomIconColorPicklist": [
+            {
+                "Name": "Färg 1",
+                "Color": "#D53302"
+            },
+            {
+                "Name": "Färg 2",
+                "Color": "#FCC560"
+            },
+            {
+                "Name": "Färg 3",
+                "Color": "#A0CBAD"
+            },
+            {
+                "Name": "Färg 4",
+                "Color": "#8FB1BE"
+            },
+            {
+                "Name": "Färg 5",
+                "Color": "#0C012A"
+            }
+        ],
+        "CustomContourColorPicklist": [
+            {
+                "Name": "Färg 1",
+                "Color": "#cc3300"
+            },
+            {
+                "Name": "Färg 2",
+                "Color": "#ff9966"
+            },
+            {
+                "Name": "Färg 3",
+                "Color": "#ffcc00"
+            },
+            {
+                "Name": "Färg 4",
+                "Color": "#99cc33"
+            },
+            {
+                "Name": "Färg 5",
+                "Color": "#339900"
+            }
+        ]
+    },
+    "Menu": {
+        "Start": {},
+        "Archive": {
+            "Import": true
+        }
+    },
+    "Display": [
+        {
+            "Id": "default",
+            "Name": "Standardvy",
+            "Rules": [
+                {
+                    "TypeId": "ET1",
+                    "PropertyTypeId": "ET1E5",
+                    "Equals": "M",
+                    "Icon": "man",
+                    "Color": "#542246"
+                },
+                {
+                    "TypeId": "ET1",
+                    "PropertyTypeId": "ET1E5",
+                    "Equals": "I",
+                    "Icon": "boy",
+                    "Color": "#542246"
+                },
+                {
+                    "TypeId": "ET1",
+                    "PropertyTypeId": "ET1E5",
+                    "Equals": "K",
+                    "Icon": "woman",
+                    "Color": "#542246"
+                },
+                {
+                    "TypeId": "ET1",
+                    "PropertyTypeId": "ET1E6",
+                    "Equals": "falsk identitet",
+                    "Icon": "supervisor_account",
+                    "Color": "#ff1414"
+                },
+                {
+                    "TypeId": "ET1",
+                    "PropertyTypeId": "ET1E6",
+                    "Equals": "avliden",
+                    "Icon": "person_off",
+                    "Color": "#807d7d"
+                }
+            ],
+            "Show": [
+                {
+                    "TypeId": "ET1",
+                    "Icon": "person_fill",
+                    "Color": "#54b946",
+                    "LabelLong": "{ET1E1}\n{ET1E2} {ET1E3}",
+                    "LabelShort": "{ET1E2} {ET1E3}"
+                },
+                {
+                    "TypeId": "ET2",
+                    "Icon": "outlined_apartment",
+                    "Color": "#58cee8",
+                    "LabelLong": "{ET2E1}\n{ET2E2}",
+                    "LabelShort": "{ET2E2}"
+                },
+                {
+                    "TypeId": "ET3",
+                    "Icon": "directions_car_fill",
+                    "Color": "#d41919",
+                    "LabelLong": "{ET3E2}\n{ET3E1}",
+                    "LabelShort": "{ET3E2} {ET3E1}"
+                },
+                {
+                    "TypeId": "ET4",
+                    "Icon": "outlined_map",
+                    "LabelLong": "{ET4E1}\n{ET4E3} {ET4E3}",
+                    "LabelShort": "{ET4E1}, {ET4E4}"
+                },
+                {
+                    "TypeId": "ET5",
+                    "Icon": "account_balance",
+                    "LabelLong": "{ET5E1}\n{ET5E2}",
+                    "LabelShort": "{ET5E1}, {ET5E2}",
+                    "Show": false
+                },
+                {
+                    "TypeId": "ET6",
+                    "Icon": "phone_iphone",
+                    "LabelLong": "{ET6E1}",
+                    "LabelShort": "{ET6E1}"
+                },
+                {
+                    "TypeId": "ET7",
+                    "Icon": "calendar_month",
+                    "LabelLong": "{ET7E1}",
+                    "LabelShort": "{ET7E2}",
+                    "LabelChart": "{ET7E1}\n{DateFrom}"
+                },
+                {
+                    "TypeId": "LT1",
+                    "LabelLong": "{LT1E1}",
+                    "LabelShort": "{LT1E1}"
+                },
+                {
+                    "TypeId": "LT2",
+                    "LabelLong": "{LT2E1}",
+                    "LabelShort": "{LT2E1}"
+                },
+                {
+                    "TypeId": "LT3",
+                    "LabelLong": "{LT3E1}",
+                    "LabelShort": "{LT3E1}"
+                },
+                {
+                    "TypeId": "LT4",
+                    "LabelLong": "{LT4E1}",
+                    "LabelShort": "{LT4E1}"
+                },
+                {
+                    "TypeId": "LT5",
+                    "LabelLong": "{LT5E1}",
+                    "LabelShort": "{LT5E1}"
+                },
+                {
+                    "TypeId": "LT6",
+                    "LabelLong": "{LT6E1}",
+                    "LabelShort": "{LT6E1}"
+                },
+                {
+                    "TypeId": "relation",
+                    "LabelLong": "{relationslank}",
+                    "LabelShort": "{relationslank}"
+                },
+                {
+                    "TypeId": "EV1G1",
+                    "LabelLong": "{EV1GP1} kronor",
+                    "LabelShort": "{EV1GP1} kr",
+                    "Color": "#4169e1"
+                },
+                {
+                    "TypeId": "EV1G2",
+                    "LabelLong": "{EV1GP21} kronor",
+                    "LabelShort": "{EV1GP21} kr",
+                    "Color": "#4169e1",
+                    "Show": false
+                }
+            ]
+        },
+        {
+            "Id": "hide",
+            "Name": "Kontovy",
+            "Show": [
+                {
+                    "TypeId": "ET7",
+                    "Show": false
+                },
+                {
+                    "TypeId": "ET5",
+                    "Show": true
+                },
+                {
+                    "TypeId": "EV1G1",
+                    "Show": false
+                },
+                {
+                    "TypeId": "EV1G2",
+                    "Show": true
+                }
+            ]
+        }
+    ],
+    "MapConfiguration": {
+        "Layers": [
+            {
+                "Url": "http://wc00506.rsvc.se/cgi-bin/qgis_mapserv.fcgi.exe?map=E:\\Install\\QGIS Server\\Data\\optofoto.qgs",
+                "Name": "Flygfoto",
+                "Layers": "mosaik",
+                "Format": "image/png",
+                "Transparent": true,
+                "Version": "1.1.1"
+            }
+        ],
+        "WmsMapLayers": [
+            {
+                "Url": "http://wc00506.rsvc.se/cgi-bin/qgis_mapserv.fcgi.exe?map=E:\\Install\\QGIS Server\\Data\\sweden-tiles.qgs",
+                "Name": "Open Street Maps",
+                "Layers": "sweden",
+                "Format": "image/png",
+                "Transparent": false,
+                "Version": "1.1.1"
+            },
+            {
+                "Url": "http://wc00506.rsvc.se/cgi-bin/qgis_mapserv.fcgi.exe?map=E:\\Install\\QGIS Server\\Data\\lm.qgs",
+                "Name": "Lantmäteriet",
+                "Layers": "topowebb",
+                "Format": "image/png",
+                "Transparent": false,
+                "Version": "1.1.1"
+            }
+        ]
+    },
+    "TimeAnalysis": {
+        "PhaseAnalysis": {
+            "EntityTypeId": "ET7",
+            "LinkTypeId": "LT6",
+            "LinkPropertyId": "LT6E1"
+        }
+    },
+    "Domain": {
+        "EntityTypes": [
+            {
+                "TypeId": "ET1",
+                "Name": "Person",
+                "Description": "En fysiker",
+                "MatchRules": [
+                    {
+                        "PropertyTypeId": "ET1E1",
+                        "Regex": "(\\d+)[-]?(\\d+)"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "ET1E1",
+                        "Name": "Personnummer",
+                        "Description": "Personnummret i 12 siffror",
+                        "FieldType": "String",
+                        "FieldValidation": "[0-9]+"
+                    },
+                    {
+                        "TypeId": "ET1E2",
+                        "Name": "Förnamn",
+                        "Description": "Personens förnamn",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET1E3",
+                        "Name": "Efternamn",
+                        "Description": "Personens efternamn",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET1E4",
+                        "Name": "Födelsedatum",
+                        "Description": "År månad dag när personed föddes",
+                        "FieldType": "Date"
+                    },
+                    {
+                        "TypeId": "ET1E5",
+                        "Name": "Kön",
+                        "Description": "Personens kön",
+                        "FieldType": "Select",
+                        "FieldOptions": [
+                            {
+                                "Value": "M",
+                                "Name": "Man"
+                            },
+                            {
+                                "Value": "K",
+                                "Name": "Kvinna"
+                            },
+                            {
+                                "Value": "0",
+                                "Name": "Okänt"
+                            }
+                        ]
+                    },
+                    {
+                        "TypeId": "ET1E6",
+                        "Name": "Status",
+                        "Description": "Personens ID status",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "ET2",
+                "Name": "Bolag",
+                "Description": "En juridisk person",
+                "MatchRules": [
+                    {
+                        "PropertyTypeId": "ET2E1",
+                        "Regex": "(?:16)?(\\d+)[-]?(\\d+)"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "ET2E1",
+                        "Name": "Organisationsnummer",
+                        "Description": "Den juridiska indEntityen",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET2E2",
+                        "Name": "Name",
+                        "Description": "Namnet på bolaget",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET2E3",
+                        "Name": "Firmatecknare",
+                        "Description": "Beskriver företagets firmatecknare",
+                        "FieldType": "Multiline"
+                    }
+                ]
+            },
+            {
+                "TypeId": "ET3",
+                "Name": "Bil",
+                "Description": "Ett färdmedel",
+                "LabelLong": "{ET3E2}\n{ET3E1}",
+                "LabelShort": "{ET3E2} {ET3E1}",
+                "Properties": [
+                    {
+                        "TypeId": "ET3E1",
+                        "Name": "Modell",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET3E2",
+                        "Name": "Registreringsskylt",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET3E3",
+                        "Name": "Color",
+                        "Description": "",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "ET4",
+                "Name": "Adress",
+                "Description": "En plats",
+                "Properties": [
+                    {
+                        "TypeId": "ET4E1",
+                        "Name": "Gatuadress 1",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET4E2",
+                        "Name": "Gatuadress 2",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET4E3",
+                        "Name": "Postnummer",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET4E4",
+                        "Name": "Ort",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET4E5",
+                        "Name": "Land",
+                        "Description": "",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "ET5",
+                "Name": "Konto",
+                "Description": "Bankkonto",
+                "Properties": [
+                    {
+                        "TypeId": "ET5E1",
+                        "Name": "Kontonummer",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET5E2",
+                        "Name": "Kontotyp",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET5E3",
+                        "Name": "Valuta",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET5E4",
+                        "Name": "Bank",
+                        "Description": "Banken som äger kontot",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "ET6",
+                "Name": "Mobiltelefon",
+                "Description": "Mobiltelefon",
+                "Properties": [
+                    {
+                        "TypeId": "ET6E1",
+                        "Name": "Nummer",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET6E2",
+                        "Name": "Modell",
+                        "Description": "",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "ET7",
+                "Name": "Händelse",
+                "Description": "Händelse",
+                "Properties": [
+                    {
+                        "TypeId": "ET7E1",
+                        "Name": "Rubrik",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "ET7E2",
+                        "Name": "Description",
+                        "Description": "",
+                        "FieldType": "String"
+                    }
+                ]
+            }
+        ],
+        "LinkTypes": [
+            {
+                "TypeId": "LT1",
+                "Name": "Engagemang",
+                "Description": "Personens relation till ett bolag",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "ET1",
+                        "ToEntityTypeId": "ET2"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT1E1",
+                        "Name": "Engagemangstyp",
+                        "Description": "Description av den relation personen har till bolaget, text styrelseledarmot",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "LT2",
+                "Name": "Familjerelation",
+                "Description": "Beskriver hur två personer inom en familj är relaterade till varandra",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "ET1",
+                        "ToEntityTypeId": "ET1"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT2E1",
+                        "Name": "Relation",
+                        "Description": "Beskrinving av relationen, text far, mor etc",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "LT3",
+                "Name": "Adressrelation",
+                "Description": "En adressrelation",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "ET4",
+                        "ToEntityTypeId": "ET1"
+                    },
+                    {
+                        "FromEntityTypeId": "ET4",
+                        "ToEntityTypeId": "ET2"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT3E1",
+                        "Name": "Typ",
+                        "Description": "Beskriver typen av relation",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "LT4",
+                "Name": "Ägs av",
+                "Description": "Förhållande",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "ET3",
+                        "ToEntityTypeId": "ET1"
+                    },
+                    {
+                        "FromEntityTypeId": "ET6",
+                        "ToEntityTypeId": "ET1"
+                    },
+                    {
+                        "FromEntityTypeId": "ET5",
+                        "ToEntityTypeId": "ET1"
+                    },
+                    {
+                        "FromEntityTypeId": "ET5",
+                        "ToEntityTypeId": "ET2"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT4E1",
+                        "Name": "Typ",
+                        "Description": "Beskriver typen av förhållande",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "LT5",
+                "Name": "Konto",
+                "Description": "Kontot hos banken",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "ET5",
+                        "ToEntityTypeId": "ET2"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT5E1",
+                        "Name": "Typ",
+                        "Description": "Beskriver typen av konto",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "LT6",
+                "Name": "Händelselänk",
+                "Description": "",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "ET7",
+                        "ToEntityTypeId": "ET1"
+                    },
+                    {
+                        "FromEntityTypeId": "ET7",
+                        "ToEntityTypeId": "ET2"
+                    },
+                    {
+                        "FromEntityTypeId": "ET7",
+                        "ToEntityTypeId": "ET3"
+                    },
+                    {
+                        "FromEntityTypeId": "ET7",
+                        "ToEntityTypeId": "ET4"
+                    },
+                    {
+                        "FromEntityTypeId": "ET7",
+                        "ToEntityTypeId": "ET5"
+                    },
+                    {
+                        "FromEntityTypeId": "ET7",
+                        "ToEntityTypeId": "ET6"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT6E1",
+                        "Name": "Roll",
+                        "Description": "Beskriver vilken roll relationen har",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "relation",
+                "Name": "Relation",
+                "Description": "En generisk relation",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "*",
+                        "ToEntityTypeId": "*"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "relationslank",
+                        "Name": "Relation",
+                        "Description": "Beskriver relationen",
+                        "FieldType": "String"
+                    }
+                ]
+            }
+        ],
+        "EventTypes": [
+            {
+                "TypeId": "EV1",
+                "Name": "Transaktion",
+                "Properties": [
+                    {
+                        "TypeId": "EV1P1",
+                        "Name": "Belopp",
+                        "Description": "Belopp i SEK",
+                        "FieldType": "number"
+                    },
+                    {
+                        "TypeId": "EV1P2",
+                        "Name": "Från",
+                        "Description": "Från personnummer / organisation",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "EV1P3",
+                        "Name": "Till",
+                        "Description": "Till personummer / organisation",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "EV1P4",
+                        "Name": "Avser",
+                        "Description": "Typ av överföring",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "EV1P5",
+                        "Name": "Från konto",
+                        "Description": "Från konto",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "EV1P6",
+                        "Name": "Till konto",
+                        "Description": "Till konto",
+                        "FieldType": "String"
+                    }
+                ],
+                "Generate": [
+                    {
+                        "TypeId": "EV1G1",
+                        "Properties": [
+                            {
+                                "TypeId": "EV1GP1",
+                                "Action": "sum",
+                                "Name": "Summa",
+                                "FieldType": "Number",
+                                "Description": "Det totala beloppet av transaktionerna",
+                                "TargetPropertyTypeId": "EV1P1"
+                            },
+                            {
+                                "TypeId": "EV1GP2",
+                                "Action": "count",
+                                "Name": "Antal",
+                                "FieldType": "Number",
+                                "Description": "Det totala antalet transaktioner"
+                            }
+                        ],
+                        "LinkFrom": [
+                            {
+                                "TypeId": "ET1",
+                                "PropertyTypeId": "EV1P2",
+                                "EntityPropertyTypeId": "ET1E1"
+                            },
+                            {
+                                "TypeId": "ET2",
+                                "PropertyTypeId": "EV1P2",
+                                "EntityPropertyTypeId": "ET2E1"
+                            }
+                        ],
+                        "LinkTo": [
+                            {
+                                "TypeId": "ET1",
+                                "PropertyTypeId": "EV1P3",
+                                "EntityPropertyTypeId": "ET1E1"
+                            },
+                            {
+                                "TypeId": "ET2",
+                                "PropertyTypeId": "EV1P3",
+                                "EntityPropertyTypeId": "ET2E1"
+                            }
+                        ]
+                    },
+                    {
+                        "TypeId": "EV1G2",
+                        "Properties": [
+                            {
+                                "TypeId": "EV1GP21",
+                                "Action": "sum",
+                                "Name": "Summa",
+                                "FieldType": "Number",
+                                "Description": "Det totala beloppet av transaktionerna",
+                                "TargetPropertyTypeId": "EV1P1"
+                            },
+                            {
+                                "TypeId": "EV1GP22",
+                                "Action": "count",
+                                "Name": "Antal",
+                                "FieldType": "Number",
+                                "Description": "Det totala antalet transaktioner"
+                            }
+                        ],
+                        "LinkFrom": [
+                            {
+                                "TypeId": "ET5",
+                                "PropertyTypeId": "EV1P5",
+                                "EntityPropertyTypeId": "ET5E1"
+                            }
+                        ],
+                        "LinkTo": [
+                            {
+                                "TypeId": "ET5",
+                                "PropertyTypeId": "EV1P6",
+                                "EntityPropertyTypeId": "ET5E1"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Workflows": [
+        {
+            "Id": "testdata",
+            "Name": "Ladda testdata",
+            "ShowProgress": true,
+            "Actions": [
+                {
+                    "Id": "1",
+                    "Name": "Hämtar Ärende",
+                    "Description": "Testar att hämta lite data som säkert går bra",
+                    "ActionType": "RunQuery",
+                    "ActionParameters": {
+                        "QueryId": "ST1-test",
+                        "InputType": "none"
+                    }
+                },
+                {
+                    "Id": "5",
+                    "ActionType": "Add",
+                    "ActionParameters": {
+                        "Filters": []
+                    }
+                },
+                {
+                    "Id": "6",
+                    "ActionType": "ChangeLayout",
+                    "ActionParameters": {
+                        "LayoutId": "UD"
+                    }
+                },
+                {
+                    "Id": "7",
+                    "ActionType": "Delay",
+                    "ActionParameters": {
+                        "ms": 1500
+                    }
+                },
+                {
+                    "Id": "8",
+                    "ActionType": "CloseDialog"
+                }
+            ]
+        }
+    ],
+    "Integrations": {
+        "Search": [
+            {
+                "Id": "ST1",
+                "Name": "Sök person",
+                "Description": "En tjänst för att söka efter en person med personnummer",
+                "Icon": "outlined_person_search",
+                "Url": "https://fakeurl.skatteverket.se/SokPerson",
+                "Parameters": {
+                    "Form": {
+                        "Fields": [
+                            {
+                                "TypeId": "ST1E1",
+                                "Name": "Personnummer",
+                                "FieldValidation": "[0-9]+",
+                                "FieldType": "String"
+                            },
+                            {
+                                "TypeId": "ST1E2",
+                                "Name": "Adress",
+                                "FieldType": "String"
+                            },
+                            {
+                                "TypeId": "ST1E4",
+                                "Name": "Födelsedatum",
+                                "FieldType": "Date"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "Id": "STTest",
+                "Name": "Sök demodata",
+                "Description": "En tjänst som hämtar lite data",
+                "Icon": "search",
+                "Url": "https://fakeurl.skatteverket.se/HamtaTest",
+                "Parameters": {
+                    "Form": {
+                        "Fields": []
+                    }
+                }
+            },
+            {
+                "Id": "ST4",
+                "Name": "Sök bolag",
+                "Icon": "domain",
+                "Description": "En tjänst för att söka efter ett bolag med orgnr",
+                "Url": "https://fakeurl.skatteverket.se/SokOrganisation",
+                "Parameters": {
+                    "Form": {
+                        "Fields": [
+                            {
+                                "TypeId": "ET2E1",
+                                "Name": "Organisationsnnummer",
+                                "FieldType": "String"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "Id": "ST8",
+                "Name": "Sök i fil",
+                "Icon": "outlined_find_in_page",
+                "Description": "En tjänst för att skicka en fil till en tjänst",
+                "Url": "https://fakeurl.skatteverket.se/SokPerson",
+                "Parameters": {
+                    "Form": {
+                        "Fields": [
+                            {
+                                "TypeId": "Dokument",
+                                "Name": "Fil för uppladdning",
+                                "FieldType": "File"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "Id": "ST1-test",
+                "Name": "Personuppgifter",
+                "Description": "En tjänst för att hämta personuppgifter för valda personer",
+                "Icon": "outlined_person",
+                "Url": "https://fakeurl.skatteverket.se/TestData",
+                "Parameters": {
+                    "EntityTypes": [
+                        {
+                            "TypeId": "ET1",
+                            "Min": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "Id": "ST_Map_1",
+                "Name": "Adressuppgifter",
+                "Icon": "outlined_home",
+                "Description": "En tjänst för att hämta adressuppgifter",
+                "Parameters": {
+                    "GeoData": true
+                },
+                "RequestFunction": "global_geocode"
+            },
+            {
+                "Id": "ST_Map_2",
+                "Name": "Position",
+                "Icon": "pin_drop",
+                "Description": "Hämtar geografisk position för en adress",
+                "Parameters": {
+                    "EntityTypes": [
+                        {
+                            "TypeId": "ET4",
+                            "Min": 1
+                        }
+                    ]
+                },
+                "RequestFunction": "global_reverse_geocode"
+            },
+            {
+                "Id": "ST3",
+                "Name": "Familjerelationer",
+                "Icon": "outlined_groups",
+                "Description": "En tjänst för att hämta familjerelationer för en person",
+                "Url": "https://fakeurl.skatteverket.se/SokRelation",
+                "Parameters": {
+                    "EntityTypes": [
+                        {
+                            "TypeId": "ET1",
+                            "Min": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "Id": "ST5",
+                "Name": "Bolagsengagemang",
+                "Icon": "corporate_fare",
+                "Description": "En tjänst för att hämta valda personer bolagsengagemang",
+                "Url": "https://fakeurl.skatteverket.se/SokBolagsEngagemang",
+                "Parameters": {
+                    "EntityTypes": [
+                        {
+                            "TypeId": "ET1",
+                            "Min": 1,
+                            "Max": 3
+                        }
+                    ]
+                }
+            },
+            {
+                "Id": "ST6",
+                "Name": "Funktionärer",
+                "Description": "En tjänst för att hämta funktionärer för valda bolag",
+                "Icon": "outlined_lan",
+                "Url": "https://fakeurl.skatteverket.se/SokBolagsEngagemang",
+                "Parameters": {
+                    "EntityTypes": [
+                        {
+                            "TypeId": "ET2",
+                            "Min": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "Id": "ST7",
+                "Name": "Konton",
+                "Description": "En tjänst för att hämta konton för bolag eller personer",
+                "Icon": "account_balance",
+                "Url": "https://fakeurl.skatteverket.se/SokKonton",
+                "Parameters": {
+                    "EntityConfiguration": "OR",
+                    "EntityTypes": [
+                        {
+                            "TypeId": "ET2",
+                            "Min": 1,
+                            "Max": 1
+                        },
+                        {
+                            "TypeId": "ET1",
+                            "Min": 1,
+                            "Max": 1
+                        }
+                    ]
+                }
+            }
+        ],
+        "Import": [
+            {
+                "Id": "import-transaction",
+                "Name": "Transaktionsimport",
+                "Beskrinving": "Importerar transaktionsfil enligt iso:20022",
+                "TransformFunction": "global_transaction_import"
+            },
+            {
+                "Id": "import-usis",
+                "Name": "csv import",
+                "Beskrinving": "Importerar usis csv",
+                "TransformFunction": "global_usis_import"
+            }
+        ],
+        "Save": [
+            {
+                "Id": "String",
+                "Name": "String",
+                "Description": "String",
+                "Url": "String"
+            }
+        ]
+    }
+}

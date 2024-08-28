@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.css": "postcss"
+    },
+    "editor.tabSize": 2,
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+    "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+    "eslint.experimental.useFlatConfig": true
+}

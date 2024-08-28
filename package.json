@@ -1,0 +1,9 @@
+{
+  "name": "mla-monorepo",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "pnpm --filter ./apps/web run dev"
+  },
+  "packageManager": "pnpm@9.7.1"
+}
+  

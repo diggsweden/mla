@@ -1,0 +1,19 @@
+{
+	"Entities": [
+		{
+			"Id": "16550101010101",
+			"TypeId": "ET2",
+			"SourceSystemId": "Basinfo",
+			"Properties": [
+				{
+					"TypeId": "ET2E1",
+					"Value": "556426-1863"
+				},
+				{
+					"TypeId": "ET2E2",
+					"Value": "Fermenta AB"
+				}
+			]
+		}
+	]
+}

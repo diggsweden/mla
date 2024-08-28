@@ -1,0 +1,111 @@
+{
+  "Entities": [
+    {
+      "Id": "652d3231-fbf2-4eb3-b3f7-9c789eb8e65e",
+      "TypeId": "ET1",
+      "SourceSystemId": "Modifierad",
+      "Properties": [
+        {
+          "TypeId": "ET1E1",
+          "Value": "19923123"
+        },
+        {
+          "TypeId": "ET1E2",
+          "Value": "Berra"
+        },
+        {
+          "TypeId": "ET1E3",
+          "Value": "Karlsson"
+        }
+      ]
+    },
+    {
+      "Id": "a4af157b-1c73-4be0-abe9-f3e70f54b806",
+      "TypeId": "ET1",
+      "SourceSystemId": "Modifierad",
+      "Properties": [
+        {
+          "TypeId": "ET1E1",
+          "Value": "19123541232"
+        },
+        {
+          "TypeId": "ET1E2",
+          "Value": "Gurrra"
+        },
+        {
+          "TypeId": "ET1E3",
+          "Value": "Jonsson"
+        }
+      ]
+    },
+    {
+      "Id": "eb0d695c-7dd4-4556-a3ac-e239665e61f1",
+      "TypeId": "ET1",
+      "SourceSystemId": "Modifierad",
+      "Properties": [
+        {
+          "TypeId": "ET1E1",
+          "Value": "1283812311"
+        },
+        {
+          "TypeId": "ET1E2",
+          "Value": "Hanna"
+        },
+        {
+          "TypeId": "ET1E3",
+          "Value": "Jonsson"
+        }
+      ]
+    }
+  ],
+  "Links": [
+    {
+      "Id": "c5032ea7-803c-47c3-b9e8-b7fb5ae03aa1",
+      "TypeId": "LT2",
+      "SourceSystemId": "Modifierad",
+      "FromEntityId": "191212121212",
+      "FromEntityTypeId": "ET1",
+      "ToEntityId": "652d3231-fbf2-4eb3-b3f7-9c789eb8e65e",
+      "ToEntityTypeId": "ET1",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT2E1",
+          "Value": "Förälder"
+        }
+      ]
+    },
+    {
+      "Id": "a050fd9a-d9f4-44f2-a0bc-e4f4f56bc769",
+      "TypeId": "LT2",
+      "SourceSystemId": "Modifierad",
+      "FromEntityId": "191212121212",
+      "FromEntityTypeId": "ET1",
+      "ToEntityId": "a4af157b-1c73-4be0-abe9-f3e70f54b806",
+      "ToEntityTypeId": "ET1",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT2E1",
+          "Value": "Förälder"
+        }
+      ]
+    },
+    {
+      "Id": "a12a7d0e-5565-4284-8801-768c1b855f0f",
+      "TypeId": "LT2",
+      "SourceSystemId": "Modifierad",
+      "FromEntityId": "a4af157b-1c73-4be0-abe9-f3e70f54b806",
+      "FromEntityTypeId": "ET1",
+      "ToEntityId": "eb0d695c-7dd4-4556-a3ac-e239665e61f1",
+      "ToEntityTypeId": "ET1",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT2E1",
+          "Value": "Förälder"
+        }
+      ]
+    }
+  ]
+}

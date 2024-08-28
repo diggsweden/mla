@@ -1,0 +1,142 @@
+{
+	"Entities": [
+		{
+			"Id": "191212121212",
+			"TypeId": "ET1",
+			"SourceSystemId": "Navet",
+			"Properties": [
+				{
+					"TypeId": "ET1E1",
+					"Value": "1212121212"
+				},
+				{
+					"TypeId": "ET1E2",
+					"Value": "Anders"
+				},
+				{
+					"TypeId": "ET1E3",
+					"Value": "Karlsson"
+				}
+			]
+		},
+		{
+			"Id": "ADR1",
+			"TypeId": "ET4",
+			"SourceSystemId": "Navet",
+			"Coordinates": {
+				"lat": 57.69783992572588,
+				"lng": 11.94753472213756
+			},
+			"Properties": [
+				{
+					"TypeId": "ET4E1",
+					"Value": "Fjärde Långgatan 11"
+				},
+				{
+					"TypeId": "ET4E3",
+					"Value": "413 28"
+				},
+				{
+					"TypeId": "ET4E4",
+					"Value": "Göteborg"
+				}
+			]
+		},
+		{
+			"Id": "ADR2",
+			"TypeId": "ET4",
+			"SourceSystemId": "Navet",
+			"Coordinates": {
+				"lat": 57.71988411300851,
+				"lng": 12.006280860668483
+			},
+			"Properties": [
+				{
+					"TypeId": "ET4E1",
+					"Value": "Svangatan 8"
+				},
+				{
+					"TypeId": "ET4E3",
+					"Value": "416 68"
+				},
+				{
+					"TypeId": "ET4E4",
+					"Value": "Göteborg"
+				}
+			]
+		},
+		{
+			"Id": "JGH423",
+			"TypeId": "ET3",
+			"SourceSystemId": "Bilregistret",
+			"DateFrom": "2022-01-01",
+			"Properties": [
+				{
+					"TypeId": "ET3E1",
+					"Value": "Toyota Prius"
+				},
+				{
+					"TypeId": "ET3E2",
+					"Value": "JGH423"
+				},
+				{
+					"TypeId": "ET3E3",
+					"Value": "Röd"
+				}
+			]
+		}
+
+	],
+	"Links": [
+		{
+			"Id": "L1",
+			"TypeId": "LT3",
+			"DateFrom": "2013-04-30",
+			"DateTo": "2023-11-22",
+			"SourceSystemId": "Navet",
+			"FromEntityTypeId": "ET4",
+			"FromEntityId": "ADR1",
+			"ToEntityTypeId": "ET1",
+			"ToEntityId": "191212121212",
+			"Properties": [
+				{
+					"TypeId": "LT3E1",
+					"Value": "Folkbokföringsadress"
+				}
+			]
+		},
+		{
+			"Id": "L11",
+			"TypeId": "LT3",
+			"DateFrom": "2012-03-03",
+			"DateTo": "2013-04-29",
+			"SourceSystemId": "Navet",
+			"FromEntityTypeId": "ET4",
+			"FromEntityId": "ADR2",
+			"ToEntityTypeId": "ET1",
+			"ToEntityId": "191212121212",
+			"Properties": [
+				{
+					"TypeId": "LT3E1",
+					"Value": "Folkbokföringsadress"
+				}
+			]
+		},
+		{
+			"Id": "L2",
+			"TypeId": "LT4",
+			"SourceSystemId": "Bilregistret",
+			"FromEntityTypeId": "ET3",
+			"FromEntityId": "JGH423",
+			"ToEntityTypeId": "ET1",
+			"ToEntityId": "191212121212",
+			"Properties": [
+				{
+					"TypeId": "LT4E1",
+					"Value": "Ägare"
+				}
+			]
+		}				
+	],
+	"ErrorMessage": "Alla data som hämtas är fejkad"
+}

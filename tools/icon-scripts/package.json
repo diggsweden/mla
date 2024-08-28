@@ -1,0 +1,15 @@
+{
+  "name": "@repo/icon-scripts",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "icon-loader.js",
+  "scripts": {
+    "create-icons-json": "node icon-loader.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@material-symbols/svg-400": "^0.22.2"
+  }
+}

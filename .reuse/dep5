@@ -1,0 +1,89 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: /*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/desktop/images/*.png
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/desktop/images/*.ico
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/desktop/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/web/public/*.ico
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/web/public/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/web/public/config/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/web/src/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/web/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: tools/icon-scripts/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: tools/icon-scripts/custom_icons/*.svg
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/component/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/config-tailwind/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/mla/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/mla/src/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/mla/src/*.svg
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/config-typescript/*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/mla/.babelrc
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/mla/tsconfig.tsbuildinfo
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: .vscode/settings.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: package.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: packages/component/tsconfig.tsbuildinfo
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0

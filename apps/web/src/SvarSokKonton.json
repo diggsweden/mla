@@ -1,0 +1,94 @@
+{
+  "Events": [
+    {
+      "TypeId": "EV1",
+      "Date": "2024-04-06 12:33",
+      "Properties": [
+        {
+          "TypeId": "EV1P1",
+          "Value": 290
+        },
+        {
+          "TypeId": "EV1P2",
+          "Value": "1212121212"
+        },
+        {
+          "TypeId": "EV1P3",
+          "Value": "1283812311"
+        }
+      ]
+    },    
+    {
+      "TypeId": "EV1",
+      "Date": "2024-05-03 13:33",
+      "Properties": [
+        {
+          "TypeId": "EV1P1",
+          "Value": 300
+        },
+        {
+          "TypeId": "EV1P2",
+          "Value": "1283812311"
+        },
+        {
+          "TypeId": "EV1P3",
+          "Value": "1212121212"
+        }
+      ]
+    },
+    {
+      "TypeId": "EV1",
+      "Date": "2024-05-03 14:33",
+      "Properties": [
+        {
+          "TypeId": "EV1P1",
+          "Value": 420
+        },
+        {
+          "TypeId": "EV1P2",
+          "Value": "1212121212"
+        },
+        {
+          "TypeId": "EV1P3",
+          "Value": "1283812311"
+        }
+      ]
+    },
+    {
+      "TypeId": "EV1",
+      "Date": "2024-05-03 14:33",
+      "Properties": [
+        {
+          "TypeId": "EV1P1",
+          "Value": 360
+        },
+        {
+          "TypeId": "EV1P2",
+          "Value": "1283812311"
+        },
+        {
+          "TypeId": "EV1P3",
+          "Value": "1212121212"
+        }
+      ]
+    },
+    {
+      "TypeId": "EV1",
+      "Date": "2024-05-03 14:33",
+      "Properties": [
+        {
+          "TypeId": "EV1P1",
+          "Value": 800
+        },
+        {
+          "TypeId": "EV1P2",
+          "Value": "1283812311"
+        },
+        {
+          "TypeId": "EV1P3",
+          "Value": "19923123"
+        }
+      ]
+    }
+  ]
+}

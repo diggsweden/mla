@@ -1,0 +1,36 @@
+{
+  "name": "@repo/web-demo",
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@repo/mla": "workspace:^",
+    "http-request-mock": "^1.8.19",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "scripts": {
+    "dev": "vite --open",
+    "preview": "vite preview --open",
+    "build": "tsc && vite build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version"
+    ]
+  },
+  "devDependencies": {
+    "@repo/tailwind-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "@types/wicg-file-system-access": "^2023.10.5",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.11",
+    "vite-plugin-commonjs": "^0.10.1"
+  }
+}

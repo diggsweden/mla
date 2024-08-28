@@ -1,0 +1,12 @@
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: CC0-1.0
+
+@import 'leaflet/dist/leaflet.css';
+@import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
+@import "fullscreen/Control.FullScreen.css";
+
+.leaflet-tooltip-pane > .leaflet-tooltip {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 2px;
+}

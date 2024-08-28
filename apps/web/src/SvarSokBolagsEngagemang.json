@@ -1,0 +1,68 @@
+{
+	"Entities": [
+		{
+			"Id": "165501010101",
+			"TypeId": "ET2",
+			"SourceSystemId": "Bolagsverket",
+			"Properties": [
+				{
+					"TypeId": "ET2E1",
+					"Value": "550101-0101"
+				},
+				{
+					"TypeId": "ET2E2",
+					"Value": "Fermenta AB"
+				}
+			]
+		},
+		{
+			"Id": "165512121212",
+			"TypeId": "ET2",
+			"SourceSystemId": "Bolagsverket",
+			"Properties": [
+				{
+					"TypeId": "ET2E1",
+					"Value": "551212-1212"
+				},
+				{
+					"TypeId": "ET2E2",
+					"Value": "Lur och frej AB"
+				}
+			]
+		}
+	],
+	"Links": [
+		{
+			"Id": "L1",
+			"TypeId": "LT1",
+			"SourceSystemId": "Bolagsverket",
+			"FromEntityId": "191212121212",
+			"FromEntityTypeId": "ET1",
+			"ToEntityId": "165501010101",
+			"ToEntityTypeId": "ET2",
+			"Direction": "TO",
+			"Properties": [
+				{
+					"TypeId": "LT1E1",
+					"Value": "Styrelseledarmot"
+				}
+			]
+		},
+		{
+			"Id": "L2",
+			"TypeId": "LT1",
+			"SourceSystemId": "Bolagsverket",
+			"FromEntityId": "191212121212",
+			"FromEntityTypeId": "ET1",
+			"ToEntityId": "165512121212",
+			"ToEntityTypeId": "ET2",
+			"Direction": "TO",
+			"Properties": [
+				{
+					"TypeId": "LT1E1",
+					"Value": "Suppleant"
+				}
+			]
+		}
+	]
+}
