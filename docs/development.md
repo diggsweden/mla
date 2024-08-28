@@ -4,7 +4,7 @@
  SPDX-License-Identifier: CC0-1.0
 -->
 
-## DEMO
+# DEMO
 
 MLA kan startas med olika konfigurationer som ger användaren tillgång till olika verktyg.
 

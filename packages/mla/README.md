@@ -51,6 +51,6 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-###
+### Electron
 Electron. Larvar sig med proxy. Använd:
 npx cross-env ELECTRON_GET_USE_PROXY=true GLOBAL_AGENT_HTTPS_PROXY=http://klientproxy-skv.rsv.se:8080 npm install
