@@ -6,7 +6,7 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: "0.3"
+publiccodeYmlVersion: "0.4.0"
 categories:
   - collaboration
 description:
