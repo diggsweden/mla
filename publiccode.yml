@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# This repository adheres to the publiccode.yml standard by including this
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: "0.3"
+categories:
+  - collaboration
+description:
+  en:
+    features:
+      - Create network analysis charts
+      - Visual representation of relationships through graphs
+      - Custom information model
+      - Crime Scripting
+      - Geo Positioning using maps
+      - Retrive information from external sources      
+      - Customizable
+    genericName: MLA
+    longDescription: |
+      MLA is a web component that lets users create network analysis charts in a fast and intuitive way. 
+      It has a config file that lets the user configure it's own information model, create rules,
+      set theme colors, connect it to existing information sources and alot more.
+
+      MLA can run as part of a existing system, as a web application or as a desktop application. 
+      It has no dependencies and works in a air-gaped environment.  
+    shortDescription: Network analysis application that supports Crime Scripting
+developmentStatus: stable
+legal:
+  license: CC0-1.0
+localisation:
+  availableLanguages:
+    - sv
+  localisationReady: false
+maintenance:
+  contacts:
+    - name: Whiteflight@skatteverket.se
+  type: internal
+name: MLA
+platforms:
+  - web
+  - windows
+releaseDate: "2024-09-01"
+softwareType: "library"
+softwareVersion: "1.0"
+url: "https://github.com/diggsweden/mla.git"
+roadmap: "https://github.com/diggsweden/mla#roadmap"
