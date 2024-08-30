@@ -51,7 +51,7 @@ jobs:
       # Bump package version
       # Use tag latest
       - name: Bump release version
-        if: startsWith(github.event.inputs.release-type, 'pre') != true
+        if: startsWith(github.event.inputs.release-type, "pre") != true
         run: |
           echo "NEW_VERSION=$(npm --no-git-tag-version version $RELEASE_TYPE)" >> $GITHUB_ENV
           echo "RELEASE_TAG=latest" >> $GITHUB_ENV
@@ -61,7 +61,7 @@ jobs:
       # Bump package pre-release version
       # Use tag beta for pre-release versions
       - name: Bump pre-release version
-        if: startsWith(github.event.inputs.release-type, 'pre')
+        if: startsWith(github.event.inputs.release-type, "pre")
         run: |
           echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version $RELEASE_TYPE
           echo "RELEASE_TAG=beta" >> $GITHUB_ENV
