@@ -28,6 +28,7 @@ jobs:
           node-version-file: ".nvmrc"
           cache: pnpm
           registry-url: https://registry.npmjs.org
+          scope: '@diggsweden'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile          
