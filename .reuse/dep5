@@ -1,6 +1,18 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
+Files: .vscode/settings.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
 Files: /*.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: package.json
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
+Files: apps/desktop/*.json
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 
@@ -12,7 +24,7 @@ Files: apps/desktop/images/*.ico
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 
-Files: apps/desktop/*.json
+Files: apps/web/*.json
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 
@@ -32,7 +44,7 @@ Files: apps/web/src/*.json
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 
-Files: apps/web/*.json
+Files: assets/*.png
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 
@@ -64,10 +76,6 @@ Files: packages/mla/src/*.svg
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 
-Files: packages/config-typescript/*.json
-Copyright: Skatteverket - Swedish Tax Agency
-License: CC0-1.0
-
 Files: packages/mla/.babelrc
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
@@ -76,11 +84,7 @@ Files: packages/mla/tsconfig.tsbuildinfo
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 
-Files: .vscode/settings.json
-Copyright: Skatteverket - Swedish Tax Agency
-License: CC0-1.0
-
-Files: package.json
+Files: packages/config-typescript/*.json
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 

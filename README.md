@@ -62,9 +62,6 @@ To build the packages, follow these steps:
 ```shell
 # Open a terminal (Command Prompt or PowerShell for Windows, Terminal for macOS or Linux)
 
-# Ensure Git is installed
-# Visit https://git-scm.com to download and install console Git if not already installed
-
 # Clone this repository
 $ git clone https://github.com/diggsweden/mla
 
@@ -72,10 +69,11 @@ $ git clone https://github.com/diggsweden/mla
 $ cd mla
 
 # Install dependencies
-$ npm install
+$ npm install -g pnpm
+$ pnpm install
 
-# Run the app
-$ npm start
+# Run the demo app
+$ pnpm run dev
 ```
 
 ## Documentation 
@@ -91,5 +89,3 @@ CODE_OF_CONDUCT.md template:
 
 Copyright: [Contributor Covenant](https://www.contributor-covenant.org/)
 License: [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
-
----
