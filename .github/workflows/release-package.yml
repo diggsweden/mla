@@ -4,10 +4,6 @@
 
 ---
 name: Release components package
-description: Publishes a NPM package using PNPM
-branding:
-  icon: upload-cloud
-  color: green
 
 on:
   workflow_dispatch:
