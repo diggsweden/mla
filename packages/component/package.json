@@ -1,7 +1,6 @@
 {
-  "name": "@repo/mla-component",
+  "name": "webcomponent-mla",
   "publishConfig": {
-    "name": "mla-component",
     "registry": "https://npm.pkg.github.com"
   },  
   "version": "1.0.0",
