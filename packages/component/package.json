@@ -1,6 +1,7 @@
 {
   "name": "@repo/mla-component",
   "publishConfig": {
+    "name": "mla-component",
     "registry": "https://npm.pkg.github.com"
   },  
   "version": "1.0.0",
