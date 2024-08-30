@@ -1,58 +1,82 @@
 {
   "Entities": [
     {
-      "Id": "652d3231-fbf2-4eb3-b3f7-9c789eb8e65e",
-      "TypeId": "ET1",
+      "Id": "this-will-be-mapped",
+      "InternalId": "6258a2e9-1918-4af3-8a00-000000000000",
+      "TypeId": "person",
       "SourceSystemId": "Modifierad",
       "Properties": [
         {
-          "TypeId": "ET1E1",
+          "TypeId": "personE1",
+          "Value": "191212121212"
+        },
+        {
+          "TypeId": "personE2",
+          "Value": "Anders"
+        },
+        {
+          "TypeId": "personE3",
+          "Value": "Karlsson"
+        },
+        {
+          "TypeId": "personE5",
+          "Value": "M"
+        }
+      ]
+    },
+    {
+      "Id": "652d3231-fbf2-4eb3-b3f7-9c789eb8e65e",
+      "TypeId": "person",
+      "SourceSystemId": "Modifierad",
+      "Properties": [
+        {
+          "TypeId": "personE1",
           "Value": "19923123"
         },
         {
-          "TypeId": "ET1E2",
+          "TypeId": "personE2",
           "Value": "Berra"
         },
         {
-          "TypeId": "ET1E3",
-          "Value": "Karlsson"
+          "TypeId": "personE3",
+          "Value": "Andersson"
         }
       ]
     },
     {
       "Id": "a4af157b-1c73-4be0-abe9-f3e70f54b806",
-      "TypeId": "ET1",
+      "TypeId": "person",
       "SourceSystemId": "Modifierad",
       "Properties": [
         {
-          "TypeId": "ET1E1",
+          "TypeId": "personE1",
           "Value": "19123541232"
         },
         {
-          "TypeId": "ET1E2",
+          "TypeId": "personE2",
           "Value": "Gurrra"
         },
         {
-          "TypeId": "ET1E3",
+          "TypeId": "personE3",
           "Value": "Jonsson"
         }
       ]
     },
     {
       "Id": "eb0d695c-7dd4-4556-a3ac-e239665e61f1",
-      "TypeId": "ET1",
+      "TypeId": "person",
       "SourceSystemId": "Modifierad",
       "Properties": [
         {
-          "TypeId": "ET1E1",
+          "TypeId": "personE1",
           "Value": "1283812311"
         },
         {
-          "TypeId": "ET1E2",
+          "TypeId": "personE2",
           "Value": "Hanna"
         },
         {
-          "TypeId": "ET1E3",
+          "TypeId": "personE3",
           "Value": "Jonsson"
         }
       ]
@@ -63,10 +87,10 @@
       "Id": "c5032ea7-803c-47c3-b9e8-b7fb5ae03aa1",
       "TypeId": "LT2",
       "SourceSystemId": "Modifierad",
-      "FromEntityId": "191212121212",
-      "FromEntityTypeId": "ET1",
+      "FromEntityId": "6258a2e9-1918-4af3-8a00-000000000000",
+      "FromEntityTypeId": "person",
       "ToEntityId": "652d3231-fbf2-4eb3-b3f7-9c789eb8e65e",
-      "ToEntityTypeId": "ET1",
+      "ToEntityTypeId": "person",
       "Direction": "FROM",
       "Properties": [
         {
@@ -79,10 +103,10 @@
       "Id": "a050fd9a-d9f4-44f2-a0bc-e4f4f56bc769",
       "TypeId": "LT2",
       "SourceSystemId": "Modifierad",
-      "FromEntityId": "191212121212",
-      "FromEntityTypeId": "ET1",
+      "FromEntityId": "6258a2e9-1918-4af3-8a00-000000000000",
+      "FromEntityTypeId": "person",
       "ToEntityId": "a4af157b-1c73-4be0-abe9-f3e70f54b806",
-      "ToEntityTypeId": "ET1",
+      "ToEntityTypeId": "person",
       "Direction": "FROM",
       "Properties": [
         {
@@ -96,9 +120,9 @@
       "TypeId": "LT2",
       "SourceSystemId": "Modifierad",
       "FromEntityId": "a4af157b-1c73-4be0-abe9-f3e70f54b806",
-      "FromEntityTypeId": "ET1",
+      "FromEntityTypeId": "person",
       "ToEntityId": "eb0d695c-7dd4-4556-a3ac-e239665e61f1",
-      "ToEntityTypeId": "ET1",
+      "ToEntityTypeId": "person",
       "Direction": "FROM",
       "Properties": [
         {

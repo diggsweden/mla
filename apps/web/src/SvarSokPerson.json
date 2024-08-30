@@ -2,26 +2,26 @@
 	"Entities": [
 		{
 			"Id": "191212121212",
-			"TypeId": "ET1",
+			"TypeId": "person",
 			"SourceSystemId": "Navet",
 			"Properties": [
 				{
-					"TypeId": "ET1E1",
-					"Value": "1212121212"
+					"TypeId": "personE1",
+					"Value": "191212121212"
 				},
 				{
-					"TypeId": "ET1E2",
+					"TypeId": "personE2",
 					"Value": "Anders"
 				},
 				{
-					"TypeId": "ET1E3",
+					"TypeId": "personE3",
 					"Value": "Karlsson"
 				}
 			]
 		},
 		{
 			"Id": "ADR1",
-			"TypeId": "ET4",
+			"TypeId": "adress",
 			"SourceSystemId": "Navet",
 			"Coordinates": {
 				"lat": 57.69783992572588,
@@ -29,22 +29,22 @@
 			},
 			"Properties": [
 				{
-					"TypeId": "ET4E1",
+					"TypeId": "adressE1",
 					"Value": "Fjärde Långgatan 11"
 				},
 				{
-					"TypeId": "ET4E3",
+					"TypeId": "adressE3",
 					"Value": "413 28"
 				},
 				{
-					"TypeId": "ET4E4",
+					"TypeId": "adressE4",
 					"Value": "Göteborg"
 				}
 			]
 		},
 		{
 			"Id": "ADR2",
-			"TypeId": "ET4",
+			"TypeId": "adress",
 			"SourceSystemId": "Navet",
 			"Coordinates": {
 				"lat": 57.71988411300851,
@@ -52,35 +52,35 @@
 			},
 			"Properties": [
 				{
-					"TypeId": "ET4E1",
+					"TypeId": "adressE1",
 					"Value": "Svangatan 8"
 				},
 				{
-					"TypeId": "ET4E3",
+					"TypeId": "adressE3",
 					"Value": "416 68"
 				},
 				{
-					"TypeId": "ET4E4",
+					"TypeId": "adressE4",
 					"Value": "Göteborg"
 				}
 			]
 		},
 		{
 			"Id": "JGH423",
-			"TypeId": "ET3",
+			"TypeId": "fordon",
 			"SourceSystemId": "Bilregistret",
 			"DateFrom": "2022-01-01",
 			"Properties": [
 				{
-					"TypeId": "ET3E1",
+					"TypeId": "fordonE1",
 					"Value": "Toyota Prius"
 				},
 				{
-					"TypeId": "ET3E2",
+					"TypeId": "fordonE2",
 					"Value": "JGH423"
 				},
 				{
-					"TypeId": "ET3E3",
+					"TypeId": "fordonE3",
 					"Value": "Röd"
 				}
 			]
@@ -94,9 +94,9 @@
 			"DateFrom": "2013-04-30",
 			"DateTo": "2023-11-22",
 			"SourceSystemId": "Navet",
-			"FromEntityTypeId": "ET4",
+			"FromEntityTypeId": "adress",
 			"FromEntityId": "ADR1",
-			"ToEntityTypeId": "ET1",
+			"ToEntityTypeId": "person",
 			"ToEntityId": "191212121212",
 			"Properties": [
 				{
@@ -111,9 +111,9 @@
 			"DateFrom": "2012-03-03",
 			"DateTo": "2013-04-29",
 			"SourceSystemId": "Navet",
-			"FromEntityTypeId": "ET4",
+			"FromEntityTypeId": "adress",
 			"FromEntityId": "ADR2",
-			"ToEntityTypeId": "ET1",
+			"ToEntityTypeId": "person",
 			"ToEntityId": "191212121212",
 			"Properties": [
 				{
@@ -126,9 +126,9 @@
 			"Id": "L2",
 			"TypeId": "LT4",
 			"SourceSystemId": "Bilregistret",
-			"FromEntityTypeId": "ET3",
+			"FromEntityTypeId": "fordon",
 			"FromEntityId": "JGH423",
-			"ToEntityTypeId": "ET1",
+			"ToEntityTypeId": "person",
 			"ToEntityId": "191212121212",
 			"Properties": [
 				{

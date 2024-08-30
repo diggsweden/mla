@@ -1,17 +1,17 @@
 {
 	"Entities": [
 		{
-			"Id": "16550101010101",
-			"TypeId": "ET2",
+			"Id": "165128000162",
+			"TypeId": "organisation",
 			"SourceSystemId": "Basinfo",
 			"Properties": [
 				{
-					"TypeId": "ET2E1",
-					"Value": "556426-1863"
+					"TypeId": "organisationE1",
+					"Value": "512800-0162"
 				},
 				{
-					"TypeId": "ET2E2",
-					"Value": "Fermenta AB"
+					"TypeId": "organisationE2",
+					"Value": "Bolagsbolaget AB"
 				}
 			]
 		}

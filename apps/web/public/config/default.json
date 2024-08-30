@@ -210,16 +210,6 @@
         }
     ],
     "MapConfiguration": {
-        "Layers": [
-            {
-                "Url": "http://wc00506.rsvc.se/cgi-bin/qgis_mapserv.fcgi.exe?map=E:\\Install\\QGIS Server\\Data\\optofoto.qgs",
-                "Name": "Flygfoto",
-                "Layers": "mosaik",
-                "Format": "image/png",
-                "Transparent": true,
-                "Version": "1.1.1"
-            }
-        ],
         "MapLayers": [
             {
                 "Url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -237,24 +227,6 @@
                 "MaxZoom": 20,
                 "SubDomains":["mt0","mt1","mt2","mt3"],
                 "Name": "Gooogle Streets"
-            }
-        ],
-        "WmsMapLayers": [
-            {
-                "Url": "http://wc00506.rsvc.se/cgi-bin/qgis_mapserv.fcgi.exe?map=E:\\Install\\QGIS Server\\Data\\sweden-tiles.qgs",
-                "Name": "Open Street Maps",
-                "Layers": "sweden",
-                "Format": "image/png",
-                "Transparent": false,
-                "Version": "1.1.1"
-            },
-            {
-                "Url": "http://wc00506.rsvc.se/cgi-bin/qgis_mapserv.fcgi.exe?map=E:\\Install\\QGIS Server\\Data\\lm.qgs",
-                "Name": "Lantmäteriet",
-                "Layers": "topowebb",
-                "Format": "image/png",
-                "Transparent": false,
-                "Version": "1.1.1"
             }
         ]
     },
@@ -816,7 +788,7 @@
                 "Name": "Sök person",
                 "Description": "En tjänst för att söka efter en person med personnummer eller andra parametrar",
                 "Icon": "outlined_person_search",
-                "Url": "https://fakeurl.skatteverket.se/SokPerson",
+                "Url": "https://fakeurl.testsystem.se/SokPerson",
                 "Parameters": {
                     "Form": {
                         "Fields": [
@@ -842,10 +814,10 @@
             },
             {
                 "Id": "STTest",
-                "Name": "Sök demodata",
+                "Name": "Hämta testdata",
                 "Description": "En tjänst som hämtar lite testdata",
                 "Icon": "search",
-                "Url": "https://fakeurl.skatteverket.se/HamtaTest",
+                "Url": "https://fakeurl.testsystem.se/HamtaTest",
                 "Parameters": {
                     "Form": {
                         "Fields": []
@@ -857,7 +829,7 @@
                 "Name": "Sök bolag",
                 "Icon": "domain",
                 "Description": "En tjänst för att söka efter ett bolag",
-                "Url": "https://fakeurl.skatteverket.se/SokOrganisation",
+                "Url": "https://fakeurl.testsystem.se/SokOrganisation",
                 "Parameters": {
                     "Form": {
                         "Fields": [
@@ -874,8 +846,8 @@
                 "Id": "ST8",
                 "Name": "Sök i fil",
                 "Icon": "outlined_find_in_page",
-                "Description": "En tjänst för att skicka en fil till en tjänst",
-                "Url": "https://fakeurl.skatteverket.se/fakeUpload",
+                "Description": "En tjänst som laddar upp en fil och får tillbaka svar",
+                "Url": "https://fakeurl.testsystem.se/fakeUpload",
                 "Parameters": {
                     "Form": {
                         "Fields": [
@@ -893,7 +865,7 @@
                 "Name": "Personuppgifter",
                 "Description": "En tjänst för att hämta personuppgifter för valda personer",
                 "Icon": "outlined_person",
-                "Url": "https://fakeurl.skatteverket.se/TestData",
+                "Url": "https://fakeurl.testsystem.se/TestData",
                 "Parameters": {
                     "EntityTypes": [
                         {
@@ -933,7 +905,7 @@
                 "Name": "Familjerelationer",
                 "Icon": "outlined_groups",
                 "Description": "En tjänst för att hämta familjerelationer för en person",
-                "Url": "https://fakeurl.skatteverket.se/SokRelation",
+                "Url": "https://fakeurl.testsystem.se/SokRelation",
                 "Parameters": {
                     "EntityTypes": [
                         {
@@ -948,7 +920,7 @@
                 "Name": "Bolagsengagemang",
                 "Icon": "corporate_fare",
                 "Description": "En tjänst för att hämta valda personers bolagsengagemang",
-                "Url": "https://fakeurl.skatteverket.se/SokBolagsEngagemang",
+                "Url": "https://fakeurl.testsystem.se/SokBolagsEngagemang",
                 "Parameters": {
                     "EntityTypes": [
                         {
@@ -964,7 +936,7 @@
                 "Name": "Funktionärer",
                 "Description": "En tjänst för att hämta funktionärer för valda bolag",
                 "Icon": "outlined_lan",
-                "Url": "https://fakeurl.skatteverket.se/SokBolagsEngagemang",
+                "Url": "https://fakeurl.testsystem.se/SokBolagsEngagemang",
                 "Parameters": {
                     "EntityTypes": [
                         {
@@ -979,7 +951,7 @@
                 "Name": "Konton",
                 "Description": "En tjänst för att hämta konton för bolag eller personer",
                 "Icon": "account_balance",
-                "Url": "https://fakeurl.skatteverket.se/SokKonton",
+                "Url": "https://fakeurl.testsystem.se/SokKonton",
                 "Parameters": {
                     "EntityConfiguration": "OR",
                     "EntityTypes": [
@@ -998,12 +970,6 @@
             }
         ],
         "Import": [
-            {
-                "Id": "import-transaction",
-                "Name": "Transaktionsimport",
-                "Beskrinving": "Importerar transaktionsfil enligt iso:20022",
-                "TransformFunction": "global_transaction_import"
-            },
             {
                 "Id": "import-csv",
                 "Name": "csv import",

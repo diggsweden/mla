@@ -8,6 +8,11 @@ import setupMockApi from './mock-setup'
 
 setupMockApi()
 
+const urlParams = new URLSearchParams(window.location.search);
+  const configSrc = urlParams.get("config") ?? "config/default.json";
+  const contextParam = urlParams.get("context") ?? undefined;
+  const workflow = urlParams.get("workflow") ?? undefined;
+
 createRoot(document.getElementById('root')!).render(
-  <MLA configSrc={'config/default.json'} />
+  <MLA configSrc={configSrc} context={contextParam} workflowId={workflow} />
 )

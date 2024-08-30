@@ -68,10 +68,14 @@ export function fixDate (value: string | undefined | Date | DateTime): DateTime 
 
     if (typeof value === 'string') {
       date = DateTime.fromISO(value)
+
+      if (!date.isValid) {
+        date = DateTime.fromSQL(value)
+      }
     }
 
     if (date == undefined || !date.isValid) {
-      console.error("Invalid date", value)
+      console.error("unknown date", value)
       date = DateTime.now()
     }
 
