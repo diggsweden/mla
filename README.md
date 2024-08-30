@@ -23,9 +23,8 @@ SPDX-License-Identifier: CC0-1.0
   [![GitHub last commit](https://img.shields.io/github/last-commit/diggsweden/mla)](#)
 
 <p align="center">
-</p>
-
 ⭐ Star us on GitHub — it motivates us a lot!
+</p>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
@@ -40,10 +39,23 @@ Här ska en video in !
 
 ## Key Features
 
-* LivePreview - Make changes, See changes
-  - Instantly see what your Markdown documents look like in HTML as you create them.
-* Sync Scrolling
-  - While you type, LivePreview will automatically scroll to the current location you're editing.
+* Network Charts
+  - Add custom entities to a chart and connect them using links
+  - Automaticly rearange objects on the chart
+* Analyze your data in different ways
+  - View a timeline of your chart and move forward and backwars in time to se what happend and when
+  - Crime Scripting allows you to add acts to your timeline 
+* Customizable
+  - Define your own information model
+  - Customize the application GUIs colors and icons
+  - Enable/disable functions
+  - Use multiple configurations to make the application behave like you want
+  - Create plugins
+* Workflows
+  - Create workflows that runs commands in sequence 
+* Integrations
+  - Connect your datasources and pull information onto your charts
+  - Export your chart in different ways
 
 ## 📝 How to Build
 
