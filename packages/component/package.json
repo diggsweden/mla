@@ -1,5 +1,9 @@
 {
   "name": "@repo/mla-component",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diggsweden/mla.git"
+  },  
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",

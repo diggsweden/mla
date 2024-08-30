@@ -4,6 +4,10 @@
 
 ---
 name: Release components package
+description: Publishes a NPM package using PNPM
+branding:
+  icon: upload-cloud
+  color: green
 
 on:
   workflow_dispatch:
@@ -32,8 +36,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile          
 
-#      - name: Publish 🚀
-#        shell: bash
-#        run: pnpm publish packages/components --access public --no-git-checks
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish 🚀
+        shell: bash
+        run: pnpm publish packages/component/dist --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
