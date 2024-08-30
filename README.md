@@ -28,14 +28,12 @@ SPDX-License-Identifier: CC0-1.0
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#download">Download</a> •
-  <a href="#credits">Credits</a> •
-  <a href="#related">Related</a> •
+  <a href="#how-to-build">How to Build</a> •
+  <a href="#documentation">Documentation</a> •
   <a href="#license">License</a>
 </p>
 
-Här ska en video in !
+Add a video showing the use ov demo version MLA
 
 ## Key Features
 
@@ -57,7 +55,7 @@ Här ska en video in !
   - Connect your datasources and pull information onto your charts
   - Export your chart in different ways
 
-## 📝 How to Build
+## How to Build
 
 To build the packages, follow these steps:
 
@@ -80,5 +78,18 @@ $ npm install
 $ npm start
 ```
 
-## 📚 Documentation 
+## Documentation 
 We have a <a href="">wiki</a>!
+
+## License
+
+This project is licensed under the Creative Commons Zero v1.0 Universal License - see the [LICENSE](LICENSE) file for details
+
+Most assets released are under Creative Commons CC0-1.0 except for
+
+CODE_OF_CONDUCT.md template:
+
+Copyright: [Contributor Covenant](https://www.contributor-covenant.org/)
+License: [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
+
+---
