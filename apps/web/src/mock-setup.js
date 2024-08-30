@@ -10,6 +10,7 @@ import * as sokBolagEngagemang from './SvarSokBolagsEngagemang.json'
 import * as sokOrganisation from './SvarSokOrganisation.json'
 import * as sokRelationer from './SvarSokRelation.json'
 import * as sokKonton from './SvarSokKonton.json'
+import * as test from './Testdata.json'
 
 function generateUUID () {
   let d = new Date().getTime()
@@ -31,7 +32,7 @@ function generateUUID () {
 export default function setupMockApi () {
   const mocker = HttpRequestMock.setup()
 
-  mocker.post('https://fakeurl.skatteverket.se/SokAdress', (requestInfo) => {
+  mocker.post('https://fakeurl.testsystem.se/SokAdress', (requestInfo) => {
     if (requestInfo.body.Shape?.Point != null) {
       return {
         Entities: [{
@@ -69,7 +70,7 @@ export default function setupMockApi () {
       Links: []
     }
   }, { delay: 750 })
-  mocker.post('https://fakeurl.skatteverket.se/SokPerson', (requestInfo) => {
+  mocker.post('https://fakeurl.testsystem.se/SokPerson', (requestInfo) => {
     const param = requestInfo.body.Form?.Params.find(p => p.TypeId === 'ST1E1')
     if (param?.Value === '191212121212') {
       return sokPerson
@@ -79,12 +80,12 @@ export default function setupMockApi () {
       Links: []
     }
   }, { delay: 750 })
-  mocker.post('https://fakeurl.skatteverket.se/TestData', () => {
-    return sokPerson
+  mocker.post('https://fakeurl.testsystem.se/TestData', () => {
+    return test
   }, { delay: 750 })
-  mocker.post('https://fakeurl.skatteverket.se/SokOrganisation', (requestInfo) => {
-    const param = requestInfo.body.Form?.Params.find(p => p.TypeId === 'ET2E1')
-    if (param?.Value === '16550101010101') {
+  mocker.post('https://fakeurl.testsystem.se/SokOrganisation', (requestInfo) => {
+    const param = requestInfo.body.Form?.Params.find(p => p.TypeId === 'organisationE1')
+    if (param?.Value === '165128000162') {
       return sokOrganisation
     }
     return {
@@ -92,8 +93,8 @@ export default function setupMockApi () {
       Links: []
     }
   }, { delay: 750 })
-  mocker.post('https://fakeurl.skatteverket.se/SokBolagsEngagemang', (requestInfo) => {
-    const param = requestInfo.body?.Entities?.find(e => e.Properties?.find(p => p.TypeId === 'ET1E1' && p.Value === '1212121212'))
+  mocker.post('https://fakeurl.testsystem.se/SokBolagsEngagemang', (requestInfo) => {
+    const param = requestInfo.body?.Entities?.find(e => e.Properties?.find(p => p.TypeId === 'personE1' && p.Value === '191212121212'))
     if (param != null) {
       return sokBolagEngagemang
     }
@@ -102,8 +103,8 @@ export default function setupMockApi () {
       Links: []
     }
   }, { delay: 750 })
-  mocker.post('https://fakeurl.skatteverket.se/SokRelation', (requestInfo) => {
-    const param = (requestInfo.body?.Entities).find(e => e.Properties?.find(p => p.TypeId === 'ET1E1' && p.Value === '1212121212'))
+  mocker.post('https://fakeurl.testsystem.se/SokRelation', (requestInfo) => {
+    const param = (requestInfo.body?.Entities).find(e => e.Properties?.find(p => p.TypeId === 'personE1' && p.Value === '191212121212'))
     if (param != null) {
       return sokRelationer
     }
@@ -112,8 +113,8 @@ export default function setupMockApi () {
       Links: []
     }
   }, { delay: 750 })
-  mocker.post('https://fakeurl.skatteverket.se/SokKonton', (requestInfo) => {
-    const param =(requestInfo.body?.Entities).find(e => e.Properties?.find(p => p.TypeId === 'ET1E1' && p.Value === '1212121212'))
+  mocker.post('https://fakeurl.testsystem.se/SokKonton', (requestInfo) => {
+    const param =(requestInfo.body?.Entities).find(e => e.Properties?.find(p => p.TypeId === 'personE1' && p.Value === '191212121212'))
     if (param != null) {
       return sokKonton
     }

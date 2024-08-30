@@ -2,30 +2,30 @@
 	"Entities": [
 		{
 			"Id": "165501010101",
-			"TypeId": "ET2",
-			"SourceSystemId": "Bolagsverket",
+			"TypeId": "organisation",
+			"SourceSystemId": "Testdata",
 			"Properties": [
 				{
-					"TypeId": "ET2E1",
+					"TypeId": "organisationE1",
 					"Value": "550101-0101"
 				},
 				{
-					"TypeId": "ET2E2",
-					"Value": "Fermenta AB"
+					"TypeId": "organisationE2",
+					"Value": "Alrajt AB"
 				}
 			]
 		},
 		{
 			"Id": "165512121212",
-			"TypeId": "ET2",
-			"SourceSystemId": "Bolagsverket",
+			"TypeId": "organisation",
+			"SourceSystemId": "Testdata",
 			"Properties": [
 				{
-					"TypeId": "ET2E1",
+					"TypeId": "organisationE1",
 					"Value": "551212-1212"
 				},
 				{
-					"TypeId": "ET2E2",
+					"TypeId": "organisationE2",
 					"Value": "Lur och frej AB"
 				}
 			]
@@ -35,11 +35,11 @@
 		{
 			"Id": "L1",
 			"TypeId": "LT1",
-			"SourceSystemId": "Bolagsverket",
-			"FromEntityId": "191212121212",
-			"FromEntityTypeId": "ET1",
+			"SourceSystemId": "Testdata",
+			"FromEntityId": "6258a2e9-1918-4af3-8a00-000000000000",
+			"FromEntityTypeId": "person",
 			"ToEntityId": "165501010101",
-			"ToEntityTypeId": "ET2",
+			"ToEntityTypeId": "organisation",
 			"Direction": "TO",
 			"Properties": [
 				{
@@ -52,10 +52,10 @@
 			"Id": "L2",
 			"TypeId": "LT1",
 			"SourceSystemId": "Bolagsverket",
-			"FromEntityId": "191212121212",
-			"FromEntityTypeId": "ET1",
+			"FromEntityId": "6258a2e9-1918-4af3-8a00-000000000000",
+			"FromEntityTypeId": "person",
 			"ToEntityId": "165512121212",
-			"ToEntityTypeId": "ET2",
+			"ToEntityTypeId": "organisation",
 			"Direction": "TO",
 			"Properties": [
 				{

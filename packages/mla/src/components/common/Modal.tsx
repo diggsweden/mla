@@ -53,7 +53,7 @@ function Modal (props: ModalProps) {
   return (
     <dialog ref={dialog} className={'p-0 animate-in fade-in duration-300 rounded shadow-lg backdrop:bg-black/50 ' + (props.wide ? ' w-full ' : ' w-2/4 max-w-2xl ') + props.className}>
       {props.show &&
-        <form aria-hidden="true" className={ 'w-full overflow-x-hidden overflow-y-auto md:h-full' } onSubmit={handleSubmit}>
+        <form className={ 'w-full overflow-x-hidden overflow-y-auto md:h-full' } onSubmit={handleSubmit}>
           <div className="relative w-full h-full mx-auto z-100">
             <div className="duration-300 relative">
               <div className="flex items-center justify-between p-4 bg-primary">
@@ -61,7 +61,7 @@ function Modal (props: ModalProps) {
                   {props.title}
                 </h3>
                 <button type="button" onClick={props.onNegative} className="text-white bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-hide="defaultModal">
-                  <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                   <span className="sr-only">Stäng</span>
                 </button>
               </div>

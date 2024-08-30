@@ -90,11 +90,13 @@ async function global_reverse_geocode(req, context) {
   return res
 }
 
+const apiKey = "your google api key"
 async function findPosition(street, postalCode) {
-  var url = `[Geo Coder Url to be configured in config]`
+  var url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(street)}&key=${apiKey}`
   if (postalCode) {
     url += `&components=postal_code:${postalCode?.replace(' ', '')}`
   }
+
   var geocoded = await fetch(url)
 
   if (geocoded.status = 200) {
@@ -106,7 +108,9 @@ async function findPosition(street, postalCode) {
 }
 
 async function findAdress(lat, lng) {
-  var geocoded = await fetch(`[LAT LONG Resolver to be configured in config]`)
+  var url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}}`
+  
+  var geocoded = await fetch(url)
 
   if (geocoded.status = 200) {
     var json = await geocoded.json()
