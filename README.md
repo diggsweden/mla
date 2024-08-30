@@ -3,10 +3,10 @@ SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 
 SPDX-License-Identifier: CC0-1.0
 -->
-
+<a name="top"></a>
 <h1 align="center">
   <br>
-  <img src="https://raw.githubusercontent.com//diggsweden/mla/main/asset/icon.png" alt="MLA" width="200">
+  <img src="https://github.com/diggsweden/mla/blob/main/assets/icon.png" alt="MLA" width="200">
   <br>
   MLA
   <br>
@@ -14,7 +14,6 @@ SPDX-License-Identifier: CC0-1.0
 
 <h4 align="center">A powerfull, easy to use and intuitive way to create network analysis charts.</h4>
 
-<p align="center">
   [![security rating](https://sonarcloud.io/api/project_badges/measure?project=MLA&metric=security_rating)](https://sonarcloud.io/summary/overall?id=MLA)
   [![reliability rating](https://sonarcloud.io/api/project_badges/measure?project=MLA&metric=reliability_rating)](https://sonarcloud.io/summary/overall?id=MLA)
   [![maintainability rating](https://sonarcloud.io/api/project_badges/measure?project=MLA&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=MLA)
@@ -22,6 +21,8 @@ SPDX-License-Identifier: CC0-1.0
   [![GitHub release](https://img.shields.io/github/v/release/diggsweden/mla)](#)
   [![GitHub release date](https://img.shields.io/github/release-date/diggsweden/mla)](#)
   [![GitHub last commit](https://img.shields.io/github/last-commit/diggsweden/mla)](#)
+
+<p align="center">
 </p>
 
 ⭐ Star us on GitHub — it motivates us a lot!
