@@ -1,0 +1,35 @@
+name: Release components package
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false      
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile          
+
+#      - name: Publish 🚀
+#        shell: bash
+#        run: pnpm publish packages/components --access public --no-git-checks
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
