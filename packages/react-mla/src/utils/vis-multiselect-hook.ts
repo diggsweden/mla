@@ -4,6 +4,7 @@
 
 import { useEffect, useRef } from 'react'
 import { type Network } from 'vis-network'
+
 import useAppStore from '../store/app-store'
 
 const LEFT_CLICK = 0

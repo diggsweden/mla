@@ -4,7 +4,7 @@
 
 import { MouseEventHandler } from "react";
 
-interface Props<T> {
+interface Props {
   className?: string
   children?: React.ReactNode
   disabled?: boolean
@@ -13,7 +13,7 @@ interface Props<T> {
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-export function Button<T>(props: Props<T>) {
+export function Button(props: Props) {
   switch(props.type) {
     case 'secondary':
       return <button type="button" data-modal-hide={props.dataModalHide} onClick={props.onClick} disabled={props.disabled} className={'m-bg-gray-200 enabled:hover:m-bg-gray-300 focus:m-ring-4 focus:m-ring-gray-300 m-font-medium m-rounded m-px-4 m-py-1 m-mr-2 m-my-2 disabled:m-opacity-50 ' + props.className }>
