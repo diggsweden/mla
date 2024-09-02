@@ -4,6 +4,15 @@
   "license": "MIT",
   "type": "module",
   "main": "index.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "module": "./dist/mla.js",
+      "import": "./dist/mla.js",
+      "require": "./dist/mla.cjs",
+      "default": "./dist/mla.js"
+    }
+  },
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.17.0",
     "glob": "^11.0.0",

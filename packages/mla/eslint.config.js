@@ -38,7 +38,8 @@ export default [
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "yoda": "warn"
+      "yoda": "warn",
+      "js-comment-in-css": "off"
     }
   }
 ]
