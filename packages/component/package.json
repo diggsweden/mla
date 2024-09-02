@@ -1,5 +1,8 @@
 {
-  "name": "@repo/mla-component",
+  "name": "webcomponent-mla",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },  
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",

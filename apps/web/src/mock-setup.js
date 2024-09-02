@@ -8,7 +8,6 @@ import HttpRequestMock from 'http-request-mock'
 import * as sokPerson from './SvarSokPerson.json'
 import * as sokBolagEngagemang from './SvarSokBolagsEngagemang.json'
 import * as sokOrganisation from './SvarSokOrganisation.json'
-import * as sokRelationer from './SvarSokRelation.json'
 import * as sokKonton from './SvarSokKonton.json'
 import * as test from './Testdata.json'
 
