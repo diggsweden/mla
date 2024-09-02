@@ -87,6 +87,18 @@ jobs:
           git commit -m "chore: release ${{ env.NEW_VERSION }}"
           git tag ${{ env.NEW_VERSION }}
 
+      # Publish version to public repository
+      - name: Publish webcomponent-mla
+        run: pnpm publish ./packages/webcomponent-mla --access private --tag ${{ env.RELEASE_TAG }} --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+
+      # Publish version to public repository
+      - name: Publish react-mla
+        run: pnpm publish ./packages/react-mla --access private --tag ${{ env.RELEASE_TAG }} --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+
       # Push repository changes
       - name: Push changes to repository
         env:
