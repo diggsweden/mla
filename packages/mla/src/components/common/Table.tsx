@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { useRef, type ReactNode, useMemo } from 'react'
+import { type ReactNode, useMemo, useRef } from 'react'
 import { type IBasePropertyConfiguration } from '../../interfaces/configuration'
-import type { IEvent, IBase } from '../../interfaces/data-models'
+import type { IBase, IEvent } from '../../interfaces/data-models'
 import { type SortConfig } from '../tools/TableTool'
 import viewService from '../../services/viewService'
 import { toDateAndTimeString } from '../../utils/date'
@@ -23,9 +23,9 @@ interface Props {
 function Table (props: Props) {
   const tableTop = useRef<null | HTMLTableElement>(null)
   function sortArrows (property: IBasePropertyConfiguration, sortConfig: SortConfig | undefined): ReactNode {
-    return <span className="relative text-xl leading-none">
-      <span className={`${property.TypeId === sortConfig?.property && props.sortConfig?.asc ? ' text-blue-600' : ''} absolute right-[-2] top-[2px]`}>▴</span>
-      <span className={`${property.TypeId === sortConfig?.property && !props.sortConfig?.asc ? ' text-blue-600' : ''} absolute right-[-2] top-[10px]`}>▾</span>
+    return <span className="m-relative m-text-xl m-leading-none">
+      <span className={`${property.TypeId === sortConfig?.property && props.sortConfig?.asc ? ' m-text-blue-600' : ''} m-absolute m-right-[-2] m-top-[2px]`}>▴</span>
+      <span className={`${property.TypeId === sortConfig?.property && !props.sortConfig?.asc ? ' m-text-blue-600' : ''} m-absolute m-right-[-2] m-top-[10px]`}>▾</span>
     </span>
   }
 
@@ -49,22 +49,22 @@ function Table (props: Props) {
 
   const isEvent = props.items.some(e => (e as IEvent).Date != null)
 
-  return <div className="w-full max-h-[70vh] overflow-y-auto">
-    <table ref={tableTop} className="w-full text-left rtl:text-right">
-      <thead className="sticky top-0 h-8 select-none text-gray-900 bg-gray-100 border border-gray-100 uppercase">
+  return <div className="m-w-full m-max-h-[70vh] m-overflow-y-auto">
+    <table ref={tableTop} className="m-w-full m-text-left m-rtl:text-right">
+      <thead className="m-sticky m-top-0 m-h-8 m-select-none m-text-gray-900 m-bg-gray-100 m-border m-border-gray-100 m-uppercase">
         <tr>
-          {isEvent && <th className="cursor-pointer pl-1.5 text-gray-300 hover:text-blue-400">
-            <span className="text-gray-900">Tid</span>
+          {isEvent && <th className="m-cursor-pointer m-pl-1.5 m-text-gray-300 hover:m-text-blue-400">
+            <span className="m-text-gray-900">Tid</span>
           </th>
           }
           {properties.map(p =>
-            <th key={p.TypeId} aria-sort={p.TypeId === props.sortConfig?.property ? props.sortConfig.asc ? 'ascending' : 'descending' : 'none'} className="cursor-pointer pl-1.5 text-gray-300 hover:text-blue-400">
+            <th key={p.TypeId} aria-sort={p.TypeId === props.sortConfig?.property ? props.sortConfig.asc ? 'ascending' : 'descending' : 'none'} className="m-cursor-pointer m-pl-1.5 m-text-gray-300 hover:m-text-blue-400">
               <div onClick={() => { handleSort(p.TypeId) }}>
-                <span className="text-gray-900">{p.Name}</span>
+                <span className="m-text-gray-900">{p.Name}</span>
                 <span>{sortArrows(p, props.sortConfig)}</span>
               </div>
               { props.filterFn &&
-                <input type='text' placeholder='filter' className='my-1 p-1 -ms-1 text-black' value={getFilterValue(p.TypeId)} onChange={(e) => { props.filterFn!(p.TypeId, e.target.value) }}></input>
+                <input type='text' placeholder='filter' className="m-my-1 m-p-1 -m-ms-1 m-text-black" value={getFilterValue(p.TypeId)} onChange={(e) => { props.filterFn!(p.TypeId, e.target.value) }}></input>
               }
             </th>
           )}
@@ -72,13 +72,13 @@ function Table (props: Props) {
       </thead>
       <tbody>
         {props.items.map(i =>
-          <tr key={i.Id} className="hover:bg-gray-50">
-            {isEvent && <td className='border border-gray-200 h-10 p-1.5'>
+          <tr key={i.Id} className="hover:m-bg-gray-50">
+            {isEvent && <td className='m-border m-border-gray-200 m-h-10 m-p-1.5'>
               {toDateAndTimeString((i as IEvent).Date)}
             </td>
           }
             {properties.map(p =>
-              <td className='border border-gray-200 h-10 p-1.5' key={p.TypeId}>{viewService.getPropertyValue(i, p.TypeId)}</td>
+              <td className='m-border m-border-gray-200 m-h-10 m-p-1.5' key={p.TypeId}>{viewService.getPropertyValue(i, p.TypeId)}</td>
             )}
           </tr>
         )}

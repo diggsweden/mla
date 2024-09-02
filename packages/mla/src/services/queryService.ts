@@ -4,7 +4,7 @@
 
 import { freeze } from 'immer'
 import { type IQueryIntegration } from '../interfaces/configuration'
-import type { IEvent, IEntity, ILink } from '../interfaces/data-models'
+import type { IEntity, IEvent, ILink } from '../interfaces/data-models'
 import { type IGeoFeature } from '../interfaces/data-models/geo'
 import useMainStore from '../store/main-store'
 import { findId, mergeContext } from '../utils/utils'

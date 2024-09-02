@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { type IQueryAction, type IChangeLayout, type IWorkflowConfiguration, type IDelay } from '../interfaces/configuration/workflow-configuration'
+import { type IChangeLayout, type IDelay, type IQueryAction, type IWorkflowConfiguration } from '../interfaces/configuration/workflow-configuration'
 import useAppStore from '../store/app-store'
 import configService from './configurationService'
 import queryService from './queryService'

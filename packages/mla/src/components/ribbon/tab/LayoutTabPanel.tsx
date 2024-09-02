@@ -29,7 +29,7 @@ function LayoutTabPanel () {
     }
   }
 
-  return <div className="flex text-center h-full p-1">
+  return <div className="m-flex m-text-center m-h-full m-p-1">
     <RibbonMenuSection title='Placering' >
       <RibbonMenuButton label='Upp' onClick={() => { setLayout('UD') }} iconName="outlined_account_tree" iconClassName="-rotate-90 -scale-x-100"/>
       <RibbonMenuButton label='Ner' onClick={() => { setLayout('DU') }} iconName="outlined_account_tree" iconClassName="-rotate-90"/>
@@ -39,7 +39,7 @@ function LayoutTabPanel () {
     </RibbonMenuSection>
     <RibbonMenuDivider />
     <RibbonMenuSection title='Vyer'>
-      <select onChange={changeView} value={view} className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1">
+      <select onChange={changeView} value={view} className="m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-w-full m-p-1">
         {config.Display.map(e => (
           <option key={e.Id} value={e.Id}>{e.Name}</option>
         ))}

@@ -18,12 +18,12 @@ function Footer () {
   }
 
   return (
-    <footer className="h-5 flex flex-row w-full border-t border-gray-300 bg-gray-50">
-      <span className={(!dirty ? 'hidden ' : '') + 'ml-1'}>Det finns osparade ändringar,</span>
-      <div className='flex-1'></div>
+    <footer className="m-h-5 m-flex m-flex-row m-w-full m-border-t m-border-gray-300 m-bg-gray-50">
+      <span className={(!dirty ? 'm-hidden ' : '') + 'm-ml-1'}>Det finns osparade ändringar,</span>
+      <div className="m-flex-1"></div>
       <span className=''>
-        <button className="pr-3" onClick={() => { fit(false) }}><Icon className='h-3 inline-block mr-1' name="monitor" />Visa allt</button>
-        <button disabled={selectedEntities.length === 0} className='disabled:opacity-50 mr-2' onClick={() => { fit(true) }}><Icon className='h-3 inline-block mr-1' name="screenshot_monitor" />Visa markerade</button>
+        <button className="m-pr-3" onClick={() => { fit(false) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="monitor" />Visa allt</button>
+        <button disabled={selectedEntities.length === 0} className='disabled:opacity-50 mr-2' onClick={() => { fit(true) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="screenshot_monitor" />Visa markerade</button>
       </span>
     </footer>
   )

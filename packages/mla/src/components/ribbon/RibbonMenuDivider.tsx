@@ -7,7 +7,7 @@ interface Props {
 }
 
 function RibbonMenuDivider (props: Props) {
-  return props.visible !== false ? <div className="w-px border border-l-slate-300 -ml-px"></div> : null
+  return props.visible !== false ? <div className="m-w-px m-border m-border-l-slate-300 -m-ml-px"></div> : null
 }
 
 export default RibbonMenuDivider

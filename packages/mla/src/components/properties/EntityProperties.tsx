@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import Icon from '../common/Icon'
 import useAppStore from '../../store/app-store'
 import { getId } from '../../utils/utils'
+import { Button } from '../common/Button'
 
 interface Props {
   entity: IEntity
@@ -91,7 +92,7 @@ function EntityProperties (props: Props) {
   }
 
   return (
-    <div className='px-3 mt-3'>
+    <div className="m-px-3 m-mt-3">
       <div>
         {configService.getProperties(entity).map(e => (
           <Property key={entity.Id + e.propertyConfiguration.TypeId + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
@@ -101,9 +102,9 @@ function EntityProperties (props: Props) {
         ))}
       </div>
       { usingMap && <div>
-        <span className="mb-1 text-sm font-medium text-gray-900" title="Latitud och Longitud">Position</span>
-        <input type="text" value={inputCoords} onChange={(e) => { updateCoords(e.target.value) }} className={'border-gray-300 bg-white border text-gray-900 rounded-lg block w-full p-1'}></input>
-        <button onClick={() => { place(entity) }} className='w-full text-white bg-primary enabled:hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1 mr-2 my-2 disabled:opacity-50'><Icon name="pin_drop" className='w-5 h-5 inline-block m-0 -mb-1' color='#ffffff'></Icon> Placera på karta</button>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Latitud och Longitud">Position</span>
+        <input type="text" value={inputCoords} onChange={(e) => { updateCoords(e.target.value) }} className={'m-border-gray-300 m-bg-white m-border m-text-gray-900 m-rounded-lg m-block m-w-full m-p-1'}></input>
+        <Button className="m-w-full" onClick={() => { place(entity) }}><Icon name="pin_drop" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon> Placera på karta</Button>
       </div>}
     </div>
   )

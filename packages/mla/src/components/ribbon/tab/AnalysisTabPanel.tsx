@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { type ChangeEvent, useState, useRef } from 'react'
+import { type ChangeEvent, useRef, useState } from 'react'
 import type { IPhaseEvent } from '../../../interfaces/data-models'
 import useAppStore from '../../../store/app-store'
 import useMainStore from '../../../store/main-store'
@@ -79,8 +79,9 @@ function AnalysisTabPanel () {
     setFilter(updatedFilter.current)
   }
 
+  const timePickerClass = "m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-w-full m-px-1 m-cursor-pointer"
   return (<>
-    <div className="flex text-center h-full p-1">
+    <div className="m-flex m-text-center m-h-full m-p-1">
       <GraphToolbox />
 
       <RibbonMenuSection title='Visa som tabell' >
@@ -100,14 +101,14 @@ function AnalysisTabPanel () {
         </RibbonMenuSection>
 
         <RibbonMenuSection title='Välj tidsintervall' >
-          <div className='text-left px-1'>
-            <span className="mb-1 text-sm font-medium text-gray-900">Från - Till</span>
-            <input type='Date' required min={toDateString(min)} value={toDateString(date.DateFrom)} onChange={dateChanged} className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-1"></input>
-            <input type='Date' min={toDateString(date.DateFrom)} max={toDateString(max)} required readOnly={interval !== 'custom'} value={toDateString(date.DateTo)} onChange={dateToChanged} className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-1"></input>
+          <div className="m-text-left m-px-1">
+            <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">Från - Till</span>
+            <input type='Date' required min={toDateString(min)} value={toDateString(date.DateFrom)} onChange={dateChanged} className={timePickerClass}></input>
+            <input type='Date' min={toDateString(date.DateFrom)} max={toDateString(max)} required readOnly={interval !== 'custom'} value={toDateString(date.DateTo)} onChange={dateToChanged} className={timePickerClass}></input>
           </div>
-          <div className='px-1'>
-            <span className="mb-1 text-sm font-medium text-gray-900">Tidsintervall</span>
-            <select required value={interval} onChange={(e) => { setInterval(e.target.value as IntervalType) }} className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-1">
+          <div className="m-px-1">
+            <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">Tidsintervall</span>
+            <select required value={interval} onChange={(e) => { setInterval(e.target.value as IntervalType) }} className={timePickerClass}>
               <option value={'day'}>dag</option>
               <option value={'week'}>vecka</option>
               <option value={'month'}>månad</option>

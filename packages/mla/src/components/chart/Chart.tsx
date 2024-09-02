@@ -298,11 +298,11 @@ function Chart (props: Props) {
 
   return (
     <div className={props.className}>
-      <div className="h-full w-full absolute pointer-events-none z-10">
+      <div className="m-h-full m-w-full m-absolute m-pointer-events-none m-z-10">
         {props.children}
       </div>
-      <div className="h-full w-full" ref={dropRef[1]} >
-        <div className="h-full w-full outline-none" id="mla-chart" ref={networkNode}>
+      <div className="m-h-full m-w-full" ref={dropRef[1]} >
+        <div className="m-h-full m-w-full m-outline-none" id="m-chart" ref={networkNode}>
           <ContentRenderer />
         </div>
       </div>

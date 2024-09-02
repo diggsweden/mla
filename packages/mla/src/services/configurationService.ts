@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import { freeze } from 'immer'
-import type { IEventConfiguration, IConfiguration, IEntityConfiguration, IImportConfiguration, ILinkConfiguration, IQueryIntegration, IPropertyConfiguration, IWorkflowConfiguration } from '../interfaces/configuration'
+import type { IConfiguration, IEntityConfiguration, IEventConfiguration, IImportConfiguration, ILinkConfiguration, IPropertyConfiguration, IQueryIntegration, IWorkflowConfiguration } from '../interfaces/configuration'
 import type { IBase, IProperty } from '../interfaces/data-models'
 import { loadScript } from '../utils/script-loader'
 

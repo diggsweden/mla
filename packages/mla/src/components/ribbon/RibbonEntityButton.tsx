@@ -43,17 +43,18 @@ function RibbonEntityButton (props: Props) {
     void getToken()
   }, [view])
 
+  const dragPreview = (isDragging ? 'm-opacity-50' : 'm-opacity-100') + ' m-h-5 m-m-px m-inline-flex m-flex-row m-flex-nowrap m-items-center m-py-0 m-pl-0.5 m-pr-1 m-border m-border-transparent enabled:hover:m-bg-blue-100 enabled:hover:m-border-blue-400 disabled:m-opacity-50 disaled:m-cursor-default'
   if (props.draggable === false) {
     return <button
       type='button'
       disabled={props.disabled}
       onClick={props.onClick}
       title={props.entity.Name}
-      className={(isDragging ? 'opacity-50' : 'opacity-100') + ' h-5 m-px inline-flex flex-row flex-nowrap items-center py-0 pl-0.5 pr-1 border border-transparent enabled:hover:bg-blue-100 enabled:hover:border-blue-400 disabled:opacity-50 disaled:cursor-default'}>
-      <span className="flex justify-center items-center">
-        <span className="leading-4"><Icon color={view.Color} name={view.Icon} className="h-5 w-5" /></span>
+      className={dragPreview}>
+      <span className="m-flex m-justify-center m-items-center">
+        <span className="m-leading-4"><Icon color={view.Color} name={view.Icon} className="m-h-5 m-w-5" /></span>
       </span>
-      <span className="ml-1">{props.entity.Name}</span>
+      <span className="m-ml-1">{props.entity.Name}</span>
     </button>
   }
 
@@ -65,11 +66,11 @@ function RibbonEntityButton (props: Props) {
       disabled={props.disabled}
       onClick={props.onClick}
       title={props.entity.Name}
-      className={(isDragging ? 'opacity-50' : 'opacity-100') + ' h-5 m-px inline-flex flex-row flex-nowrap items-center py-0 pl-0.5 pr-1 border border-transparent enabled:hover:bg-blue-100 enabled:hover:border-blue-400 disabled:opacity-50 disaled:cursor-default'}>
-      <span className="flex justify-center items-center">
-        <span className="leading-4"><Icon color={view.Color} name={view.Icon} className="h-5 w-5" /></span>
+      className={dragPreview}>
+      <span className="m-flex m-justify-center m-items-center">
+        <span className="m-leading-4"><Icon color={view.Color} name={view.Icon} className="m-h-5 m-w-5" /></span>
       </span>
-      <span className="ml-1">{props.entity.Name}</span>
+      <span className="m-ml-1">{props.entity.Name}</span>
     </button>
   </>
 }

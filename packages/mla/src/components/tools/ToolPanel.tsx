@@ -41,13 +41,13 @@ function ToolPanel (props: Props) {
   }
 
   return (
-    <aside className={'flex flex-col ease-in-out duration-300 ' + (getTool() != null ? 'translate-x-0 ' : '-translate-x-full ') + props.className}>
-      <div className='bg-secondary w-full flex justify-center'>
-        <div className='text-white p-1 h-7'>{getToolName()}</div>
-        <div onClick={() => { setTool(undefined) }} className="absolute top-0 right-3 text-xl text-white align-center cursor-pointer alert-del">&times;</div>
+    <aside className={'m-flex m-flex-col m-ease-in-out m-duration-300 ' + (getTool() != null ? 'm-translate-x-0 ' : '-m-translate-x-full ') + props.className}>
+      <div className="m-bg-secondary m-w-full m-flex m-justify-center">
+        <div className="m-text-white m-p-1 m-h-7">{getToolName()}</div>
+        <div onClick={() => { setTool(undefined) }} className="m-absolute m-top-0 m-right-3 m-text-xl m-text-white m-align-center m-cursor-pointer m-alert-del">&times;</div>
       </div>
 
-      <div className='flex-1 px-3 py-4 overflow-y-auto overflow-x-hidden bg-gray-50'>
+      <div className="m-flex-1 m-px-3 m-py-4 m-overflow-y-auto m-overflow-x-hidden m-bg-gray-50">
         {getTool()}
       </div>
     </aside>

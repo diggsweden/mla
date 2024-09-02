@@ -15,21 +15,21 @@ function Accordion (props: AccordionProps) {
   const contentSpace = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(props.expanded)
   const [height, setHeight] = useState(props.expanded ? '' : '0px')
-  const [rotate, setRotate] = useState(props.expanded ? 'transform duration-300 ease rotate-90' : 'transform duration-400 ease')
+  const [rotate, setRotate] = useState(props.expanded ? 'm-transform duration-300 m-ease m-rotate-90' : 'm-transform m-duration-400 m-ease')
 
   useEffect(() => {
     setHeight(!active ? '0px' : `${contentSpace.current?.scrollHeight ?? 0}px`)
-    setRotate(!active ? 'transform duration-300 ease' : 'transform duration-300 ease rotate-90')
+    setRotate(!active ? 'm-transform m-duration-300 m-ease' : 'm-transform m-duration-300 m-ease m-rotate-90')
   }, [active])
 
   return (
-    <div className="flex flex-col mx-3 mt-3">
-      <button className="w-full p-1 text-left cursor-pointer box-border flex items-center bg-slate-300" onClick={() => { setActive(!active) }}>
-        <Icon color="#000" name="outlined_chevron_right" className={`${rotate} inline-block text-primary h-4 w-4`} />
-        <div className="grow pl-1">{props.title}</div>
+    <div className="m-flex m-flex-col m-mx-3 m-mt-3">
+      <button className="m-w-full m-p-1 m-text-left m-cursor-pointer m-box-border m-flex m-items-center m-bg-slate-300" onClick={() => { setActive(!active) }}>
+        <Icon color="#000" name="outlined_chevron_right" className={`${rotate} m-inline-block m-text-primary m-h-4 m-w-4`} />
+        <div className="m-grow m-pl-1">{props.title}</div>
       </button>
-      <div ref={contentSpace} style={{ maxHeight: `${height}` }} className="overflow-hidden transition-max-height duration-300 ease-in-out">
-        <div className="pb-2 pt-3">{props.children}</div>
+      <div ref={contentSpace} style={{ maxHeight: `${height}` }} className="m-overflow-hidden m-transition-max-height m-duration-300 m-ease-in-out">
+        <div className="m-pb-2 m-pt-3">{props.children}</div>
       </div>
     </div>
   )

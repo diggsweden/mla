@@ -6,6 +6,7 @@
   "main": "index.ts",
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.17.0",
+    "glob": "^11.0.0",
     "http-request-mock": "^1.8.19",
     "immer": "^10.1.1",
     "leaflet": "^1.9.4",
@@ -28,10 +29,10 @@
     "lint": "eslint ./src --max-warnings 0"
   },
   "devDependencies": {
-    "@repo/tailwind-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
     "@eslint/compat": "^1.0.1",
     "@eslint/js": "^9.3.0",
+    "@repo/tailwind-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/leaflet": "^1.9.12",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.12.12",
@@ -44,6 +45,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.56.0",
+    "eslint-plugin-autofix": "^2.1.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",

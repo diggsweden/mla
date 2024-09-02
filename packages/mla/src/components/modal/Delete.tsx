@@ -12,9 +12,9 @@ interface Props {
 
 function Delete (props: Props) {
   return (
-    <div className='p-6'>
-      <p className='mb-1'>Följande objekt är markerade</p>
-      <ul className='list-inside list-disc'>
+    <div className="m-p-6">
+      <p className="m-mb-1">Följande objekt är markerade</p>
+      <ul className="m-list-inside m-list-disc">
         {props.entities.map(e => (
           <li key={e.InternalId}>{configService.getEntityConfiguration(e.TypeId).Name}: {e.LabelShort} </li>
         ))}
@@ -22,7 +22,7 @@ function Delete (props: Props) {
           <li key={e.InternalId}>{configService.getLinkConfiguration(e.TypeId).Name}: {e.LabelShort} </li>
         ))}
       </ul>
-      <p className='font-medium mt-3'>Vill du radera dem?</p>
+      <p className="m-font-medium m-mt-3">Vill du radera dem?</p>
     </div>
   )
 }

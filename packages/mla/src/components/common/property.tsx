@@ -125,13 +125,14 @@ function Property (props: Props) {
   }
 
   function getInput () {
+    const inputClass = (valid ? 'm-border-gray-300 ' : 'm-border-red-500 m-bg-red-200 ') + 'm-bg-white m-border m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 m-block m-w-full m-p-1'
     switch (config.FieldType) {
-      case 'String': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="text" required={config.Required} pattern={config.FieldValidation} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={(valid ? 'border-gray-300 ' : 'border-red-500 bg-red-200 ') + 'bg-white border text-gray-900 rounded-lg focus:ring-blue-500 block w-full p-1'}></input>
-      case 'Multiline': return <textarea id={key} ref={textRef} readOnly={readOnly ?? false} required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={(valid ? 'border-gray-300 ' : 'border-red-500 bg-red-200 ') + 'bg-white border text-gray-900 rounded-lg focus:ring-blue-500 block w-full p-1 min-h-[48px] max-h-[200px] overflow-y-auto'}></textarea>
-      case 'Date': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="date" required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChangeDate(e.target.valueAsDate ?? undefined) }} className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1"></input>
-      case 'Number': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="number" required={config.Required} value={value ? Number(value) : 0} onChange={(e) => { handleChange(e.target.value) }} className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1"></input>
-      case 'Boolean': return <Toggle title={config.Name} readOnly={readOnly ?? false} value={value === true} onChange={(e) => { handleChange(e) }} yesNo className='mt-2' />
-      case 'Select': return <select id={key} ref={selectRef} required={config.Required} value={value?.toString() ?? (config.Required ? undefined : '0')} onChange={(e) => { handleChange(e.target.value) }} className={'bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1' + (readOnly ?? false ? ' pointer-events-none' : '')}>
+      case 'String': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="text" required={config.Required} pattern={config.FieldValidation} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass}></input>
+      case 'Multiline': return <textarea id={key} ref={textRef} readOnly={readOnly ?? false} required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + ' min-h-[48px] max-h-[200px] overflow-y-auto'}></textarea>
+      case 'Date': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="date" required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChangeDate(e.target.valueAsDate ?? undefined) }} className={inputClass}></input>
+      case 'Number': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="number" required={config.Required} value={value ? Number(value) : 0} onChange={(e) => { handleChange(e.target.value) }} className={inputClass}></input>
+      case 'Boolean': return <Toggle title={config.Name} readOnly={readOnly ?? false} value={value === true} onChange={(e) => { handleChange(e) }} yesNo className="m-mt-2" />
+      case 'Select': return <select id={key} ref={selectRef} required={config.Required} value={value?.toString() ?? (config.Required ? undefined : '0')} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + (readOnly ?? false ? ' pointer-events-none' : '')}>
         {!config.Required && !config.FieldOptions?.some(x => x.Value === '0') &&
           <option value={undefined}></option>
         }
@@ -139,7 +140,7 @@ function Property (props: Props) {
           <option key={opt.Value} value={opt.Value}>{opt.Name}</option>
         )}
       </select>
-      case 'File': return <input id={key} ref={inputRef} accept={config.FieldValidation} required={config.Required} type="file" onChange={(e) => { handeFileUpload(e) }} className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1"></input>
+      case 'File': return <input id={key} ref={inputRef} accept={config.FieldValidation} required={config.Required} type="file" onChange={(e) => { handeFileUpload(e) }} className={inputClass}></input>
       default: throw Error('Unsupported config: ' + (config.FieldType as any))
     }
   }
@@ -147,7 +148,7 @@ function Property (props: Props) {
   return (
     <div className={className}>
       {config.FieldType !== 'Boolean' &&
-        <span className="mb-1 text-sm font-medium text-gray-900" title={config.Description}>{config.Name}</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={config.Description}>{config.Name}</span>
       }
       {getInput()}
     </div>

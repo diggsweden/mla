@@ -88,11 +88,11 @@ function ContextMenu (props: Props) {
       <>
         {geoFeature?.Point != null && <>
           <span>{geoFeature.Point.lat}, {geoFeature.Point.lng}</span>
-          <hr className="my-3 border-gray-300" />
+          <hr className="m-my-3 m-border-gray-300" />
         </>}
         {availableTools.length > 0 && <>
-          <div className="flex py-1 px-2 rounded cursor-default">
-            <span className="w-3 mr-2"><Icon name="content_paste_search" /></span>
+          <div className="m-flex m-py-1 m-px-2 m-rounded m-cursor-default">
+            <span className="m-w-3 m-mr-2"><Icon name="content_paste_search" /></span>
             <div>Inhämta</div>
           </div>
           {availableTools.map(e => (
@@ -100,26 +100,26 @@ function ContextMenu (props: Props) {
               <div>{e.Name}</div>
             </button>
           ))}
-          <hr className="my-3 border-gray-300" />
+          <hr className="m-my-3 m-border-gray-300" />
         </>}
         {geoFeature?.Bounds && (<>
           <button className="flex hover:bg-gray-100 py-1 px-2 rounded cursor-pointer" onClick={() => { selectGeoFeature(); hideContextMenu() }}>
-            <span className="w-3 mr-2"><Icon name="select_all" /></span>
+            <span className="m-w-3 m-mr-2"><Icon name="select_all" /></span>
             <div>Markera</div>
           </button>
-          <hr className="my-3 border-gray-300" />
+          <hr className="m-my-3 m-border-gray-300" />
         </>
         )}
         <button className="flex hover:bg-gray-100 py-1 px-2 rounded cursor-pointer disabled:opacity-50" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
-          <span className="w-3 mr-2"><Icon name="content_copy" /></span>
+          <span className="m-w-3 m-mr-2"><Icon name="content_copy" /></span>
           <div>Kopiera</div>
         </button>
         <button className="flex hover:bg-gray-100 py-1 px-2 rounded cursor-pointer" onClick={() => { if (props.paste != null) { props.paste(); hideContextMenu() } }}>
-          <span className="w-3 mr-2"><Icon name="content_paste" /></span>
+          <span className="m-w-3 m-mr-2"><Icon name="content_paste" /></span>
           <div>Klistra in</div>
         </button>
         <button className="flex hover:bg-gray-100 py-1 px-2 rounded disabled:opacity-50 cursor-pointer" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
-          <span className="w-3 mr-2"><Icon name="delete_forever" /></span>
+          <span className="m-w-3 m-mr-2"><Icon name="delete_forever" /></span>
           <div>Radera</div>
         </button>
       </>

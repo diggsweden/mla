@@ -68,20 +68,20 @@ export function MLA (props: MlaProps) {
   const loading = (
     <div id="loader">
       <h1>Mönster Länk Analysverktyget startar...</h1>
-      <div className="h-16 w-16 m-auto">
+      <div className="m-h-16 m-w-16 m-m-auto">
         <Spinner />
       </div>
     </div>
   )
 
   return (
-    <>
+    <div className='mla-component'>
       { !ready && loading }
       { ready &&
         <ErrorBoundary>
           <App />
         </ErrorBoundary>
       }
-    </>
+    </div>
   )
 }

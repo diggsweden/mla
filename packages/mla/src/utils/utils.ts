@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
+import type { IEntityTypeConfiguration, IMatchRule, IQueryIntegration } from '../interfaces/configuration'
+import type { IBase, IChartBase, IEntity, IHistory, ILink, IProperty } from '../interfaces/data-models'
 import { DateTime } from 'luxon'
-import type { IQueryIntegration, IMatchRule, IEntityTypeConfiguration } from '../interfaces/configuration'
-import type { IProperty, IChartBase, IEntity, IHistory, ILink, IBase } from '../interfaces/data-models'
 
 function getId (thing?: IBase): string {
   if (thing) {

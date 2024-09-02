@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import type { ILinked, IChartBase } from './base'
+import type { IChartBase, ILinked } from './base'
 
 type Direction = 'TO' | 'FROM' | 'BOTH' | 'NONE'
 type LinkDashStyle = 'LINE' | 'DASHED' | 'DOTTED'
