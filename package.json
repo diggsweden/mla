@@ -5,5 +5,5 @@
     "dev": "pnpm --filter ./apps/web run dev"
   },
   "packageManager": "pnpm@9.7.1",
-  "version": "0.0.0-beta.0"
+  "version": "0.0.0-beta.1"
 }
