@@ -3,7 +3,7 @@
 		{
 			"Id": "191212121212",
 			"TypeId": "person",
-			"SourceSystemId": "Navet",
+			"SourceSystemId": "Spar",
 			"Properties": [
 				{
 					"TypeId": "personE1",
@@ -22,7 +22,7 @@
 		{
 			"Id": "ADR1",
 			"TypeId": "adress",
-			"SourceSystemId": "Navet",
+			"SourceSystemId": "Spar",
 			"Coordinates": {
 				"lat": 57.69783992572588,
 				"lng": 11.94753472213756
@@ -45,7 +45,7 @@
 		{
 			"Id": "ADR2",
 			"TypeId": "adress",
-			"SourceSystemId": "Navet",
+			"SourceSystemId": "Spar",
 			"Coordinates": {
 				"lat": 57.71988411300851,
 				"lng": 12.006280860668483
@@ -93,7 +93,7 @@
 			"TypeId": "LT3",
 			"DateFrom": "2013-04-30",
 			"DateTo": "2023-11-22",
-			"SourceSystemId": "Navet",
+			"SourceSystemId": "Spar",
 			"FromEntityTypeId": "adress",
 			"FromEntityId": "ADR1",
 			"ToEntityTypeId": "person",
@@ -110,7 +110,7 @@
 			"TypeId": "LT3",
 			"DateFrom": "2012-03-03",
 			"DateTo": "2013-04-29",
-			"SourceSystemId": "Navet",
+			"SourceSystemId": "Spar",
 			"FromEntityTypeId": "adress",
 			"FromEntityId": "ADR2",
 			"ToEntityTypeId": "person",
@@ -118,7 +118,7 @@
 			"Properties": [
 				{
 					"TypeId": "LT3E1",
-					"Value": "Folkbokföringsadress"
+					"Value": "Postadress"
 				}
 			]
 		},

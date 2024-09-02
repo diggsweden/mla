@@ -163,11 +163,6 @@
                     "LabelShort": "{LT4E1}"
                 },
                 {
-                    "TypeId": "LT5",
-                    "LabelLong": "{LT5E1}",
-                    "LabelShort": "{LT5E1}"
-                },
-                {
                     "TypeId": "LT6",
                     "LabelLong": "{LT6E1}",
                     "LabelShort": "{LT6E1}"
@@ -504,25 +499,6 @@
                 ]
             },
             {
-                "TypeId": "LT2",
-                "Name": "Familjerelation",
-                "Description": "Beskriver hur två personer inom en familj är relaterade till varandra",
-                "AllowedRelations": [
-                    {
-                        "FromEntityTypeId": "ET1",
-                        "ToEntityTypeId": "ET1"
-                    }
-                ],
-                "Properties": [
-                    {
-                        "TypeId": "LT2E1",
-                        "Name": "Relation",
-                        "Description": "Beskrinving av relationen, text far, mor etc",
-                        "FieldType": "String"
-                    }
-                ]
-            },
-            {
                 "TypeId": "LT3",
                 "Name": "Adressrelation",
                 "Description": "En adressrelation",
@@ -572,25 +548,6 @@
                         "TypeId": "LT4E1",
                         "Name": "Typ",
                         "Description": "Beskriver typen av förhållande",
-                        "FieldType": "String"
-                    }
-                ]
-            },
-            {
-                "TypeId": "LT5",
-                "Name": "Konto",
-                "Description": "Kontot hos banken",
-                "AllowedRelations": [
-                    {
-                        "FromEntityTypeId": "ET5",
-                        "ToEntityTypeId": "ET2"
-                    }
-                ],
-                "Properties": [
-                    {
-                        "TypeId": "LT5E1",
-                        "Name": "Typ",
-                        "Description": "Beskriver typen av konto",
                         "FieldType": "String"
                     }
                 ]
@@ -941,21 +898,6 @@
                     ]
                 },
                 "RequestFunction": "global_reverse_geocode"
-            },
-            {
-                "Id": "ST3",
-                "Name": "Familjerelationer",
-                "Icon": "outlined_groups",
-                "Description": "En tjänst för att hämta familjerelationer för en person",
-                "Url": "https://fakeurl.skatteverket.se/SokRelation",
-                "Parameters": {
-                    "EntityTypes": [
-                        {
-                            "TypeId": "ET1",
-                            "Min": 1
-                        }
-                    ]
-                }
             },
             {
                 "Id": "ST5",
