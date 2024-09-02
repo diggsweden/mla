@@ -85,8 +85,14 @@ jobs:
           git tag ${{ env.NEW_VERSION }}
 
       # Publish version to public repository
-      - name: Publish
-        run: pnpm publish ./packages/component --access public --tag ${{ env.RELEASE_TAG }} --dry-run
+      - name: Publish webcomponent-mla
+        run: pnpm publish ./packages/webcomponent-mla --access public --tag ${{ env.RELEASE_TAG }} --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+
+      # Publish version to public repository
+      - name: Publish react-mla
+        run: pnpm publish ./packages/react-mla --access public --tag ${{ env.RELEASE_TAG }} --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
 

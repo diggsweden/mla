@@ -18,7 +18,7 @@ export default defineConfig({
   },
   resolve: {
     alias:{
-      '@repo/mla' : path.resolve(__dirname, '../../packages/mla/index.ts'),
+      '@repo/mla' : path.resolve(__dirname, '../../packages/react-mla/index.ts'),
     },
   },
 })
