@@ -13,7 +13,6 @@
     }
   },
   "files": [
-    "src",
     "dist"
   ],
   "dependencies": {
@@ -23,7 +22,7 @@
     "react-mla": "workspace:^"
   },
   "scripts": {
-    "preview": "vite preview --open",
+    "dev": "vite dev --open",
     "build": "tsc && vite build"
   },
   "devDependencies": {

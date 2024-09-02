@@ -17,6 +17,7 @@ export default defineConfig({
   ],
   define: {'process.env': process.env},
   build: {
+    copyPublicDir: false,
     target: "es2020",
     lib: {
       entry: "./index.ts",
