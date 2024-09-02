@@ -13,6 +13,8 @@ on:
         required: true
 
 permissions:
+  contents: read
+  metadata: read
   packages: write
 
 jobs:
