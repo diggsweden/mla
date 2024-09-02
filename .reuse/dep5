@@ -8,6 +8,10 @@ Files: .nvmrc
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
 
+Files: CHANGELOG.md
+Copyright: Skatteverket - Swedish Tax Agency
+License: CC0-1.0
+
 Files: /*.json
 Copyright: Skatteverket - Swedish Tax Agency
 License: CC0-1.0
