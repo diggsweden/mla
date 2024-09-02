@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@r2wc/react-to-web-component": "^2.0.3",
-    "@repo/mla": "workspace:^",
+    "react-mla": "workspace:^",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

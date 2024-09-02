@@ -7,9 +7,6 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "module": "./dist/mla.js",
-      "import": "./dist/mla.js",
-      "require": "./dist/mla.cjs",
       "default": "./dist/mla.js"
     }
   },

@@ -16,7 +16,7 @@ export default defineConfig({
       entry: "./index.ts",
       name: "MlaReactComponent",
       fileName: "mla",
-      formats: ['es', 'cjs']
+      formats: ['es']
     },
     rollupOptions: {
       external: [

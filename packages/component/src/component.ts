@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import r2wc from "@r2wc/react-to-web-component"
-import { MLA } from '@repo/mla'
+import { MLA } from "react-mla"
 
 function CreateMLAComponent() {
   const MLAComponent = r2wc(MLAComponentWrapper, {
