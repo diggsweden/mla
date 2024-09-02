@@ -12,7 +12,7 @@ importers:
     dependencies:
       '@repo/mla':
         specifier: workspace:^
-        version: link:../../packages/mla
+        version: link:../../packages/react-mla
       http-request-mock:
         specifier: ^1.8.19
         version: 1.8.28
@@ -48,7 +48,7 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1
 
-  packages/component:
+  packages/webcomponent-mla:
     dependencies:
       '@r2wc/react-to-web-component':
         specifier: ^2.0.3
@@ -111,7 +111,7 @@ importers:
 
   packages/config-typescript: {}
 
-  packages/mla:
+  packages/react-mla:
     dependencies:
       '@geoman-io/leaflet-geoman-free':
         specifier: ^2.17.0

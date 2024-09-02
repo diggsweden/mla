@@ -11,7 +11,7 @@ const styles = {
 
 const materialSymbols = './node_modules/@material-symbols/svg-400';
 const customIcons = './custom_icons';
-const output = '../../packages/mla/src/icons.json';
+const output = '../../packages/react-mla/src/icons.json';
 
 const result = {};
 

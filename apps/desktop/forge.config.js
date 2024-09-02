@@ -40,7 +40,7 @@ module.exports = {
   ],
   hooks: {
     generateAssets: async (config, buildPath, electronVersion, platform, arch) => {
-      var src = path.join(__dirname, '../../packages/component/dist');
+      var src = path.join(__dirname, '../../packages/webcomponent-mla/dist');
       var dst = './src/public';
       fs.cpSync(src, dst, {recursive: true});
     }

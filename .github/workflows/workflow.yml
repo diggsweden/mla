@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 ---
-name: Open Source Project Template Workflow
+name: CI
 
 on: # yamllint disable-line rule:truthy
   push:
