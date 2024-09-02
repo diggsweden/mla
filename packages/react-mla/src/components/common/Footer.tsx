@@ -23,7 +23,7 @@ function Footer () {
       <div className="m-flex-1"></div>
       <span className=''>
         <button className="m-pr-3" onClick={() => { fit(false) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="monitor" />Visa allt</button>
-        <button disabled={selectedEntities.length === 0} className='disabled:opacity-50 mr-2' onClick={() => { fit(true) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="screenshot_monitor" />Visa markerade</button>
+        <button disabled={selectedEntities.length === 0} className='disabled:opacity-50 m-mr-2' onClick={() => { fit(true) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="screenshot_monitor" />Visa markerade</button>
       </span>
     </footer>
   )

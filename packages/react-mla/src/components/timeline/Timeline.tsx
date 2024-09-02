@@ -171,7 +171,7 @@ function Timeline (props: Props) {
         <div className='m-absolute -m-top-6 m-left-1/2 m-font-bold m-text-center m-overflow-hidden'>
           <div className='m-absolute m-w-44 m-text-center -m-translate-x-1/2 m-backdrop-blur-md m-bg-white/3'>{!isDay ? (toDateString(currentDate.DateFrom) + " - " + toDateString(currentDate.DateTo)) : toDateString(currentDate.DateFrom)}</div>
         </div>
-        <div className="m-absolute m-h-full m-w-full m-flex m-justify-center m-pointer-events-none"><div className='h-full w-0.5 bg-blue-800 z-10'></div></div>
+        <div className="m-absolute m-h-full m-w-full m-flex m-justify-center m-pointer-events-none"><div className='m-h-full m-w-0.5 m-bg-blue-800 m-z-10'></div></div>
         <div className={isDay ? 'm-hidden ' : 'm-absolute m-h-full m-top-0 m-opacity-30 m-left-1/2 m-z-5 m-bg-blue-300 m-border-x m-border-blue-800 m-z-10 m-pointer-events-none'} style={{ width: `${width}px`, marginLeft: `${-width / 2}px` }}></div>
         <div className='m-flex m-flex-row m-h-full m-justify-stretch m-gap-2.5'>
           <TimelineBar history={history} months={months} onSelect={select} startDate={startOffset} play={play} transitionTime={transitionTime} date={play == 0 ? centerDate : getDateBetween(currentDate, targetDate)} />
