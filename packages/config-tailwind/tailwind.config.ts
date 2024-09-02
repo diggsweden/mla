@@ -10,6 +10,7 @@ const config: Omit<Config, "content"> = {
   prefix: "m-",
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
+    "../react-mla/src/**/*.{ts,tsx}",
     "./index.html",
   ],
   theme: {

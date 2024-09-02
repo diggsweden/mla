@@ -6,7 +6,7 @@ import type { Config } from "tailwindcss";
 import sharedConfig from "@repo/tailwind-config";
 
 const config: Pick<Config, "prefix" | "presets" | "content"> = {
-  content: ["index.ts", "./src/**/*.ts", "../mla/src/**/*{.ts,tsx}"],
+  content: ["./src/**/*.ts", "../react-mla/src/**/*.{.ts,tsx}"],
   presets: [sharedConfig],
 };
 

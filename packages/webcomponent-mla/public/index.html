@@ -1,0 +1,41 @@
+<!--
+ SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+
+ SPDX-License-Identifier: CC0-1.0
+-->
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MLA - demo</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-width: 100vw;
+      overflow: hidden;
+    }
+
+    mla-component {
+      width: 100vw !important;
+      height: 100vh !important;
+      display: block;
+    }
+  </style>
+  <script src="mla-component.umd.cjs"></script>
+</head>
+
+<body>
+  <script>
+    const configUrl = "default.json";
+    const mla = document.createElement("mla-component")
+    mla.configSrc = configUrl;
+
+    document.body.appendChild(mla)
+  </script>
+</body>
+
+</html>

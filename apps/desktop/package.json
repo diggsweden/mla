@@ -26,7 +26,7 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "@repo/mla": "workspace:^",
+    "react-mla": "workspace:^",
     "electron-squirrel-startup": "^1.0.1"
   }
 }

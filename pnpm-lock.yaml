@@ -10,9 +10,12 @@ importers:
 
   apps/web:
     dependencies:
-      '@repo/mla':
+      '@repo/tailwind-config':
         specifier: workspace:^
-        version: link:../../packages/react-mla
+        version: link:../../packages/config-tailwind
+      '@repo/typescript-config':
+        specifier: workspace:^
+        version: link:../../packages/config-typescript
       http-request-mock:
         specifier: ^1.8.19
         version: 1.8.28
@@ -22,53 +25,10 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
-    devDependencies:
-      '@repo/tailwind-config':
-        specifier: workspace:*
-        version: link:../../packages/config-tailwind
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/config-typescript
-      '@types/react':
-        specifier: ^18.3.2
-        version: 18.3.4
-      '@types/react-dom':
-        specifier: ^18.3.0
-        version: 18.3.0
-      '@types/wicg-file-system-access':
-        specifier: ^2023.10.5
-        version: 2023.10.5
-      '@vitejs/plugin-react':
-        specifier: ^4.2.1
-        version: 4.3.1(vite@5.4.2(@types/node@20.16.1)(sass-embedded@1.77.8))
-      vite:
-        specifier: ^5.2.11
-        version: 5.4.2(@types/node@20.16.1)(sass-embedded@1.77.8)
-      vite-plugin-commonjs:
-        specifier: ^0.10.1
-        version: 0.10.1
-
-  packages/webcomponent-mla:
-    dependencies:
-      '@r2wc/react-to-web-component':
-        specifier: ^2.0.3
-        version: 2.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@repo/mla':
+      react-mla:
         specifier: workspace:^
-        version: link:../mla
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        version: link:../../packages/react-mla
     devDependencies:
-      '@repo/tailwind-config':
-        specifier: workspace:*
-        version: link:../config-tailwind
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../config-typescript
       '@types/react':
         specifier: ^18.3.2
         version: 18.3.4
@@ -81,9 +41,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.3.1(vite@5.4.2(@types/node@20.16.1)(sass-embedded@1.77.8))
-      sass-embedded:
-        specifier: ^1.77.8
-        version: 1.77.8
+      tailwindcss:
+        specifier: ^3.4.3
+        version: 3.4.10
       typescript:
         specifier: ^5.4.3
         version: 5.5.4
@@ -93,9 +53,6 @@ importers:
       vite-plugin-commonjs:
         specifier: ^0.10.1
         version: 0.10.1
-      vite-plugin-css-injected-by-js:
-        specifier: ^3.5.1
-        version: 3.5.1(vite@5.4.2(@types/node@20.16.1)(sass-embedded@1.77.8))
 
   packages/config-tailwind:
     devDependencies:
@@ -109,7 +66,11 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.10)
 
-  packages/config-typescript: {}
+  packages/config-typescript:
+    devDependencies:
+      typescript:
+        specifier: ^5.4.3
+        version: 5.5.4
 
   packages/react-mla:
     dependencies:
@@ -231,6 +192,58 @@ importers:
       vite-plugin-lib-inject-css:
         specifier: ^2.1.1
         version: 2.1.1(vite@5.4.2(@types/node@20.16.1)(sass-embedded@1.77.8))
+
+  packages/webcomponent-mla:
+    dependencies:
+      '@r2wc/react-to-web-component':
+        specifier: ^2.0.3
+        version: 2.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-mla:
+        specifier: workspace:^
+        version: link:../react-mla
+    devDependencies:
+      '@repo/tailwind-config':
+        specifier: workspace:*
+        version: link:../config-tailwind
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../config-typescript
+      '@types/react':
+        specifier: ^18.3.2
+        version: 18.3.4
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.0
+      '@types/wicg-file-system-access':
+        specifier: ^2023.10.5
+        version: 2023.10.5
+      '@vitejs/plugin-react':
+        specifier: ^4.2.1
+        version: 4.3.1(vite@5.4.2(@types/node@20.16.1)(sass-embedded@1.77.8))
+      sass-embedded:
+        specifier: ^1.77.8
+        version: 1.77.8
+      tailwindcss:
+        specifier: ^3.4.3
+        version: 3.4.10
+      typescript:
+        specifier: ^5.4.3
+        version: 5.5.4
+      vite:
+        specifier: ^5.2.11
+        version: 5.4.2(@types/node@20.16.1)(sass-embedded@1.77.8)
+      vite-plugin-commonjs:
+        specifier: ^0.10.1
+        version: 0.10.1
+      vite-plugin-css-injected-by-js:
+        specifier: ^3.5.1
+        version: 3.5.1(vite@5.4.2(@types/node@20.16.1)(sass-embedded@1.77.8))
 
 packages:
 

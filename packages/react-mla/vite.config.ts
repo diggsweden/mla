@@ -15,14 +15,17 @@ export default defineConfig({
     lib: {
       entry: "./index.ts",
       name: "MlaReactComponent",
-      fileName: "mla",
-      formats: ['es']
+      fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: [
-        'react',
-        'react-dom'
-      ],
+      external: ["react", "react-dom", "tailwindcss"],
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+          tailwindcss: "tailwindcss",
+        },
+      },
     }
   },
 })

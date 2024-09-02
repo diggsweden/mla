@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
 
 import './MLA.scss'

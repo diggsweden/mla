@@ -5,7 +5,7 @@
 import { createRoot } from 'react-dom/client'
 import { MLA } from './MLA'
 
-import * as config from '../../component/test/default.json'
+import * as config from '../../webcomponent-mla/public/default.json'
 
 createRoot(document.getElementById('root')!).render(
   <MLA config={JSON.stringify(config)} />

@@ -117,11 +117,11 @@ class ViewService {
   }
 
   public getLongName (thing: IChartBase): string {
-    return this.getLabel(thing, 'short')
+    return this.getLabel(thing, 'long')
   }
 
   public getShortName (thing: IChartBase): string {
-    return this.getLabel(thing, 'long')
+    return this.getLabel(thing, 'short')
   }
 
   public getChartName (thing: IChartBase): string {

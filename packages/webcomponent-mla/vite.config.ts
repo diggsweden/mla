@@ -7,6 +7,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import commonjs from 'vite-plugin-commonjs'
+import path from 'path'
 
 export default defineConfig({
   plugins: [
@@ -22,6 +23,11 @@ export default defineConfig({
       name: "MlaWebComponent",
       fileName: "mla-component",
       formats: ["umd"]
+    },
+  },
+  resolve: {
+    alias:{
+      'react-mla' : path.resolve(__dirname, '../react-mla/index.ts'),
     },
   },
 })
