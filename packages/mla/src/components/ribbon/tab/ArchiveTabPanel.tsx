@@ -102,7 +102,7 @@ function ArchiveTabPanel () {
 
     if (window.showSaveFilePicker != null) {
       const options = {
-        suggestedName: 'mla-projekt.json',
+        suggestedName: 'm-projekt.json',
         types: [
           {
             description: 'MLA fil',
@@ -133,7 +133,7 @@ function ArchiveTabPanel () {
       const url = URL.createObjectURL(blob)
 
       const link = document.createElement('a')
-      link.download = 'mla-projekt.json'
+      link.download = 'm-projekt.json'
       link.href = url
 
       link.click()
@@ -148,7 +148,7 @@ function ArchiveTabPanel () {
       const url = canvas.toDataURL('image/png')
 
       const link = document.createElement('a')
-      link.download = 'mla-bild.png'
+      link.download = 'm-bild.png'
       link.href = url
 
       link.click()
@@ -217,7 +217,8 @@ function ArchiveTabPanel () {
     }
   }
 
-  return <div className="flex text-center h-full p-1">
+  const inputClass = (newFilename.length > 0 ? 'm-border-gray-300 ' : 'm-border-red-500 bg-red-200 ') + 'm-p-1 m-mb-3 m-bg-white m-border m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 m-block m-w-full';
+  return <div className="m-flex m-text-center m-h-full m-p-1">
     <input
       type="file"
       accept="application/json"
@@ -254,17 +255,17 @@ function ArchiveTabPanel () {
     <ImportToolbox show={config.Menu?.Archive?.Import} />
 
     <Modal mode="save" show={showSave} title="Spara som" onNegative={closeSave} onPositive={() => { saveRemote(newFilename) }}>
-      <div className='text-start px-4 py-1'>
-        <span className="mb-1 text-sm font-medium text-gray-900" title="Spara som namn">Filnamn</span>
-        <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={(newFilename.length > 0 ? 'border-gray-300 ' : 'border-red-500 bg-red-200 ') + 'p-1 mb-3 bg-white border text-gray-900 rounded-lg focus:ring-blue-500 block w-full'}></input>
+      <div className="m-text-start m-px-4 m-py-1">
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Spara som namn">Filnamn</span>
+        <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
         {loading && <p>Sparar...</p>}
       </div>
     </Modal>
 
     <Modal mode="save" show={showImageSave} title="Spara bild som" onNegative={closeImageSave} onPositive={() => { saveImageRemote(newFilename) }}>
-      <div className='text-start px-4 py-1'>
-        <span className="mb-1 text-sm font-medium text-gray-900" title="Spara som namn">Filnamn</span>
-        <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={(newFilename.length > 0 ? 'border-gray-300 ' : 'border-red-500 bg-red-200 ') + 'p-1 mb-3 bg-white border text-gray-900 rounded-lg focus:ring-blue-500 block w-full'}></input>
+      <div className="m-text-start m-px-4 m-py-1">
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Spara som namn">Filnamn</span>
+        <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
         {loading && <p>Sparar...</p>}
       </div>
     </Modal>

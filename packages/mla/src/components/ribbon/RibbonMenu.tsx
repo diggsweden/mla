@@ -76,16 +76,16 @@ function RibbonMenu () {
     return tabs
   }, [configuration.Menu?.Archive?.Show, configuration.MapConfiguration, exploreToolsAvailable, searchToolsAvailable])
 
-  return <div className="flex flex-col select-none">
-    <div className='w-full ml-2 leading-6'>
+  return <div className="m-flex m-flex-col m-select-none">
+    <div className="m-w-full m-ml-2 m-leading-6">
       <ul>
         {tabs.map(tab =>
-          <li key={tab} className={'inline whitespace-nowrap cursor-pointer px-2 p-1 mx-1 ' + (activeTab === tab ? 'bg-gray-100 text-black' : 'hover:bg-slate-400 hover:text-black')} onClick={() => { showTab(tab) }}>{tab}</li>
+          <li key={tab} className={'m-inline m-whitespace-nowrap m-cursor-pointer m-px-2 m-p-1 m-mx-1 ' + (activeTab === tab ? 'm-bg-gray-100 m-text-black' : 'hover:m-bg-slate-400 hover:m-text-black')} onClick={() => { showTab(tab) }}>{tab}</li>
         )}
       </ul>
     </div>
-    <div className="w-full flex flex-row">
-      <div className="w-full bg-gray-100 text-black">
+    <div className="m-w-full m-flex m-flex-row">
+      <div className="m-w-full m-bg-gray-100 m-text-black">
         {getTab(activeTab)}
       </div>
     </div>

@@ -6,4 +6,4 @@ import CreateMLAComponent from './src/component'
 
 CreateMLAComponent();
 
-export default CreateMLAComponent
+export { CreateMLAComponent }

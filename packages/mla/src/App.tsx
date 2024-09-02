@@ -30,28 +30,28 @@ export function App () {
   const title = useMemo(() => getContextValue(context, 'title') ?? 'Mönster Länk Analys - verktyget', [context])
 
   return (
-    <AppShortcuts className="h-full w-full max-h-full max-w-full text-base flex flex-col">
+    <AppShortcuts className="m-h-full m-w-full m-max-h-full m-max-w-full m-text-base m-flex m-flex-col">
       <DndProvider backend={HTML5Backend}>
-        <header className="h-100 flex-none w-full border-b border-gray-300 text-white bg-primary">
-          <h1 className='pt-2 pb-2 pl-4'>MLA - {title}</h1>
+        <header className="m-h-100 m-flex-none m-w-full m-border-b m-border-gray-300 m-text-white m-bg-primary">
+          <h1 className="m-pt-2 m-pb-2 m-pl-4">MLA - {title}</h1>
             <RibbonMenu />
         </header>
-        <section className="flex-1 flex min-h-0 relative">
-          <Chart className='h-full flex-1 relative overflow-hidden'>
-            <div className='h-full w-full flex flex-row overflow-hidden'>
-              <ToolPanel className="w-72 flex-none h-full border-r border-gray-300 pointer-events-auto" />
-              <div className='flex-1 flex pointer-events-none'>
-                {history && <div className='w-full self-end mb-5'>
-                  <Timeline className='pointer-events-auto' />
+        <section className="m-flex-1 m-flex m-min-h-0 m-relative">
+          <Chart className="m-h-full m-flex-1 m-relative m-overflow-hidden">
+            <div className="m-h-full m-w-full m-flex m-flex-row m-overflow-hidden">
+              <ToolPanel className="m-w-72 m-flex-none m-h-full m-border-r m-border-gray-300 m-pointer-events-auto" />
+              <div className="m-flex-1 m-flex m-pointer-events-none">
+                {history && <div className="m-w-full m-self-end m-mb-5">
+                  <Timeline className="m-pointer-events-auto" />
                 </div>}
               </div>
-              <PropertiesPanel className="w-72 flex-none h-full border-l border-gray-300 pointer-events-auto" />
+              <PropertiesPanel className="m-w-72 m-flex-none m-h-full m-border-l m-border-gray-300 m-pointer-events-auto" />
             </div>
           </Chart>
 
           {configService.getConfiguration().MapConfiguration && (<ErrorBoundary>
-            <div className={(map ? '' : 'hidden ') + 'h-full w-1 bg-gray-300 z-10 hover:cursor-col-resize'} />
-            <Map className={(map ? '' : 'hidden ') + 'h-full w-full flex-1'} />
+            <div className={(map ? '' : 'm-hidden ') + 'm-h-full m-w-1 m-bg-gray-300 m-z-10 hover:m-cursor-col-resize'} />
+            <Map className={(map ? '' : 'm-hidden ') + 'm-h-full m-w-full m-flex-1'} />
           </ErrorBoundary>)}
         </section>
         

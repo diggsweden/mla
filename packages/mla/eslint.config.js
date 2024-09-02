@@ -4,6 +4,7 @@
 
 import hooksPlugin from 'eslint-plugin-react-hooks'
 import refreshPlugin from 'eslint-plugin-react-refresh'
+import autofix from 'eslint-plugin-autofix'
 
 import globals from "globals"
 import pluginJs from "@eslint/js"
@@ -26,18 +27,19 @@ export default [
   {
     plugins: {
       'react-hooks': hooksPlugin,
-      'react-refresh': refreshPlugin
-    },
-    rules: hooksPlugin.configs.recommended.rules,
+      'react-refresh': refreshPlugin,
+      'autofix': autofix,
+    }
   },
   {
     rules: {
+      "autofix/no-debugger": "warn",
+      "sort-imports": 'error',
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-      "react-refresh/only-export-components": "warn",
+      "yoda": "warn",
+      "js-comment-in-css": "off"
     }
   }
 ]

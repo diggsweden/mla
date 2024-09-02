@@ -40,32 +40,32 @@ function ImportTool () {
   }
 
   return (
-    <div className='animate-in slide-in-from-left'>
-      <div className='search-tools animate-in slide-in-from-left'>
-        <p className='text-sm p-1'>{selectedTool.Description}</p>
-        <div className='pt-2'>
-          <input className="w-full" type="file" onChange={(e) => { setSelectedFile(e.target.files) }}></input>
+    <div className="m-animate-in m-slide-in-from-left">
+      <div className="m-search-tools m-animate-in m-slide-in-from-left">
+        <p className="m-text-sm m-p-1">{selectedTool.Description}</p>
+        <div className="m-pt-2">
+          <input className="m-w-full" type="file" onChange={(e) => { setSelectedFile(e.target.files) }}></input>
           <button disabled={fileContents === ''} onClick={search} className='w-full text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1 mr-2 my-2'>Importera</button>
         </div>
       </div>
-      <div className='mt-2'>
+      <div className="m-mt-2">
         {loading &&
-          <div className="animate-in fade-in duration-500 flex space-x-4 mt-4">
-            <div className="animate-pulse rounded-full bg-slate-200 h-10 w-10"></div>
-            <div className="flex-1 space-y-6 py-1">
-              <div className="h-2 bg-slate-200 rounded"></div>
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="h-2 bg-slate-200 rounded col-span-2"></div>
-                  <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+          <div className="m-animate-in m-fade-in m-duration-500 m-flex m-space-x-4 m-mt-4">
+            <div className="m-animate-pulse m-rounded-full m-bg-slate-200 m-h-10 m-w-10"></div>
+            <div className="m-flex-1 m-space-y-6 m-py-1">
+              <div className="m-h-2 m-bg-slate-200 m-rounded"></div>
+              <div className="m-space-y-3">
+                <div className="m-grid m-grid-cols-3 m-gap-4">
+                  <div className="m-h-2 m-bg-slate-200 m-rounded m-col-span-2"></div>
+                  <div className="m-h-2 m-bg-slate-200 m-rounded m-col-span-1"></div>
                 </div>
-                <div className="h-2 bg-slate-200 rounded"></div>
+                <div className="m-h-2 m-bg-slate-200 m-rounded"></div>
               </div>
             </div>
           </div>
         }
         {!loading && result &&
-          <ItemResultList className="animate-in slide-in-from-bottom border-t border-gray-400 pt-2" result={result} />
+          <ItemResultList className="m-animate-in m-slide-in-from-bottom m-border-t m-border-gray-400 m-pt-2" result={result} />
         }
       </div>
     </div>

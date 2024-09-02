@@ -51,31 +51,31 @@ function InternalResult (props: InternalProps) {
 
   function getLinkDirectionIcon (link: ILink): JSX.Element | null {
     switch (link.Direction) {
-      case 'TO': return <Icon name='arrow_forward' className="text-primary relative h-5 w-5 ml-1 " />
-      case 'FROM': return <Icon name='arrow_back' className="text-primary relative h-5 w-5  ml-1 " />
-      case 'BOTH': return <Icon name='sync_alt' className="text-primary relative h-5 w-5  ml-1 " />
+      case 'TO': return <Icon name='arrow_forward' className="m-text-primary m-relative m-h-5 m-w-5 m-ml-1 m-" />
+      case 'FROM': return <Icon name='arrow_back' className="m-text-primary m-relative m-h-5 m-w-5 m- m-ml-1 m-" />
+      case 'BOTH': return <Icon name='sync_alt' className="m-text-primary m-relative m-h-5 m-w-5 m- m-ml-1 m-" />
       case 'NONE': return null
     }
   }
   return (
     <div className={props.className}>
       {item.links.length > 0 && item.links.map(l => (
-        <div key={`${props.depth}-${l.Id}`} className="flex flex-nowrap w-full">
-          <div className="height-f flex ml-2 mr-1">
-            <Icon name={'link'} className="text-primary relative h-5 w-5 " />
+        <div key={`${props.depth}-${l.Id}`} className="m-flex m-flex-nowrap m-w-full">
+          <div className="m-height-f m-flex m-ml-2 m-mr-1">
+            <Icon name={'link'} className="m-text-primary m-relative m-h-5 m-w-5 m-" />
             {getLinkDirectionIcon(l)}
           </div>
-          <div className='grow truncate text-left text-sm font-semibold leading-5' key={l.Id}>{getLinkLabel(l)}</div>
+          <div className="m-grow m-truncate m-text-left m-text-sm m-font-semibold m-leading-5" key={l.Id}>{getLinkLabel(l)}</div>
         </div>
       ))}
-      <div className="flex flex-nowrap w-full py-1">
-        <div className="height-f flex mx-2 items-center"><Icon name={view.Icon} className="text-primary relative h-5 w-5 " /></div>
-        <div className='grow truncate text-left mr-1 text-normal'>
+      <div className="m-flex m-flex-nowrap m-w-full m-py-1">
+        <div className="m-height-f m-flex m-mx-2 m-items-center"><Icon name={view.Icon} className="m-text-primary m-relative m-h-5 m-w-5 m-" /></div>
+        <div className="m-grow m-truncate m-text-left m-mr-1 m-text-normal">
           { getLabel(item.primary) }
         </div>
       </div>
       {item.entities.length > 0 && item.entities.map(subEntity => (
-        <InternalResult depth={props.depth + 1} className='ml-4 border-dashed border-l-2 border-gray-300' key={subEntity.primary.Id} item={subEntity}></InternalResult>
+        <InternalResult depth={props.depth + 1} className="m-ml-4 m-border-dashed m-border-l-2 m-border-gray-300" key={subEntity.primary.Id} item={subEntity}></InternalResult>
       ))}
     </div>
   )
@@ -117,10 +117,10 @@ function ItemResult (props: Props) {
   }
 
   return (
-    <div ref={drag} className={props.className + (isDragging ? ' opacity-50' : ' opacity-100') + ' w-full rounded border-solid border bg-white mb-1 py-1 relative'}>
+    <div ref={drag} className={props.className + (isDragging ? ' m-opacity-50' : ' m-opacity-100') + ' m-w-full m-rounded m-border-solid m-border m-bg-white m-mb-1 m-py-1 m-relative'}>
       {config.Internal !== true && props.onClick != null &&
-        <span className='absolute top-4 -right-4 -translate-y-1/2' onClick={() => { add() }}>
-          <button className='text-white bg-primary rounded-full text-lg px-2 m-2 h-5 w-5 leading-5 flex justify-center'>+</button>
+        <span className='m-absolute m-top-4 -m-right-4 -m-translate-y-1/2' onClick={() => { add() }}>
+          <button className="m-text-white m-bg-primary m-rounded-full m-text-lg m-px-2 m-m-2 m-h-5 m-w-5 m-leading-5 m-flex m-justify-center">+</button>
         </span>
       }
       <InternalResult item={props.item} depth={0}></InternalResult>

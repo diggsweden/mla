@@ -166,33 +166,33 @@ function Timeline (props: Props) {
   }
 
   return (
-    <div className={"w-full " + props.className}>
-      <div className='select-none absolute bottom-16 h-11 left-1/4 right-1/4'>
-        <div className='absolute -top-6 left-1/2 font-bold text-center overflow-hidden'>
-          <div className='absolute w-44 text-center -translate-x-1/2 backdrop-blur-md bg-white/3'>{!isDay ? (toDateString(currentDate.DateFrom) + " - " + toDateString(currentDate.DateTo)) : toDateString(currentDate.DateFrom)}</div>
+    <div className={"m-w-full " + props.className}>
+      <div className='m-select-none m-absolute m-bottom-16 m-h-11 m-left-1/4 m-right-1/4'>
+        <div className='m-absolute -m-top-6 m-left-1/2 m-font-bold m-text-center m-overflow-hidden'>
+          <div className='m-absolute m-w-44 m-text-center -m-translate-x-1/2 m-backdrop-blur-md m-bg-white/3'>{!isDay ? (toDateString(currentDate.DateFrom) + " - " + toDateString(currentDate.DateTo)) : toDateString(currentDate.DateFrom)}</div>
         </div>
-        <div className='absolute h-full w-full flex justify-center pointer-events-none'><div className='h-full w-0.5 bg-blue-800 z-10'></div></div>
-        <div className={isDay ? 'hidden ' : 'absolute h-full top-0 opacity-30 left-1/2 z-5 bg-blue-300 border-x border-blue-800 z-10 pointer-events-none'} style={{ width: `${width}px`, marginLeft: `${-width / 2}px` }}></div>
-        <div className='flex flex-row h-full justify-stretch gap-2.5'>
+        <div className="m-absolute m-h-full m-w-full m-flex m-justify-center m-pointer-events-none"><div className='h-full w-0.5 bg-blue-800 z-10'></div></div>
+        <div className={isDay ? 'm-hidden ' : 'm-absolute m-h-full m-top-0 m-opacity-30 m-left-1/2 m-z-5 m-bg-blue-300 m-border-x m-border-blue-800 m-z-10 m-pointer-events-none'} style={{ width: `${width}px`, marginLeft: `${-width / 2}px` }}></div>
+        <div className='m-flex m-flex-row m-h-full m-justify-stretch m-gap-2.5'>
           <TimelineBar history={history} months={months} onSelect={select} startDate={startOffset} play={play} transitionTime={transitionTime} date={play == 0 ? centerDate : getDateBetween(currentDate, targetDate)} />
         </div>
       </div>
       
-      <div className="flex flex-row justify-center flex-nowrap shrink-0 grow-0 mt-4">
-        <span className='mr-5 backdrop-blur-md bg-white/3' title="Bakåt" onClick={() => { if (play === 0) { next(-1) } }}>
-          <Icon name="skip_previous" className={'w-8 ' + (getNextDate(-1, currentDate) == undefined || play > 0 ? 'text-neutral-300' : 'text-primary cursor-pointer')}></Icon>
+      <div className="m-flex m-flex-row m-justify-center m-flex-nowrap m-shrink-0 m-grow-0 m-mt-4 m-cursor-pointer">
+        <span className='m-mr-5 m-backdrop-blur-md m-bg-white/3' title="Bakåt" onClick={() => { if (play === 0) { next(-1) } }}>
+          <Icon name="skip_previous" className={'m-w-8 ' + (getNextDate(-1, currentDate) == undefined || play > 0 ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
-        <span className="backdrop-blur-md bg-white/3" title="Pausa uppspelning" onClick={() => { setPlay(0) }}>
-          <Icon name="pause" className={'w-8 ' + (play === 0 ? 'text-neutral-300' : 'text-primary cursor-pointer')}></Icon>
+        <span className="m-backdrop-blur-md m-bg-white/3" title="Pausa uppspelning" onClick={() => { setPlay(0) }}>
+          <Icon name="pause" className={'m-w-8 ' + (play === 0 ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
-        <span className="backdrop-blur-md bg-white/3" title="Spela upp aktiviteter" onClick={() => { if (getNextDate(1, currentDate) != undefined) { activatePlay(1) } }}>
-          <Icon name="play_arrow" className={'w-8 ' + (play === 1 ? 'animate-pulse ' : '') + (getNextDate(1, currentDate) == undefined ? 'text-neutral-300' : 'text-primary cursor-pointer')}></Icon>
+        <span className="m-backdrop-blur-md m-bg-white/3" title="Spela upp aktiviteter" onClick={() => { if (getNextDate(1, currentDate) != undefined) { activatePlay(1) } }}>
+          <Icon name="play_arrow" className={'m-w-8 ' + (play === 1 ? 'animate-pulse ' : '') + (getNextDate(1, currentDate) == undefined ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
-        <span className="backdrop-blur-md bg-white/3" title="Spela upp snabbare" onClick={() => { if (play >= 1) { setPlay(play + 3) } }}>
-          <Icon name="fast_forward" className={'w-8 ' + (play > 1 ? 'animate-pulse ' : '') + (play === 0 ? 'text-neutral-300' : 'text-primary cursor-pointer')}></Icon>
+        <span className="m-backdrop-blur-md m-bg-white/3" title="Spela upp snabbare" onClick={() => { if (play >= 1) { setPlay(play + 3) } }}>
+          <Icon name="fast_forward" className={'m-w-8 ' + (play > 1 ? 'animate-pulse ' : '') + (play === 0 ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
-        <span className='ml-5 backdrop-blur-md bg-white/3' title="Framåt" onClick={() => { if (play === 0) { next(1) } }}>
-          <Icon name="skip_next" className={'w-8 ' + (getNextDate(1, currentDate) == undefined || play > 0 ? 'text-neutral-300' : 'text-primary cursor-pointer')}></Icon>
+        <span className='m-ml-5 m-backdrop-blur-md m-bg-white/3' title="Framåt" onClick={() => { if (play === 0) { next(1) } }}>
+          <Icon name="skip_next" className={'m-w-8 ' + (getNextDate(1, currentDate) == undefined || play > 0 ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
       </div>
     </div>

@@ -174,9 +174,9 @@ export default function GraphTools (props: Props) {
     { showJoin &&
       <Modal mode={joinResult.length > 0 ? 'accept' : 'ok'} show={showJoin} title={'Slå samman'} onNegative={() => { setShowJoin(false) }} onPositive={() => { join() }}>
         { joinLoading && <Spinner />}
-        { !joinLoading && joinResult.length > 0 && <div className='text-left px-3 py-2'>
+        { !joinLoading && joinResult.length > 0 && <div className="m-text-left m-px-3 m-py-2">
           <p>Följande slås samman:</p>
-          <ul className='list-inside list-disc'>
+          <ul className="m-list-inside m-list-disc">
             {joinResult.filter(r => r.show).map(r => (<>
               {r.entity &&
                 <li key={r.entity.InternalId}>{configService.getEntityConfiguration(r.entity.TypeId).Name}: {r.entity.LabelShort} </li>
@@ -189,7 +189,7 @@ export default function GraphTools (props: Props) {
           </ul>
         </div>}
         { !joinLoading && joinResult.length === 0 && <>
-          <p className='py-3'>Hittade ingen data som kunde slås samman.</p>
+          <p className="m-py-3">Hittade ingen data som kunde slås samman.</p>
         </>}
       </Modal>
     }

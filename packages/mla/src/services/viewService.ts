@@ -4,7 +4,7 @@
 
 import { freeze } from 'immer'
 import { type IThemeConfiguration } from '../interfaces/configuration/theme-configuration'
-import type { IRuleConfiguration, IBaseViewConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
+import type { IBaseViewConfiguration, IRuleConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
 import type { IBase, IChartBase, IEntity } from '../interfaces/data-models'
 import useAppStore from '../store/app-store'
 import configService, { type PropertyAndConfiguration } from './configurationService'

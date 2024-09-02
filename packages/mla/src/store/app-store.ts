@@ -76,7 +76,6 @@ const useAppStore = create<AppState>((set, get) => ({
       thingViewConfiguration: update
     }))
 
-    // Uppdatera labels då vyn ändras
     internalUpdateLabels()
   },
 

@@ -42,7 +42,7 @@ function MapTabPanel () {
     update(...change)
   }
 
-  return <div className="flex text-center h-full p-1">
+  return <div className="m-flex m-text-center m-h-full m-p-1">
     <RibbonMenuSection title='Karta' >
       <RibbonMenuButton active={showMap} label='Kartläge' title="Visa kartan" onClick={() => { setShowMap(!showMap) }} iconName="public" />
     </RibbonMenuSection>

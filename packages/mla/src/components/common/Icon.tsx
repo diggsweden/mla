@@ -12,7 +12,7 @@ interface IconProps {
 
 function Icon (props: IconProps) {
   const svg = iconService.getSVG(props.name ?? 'warning')
-  return <div style={{ color: props.color }} className={'fill-current mla-icon ' + props.className} dangerouslySetInnerHTML={{ __html: svg }} />
+  return <div style={{ color: props.color }} className={'m-fill-current mla-icon ' + props.className} dangerouslySetInnerHTML={{ __html: svg }} />
 }
 
 export default Icon

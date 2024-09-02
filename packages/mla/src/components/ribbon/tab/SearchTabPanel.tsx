@@ -5,7 +5,7 @@
 import SearchToolbox from '../toolbox/SearchToolbox'
 
 function SearchTabPanel () {
-  return <div className="flex text-center h-full p-1">
+  return <div className="m-flex m-text-center m-h-full m-p-1">
     <SearchToolbox />
   </div>
 }

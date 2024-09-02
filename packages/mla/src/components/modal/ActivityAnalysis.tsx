@@ -69,7 +69,6 @@ interface Attribute {
 function within (period: TimePeriod, thing: IChartBase): boolean {
   const interval = Interval.fromDateTimes(period.From, period.To)
 
-  // Todo rätta denna
   return interval.contains(thing.DateFrom!) && interval.contains(thing.DateTo!)
 }
 
@@ -251,16 +250,16 @@ function ActivityAnalysis (props: Props) {
   }, [entities, events, maxDate, config.EntityTypeId, config.LinkPropertyId, getEntity, links, viewConfig])
 
   if (loading) {
-    return <div className="animate-in fade-in duration-500 flex space-x-4 mt-4">
-      <div className="animate-pulse rounded-full bg-slate-200 h-10 w-10"></div>
-      <div className="flex-1 space-y-6 py-1">
-        <div className="h-2 bg-slate-200 rounded"></div>
-        <div className="space-y-3">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="h-2 bg-slate-200 rounded col-span-2"></div>
-            <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+    return <div className="m-animate-in m-fade-in m-duration-500 m-flex m-space-x-4 m-mt-4">
+      <div className="m-animate-pulse m-rounded-full m-bg-slate-200 m-h-10 m-w-10"></div>
+      <div className="m-flex-1 m-space-y-6 m-py-1">
+        <div className="m-h-2 m-bg-slate-200 m-rounded"></div>
+        <div className="m-space-y-3">
+          <div className="m-grid m-grid-cols-3 m-gap-4">
+            <div className="m-h-2 m-bg-slate-200 m-rounded m-col-span-2"></div>
+            <div className="m-h-2 m-bg-slate-200 m-rounded m-col-span-1"></div>
           </div>
-          <div className="h-2 bg-slate-200 rounded"></div>
+          <div className="m-h-2 m-bg-slate-200 m-rounded"></div>
         </div>
       </div>
     </div>
@@ -286,7 +285,7 @@ function ActivityAnalysis (props: Props) {
   function dots (count: number, color: string): ReactElement[] {
     const result = [] as ReactElement[]
     for (let i = 0; i < Math.min(10, count); i++) {
-      result.push(<svg key={i} className={`h-3 w-3 mt-1 inline z-10 ${i > 0 ? ' ml-1' : ''}`}>
+      result.push(<svg key={i} className={`m-h-3 m-w-3 m-mt-1 m-inline m-z-10 ${i > 0 ? ' m-ml-1' : ''}`}>
         <circle cx="5" cy="5" r="5" fill={color} />
       </svg>
       )
@@ -297,7 +296,7 @@ function ActivityAnalysis (props: Props) {
 
   function dot (color?: string) {
     if (color) {
-      return <svg className='w-3 h-3 mr-1 inline'><circle cx="4" cy="4" r="4" fill={color} /></svg>
+      return <svg className="m-w-3 m-h-3 m-mr-1 m-inline"><circle cx="4" cy="4" r="4" fill={color} /></svg>
     }
 
     return undefined
@@ -305,32 +304,32 @@ function ActivityAnalysis (props: Props) {
 
   let previousDay = (view.length > 0 && view[0].Description.length > 0) ? view[0].Description[0].Date : DateTime.now()
   return (
-    <div className={('bg-stone-400 p-5 ' + props.className)}>
+    <div className={('m-bg-stone-400 m-p-5 ' + props.className)}>
       {view.length === 0 &&
         <div>Inget att visa</div>
       }
       {view.length > 0 &&
-        <div className="p-8 w-full overflow-x bg-white ">
-          <div className="w-full -mt-5 mb-4 -ml-4">
-            <button type="button" onClick={(e) => { show(e) }} className='float-left text-white bg-primary enabled:hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1'>
-              <Icon name="settings" className='w-5 h-5 inline-block m-0 -mb-1' color='#ffffff'></Icon> Inställningar
+        <div className="m-p-8 m-w-full m-overflow-x m-bg-white m-">
+          <div className="m-w-full -m-mt-5 m-mb-4 -m-ml-4">
+            <button type="button" onClick={(e) => { show(e) }} className='m-float-left m-text-white m-bg-primary enabled:m-hover:bg-blue-800 focus:m-ring-4 focus:m-ring-blue-300 m-font-medium m-rounded m-px-2 m-py-1'>
+              <Icon name="settings" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon> Inställningar
             </button>
           </div>
 
           {/* Header */}
-          <div className="flex w-full mt-8">
-            <div className="flex justify-center items-center w-14"><div className="-rotate-90 text-xl">Akt</div></div>
-            <div className={'grow max-w-7xl grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
+          <div className="m-flex m-w-full m-mt-8">
+            <div className="m-flex m-justify-center m-items-center m-w-14"><div className="-m-rotate-90 m-text-xl">Akt</div></div>
+            <div className={'m-grow m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
               {view.map((v, i) =>
-                <div key={i} className="h-full">
-                  <div className="flex h-20 items-center">
-                    <div className="flex flex-col justify-center items-center w-full h-full bg-black text-white text-lg">
+                <div key={i} className="m-h-full">
+                  <div className="m-flex m-h-20 m-items-center m-me-2">
+                    <div className="m-flex m-flex-col m-justify-center m-items-center m-w-full m-h-full m-bg-black m-text-white m-text-lg">
                       <div>{v.Header}</div>
                       <div>{toDateString(v.From)}</div>
                     </div>
                     {i !== (view.length - 1) &&
-                      <div className="w-6">
-                        <span className="text-[20px]">&#10132;</span>
+                      <div className="m-w-6">
+                        <span className="m-text-[20px]">&#10132;</span>
                       </div>
                     }
                   </div>
@@ -340,18 +339,18 @@ function ActivityAnalysis (props: Props) {
           </div>
 
           {/* Activities */}
-          <div className="flex w-full min-h-[80px]">
-            <div className="flex justify-center items-center"><div className="-rotate-90 text-sm">Aktiviteter</div></div>
-            <div className={'grow max-w-7xl grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
+          <div className="m-flex m-w-full m-min-h-[80px]">
+            <div className="m-flex m-justify-center m-items-center"><div className="-m-rotate-90 m-text-sm">Aktiviteter</div></div>
+            <div className={'m-grow m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
               {view.map((v, i) =>
-                <div key={i} className="flex h-full">
-                  <div className="c p-2 flex grow ">
+                <div key={i} className="m-flex m-h-full">
+                  <div className="m-p-2 m-flex m-grow m-">
                     {v.Description.length === 0 &&
-                      <div className="italic">Ingen information finns</div>
+                      <div className="m-italic">Ingen information finns</div>
                     }
 
-                    <div className="w-full">
-                      <div className="font-semibold text-left text-sm ml-2">Dag</div>
+                    <div className="m-w-full">
+                      <div className="m-font-semibold m-text-left m-text-sm m-ml-2">Dag</div>
                       {v.Description.filter(d => d.Attributes.length === 0 || shouldShowAttribute(...d.Attributes)).map((d, j) => {
                         if (dateDiff) {
                           if (j === 0) {
@@ -361,11 +360,11 @@ function ActivityAnalysis (props: Props) {
                           }
                         }
                         const day = daysBetween(previousDay, d.Date)
-                        return <div key={v.Header + j} className={'grid grid-cols-[36px_1fr] ' + (day > 0 ? 'mt-1' : '')}>
-                          <div className="text-right text-sm font-semibold w-9 border-r border-gray-600 pr-1 pt-px" style={{ borderColor: d.Color, borderRightWidth: (d.Color != null) ? 3 : 1 }} key={'day-' + j}>{((dateDiff && day > 0) ? '+' : '') + ((dateDiff && day === 0) ? '' : day.toString())}</div>
-                          <div className="text-left pl-1" key={'text-' + j}>
+                        return <div key={v.Header + j} className={'m-grid m-grid-cols-[36px_1fr] ' + (day > 0 ? 'm-mt-1' : '')}>
+                          <div className="m-text-right m-text-sm m-font-semibold m-w-9 m-border-r m-border-gray-600 m-pr-1 m-pt-px" style={{ borderColor: d.Color, borderRightWidth: (d.Color != null) ? 3 : 1 }} key={'day-' + j}>{((dateDiff && day > 0) ? '+' : '') + ((dateDiff && day === 0) ? '' : day.toString())}</div>
+                          <div className="m-text-left m-pl-1" key={'text-' + j}>
                             <div>{d.Title}</div>
-                            {d.SubItems.length > 0 && <ul className={'list-none list-inside'}>
+                            {d.SubItems.length > 0 && <ul className={'m-list-none m-list-inside'}>
                               {d.SubItems.filter(s => s.Attribute == null || shouldShowAttribute(s.Attribute)).map((sub, z) => <li key={z}>{dot(sub.Color ?? '#000000')}{sub.Text}
                               </li>
                               )}
@@ -377,7 +376,7 @@ function ActivityAnalysis (props: Props) {
                     </div>
                   </div>
                   {i !== (view.length - 1) &&
-                    <div className="border-l-2 mr-2 border-gray-300 border-dotted"></div>
+                    <div className="m-border-l-2 m-mr-2 m-border-gray-300 m-border-dotted"></div>
                   }
                 </div>
               )}
@@ -385,29 +384,29 @@ function ActivityAnalysis (props: Props) {
           </div>
 
           {/* Cast */}
-          <div className="flex w-full">
-            <div className="flex justify-center items-center w-[52px]"><div className="-rotate-90 text">Aktörer</div></div>
-            <div className="grow text-left">
+          <div className="m-flex m-w-full">
+            <div className="m-flex m-justify-center m-items-center m-w-[49px]"><div className="-m-rotate-90 m-text">Aktörer</div></div>
+            <div className="m-grow m-text-left">
               {types.map(t =>
-                <div key={t.Name} className={'max-w-7xl grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
+                <div key={t.Name} className={'m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
                   {view.map((v, i) => {
                     const color = config.LinkTypeId != null ? 'black' : viewService.getView(t.TypeId).Color
-                    return <div className="flex justify-between w-full" key={i}>
+                    return <div className="m-flex m-justify-between m-w-full" key={i}>
                       {i === 0 &&
-                        <div className="mr-2 grow">{t.Name}</div>
+                        <div className="m-mr-2 m-grow">{t.Name}</div>
                       }
-                      <div className={'grow h-px translate-y-3' + (i > intervall.Start[t.TypeId] && i <= intervall.End[t.TypeId] ? ' bg-gray-300' : '')}></div>
+                      <div className={'m-grow m-h-px m-translate-y-3' + (i > intervall.Start[t.TypeId] && i <= intervall.End[t.TypeId] ? ' m-bg-gray-300' : '')}></div>
                       <div className="">
-                        <div className="relative whitespace-nowrap" title={v.Counts[t.TypeId]?.toString()}>
+                        <div className="m-relative m-whitespace-nowrap" title={v.Counts[t.TypeId]?.toString()}>
                           {dots(v.Counts[t.TypeId], color)}
                         </div>
                       </div>
                       {i !== (view.length - 1) &&
-                        <div className={'w-2 h-px translate-y-3' + (i >= intervall.Start[t.TypeId] && i < intervall.End[t.TypeId] ? ' bg-gray-300' : '')}></div>
+                        <div className={'m-w-2 m-h-px m-translate-y-3' + (i >= intervall.Start[t.TypeId] && i < intervall.End[t.TypeId] ? ' m-bg-gray-300' : '')}></div>
                       }
                       {i !== (view.length - 1) &&
-                        <div className="border-l-2 border-gray-300 border-dotted">
-                          <div className={'w-2 h-px z-0 translate-y-3' + (i >= intervall.Start[t.TypeId] && i < intervall.End[t.TypeId] ? ' bg-gray-300' : '')}></div>
+                        <div className="m-border-l-2 m-border-gray-300 m-border-dotted">
+                          <div className={'m-w-2 m-h-px m-z-0 m-translate-y-3' + (i >= intervall.Start[t.TypeId] && i < intervall.End[t.TypeId] ? ' m-bg-gray-300' : '')}></div>
                         </div>
                       }
                     </div>
@@ -421,9 +420,9 @@ function ActivityAnalysis (props: Props) {
 
       }
       <Popover backgroundClass='bg-gray-400/20' show={showSettings !== undefined} hide={() => { setShowSettings(undefined) } } x={showSettings?.x ?? 0} y={showSettings?.y ?? 0}>
-        <Toggle title="Visa dagar som skillnad från föregående datum:" value={dateDiff} onChange={() => { setDateDiff(!dateDiff) }} className='mx-3 my-2' />
+        <Toggle title="Visa dagar som skillnad från föregående datum:" value={dateDiff} onChange={() => { setDateDiff(!dateDiff) }} className="m-mx-3 m-my-2" />
         {attributes.map((a) => (
-          <Toggle key={a.Name} title={a.Name + ':'} value={a.Show} onChange={() => { toggleAttribute(a) }} className='mx-3 mb-2' />
+          <Toggle key={a.Name} title={a.Name + ':'} value={a.Show} onChange={() => { toggleAttribute(a) }} className="m-mx-3 m-mb-2" />
         ))}
       </Popover>
     </div>

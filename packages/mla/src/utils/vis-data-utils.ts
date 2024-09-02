@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import type { IBaseViewConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
-import type { Node, Edge, Network, Position } from 'vis-network'
-import type { IChartBase, IEntity, ILink, Direction, ITimeSpan } from '../interfaces/data-models'
-import viewService, { type IIcon } from '../services/viewService'
 import { getId, isLinked, randomNumber } from './utils'
-import configService from '../services/configurationService'
-import { produce } from 'immer'
 import { Interval } from 'luxon'
+import { produce } from 'immer'
+import type { Direction, IChartBase, IEntity, ILink, ITimeSpan } from '../interfaces/data-models'
+import type { Edge, Network, Node, Position } from 'vis-network'
+import type { IBaseViewConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
+import viewService, { type IIcon } from '../services/viewService'
+import configService from '../services/configurationService'
 
 export function setPositions (n: Network, entities: IEntity[], links: ILink[]): IEntity[] {
   const getLinked = (entity: IEntity): IEntity[] => {

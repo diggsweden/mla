@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { type IChartThing, type IPropertyConfiguration, type ILinkRelationConfiguration } from './common-configuration'
+import { type IChartThing, type ILinkRelationConfiguration, type IPropertyConfiguration } from './common-configuration'
 
 interface ILinkConfiguration extends IChartThing {
   TypeId: string

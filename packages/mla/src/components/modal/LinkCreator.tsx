@@ -52,7 +52,7 @@ function LinkCreator (props: Props) {
   let first = -1
 
   return (
-    <div className="grid grid-cols-2 gap-2 text-left p-6 pb-8 w-full">
+    <div className="m-grid m-grid-cols-2 m-gap-2 m-text-left m-p-6 m-pb-8 m-w-full">
       {properties.map(e => {
         first++
         return (

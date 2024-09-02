@@ -17,11 +17,11 @@ interface RibbonMenuIconButtonProps {
 }
 
 function RibbonMenuIconButton (props: RibbonMenuIconButtonProps) {
-  return <button type='button' disabled={props.disabled} onClick={props.onClick} title={props.title} className={props.className + ' ' + (props.active ? 'border-blue-300 bg-blue-100 ' : 'border-transparent ') + 'h-5 m-px inline-flex flex-row flex-nowrap items-center py-0 px-1 border enabled:hover:bg-blue-100 enabled:hover:border-blue-400 disabled:opacity-50 disabled:cursor-default '}>
-    <span className="flex justify-center items-center">
-      <span className="h-4 w-4 max-h-4 max-w-4 leading-4"><Icon color={props.color} name={props.icon} className="text-primary flex justify-center items-center h-4 w-4 " /></span>
+  return <button type='button' disabled={props.disabled} onClick={props.onClick} title={props.title} className={props.className + ' ' + (props.active ? 'm-border-blue-300 m-bg-blue-100 ' : 'm-border-transparent ') + 'm-h-5 m-m-px m-inline-flex m-flex-row m-flex-nowrap m-items-center m-py-0 m-px-1 m-border enabled:hover:m-bg-blue-100 enabled:hover:m-border-blue-400 disabled:m-opacity-50 disabled:m-cursor-default '}>
+    <span className="m-flex m-justify-center m-items-center">
+      <span className="m-h-4 m-w-4 m-max-h-4 m-max-w-4 m-leading-4"><Icon color={props.color} name={props.icon} className="m-text-primary m-flex m-justify-center m-items-center m-h-4 m-w-4 m-" /></span>
     </span>
-    <span className="ml-1 whitespace-nowrap">{props.label}</span>
+    <span className="m-ml-1 m-whitespace-nowrap">{props.label}</span>
   </button>
 }
 

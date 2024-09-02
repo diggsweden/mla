@@ -21,19 +21,19 @@ function WorkflowProgress () {
     }
 
     return (
-      <li key={action.id} className="m-10">
-        <div className="flex items-center">
-          <div className="h-8 w-8">
+      <li key={action.id} className="m-m-10">
+        <div className="m-flex m-items-center">
+          <div className="m-h-8 m-w-8">
             {
               action.running
                 ? <Spinner />
                 : <Icon name={currentAction.Icon ?? 'check_circle'} color={action.error ? 'red' : action.completed ? 'green' : 'grey'} />
             }
           </div>
-          <div className="ml-1 font-medium leading-tight">
-            <p className="text-lg">{currentAction.Name}</p>
+          <div className="m-ml-1 m-font-medium m-leading-tight">
+            <p className="m-text-lg">{currentAction.Name}</p>
             <p>{currentAction.Description}</p>
-            {action.error && <div className="text-red-700 relative" role="alert">
+            {action.error && <div className="m-text-red-700 m-relative" role="alert">
               <p>{action.error}</p>
             </div>}
           </div>

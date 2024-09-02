@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import { type IQueryResponse } from '../../services/queryService'
-import type { IEvent, IEntity, ILink } from '../../interfaces/data-models'
+import type { IEntity, IEvent, ILink } from '../../interfaces/data-models'
 import ItemResult from './ItemResult'
 import type { IEntityGroup } from './ItemResult'
 import { useEffect, useState } from 'react'
@@ -17,6 +17,7 @@ import Modal from '../common/Modal'
 import TableTool from '../tools/TableTool'
 import { toDateString } from '../../utils/date'
 import { internalAdd } from '../../store/internal-actions'
+import { Button } from '../common/Button'
 
 interface ItemResultProps {
   result: IQueryResponse
@@ -221,21 +222,21 @@ function ItemResultList (props: ItemResultProps) {
   }, [result])
 
   return <div className={props.className}>
-    {result.ErrorMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-3" role="alert">
-      <span className="block sm:inline">{result.ErrorMessage}</span>
+    {result.ErrorMessage && <div className="m-bg-red-100 m-border m-border-red-400 m-text-red-700 m-px-4 m-py-3 m-rounded m-relative m-mb-3" role="alert">
+      <span className="m-block m-sm:inline">{result.ErrorMessage}</span>
     </div>
     }
     {(Object.keys(mainEntities).length + eventGroups.length) > 0 &&
-      <div className="relative">
-        <p className='leading-normal font-sm uppercase text-center mb-2'>Resultat</p>
-        <button className="absolute right-0 top-0 text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded px-1" onClick={addAll}>Lägg till allt</button>
+      <div className="m-relative">
+        <p className="m-leading-normal m-font-sm m-uppercase m-text-center m-mb-2">Resultat</p>
+        <Button className="m-absolute m-right-0 m-top-0" onClick={addAll}>Lägg till allt</Button>
       </div>
     }
     {Object.keys(mainEntities).length > 0 &&
       <div>
         {Object.keys(mainEntities).map(k => <div key={k}>
           {k !== last && seeds &&
-            <div className='text-lg border-t border-gray-400 pt-2 mb-1 font-semibold'>
+            <div className="m-text-lg m-border-t m-border-gray-400 m-pt-2 m-mb-1 m-font-semibold">
               <span className=''>{seeds.find(s => getId(s) === k)!.LabelShort}</span>
             </div>
           }
@@ -246,14 +247,14 @@ function ItemResultList (props: ItemResultProps) {
         )}
       </div>
     }
-    {eventGroups.map(e => (<div key={e.GroupId} className='w-full rounded border-solid border bg-white mb-1 p-2 relative'>
-      <span className='absolute top-4 -right-4 -translate-y-1/2' onClick={() => { addEvents(e) }}>
-        <button className='text-white bg-primary rounded-full text-lg px-2 m-2 h-5 w-5 leading-5 flex justify-center'>+</button>
+    {eventGroups.map(e => (<div key={e.GroupId} className="m-w-full m-rounded m-border-solid m-border m-bg-white m-mb-1 m-p-2 m-relative">
+      <span className='m-absolute m-top-4 -m-right-4 -m-translate-y-1/2' onClick={() => { addEvents(e) }}>
+        <button className="m-text-white m-bg-primary m-rounded-full m-text-lg m-px-2 m-m-2 m-h-5 m-w-5 m-leading-5 m-flex m-justify-center">+</button>
       </span>
       <div onClick={() => { setShowEvents(e.Events) }}>
         <div>
-          <span className='h-5 w-5 inline-flex' >
-            <Icon name='calendar_view_day' className="text-primary relative mt-1"></Icon>
+          <span className="m-h-5 m-w-5 m-inline-flex" >
+            <Icon name='calendar_view_day' className="m-text-primary m-relative m-mt-1"></Icon>
           </span>
           <span className=''>
             {e.Name} - {e.Events.length} händelser
@@ -267,7 +268,7 @@ function ItemResultList (props: ItemResultProps) {
     ))
     }
     {(Object.keys(mainEntities).length + eventGroups.length) === 0 &&
-      <p className="italic">Inga träffar...</p>
+      <p className="m-italic">Inga träffar...</p>
     }
     {showEvents.length > 0 &&
       <Modal mode='ok' wide={true} show={showEvents.length > 0} title={'Tabelldata'} onNegative={() => { setShowEvents([]) }} onPositive={() => { setShowEvents([]) }}>

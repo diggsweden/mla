@@ -81,24 +81,24 @@ function PropertiesPanel (props: Props) {
   }
 
   return (
-    <aside className={'flex flex-col ease-in-out duration-300 bg-gray-100 overflow-none ' + (display !== '' ? 'translate-x-0 ' : 'translate-x-full ') + props.className}>
-      <div className="flex justify-items-stretch w-full bg-secondary text-white h-7 select-none">
-        <div className={'px-3 text-xl cursor-pointer hover:font-extrabold' + (selectedIds.length > 1 ? '' : ' hidden')} onClick={previous}>&lt;</div>
-        <div className='mt-1 grow text-center'>{title}</div>
-        <div className={'px-3 text-xl cursor-pointer hover:font-extrabold' + (selectedIds.length > 1 ? '' : ' hidden')} onClick={next}>&gt;</div>
+    <aside className={'m-flex m-flex-col m-ease-in-out m-duration-300 m-bg-gray-100 m-overflow-none ' + (display !== '' ? 'm-translate-x-0 ' : 'm-translate-x-full ') + props.className}>
+      <div className="m-flex m-justify-items-stretch m-w-full m-bg-secondary m-text-white m-h-7 m-select-none">
+        <div className={'m-px-3 m-text-xl m-cursor-pointer hover:m-font-extrabold' + (selectedIds.length > 1 ? '' : ' m-hidden')} onClick={previous}>&lt;</div>
+        <div className="m-mt-1 m-grow m-text-center">{title}</div>
+        <div className={'m-px-3 m-text-xl m-cursor-pointer hover:m-font-extrabold' + (selectedIds.length > 1 ? '' : ' m-hidden')} onClick={next}>&gt;</div>
       </div>
-      <div className="grow overflow-y-auto">
+      <div className="m-grow m-overflow-y-auto">
         {computedLink && <EventListProperties eventLink={computedLink} />}
         {entity && <EntityProperties key={entity.InternalId} entity={entity} />}
         {link && <LinkProperties key={link.InternalId} link={link} />}
         {(entity ?? link) && config.TimeAnalysis &&
           <HistoryProperties
-            className="w-full"
+            className="m-w-full"
             entityId={entity ? getId(entity) : undefined}
             linkId={link ? getId(link) : undefined} />
         }
       </div>
-      <div className="my-1 mx-3 text-sm self-end">
+      <div className="m-my-1 m-mx-3 m-text-sm m-self-end">
         <span>{source}</span>
       </div>
     </aside>

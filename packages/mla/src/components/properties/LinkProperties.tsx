@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import { produce } from 'immer'
-import { type ILink, type Direction } from '../../interfaces/data-models'
+import { type Direction, type ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
 import useMainStore from '../../store/main-store'
 import Property from '../common/property'
@@ -42,7 +42,7 @@ function LinkProperties (props: Props) {
   }
 
   return (
-    <div className='px-3 mt-3'>
+    <div className="m-px-3 m-mt-3">
       <div>
         {configService.getProperties(link).map(e => (
           <Property key={link.Id + e.propertyConfiguration.TypeId + link.DateFrom?.toISO() + link.DateTo?.toISO()}
@@ -52,7 +52,7 @@ function LinkProperties (props: Props) {
         ))}
       </div>
       <div>
-        <span className="mb-1 text-sm font-medium text-gray-900" title="Välj riktning på relationen">Pil</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Välj riktning på relationen">Pil</span>
         <select onChange={(e) => { linkDirectionChanged(link, e.target.value as Direction) }} value={link.Direction ?? 'NONE'} className="w-full bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1">
           <option value="TO">Till</option>
           <option value="FROM">Från</option>

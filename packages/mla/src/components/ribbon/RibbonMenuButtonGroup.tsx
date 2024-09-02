@@ -7,7 +7,7 @@ interface RibbonMenuButtonGroupProps {
 }
 
 function RibbonMenuButtonGroup (props: RibbonMenuButtonGroupProps) {
-  return <div className={'grid grid-flow-col grid-rows-3 max-h-20 pt-[2px] pb-[5px]'}>
+  return <div className={'m-grid m-grid-flow-col m-grid-rows-3 m-max-h-20 m-pt-[2px] m-pb-[5px]'}>
     {props.children }
   </div>
 }

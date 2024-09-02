@@ -13,9 +13,9 @@ function RibbonMenuSection (props: Props) {
   return (
     <>
       {visible &&
-        <div className="group px-1 pb-6 relative flex items-start content-start">
+        <div className="m-group m-px-1 m-pb-6 m-relative m-flex m-items-start m-content-start">
           {children}
-          <span className="title block absolute left-0 bottom-0 w-full h-6 leading-6 text-sm text-center whitespace-nowrap border-t border-solid border-gray-300">{title}</span>
+          <span className="m-title m-block m-absolute m-left-0 m-bottom-0 m-w-full m-h-6 m-leading-6 m-text-sm m-text-center m-whitespace-nowrap m-border-t m-border-solid m-border-gray-300">{title}</span>
         </div>
       }
     </>

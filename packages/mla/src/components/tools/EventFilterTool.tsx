@@ -4,7 +4,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import configService from '../../services/configurationService'
-import type { IEvent, IBase } from '../../interfaces/data-models'
+import type { IBase, IEvent } from '../../interfaces/data-models'
 import Table from '../common/Table'
 import Icon from '../common/Icon'
 import viewService from '../../services/viewService'
@@ -139,23 +139,23 @@ function EventFilterTool (props: Props) {
 
   return <div>
     {Object.keys(types).length > 1 &&
-      <section className="text-left pt-3 bg-gray-300">
-        <div className="pl-1">
+      <section className="m-text-left m-pt-3 m-bg-gray-300">
+        <div className="m-pl-1">
           {Object.keys(types).map(t =>
             <button
               key={t}
-              className={` ${t === selectedType ? ' bg-white text-blue-800' : ' bg-gray-100 border border-b-gray-300 border-t-gray-50'} h-7 mx-0.5 px-4 select-none font-medium tracking-wider hover:bg-white hover:border-b-gray-200`}
+              className={` ${t === selectedType ? ' m-bg-white m-text-blue-800' : ' m-bg-gray-100 m-border m-border-b-gray-300 m-border-t-gray-50'} m-h-7 m-mx-0.5 m-px-4 m-select-none m-font-medium m-tracking-wider hover:m-bg-white hover:m-border-b-gray-200`}
               type='button'
               onClick={() => { setSelectedType(t) }}>{types[t]}
             </button>)}
         </div>
       </section>
     }
-    <section className="p-3">
+    <section className="m-p-3">
       <Table items={showList} typeId={selectedType} sortFn={setSort} filterFn={setFilter} filters={updatedFilter[selectedType]} sortConfig={{ property: sortColumn, asc: sortAsc }} />
-      <div className="flex justify-between mt-0.5 align-top text-gray-500 text-sm">
-        <button className="bg-gray-200 mt-1.5 px-2 py-1 font-medium text-gray-800" onClick={(e: any) => { exportToCsv(e) }}>
-          <Icon name="ios_share" className='w-5 h-5 inline-block m-0 -mb-1 me-1'></Icon>
+      <div className="m-flex m-justify-between m-mt-0.5 m-align-top m-text-gray-500 m-text-sm">
+        <button className="m-bg-gray-200 m-mt-1.5 m-px-2 m-py-1 m-font-medium m-text-gray-800" onClick={(e: any) => { exportToCsv(e) }}>
+          <Icon name="ios_share" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1 m-me-1"></Icon>
           Exportera CSV
         </button>
         <span>Antal: {showList.length}</span>

@@ -50,16 +50,16 @@ export function TimelineBar (props: Props) {
   }, [date, play, transitionTime, width, startDate])
 
   return (
-    <div className={'border overflow-hidden rounded shadow bg-white ' + (width === 0 ? 'opacity-0' : '')} ref={resizeRef}>
-      <div className='flex flex-row flex-nowrap' style={style}>
-        {months.map((m, i) => <div className='w-[96px] shrink-0' key={i}>
-          <div className='mh-1/2 text-center border-r border-b'>{m}</div>
+    <div className={'m-border m-overflow-hidden m-rounded m-shadow m-bg-white ' + (width === 0 ? 'm-opacity-0' : '')} ref={resizeRef}>
+      <div className="m-flex m-flex-row m-flex-nowrap" style={style}>
+        {months.map((m, i) => <div className='m-w-[96px] m-shrink-0' key={i}>
+          <div className='m-mh-1/2 m-text-center m-border-r m-border-b'>{m}</div>
         </div>)}
       </div>
-      <div className='flex flex-row flex-nowrap' style={style}>
-        <div className='absolute'>
+      <div className="m-flex m-flex-row m-flex-nowrap" style={style}>
+        <div className="m-absolute">
           {history.map((m, i) => <span key={i + m.rubrik} title={m.rubrik + '\n' + toDateAndTimeString(m.date)} onClick={() => { select(m) }}>
-            <svg className={'h-3 w-3 mt-2 absolute cursor-pointer'} style={{ left: `${m.offset - 6}px` }} >
+            <svg className={'m-h-3 m-w-3 m-mt-2 m-absolute m-cursor-pointer'} style={{ left: `${m.offset - 6}px` }} >
               <circle cx="5" cy="5" r="5" fill={m.color} />
             </svg>
           </span>)}

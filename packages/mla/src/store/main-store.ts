@@ -5,10 +5,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { create } from 'zustand'
 
-import type { IEntity, IEvent, IPhaseEvent, ILink, ITimeSpan, IEventLink } from '../interfaces/data-models'
+import type { IEntity, IEvent, IEventLink, ILink, IPhaseEvent, ITimeSpan } from '../interfaces/data-models'
 import { generateUUID, mergeContext } from '../utils/utils'
 import useAppStore from './app-store'
-import { type DataInterfaceEdges, type DataInterfaceNodes, type Node, type Edge, type Network } from 'vis-network'
+import { type DataInterfaceEdges, type DataInterfaceNodes, type Edge, type Network, type Node } from 'vis-network'
 import { DataSet } from 'vis-data'
 import { produce } from 'immer'
 import { internalAdd, internalRemove, internalUpdate } from './internal-actions'

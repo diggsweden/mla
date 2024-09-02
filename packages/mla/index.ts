@@ -4,4 +4,4 @@
 
 import { MLA } from "./src/MLA"
 
-export default MLA
+export { MLA }

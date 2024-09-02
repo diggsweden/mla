@@ -230,15 +230,15 @@ function Map(props: Props) {
   }
 
   return (
-    <div className={props.className + ' bg-white'}>
-      <div className='h-full w-full relative'>
-        {placeEntityId && <div className='absolute h-full w-full z-30 opacity-75 pointer-events-none'>
-          <p className='bg-white mx-20 mt-5 text-center rounded-md'>
+    <div className={props.className + ' m-bg-white'}>
+      <div className="m-h-full m-w-full m-relative">
+        {placeEntityId && <div className="m-absolute m-h-full m-w-full m-z-30 m-opacity-75 m-pointer-events-none">
+          <p className="m-bg-white m-mx-20 m-mt-5 m-text-center m-rounded-md">
             Klicka på kartan för att placera {getEntity(placeEntityId)!.LabelShort}
           </p>
         </div>}
 
-        <div ref={mapRef} className='h-full w-full z-20' ></div>
+        <div ref={mapRef} className="m-h-full m-w-full m-z-20" ></div>
       </div>
       {map && showMap && mapEntities.map(s =>
         <EntityMarker key={s} entityId={s} map={map} click={(e) => { onSelect(e) }}></EntityMarker>
