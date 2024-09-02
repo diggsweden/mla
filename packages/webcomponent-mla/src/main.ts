@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { MLA } from "react-mla"
 import CreateMLAComponent from "./component"
 
 CreateMLAComponent();

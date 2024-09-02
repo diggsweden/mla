@@ -85,7 +85,7 @@ function Map(props: Props) {
         }
 
         if (config.WmsMapLayers) {
-          (config.WmsMapLayers as WmsConfiguration[]).forEach((layer, index) => {
+          (config.WmsMapLayers as WmsConfiguration[]).forEach((layer) => {
             const mapLayer = L.tileLayer.wms(layer.Url, {
               layers: layer.Layers,
               format: layer.Format,

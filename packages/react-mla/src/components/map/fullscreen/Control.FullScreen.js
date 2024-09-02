@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint no-undef: "off" */
 import L from 'leaflet';
 
 (function (root, factory) {
