@@ -12,6 +12,9 @@ on:
         description: 'Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease'
         required: true
 
+permissions:
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
