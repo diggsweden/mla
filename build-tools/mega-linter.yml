@@ -7,7 +7,6 @@
 # See configuration options at https://oxsecurity.github.io/megalinter/configuration/ and more in each linter documentation.
 
 # General
-sdflsjdflksjfsdlkjfslfkjsf
 PRINT_ALPACA: false
 APPLY_FIXES: all
 
@@ -15,7 +14,8 @@ DISABLE_ERRORS: false
 SHOW_ELAPSED_TIME: true
 SHOW_SKIPPED_LINTERS: false
 
-ADDITIONAL_EXCLUDED_DIRECTORIES: [.github/workflows]
+ADDITIONAL_EXCLUDED_DIRECTORIES:
+  - "workflows"
 
 # Reporter options
 CLEAR_REPORT_FOLDER: true
