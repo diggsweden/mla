@@ -10,26 +10,30 @@ import commonjs from 'vite-plugin-commonjs'
 
 import path, { resolve } from 'path'
 
-export default defineConfig({
-  plugins: [
-    react(),
-    cssInjectedByJsPlugin(),
-    commonjs(),
-  ],
-  define: {'process.env': process.env},
-  build: {
-    copyPublicDir: false,
-    target: "es2020",
-    lib: {
-      entry: resolve(__dirname, 'index.ts'),
-      name: "MlaWebComponent",
-      fileName: "mla-component",
-      formats: ["umd"]
+const isDev1 = process.env
+
+export default defineConfig(({ mode }) => {
+  return {
+    plugins: [
+      react(),
+      cssInjectedByJsPlugin(),
+      commonjs(),
+    ],
+    define: {'process.env': process.env},
+    build: {
+      copyPublicDir: false,
+      target: "es2020",
+      lib: {
+        entry: resolve(__dirname, 'index.ts'),
+        name: "MlaWebComponent",
+        fileName: "mla-component",
+        formats: ["umd"]
+      },
     },
-  },
-  resolve: {
-    alias: {
-      'react-mla': path.resolve(__dirname, '../react-mla/dist/react-mla.js')
+    resolve: {
+      alias: {
+        'react-mla': path.resolve(__dirname, mode === 'development' ? '../react-mla/index.ts' : '../react-mla/dist/react-mla.umd.cjs')
+      }
     }
   }
 })

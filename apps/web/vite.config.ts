@@ -3,22 +3,25 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import commonjs from 'vite-plugin-commonjs'
 import path from 'path'
 
+import react from '@vitejs/plugin-react'
+import commonjs from 'vite-plugin-commonjs'
 
-export default defineConfig({
-  plugins: [
-    react(),
-    commonjs()
-  ],
-  build: {
-    chunkSizeWarningLimit: 10000
-  },
-  resolve: {
-    alias:{
-      'react-mla' : path.resolve(__dirname, '../../packages/react-mla/dist/react-mla.js'),
+export default defineConfig(({ mode }) => {
+  return {
+    plugins: [
+      react(),
+      commonjs()
+    ],
+    build: {
+      chunkSizeWarningLimit: 10000
     },
-  },
+    resolve: {
+      alias: {
+        'react-mla': path.resolve(__dirname, mode === 'development' ? '../../packages/react-mla/index.ts' : '../../packages/react-mla/dist/react-mla.js')
+      },
+    },
+  }
 })
+
