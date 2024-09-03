@@ -4,6 +4,7 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/mla-component.umd.js",
+  "files": ["dist", "src"],
   "dependencies": {
     "react-mla": "workspace:^",
     "@r2wc/react-to-web-component": "^2.0.3",

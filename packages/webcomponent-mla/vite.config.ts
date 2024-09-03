@@ -28,8 +28,8 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias:{
-      'react-mla' : path.resolve(__dirname, '../react-mla/index.ts'),
-    },
-  },
+    alias: {
+      'react-mla': path.resolve(__dirname, '../react-mla/dist/react-mla.js')
+    }
+  }
 })
