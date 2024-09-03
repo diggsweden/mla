@@ -26,6 +26,7 @@ permissions:
 
 jobs:
   build:
+    name: Build and release
     runs-on: ubuntu-latest
     steps:
       # Checkout project repository
