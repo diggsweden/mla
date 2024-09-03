@@ -18,7 +18,6 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'index.ts'),
       name: "MlaReactComponent",
-      formats: ["es"],
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
