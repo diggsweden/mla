@@ -110,12 +110,19 @@ jobs:
           git commit -m "chore: release ${{ env.NEW_VERSION }}"
           git tag ${{ env.NEW_VERSION }}
 
-      # Build react-mla
-      - name: Build react-mla
+        # Build
+      - name: Build
         run: |
-          pnpm build
-          cp package.json ./dist
-        working-directory: ./packages/react-mla
+          pnpm run -r build
+          cp ./packages/react-mla/package.json ./packages/react-mla/dist
+          cp ./packages/webcomponent-mla/package.json ./packages/webcomponent-mla/dist
+
+      # Build react-mla
+      #- name: Build react-mla
+      #  run: |
+      #    pnpm build
+      #    cp package.json ./dist
+      #  working-directory: ./packages/react-mla
 
       # Publish version to public repository
       - name: Publish react-mla
@@ -124,11 +131,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
 
       # Build webcomponent-mla
-      - name: Build webcomponent-mla
-        run: |
-          pnpm build
-          cp package.json ./dist
-        working-directory: ./packages/webcomponent-mla
+      #- name: Build webcomponent-mla
+      #  run: |
+      #    pnpm build
+      #    cp package.json ./dist
+      #  working-directory: ./packages/webcomponent-mla
 
       # Publish version to public repository
       - name: Publish webcomponent-mla
