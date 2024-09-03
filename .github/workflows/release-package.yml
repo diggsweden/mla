@@ -51,14 +51,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile          
 
-      # Setup Node.js environment for GitHub
-      #- name: Switch to GitHub repository
-      #  uses: actions/setup-node@v4
-      #  with:
-      #    node-version-file: ".nvmrc"
-      #    cache: pnpm        
-      #    registry-url: 'https://npm.pkg.github.com'
-
       # Bump package version
       # Use tag latest
       - name: Bump release version
@@ -95,27 +87,22 @@ jobs:
           git commit -m "chore: release ${{ env.NEW_VERSION }}"
           git tag ${{ env.NEW_VERSION }}
 
+      # Build webcomponent-mla
+      - name: Build webcomponent-mla
+        run: pnpm build
+        working-directory: ./packages/webcomponent-mla
+
       # Publish version to public repository
       - name: Publish webcomponent-mla
         run: pnpm publish ./packages/webcomponent-mla --access private --tag ${{ env.RELEASE_TAG }} --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
 
-      #- name: Publish webcomponent-mla
-      #  run: pnpm publish ./packages/webcomponent-mla --access public --tag ${{ env.RELEASE_TAG }}
-      #  env:
-      #    NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       # Publish version to public repository
       - name: Publish react-mla
         run: pnpm publish ./packages/react-mla --access private --tag ${{ env.RELEASE_TAG }} --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
-
-      #- name: Publish react-mla
-      #  run: pnpm publish ./packages/react-mla --access public --tag ${{ env.RELEASE_TAG }}
-      #  env:
-      #    NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Push repository changes
       - name: Push changes to repository
@@ -127,7 +114,7 @@ jobs:
       # Read version changelog
       - id: get-changelog
         name: Get version changelog
-        uses: superfaceai/release-changelog-action@v1
+        uses: superfaceai/release-changelog-action@v2
         with:
           path-to-changelog: CHANGELOG.md
           version: ${{ env.NEW_VERSION }}
@@ -135,10 +122,12 @@ jobs:
 
       # Update GitHub release with changelog
       - name: Update GitHub release documentation
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2.0.8
         with:
           tag_name: ${{ env.NEW_VERSION }}
           body: ${{ steps.get-changelog.outputs.changelog }}
           prerelease: ${{ startsWith(github.event.inputs.release-type, 'pre') }}
+          files: |
+            ./packages/webcomponent-react/dist/mla-component.umd.cjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
