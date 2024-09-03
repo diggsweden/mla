@@ -7,6 +7,7 @@
 # See configuration options at https://oxsecurity.github.io/megalinter/configuration/ and more in each linter documentation.
 
 # General
+sdflsjdflksjfsdlkjfslfkjsf
 PRINT_ALPACA: false
 APPLY_FIXES: all
 
