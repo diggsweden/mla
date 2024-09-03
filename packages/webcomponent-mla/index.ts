@@ -5,5 +5,3 @@
 import CreateMLAComponent from './src/component'
 
 CreateMLAComponent();
-
-export { CreateMLAComponent }

@@ -4,19 +4,11 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/mla-component.umd.js",
-  "exports": {
-    ".": {
-      "require": "./dist/mla-component.umd.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
+    "react-mla": "workspace:^",
     "@r2wc/react-to-web-component": "^2.0.3",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-mla": "workspace:^"
+    "react-dom": "^18.3.1"
   },
   "scripts": {
     "dev": "vite dev --open",
