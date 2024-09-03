@@ -162,4 +162,4 @@ jobs:
           files: |
             ./packages/webcomponent-mla/dist/mla-component.umd.cjs
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
