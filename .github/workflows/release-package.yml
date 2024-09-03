@@ -84,8 +84,7 @@ jobs:
       - name: Create semver version
         run: |
           NEW_VERSION=${{ env.NEW_VERSION }}
-          NEW_SEMVER_VERSION=${NEW_VERSION//v}
-          echo NEW_SEMVER_VERSION=${NEW_SEMVER_VERSION} >> "$GITHUB_ENV"
+          echo "NEW_SEMVER_VERSION=${NEW_VERSION//v}" >> "$GITHUB_ENV"
 
       # Update changelog unreleased section with new version
       - name: Update changelog
