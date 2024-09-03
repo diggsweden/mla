@@ -17,6 +17,7 @@ on: # yamllint disable-line rule:truthy
 
 permissions:
   contents: write
+  security-events: write  
 
 jobs:
 #  commit:
