@@ -28,7 +28,6 @@ export interface MlaProps {
 export function MLA (props: MlaProps) {
   const [ready, setReady] = useState(false)
   useEffect(() => {
-    setReady(false)
     async function init () {
       if (configService.isConfigured()) {
         return
