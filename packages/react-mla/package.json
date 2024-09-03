@@ -1,10 +1,13 @@
 {
   "name": "react-mla",
-  "version": "0.0.3-beta.0",
+  "version": "0.0.5-beta.0",
   "license": "MIT",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "./dist/react-mla.umd.cjs",
   "module": "./dist/react-mla.js",
   "exports": {
