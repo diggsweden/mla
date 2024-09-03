@@ -160,6 +160,6 @@ jobs:
           body: ${{ steps.get-changelog.outputs.changelog }}
           prerelease: ${{ startsWith(github.event.inputs.release-type, 'pre') }}
           files: |
-            ./packages/webcomponent-react/dist/mla-component.umd.cjs
+            ./packages/webcomponent-mla/dist/mla-component.umd.cjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
