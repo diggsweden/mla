@@ -66,7 +66,6 @@ jobs:
         if: startsWith(github.event.inputs.release-type, 'pre') != true
         run: |
           echo "NEW_VERSION=$(npm --no-git-tag-version version "$RELEASE_TYPE")" >> "$GITHUB_ENV"
-          echo "NEW_SEMVER_VERSION=$(npm --tag-version-prefix "" --no-git-tag-version version "$RELEASE_TYPE")" >> "$GITHUB_ENV"
           echo "RELEASE_TAG=latest" >> "$GITHUB_ENV"
         env:
           RELEASE_TYPE: ${{ github.event.inputs.release-type }}
@@ -77,10 +76,13 @@ jobs:
         if: startsWith(github.event.inputs.release-type, 'pre')
         run: |
           echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version "$RELEASE_TYPE")" >> "$GITHUB_ENV"
-          echo "NEW_SEMVER_VERSION=$(npm --no-git-tag-version --tag-version-prefix "" --preid=beta version "$RELEASE_TYPE")" >> "$GITHUB_ENV"
           echo "RELEASE_TAG=beta" >> "$GITHUB_ENV"
         env:
           RELEASE_TYPE: ${{ github.event.inputs.release-type }}
+
+      # Create symver version
+      - name: Create symver version
+        run: echo "NEW_SEMVER_VERSION=$RELEASE_TYPE.replace('v','')" >> "$GITHUB_ENV"
 
       # Update changelog unreleased section with new version
       - name: Update changelog
@@ -117,25 +119,11 @@ jobs:
           cp ./packages/react-mla/package.json ./packages/react-mla/dist
           cp ./packages/webcomponent-mla/package.json ./packages/webcomponent-mla/dist
 
-      # Build react-mla
-      #- name: Build react-mla
-      #  run: |
-      #    pnpm build
-      #    cp package.json ./dist
-      #  working-directory: ./packages/react-mla
-
       # Publish version to public repository
       - name: Publish react-mla
         run: pnpm publish ./packages/react-mla --access restricted --tag ${{ env.RELEASE_TAG }} --no-git-checks --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
-
-      # Build webcomponent-mla
-      #- name: Build webcomponent-mla
-      #  run: |
-      #    pnpm build
-      #    cp package.json ./dist
-      #  working-directory: ./packages/webcomponent-mla
 
       # Publish version to public repository
       - name: Publish webcomponent-mla
