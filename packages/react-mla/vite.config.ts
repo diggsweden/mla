@@ -17,9 +17,7 @@ export default defineConfig({
     outDir: './dist',
     lib: {
       entry: resolve(__dirname, 'index.ts'),
-      name: "MlaReactComponent",
-      formats: ["es"],
-      fileName: (format) => `index.${format}.js`,
+      name: "MlaReactComponent"
     },
     rollupOptions: {
       external: ["react", "react-dom"],
