@@ -89,7 +89,9 @@ jobs:
 
       # Build react-mla
       - name: Build react-mla
-        run: pnpm build
+        run: |
+          pnpm build
+          cp package.json ./dist
         working-directory: ./packages/react-mla
 
       # Publish version to public repository
@@ -100,7 +102,9 @@ jobs:
 
       # Build webcomponent-mla
       - name: Build webcomponent-mla
-        run: pnpm build
+        run: |
+          pnpm build
+          cp package.json ./dist
         working-directory: ./packages/webcomponent-mla
 
       # Publish version to public repository
