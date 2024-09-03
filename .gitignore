@@ -54,6 +54,7 @@ chrome-user-data
 .vs
 *.swp
 *.swo
+*.tsbuildinfo
 
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build
