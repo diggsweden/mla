@@ -128,7 +128,7 @@ function HistoryProperties (props: Props) {
   }
 
   function setHistory (original: IChartBase) {
-    dateChanged(original, formatDate(original.DateFrom, undefined, true), formatDate(original.DateTo ?? DateTime.now(), undefined, false))
+    dateChanged(original, formatDate(original.DateFrom, undefined, true), undefined)
   }
 
   function updateDates (original: IChartBase, dateFrom?: DateTime, dateTo?: DateTime): IChartBase {
@@ -171,14 +171,15 @@ function HistoryProperties (props: Props) {
 
   function addForDate () {
     if (current) {
-      let up = current
-      const end = current.DateTo ?? formatDate(currentDate.DateFrom, undefined, false)!
-      if (current.DateTo == null) {
-        up = updateDates(current, current.DateFrom, end)
+      let to = current.DateTo
+      if (to == null) {
+        to = (current.DateFrom || currentDate.DateFrom)!.plus({ day: 1}).startOf("day")
+      } else {
+        to = to.plus({ second: 1})
       }
 
       const copy = produce(current, draft => {
-        draft.DateFrom = up.DateTo
+        draft.DateFrom = to
         draft.DateTo = undefined
         draft.InternalId = generateUUID()
       })
@@ -370,7 +371,7 @@ function HistoryProperties (props: Props) {
   </>
 }
 
-function textFormatDate (date?: DateTime): string {
+function textFormatDate (date?: DateTime): string | undefined {
   if (date) {
     return toDateAndTimeString(date)
   } else {

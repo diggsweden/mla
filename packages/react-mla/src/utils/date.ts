@@ -5,10 +5,10 @@
 import { IHistory, ITimeSpan } from "../interfaces/data-models"
 import { DateTime } from 'luxon'
 
-export function toDateString (d?: DateTime): string {
+export function toDateString (d?: DateTime): string | undefined {
   d = d?.toUTC()
   if (d == null) {
-    return ''
+    return undefined
   }
 
   return d.toFormat("yyyy-MM-dd") ?? ""
@@ -17,15 +17,15 @@ export function toDateString (d?: DateTime): string {
 export function toTimeString (d?: DateTime): string | undefined {
   d = d?.toUTC()
   if (d == null || (d.hour == 23 && d.minute == 59) || (d.hour == 0 && d.minute == 0)) {
-    return ''
+    return undefined
   }
 
   return d.toFormat("HH:mm") ?? ""
 }
 
-export function toDateAndTimeString (d?: DateTime): string {
+export function toDateAndTimeString (d?: DateTime): string | undefined {
   if (d == null) {
-    return ''
+    return undefined
   }
 
   return [toDateString(d), toTimeString(d)].join(' ')

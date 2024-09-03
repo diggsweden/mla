@@ -153,7 +153,25 @@ export function isSelected (thing: IChartBase, selected: string[]): boolean {
 
 export function isActive (thing: IChartBase, time: ITimeSpan): boolean {
   const interval = Interval.fromDateTimes(time.DateFrom, time.DateTo)
-  return (thing.DateFrom == null ? true : interval.contains(thing.DateFrom) || thing.DateTo == null ? true : interval.contains(thing.DateTo))
+
+  if (thing.DateFrom == null && thing.DateTo == null) {
+    return true
+  }
+
+  if (thing.DateFrom == null && thing.DateTo != null) {
+    return interval.contains(thing.DateTo)
+  } 
+
+  if (thing.DateTo == null && thing.DateFrom != null) {
+    return interval.contains(thing.DateFrom)
+  }
+
+  if (thing.DateFrom != null && thing.DateTo != null) {
+    const interval2 = Interval.fromDateTimes(thing.DateFrom!, thing.DateTo!)
+    return interval.intersection(interval2) != null
+  }
+
+  return false
 }
 
 export function mapToNode (entity: IEntity, icon: IIcon | undefined, selected: boolean, active: boolean, historyMode: boolean, config: IViewConfiguration, view: IBaseViewConfiguration): Node {

@@ -258,7 +258,7 @@ function ActivityTool (props: Props) {
                 </div>
               </div>
             } else if (m.separator) {
-              return <div key={i} ref={ref} className='cursor-default ml-4 mb-3 font-semibold text-center relative before:block before:absolute before:h-1 before:bg-primary before:left-0 before:w-16 before:top-1/2 after:block after:absolute after:h-1 after:bg-primary after:right-0 after:w-16 after:top-1/2'>
+              return <div key={i} ref={ref} className='m-cursor-default m-ml-4 m-mb-3 m-font-semibold m-text-center m-relative before:m-block before:m-absolute before:m-h-1 before:m-bg-primary before:m-left-0 before:m-w-16 before:m-top-1/2 after:m-block after:m-absolute after:m-h-1 after:m-bg-primary after:m-right-0 after:m-w-16 after:m-top-1/2'>
                 <div>{ toDateString(m.date) }</div>
               </div>
             } else {

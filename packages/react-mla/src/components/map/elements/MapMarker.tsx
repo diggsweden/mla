@@ -10,7 +10,6 @@ import useAppStore from '../../../store/app-store'
 import { Icon, LatLng, Marker } from 'leaflet'
 import * as L from 'leaflet'
 import { IEntity } from '../../../interfaces/data-models'
-import { useEffectDebugger } from '../../../utils/debug'
 
 interface Props {
   from?: IEntity
@@ -59,7 +58,7 @@ function MapMarker (props: Props) {
   }, [entity, from, historyMode])
 
   const animate = useRef(0)
-  useEffectDebugger(() => {
+  useEffect(() => {
     if (from?.Coordinates != null && entity.Coordinates != null && historyMode) {
       const latDiff = entity.Coordinates.lat - from.Coordinates.lat
       const lngDiff = entity.Coordinates.lng - from.Coordinates.lng
@@ -86,7 +85,7 @@ function MapMarker (props: Props) {
     return () => {
       window.clearInterval(animate.current)
     }
-  }, [from, entity, historyMode, active])
+  }, [from, entity, historyMode])
 
   useEffect(() => {
     const newMarker = new Marker(new LatLng(0, 0), {
@@ -123,7 +122,7 @@ function MapMarker (props: Props) {
         iconAnchor: [20, 40]
       }))
     }
-  }, [active, coordinates, entity, icon, marker, selected])
+  }, [active, icon, marker, selected])
 
   useEffect(() => {
     if (marker) {
@@ -136,7 +135,7 @@ function MapMarker (props: Props) {
     return () => {
       marker?.removeFrom(map)
     }
-  }, [entity, marker, map, selected, active, historyMode])
+  }, [marker, map, active, historyMode])
 
   useEffect(() => {
     if (marker) {
