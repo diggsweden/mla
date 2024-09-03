@@ -1,6 +1,6 @@
 {
   "name": "react-mla",
-  "version": "1.3.0",
+  "version": "0.0.3-beta.0",
   "license": "MIT",
   "type": "module",
   "types": "./dist/react-mla/index.d.ts",
