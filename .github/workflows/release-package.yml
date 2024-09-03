@@ -80,9 +80,12 @@ jobs:
         env:
           RELEASE_TYPE: ${{ github.event.inputs.release-type }}
 
-      # Create symver version
-      - name: Create symver version
-        run: echo "NEW_SEMVER_VERSION=$RELEASE_TYPE.replace('v','')" >> "$GITHUB_ENV"
+      # Create semver version
+      - name: Create semver version
+        run: |
+          NEW_VERSION=${{ env.NEW_VERSION }}
+          NEW_SEMVER_VERSION=${NEW_VERSION//v}
+          echo NEW_SEMVER_VERSION=${NEW_SEMVER_VERSION} >> "$GITHUB_ENV"
 
       # Update changelog unreleased section with new version
       - name: Update changelog
