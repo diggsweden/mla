@@ -26,6 +26,7 @@ permissions:
 
 jobs:
   build:
+    name: Build and release
     runs-on: ubuntu-latest
     steps:
       # Checkout project repository
@@ -66,7 +67,6 @@ jobs:
         if: startsWith(github.event.inputs.release-type, 'pre') != true
         run: |
           echo "NEW_VERSION=$(npm --no-git-tag-version version "$RELEASE_TYPE")" >> "$GITHUB_ENV"
-          echo "NEW_SEMVER_VERSION=$(npm --tag-version-prefix "" --no-git-tag-version version "$RELEASE_TYPE")" >> "$GITHUB_ENV"
           echo "RELEASE_TAG=latest" >> "$GITHUB_ENV"
         env:
           RELEASE_TYPE: ${{ github.event.inputs.release-type }}
@@ -77,10 +77,15 @@ jobs:
         if: startsWith(github.event.inputs.release-type, 'pre')
         run: |
           echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version "$RELEASE_TYPE")" >> "$GITHUB_ENV"
-          echo "NEW_SEMVER_VERSION=$(npm --no-git-tag-version --tag-version-prefix "" --preid=beta version "$RELEASE_TYPE")" >> "$GITHUB_ENV"
           echo "RELEASE_TAG=beta" >> "$GITHUB_ENV"
         env:
           RELEASE_TYPE: ${{ github.event.inputs.release-type }}
+
+      # Create semver version
+      - name: Create semver version
+        run: |
+          NEW_VERSION=${{ env.NEW_VERSION }}
+          echo "NEW_SEMVER_VERSION=${NEW_VERSION//v}" >> "$GITHUB_ENV"
 
       # Update changelog unreleased section with new version
       - name: Update changelog
@@ -110,25 +115,18 @@ jobs:
           git commit -m "chore: release ${{ env.NEW_VERSION }}"
           git tag ${{ env.NEW_VERSION }}
 
-      # Build react-mla
-      - name: Build react-mla
+        # Build
+      - name: Build
         run: |
-          pnpm build
-          cp package.json ./dist
-        working-directory: ./packages/react-mla
+          pnpm run -r build
+          cp ./packages/react-mla/package.json ./packages/react-mla/dist
+          cp ./packages/webcomponent-mla/package.json ./packages/webcomponent-mla/dist
 
       # Publish version to public repository
       - name: Publish react-mla
         run: pnpm publish ./packages/react-mla --access restricted --tag ${{ env.RELEASE_TAG }} --no-git-checks --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
-
-      # Build webcomponent-mla
-      - name: Build webcomponent-mla
-        run: |
-          pnpm build
-          cp package.json ./dist
-        working-directory: ./packages/webcomponent-mla
 
       # Publish version to public repository
       - name: Publish webcomponent-mla

@@ -28,3 +28,8 @@ jobs:
           name: MegaLinter reports
           path: |
             megalinter-reports
+
+      #- name: Upload Megalint Sarif Report
+      #  uses: github/codeql-action/upload-sarif@v3
+      #  with:
+      #    sarif_file: megalinter-reports/megalinter-report.sarif
