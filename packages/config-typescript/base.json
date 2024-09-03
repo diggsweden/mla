@@ -12,7 +12,7 @@
     "module": "ESNext",
     "resolveJsonModule": true,
     "strict": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "useDefineForClassFields": true,
     "moduleResolution": "bundler"
   },
