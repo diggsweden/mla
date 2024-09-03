@@ -15,6 +15,9 @@ on: # yamllint disable-line rule:truthy
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
 #  commit:
 #    uses: ./.github/workflows/commit.yml
