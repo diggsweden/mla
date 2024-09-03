@@ -87,6 +87,11 @@ jobs:
           git commit -m "chore: release ${{ env.NEW_VERSION }}"
           git tag ${{ env.NEW_VERSION }}
 
+      # Build webcomponent-mla
+      - name: Build webcomponent-mla
+        run: pnpm build
+        working-directory: ./packages/webcomponent-mla
+
       # Publish version to public repository
       - name: Publish webcomponent-mla
         run: pnpm publish ./packages/webcomponent-mla --access private --tag ${{ env.RELEASE_TAG }} --dry-run
