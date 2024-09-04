@@ -16,8 +16,8 @@ on: # yamllint disable-line rule:truthy
       - main
 
 jobs:
-#  commit:
-#    uses: ./.github/workflows/commit.yml
+  commit:
+    uses: ./.github/workflows/commit.yml
   license:
     uses: ./.github/workflows/license.yml
   lint:

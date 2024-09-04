@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# SPDX-FileCopyrightText: Josef Andersson
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 #
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: CC0-1.0
 
 # Code Quality Check Script
 # Uses mega-linter, reuse-tool and conform to check various linting, licenses, and commit compliance.
@@ -52,7 +52,7 @@ store_exit_code() {
 lint() {
   export MEGALINTER_DEF_WORKSPACE='/repo'
   print_header 'LINTER HEALTH (MEGALINTER)'
-  podman run --rm --volume "$(pwd)":/repo -e MEGALINTER_CONFIG='development/mega-linter.yml' -e DEFAULT_WORKSPACE=${MEGALINTER_DEF_WORKSPACE} -e LOG_LEVEL=INFO ghcr.io/oxsecurity/megalinter-java:v7.3.0
+  podman run --rm --volume "$(pwd)":/repo -e MEGALINTER_CONFIG='build-tools/mega-linter.yml' -e DEFAULT_WORKSPACE=${MEGALINTER_DEF_WORKSPACE} -e LOG_LEVEL=INFO ghcr.io/oxsecurity/megalinter-java:v7.3.0
   store_exit_code "$?" "Lint" "${MISSING} ${RED}Lint check failed, see logs (std out and/or ./megalinter-reports) and fix problems.${NC}\n" "${GREEN}${CHECKMARK}${CHECKMARK} Lint check passed${NC}\n"
   printf '\n\n'
 }
