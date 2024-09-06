@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 import useSearchStore from '../../store/search-state'
 import ItemResultList from '../result/ItemResultList'
 import Property from '../common/property'
-import { Button } from '../common/Button'
+import Button from '../common/Button'
 
 function SearchTool () {
   const selectedTool = useSearchStore((state) => state.searchTool)

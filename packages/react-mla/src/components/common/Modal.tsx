@@ -4,7 +4,7 @@
 
 import useKeyDown from '../../effects/keydown'
 import { useEffect, useRef } from 'react'
-import { Button } from './Button'
+import Button from './Button'
 
 interface ModalProps {
   title?: string

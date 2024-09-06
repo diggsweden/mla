@@ -3,7 +3,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "pnpm --filter ./apps/web run dev",
-    "build:packages": "pnpm --filter packages/* build"
+    "build:packages": "pnpm --filter ./packages/* build"
   },
   "packageManager": "pnpm@9.7.1",
   "version": "0.0.6-beta.0"

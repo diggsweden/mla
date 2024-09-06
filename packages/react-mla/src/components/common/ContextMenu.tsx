@@ -18,7 +18,7 @@ interface Props {
   paste?: () => void
 }
 
-export function ContextMenu (props: Props) {
+export default function ContextMenu (props: Props) {
   const contextmenuPosition = useAppStore((state) => state.contextmenuPosition)
   const hideContextMenu = useAppStore((state) => state.hideContextMenu)
 

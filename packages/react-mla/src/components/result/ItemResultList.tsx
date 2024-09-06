@@ -17,7 +17,7 @@ import Modal from '../common/Modal'
 import TableTool from '../tools/TableTool'
 import { toDateString } from '../../utils/date'
 import { internalAdd } from '../../store/internal-actions'
-import { Button } from '../common/Button'
+import Button from '../common/Button'
 
 interface ItemResultProps {
   result: IQueryResponse

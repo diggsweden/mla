@@ -25,7 +25,7 @@ interface Props {
   className?: string
 }
 
-export function Map(props: Props) {
+export default function Map(props: Props) {
   const showContextMenu = useAppStore(state => state.showContextMenu)
   const showMap = useAppStore(state => state.showMap)
   const setSelectedGeoFeature = useAppStore(state => state.setSelectedGeoFeature)

@@ -18,7 +18,7 @@ interface Props {
   onSelect: (h: HistoryDot) => void
 }
 
-export function TimelineBar (props: Props) {
+export default function TimelineBar (props: Props) {
   const { date, startDate, transitionTime, history, months, play, onSelect} = props;
 
   function select (item: HistoryDot) {

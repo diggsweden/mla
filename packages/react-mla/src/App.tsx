@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { useMemo, lazy, Suspense } from 'react'
+import { useMemo } from 'react'
 
 import Chart from './components/chart/Chart'
 import RibbonMenu from './components/ribbon/RibbonMenu'
@@ -18,17 +18,12 @@ import { getContextValue } from './utils/utils'
 import ErrorBoundary from './components/common/ErrorBoundary'
 import AppShortcuts from './components/common/AppShortcuts'
 import Footer from './components/common/Footer'
+import Map from './components/map/Map'
 
 import 'vis-network/dist/dist/vis-network.min.css'
 import './App.scss'
 
-const Map = lazy(() =>
-  import("./components/map/Map").then((module) => ({
-    default: module.Map,
-  }))
-);
-
-export function App () {
+export default function App () {
   const history = useAppStore((state) => state.historyMode)
   const map = useAppStore((state) => state.showMap)
   const context = useMainStore((state) => state.context)
@@ -56,9 +51,7 @@ export function App () {
 
           {configService.getConfiguration().MapConfiguration && (<ErrorBoundary>
             <div className={(map ? '' : 'm-hidden ') + 'm-h-full m-w-1 m-bg-gray-300 m-z-10 hover:m-cursor-col-resize'} />
-            <Suspense>
-              <Map className={(map ? '' : 'm-hidden ') + 'm-h-full m-w-full m-flex-1'} />
-            </Suspense>
+            <Map className={(map ? '' : 'm-hidden ') + 'm-h-full m-w-full m-flex-1'} />
           </ErrorBoundary>)}
         </section>
         

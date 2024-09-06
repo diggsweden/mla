@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import Icon from '../common/Icon'
 import useAppStore from '../../store/app-store'
 import { getId } from '../../utils/utils'
-import { Button } from '../common/Button'
+import Button from '../common/Button'
 
 interface Props {
   entity: IEntity

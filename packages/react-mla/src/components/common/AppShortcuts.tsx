@@ -14,7 +14,7 @@ import type { IEntity, ILink } from '../../interfaces/data-models'
 import WorkflowProgress from '../modal/WorkflowProgress'
 import configService from '../../services/configurationService'
 
-import { ContextMenu } from "./ContextMenu"
+import ContextMenu from "./ContextMenu"
 
 interface Props {
   className?: string
