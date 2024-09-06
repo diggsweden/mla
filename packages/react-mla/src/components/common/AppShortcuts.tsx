@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense } from 'react'
 import Modal from './Modal'
 import Delete from '../modal/Delete'
 import useKeyDown from '../../effects/keydown'
@@ -13,7 +13,12 @@ import type { IQueryResponse } from '../../services/queryService'
 import type { IEntity, ILink } from '../../interfaces/data-models'
 import WorkflowProgress from '../modal/WorkflowProgress'
 import configService from '../../services/configurationService'
-import ContextMenu from './ContextMenu'
+
+const ContextMenu = lazy(() =>
+  import("./ContextMenu").then((module) => ({
+    default: module.ContextMenu,
+  }))
+);
 
 interface Props {
   className?: string
@@ -120,7 +125,9 @@ function AppShortcuts (props: Props) {
 
   return (
     <>
-      <ContextMenu copy={copy} paste={paste} delete={() => { setDelete(true) }}></ContextMenu>
+      <Suspense>
+        <ContextMenu copy={copy} paste={paste} delete={() => { setDelete(true) }}></ContextMenu>
+      </Suspense>
       <Modal mode="accept" show={showDelete} title="Radera objekt" onNegative={() => { setDelete(false) }} onPositive={performDelete}>
         <Delete entities={selectedEntities} links={selectedLinks} />
       </Modal>

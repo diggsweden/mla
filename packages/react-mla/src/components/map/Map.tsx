@@ -18,12 +18,14 @@ import EntityMarker from './elements/EntityMarker'
 import { getId } from '../../utils/utils'
 import { IEntity } from '../../interfaces/data-models'
 import { TileConfiguration, WmsConfiguration } from '../../interfaces/configuration/map-configuration'
+import { IGeoFeatureBounds } from '../../interfaces/data-models/geo'
+import GeoFeature from './elements/GeoFeature'
 
 interface Props {
   className?: string
 }
 
-function Map(props: Props) {
+export function Map(props: Props) {
   const showContextMenu = useAppStore(state => state.showContextMenu)
   const showMap = useAppStore(state => state.showMap)
   const setSelectedGeoFeature = useAppStore(state => state.setSelectedGeoFeature)
@@ -37,6 +39,10 @@ function Map(props: Props) {
   const setDate = useMainStore(state => state.setDate)
   const entities = useMainStore(state => state.entities)
   const update = useMainStore(state => state.updateEntity)
+
+  const addGeo = useMainStore(state => state.setGeoFeature)
+  const removeGeo = useMainStore(state => state.removeGeoFeature)
+  const geoFeatures = useMainStore(state => state.geoFeatures)
 
   const [map, setMap] = useState<L.Map | null>(null)
 
@@ -145,20 +151,35 @@ function Map(props: Props) {
       return
     }
 
-    function polygonCreated(e: { shape: PM.SUPPORTED_SHAPES, layer: L.Layer }) {
+    function getGeo (e: { shape: PM.SUPPORTED_SHAPES, layer: L.Layer }): IGeoFeatureBounds | undefined {
       switch (e.shape) {
-        case 'Circle': e.layer.on('contextmenu', (ev) => {
-          const circle = ev.target as L.Circle
-          const selected = { Point: { lat: ev.latlng.lat, lng: ev.latlng.lng }, Circle: { Position: { lat: circle.getLatLng().lat, lng: circle.getLatLng().lng }, Radius: circle.getRadius() }, Bounds: circle.getBounds() }
-          setSelectedGeoFeature(selected)
-          showContextMenu(ev.originalEvent.clientX, ev.originalEvent.clientY)
-        }); break
-        case 'Polygon': e.layer.on('contextmenu', (ev) => {
-          const poly = ev.target as L.Polygon
-          const selected = { Point: { lat: ev.latlng.lat, lng: ev.latlng.lng }, Polygon: (poly.getLatLngs() as L.LatLng[]), Bounds: poly.getBounds() }
-          setSelectedGeoFeature(selected)
-          showContextMenu(ev.originalEvent.clientX, ev.originalEvent.clientY)
-        }); break
+        case 'Circle': 
+          const circle = e.layer as L.Circle
+          return { Id: (circle as any)._leaflet_id.toString(), Circle: { Position: { lat: circle.getLatLng().lat, lng: circle.getLatLng().lng }, Radius: circle.getRadius() } }
+        case 'Polygon': 
+          const poly = e.layer as L.Polygon
+          return { Id: (poly as any)._leaflet_id.toString(), Polygon: (poly.getLatLngs() as L.LatLng[]) }
+      }
+
+      return undefined
+    }
+
+    function polygonCreated(e: { shape: PM.SUPPORTED_SHAPES, layer: L.Layer}) {
+      const geo = getGeo(e)
+      if (geo) {
+        addGeo(geo)
+      }
+      
+      // We add this manually
+      if (map) {
+        e.layer.removeFrom(map)
+      }
+    }
+
+    function polygonRemoved(e: { shape: PM.SUPPORTED_SHAPES, layer: L.Layer }) {
+      const geo = getGeo(e)
+      if (geo) {
+        removeGeo(geo)
       }
     }
 
@@ -179,8 +200,12 @@ function Map(props: Props) {
       polygonCreated(e)
     })
 
+    map.on('pm:remove', (e) => {
+      polygonRemoved(e)
+    })
+
     map.pm.setLang('sv')
-  }, [map, setSelectedGeoFeature, showContextMenu])
+  }, [map, setSelectedGeoFeature, showContextMenu, addGeo, removeGeo])
 
   const mapEntities = useMemo(() => {
     const showOnMap = [] as string[]
@@ -243,7 +268,8 @@ function Map(props: Props) {
       {map && showMap && mapEntities.map(s =>
         <EntityMarker key={s} entityId={s} map={map} click={(e) => { onSelect(e) }}></EntityMarker>
       )}
+      {map && showMap && geoFeatures.map(g =>
+        <GeoFeature key={g.Id} geo={g} map={map}></GeoFeature>
+      )}
     </div>)
 }
-
-export default Map

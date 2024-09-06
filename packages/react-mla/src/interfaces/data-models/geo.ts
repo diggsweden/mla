@@ -2,14 +2,13 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { LatLngBounds } from 'leaflet'
-
 interface ICoordinate {
   lat: number
   lng: number
 }
 
 interface IGeoFeature {
+  Id?: string
   Point?: ICoordinate
   Polygon?: ICoordinate[]
   Circle?: {
@@ -19,7 +18,11 @@ interface IGeoFeature {
 }
 
 interface IGeoFeatureBounds extends IGeoFeature {
-  Bounds?: LatLngBounds
+  Bounds?: Bounds
+}
+
+interface Bounds {
+  contains(coordinate: ICoordinate): boolean
 }
 
 export type {

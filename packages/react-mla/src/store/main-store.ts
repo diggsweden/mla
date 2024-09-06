@@ -16,6 +16,7 @@ import { assignLinks, computeLinks, filterEvents } from '../utils/event-utils'
 import type { IEventFilter } from '../interfaces/configuration/event-operations'
 import { DateTime } from 'luxon'
 import { fixDate } from '../utils/date'
+import { IGeoFeature } from '../interfaces/data-models/geo'
 
 export type IntervalType = 'day' | 'week' | 'month' | 'custom'
 
@@ -41,6 +42,8 @@ export interface MainState {
   computedLinks: IEventLink[]
 
   phaseEvents: IPhaseEvent[]
+  geoFeatures: IGeoFeature[]
+
   dirty: boolean
 
   currentDate: ITimeSpan
@@ -88,6 +91,9 @@ export interface MainState {
   setPhaseEvent: (event: IPhaseEvent) => void
   removePhaseEvent: (event: IPhaseEvent) => void
 
+  setGeoFeature: (feature: IGeoFeature) => void
+  removeGeoFeature: (feature: IGeoFeature) => void
+
   setSelected: (selectedIds: string[]) => void
 
   setDirty: (isDirty: boolean) => void
@@ -109,6 +115,7 @@ const useMainStore = create<MainState>((set, get) => ({
   events: {},
   eventFilters: {},
   phaseEvents: [],
+  geoFeatures: [],
   dirty: false,
 
   interval: 'day',
@@ -449,6 +456,19 @@ const useMainStore = create<MainState>((set, get) => ({
       phaseEvents: state.phaseEvents.filter(e => e.Id !== event.Id)
     }))
   },
+  setGeoFeature: (feature: IGeoFeature) => {
+    set((state) => ({
+      geoFeatures: [feature, ...state.geoFeatures.filter(x => x.Id != feature.Id)],
+      dirty: true
+    }))
+  },
+  removeGeoFeature(feature: IGeoFeature) {
+    set((state) => ({
+      geoFeatures: state.geoFeatures.filter(x => x.Id != feature.Id),
+      dirty: true
+    }))
+  },
+
   save: () => {
     set((state) => ({
       dirty: false
@@ -459,6 +479,7 @@ const useMainStore = create<MainState>((set, get) => ({
       Links: Object.values(get().links).flat(),
       Events: Object.values(get().events),
       PhaseEvents: Object.values(get().phaseEvents),
+      GeoFeatures: Object.values(get().geoFeatures),
       context: get().context
     }
 
@@ -466,7 +487,7 @@ const useMainStore = create<MainState>((set, get) => ({
     return json
   },
   open: (json: string) => {
-    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], context: string }
+    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], GeoFeatures: IGeoFeature[], context: string }
 
     internalAdd(false, parsed.Entities, parsed.Links)
 
@@ -486,6 +507,12 @@ const useMainStore = create<MainState>((set, get) => ({
           Description: f.Description,
           Date: f.Date
         })
+      })
+    }
+
+    if (parsed.GeoFeatures) {
+      parsed.GeoFeatures.forEach(f => {
+        get().setGeoFeature(f)
       })
     }
 

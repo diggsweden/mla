@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 
 import './MLA.scss'
 
@@ -15,7 +15,12 @@ import queryService from './services/queryService'
 import useMainStore from './store/main-store'
 import Spinner from './components/common/Spinner'
 import ErrorBoundary from './components/common/ErrorBoundary'
-import { App } from './App'
+
+const App = lazy(() =>
+  import("./App").then((module) => ({
+    default: module.App,
+  }))
+);
 
 export interface MlaProps {
   config?: string
@@ -77,7 +82,9 @@ export function MLA (props: MlaProps) {
       { !ready && loading }
       { ready &&
         <ErrorBoundary>
-          <App />
+          <Suspense fallback={loading}>
+            <App />
+          </Suspense>
         </ErrorBoundary>
       }
     </div>

@@ -18,7 +18,7 @@ interface Props {
   paste?: () => void
 }
 
-function ContextMenu (props: Props) {
+export function ContextMenu (props: Props) {
   const contextmenuPosition = useAppStore((state) => state.contextmenuPosition)
   const hideContextMenu = useAppStore((state) => state.hideContextMenu)
 
@@ -56,7 +56,7 @@ function ContextMenu (props: Props) {
       Object.values(entities).forEach(e => {
         const entity = e[0]
         if (entity.Coordinates != null) {
-          if (geoFeature.Bounds!.contains([entity.Coordinates.lat, entity.Coordinates.lng])) {
+          if (geoFeature.Bounds!.contains(entity.Coordinates)) {
             result.push(getId(entity))
           }
         }
@@ -96,29 +96,29 @@ function ContextMenu (props: Props) {
             <div>Inhämta</div>
           </div>
           {availableTools.map(e => (
-            <button key={e.Id} className="flex hover:bg-gray-100 py-1 px-2 rounded cursor-pointer" onClick={() => { explore(e.Id); hideContextMenu() }}>
+            <button key={e.Id} className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { explore(e.Id); hideContextMenu() }}>
               <div>{e.Name}</div>
             </button>
           ))}
           <hr className="m-my-3 m-border-gray-300" />
         </>}
         {geoFeature?.Bounds && (<>
-          <button className="flex hover:bg-gray-100 py-1 px-2 rounded cursor-pointer" onClick={() => { selectGeoFeature(); hideContextMenu() }}>
+          <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { selectGeoFeature(); hideContextMenu() }}>
             <span className="m-w-3 m-mr-2"><Icon name="select_all" /></span>
             <div>Markera</div>
           </button>
           <hr className="m-my-3 m-border-gray-300" />
         </>
         )}
-        <button className="flex hover:bg-gray-100 py-1 px-2 rounded cursor-pointer disabled:opacity-50" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
+        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer disabled:m-opacity-50" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
           <span className="m-w-3 m-mr-2"><Icon name="content_copy" /></span>
           <div>Kopiera</div>
         </button>
-        <button className="flex hover:bg-gray-100 py-1 px-2 rounded cursor-pointer" onClick={() => { if (props.paste != null) { props.paste(); hideContextMenu() } }}>
+        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { if (props.paste != null) { props.paste(); hideContextMenu() } }}>
           <span className="m-w-3 m-mr-2"><Icon name="content_paste" /></span>
           <div>Klistra in</div>
         </button>
-        <button className="flex hover:bg-gray-100 py-1 px-2 rounded disabled:opacity-50 cursor-pointer" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
+        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded disabled:m-opacity-50 m-cursor-pointer" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
           <span className="m-w-3 m-mr-2"><Icon name="delete_forever" /></span>
           <div>Radera</div>
         </button>
@@ -126,5 +126,3 @@ function ContextMenu (props: Props) {
     </Popover>
   )
 }
-
-export default ContextMenu
