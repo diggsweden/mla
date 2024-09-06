@@ -1,9 +1,9 @@
-# SPDX-FileCopyrightText: 2023 Digg - Agency for Digital Government
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 #
 # SPDX-License-Identifier: CC0-1.0
 
 ---
-name: LintPublicCodeMeta
+name: Lint Public Code MetaData
 on: [workflow_call] # yamllint disable-line rule:truthy
 
 jobs:
