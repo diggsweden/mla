@@ -4,6 +4,7 @@
 
 interface IProperty {
   TypeId: string
+  SemanticType?: string
   Value?: string | boolean | number
 }
 

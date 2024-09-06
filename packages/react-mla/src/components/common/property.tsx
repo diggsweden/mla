@@ -91,7 +91,7 @@ function Property (props: Props) {
   }
 
   function handleChangeDate (date?: Date) {
-    const dateString = date != undefined ? DateTime.fromJSDate(date).toISO()! : ''
+    const dateString = date != undefined ? DateTime.fromJSDate(date).toFormat("yyyy-MM-dd")! : ''
     setValue(dateString)
     const test = inputRef.current?.validity.valid ?? true
     setValid(test)
@@ -148,7 +148,7 @@ function Property (props: Props) {
   return (
     <div className={className}>
       {config.FieldType !== 'Boolean' &&
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={config.Description}>{config.Name}</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={config.Description}>{config.Name ?? config.SemanticType}</span>
       }
       {getInput()}
     </div>

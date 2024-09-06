@@ -30,7 +30,7 @@ function ChartEdge (props: Props) {
   const to = useMemo(() => link != null ? getEntity(link?.ToEntityId + link?.ToEntityTypeId, date.DateFrom) : null, [getEntity, link, date])
 
   const view = useMemo(() => {
-    return { ...viewService.getDefaultView(link.TypeId), ...selectedView }
+    return { ...viewService.getDefaultView(link.TypeId, link.SemanticType), ...selectedView }
   }, [link.TypeId, selectedView])
 
   const selected = useMemo(() => {

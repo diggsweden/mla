@@ -1,0 +1,109 @@
+{
+  "Entities": [
+    {
+      "SemanticType": "person",
+      "Icon": "person_fill",
+      "Description": "A human being",
+      "LabelShort": "{identification}\n{first_name} {last_name}",
+      "Properties": [
+        {
+          "SemanticType": "identification",
+          "Description": "Unique identifier for a person",
+          "FieldType": "String"
+        },
+        {
+          "SemanticType": "first_name",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "SemanticType": "last_name",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "SemanticType": "birth_date",
+          "Description": "",
+          "FieldType": "Date"
+        }
+      ]
+    },
+    {
+      "SemanticType": "organization",
+      "Icon": "outlined_apartment",
+      "Description": "An oganized group of people",
+      "LabelShort": "{identification}\n{name}",
+      "Properties": [
+        {
+          "SemanticType": "identification",
+          "Description": "Unique identifier for an organization",
+          "FieldType": "String"
+        },
+        {
+          "SemanticType": "name",
+          "Description": "",
+          "FieldType": "String"
+        }
+      ]
+    },
+    {
+      "SemanticType": "place",
+      "Icon": "outlined_map",
+      "Description": "A position or place on the planet",
+      "LabelShort": "{address}\n{name}",
+      "Properties": [
+        {
+          "SemanticType": "address",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "SemanticType": "postal_code",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "SemanticType": "contry",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "SemanticType": "name",
+          "Description": "",
+          "FieldType": "String"
+        }
+      ]
+    },
+    {
+      "SemanticType": "event",
+      "Icon": "outlined_event",
+      "Description": "Something that happened",
+      "LabelShort": "{title}\n{DateFrom}",
+      "Properties": [
+        {
+          "SemanticType": "title",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "SemanticType": "description",
+          "Description": "",
+          "FieldType": "Multiline"
+        }
+      ]
+    }
+  ],
+  "Links": [
+    {
+      "SemanticType": "person_relation",
+      "Description": "A relation between humans",
+      "Properties": [
+        {
+          "SemanticType": "description",
+          "Description": "",
+          "FieldType": "String"
+        }
+      ]
+    }
+  ]
+}

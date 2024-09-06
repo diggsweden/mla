@@ -211,7 +211,7 @@ function ItemResultList (props: ItemResultProps) {
         res.push({
           GroupId: t,
           TypeId: typeId,
-          Name: config.Name,
+          Name: config?.Name ?? typeId,
           Events: grouped[t]
         })
       })

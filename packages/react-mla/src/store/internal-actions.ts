@@ -34,6 +34,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
   useMainStore.setState(state => {
     let min = state.minDate
     let max = state.maxDate
+
     const stateUpEntities = produce(state.entities, stateDraft => {
       const n = state.network
       if (n != null && entities.some(e => e.PosX == null || e.PosY == null)) {
@@ -41,7 +42,12 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
       }
 
       for (let entity of entities) {
-        const config = configService.getEntityConfiguration(entity.TypeId)
+        const config = configService.getEntityConfiguration(entity.TypeId, entity.SemanticType)
+        if (config == null) {
+          console.error("Could not map, skipping", entity)
+          continue
+        }
+
         if (config.Internal === true) {
           continue
         }
@@ -92,7 +98,12 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
 
     const stateUpLinks = produce(state.links, stateDraft => {
       for (let link of links) {
-        const config = configService.getLinkConfiguration(link.TypeId)
+        const config = configService.getLinkConfiguration(link.TypeId, link.SemanticType)
+        if (config == null) {
+          console.error("Could not map, skipping", link)
+          continue
+        }
+
         if (config.Internal === true) {
           return
         }

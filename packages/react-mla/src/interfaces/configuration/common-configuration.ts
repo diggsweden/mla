@@ -7,6 +7,7 @@ type FieldType = 'String' | 'Date' | 'Number' | 'Select' | 'File' | 'Multiline' 
 interface IBaseThing {
   Name: string
   TypeId: string
+  SemanticType?: string
   Properties: IPropertyConfiguration[]
 }
 
@@ -18,6 +19,7 @@ interface IChartThing extends IBaseThing {
 }
 
 interface IBasePropertyConfiguration {
+  SemanticType?: string
   TypeId: string
   Name: string
   Description: string

@@ -7,6 +7,7 @@ import { type Direction, type ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
 import useMainStore from '../../store/main-store'
 import Property from '../common/property'
+import { IPropertyConfiguration } from '../../interfaces/configuration'
 
 interface Props {
   link: ILink
@@ -16,11 +17,11 @@ function LinkProperties (props: Props) {
   const { link } = props
   const updateLink = useMainStore((state) => state.updateLink)
 
-  function linkChanged (link: ILink, newValue: string | number | boolean | undefined, propertyId: string) {
+  function linkChanged (link: ILink, newValue: string | number | boolean | undefined, property: IPropertyConfiguration) {
     const update = produce(link, copy => {
-      const prop = copy.Properties.find(p => p.TypeId === propertyId)
+      const prop = copy.Properties.find(p => p.TypeId === property.TypeId || p.SemanticType === property.SemanticType)
       if (prop == null) {
-        copy.Properties.push({ TypeId: propertyId, Value: newValue })
+        copy.Properties.push({ TypeId: property.TypeId, Value: newValue, SemanticType: property.SemanticType })
       } else {
         prop.Value = newValue
       }
@@ -45,10 +46,10 @@ function LinkProperties (props: Props) {
     <div className="m-px-3 m-mt-3">
       <div>
         {configService.getProperties(link).map(e => (
-          <Property key={link.Id + e.propertyConfiguration.TypeId + link.DateFrom?.toISO() + link.DateTo?.toISO()}
+          <Property key={link.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.SemanticType + link.DateFrom?.toISO() + link.DateTo?.toISO()}
             value={e.property?.Value}
             config={e.propertyConfiguration}
-            onChange={(value) => { linkChanged(link, value, e.propertyConfiguration.TypeId) }} />
+            onChange={(value) => { linkChanged(link, value, e.propertyConfiguration) }} />
         ))}
       </div>
       <div>

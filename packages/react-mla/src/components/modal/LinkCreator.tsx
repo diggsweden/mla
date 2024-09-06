@@ -7,6 +7,7 @@ import { type ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
 import Property from '../common/property'
 import { produce } from 'immer'
+import { IPropertyConfiguration } from '../../interfaces/configuration'
 
 interface Props {
   link: ILink
@@ -18,14 +19,15 @@ function LinkCreator (props: Props) {
   const { link, onChange } = props
 
   const [properties, setProperties] = useState(configService.getProperties(link))
-  function setProperty (id: string, value?: string | number | boolean) {
+  function setProperty (prop: IPropertyConfiguration, value?: string | number | boolean) {
     const up = produce(link, draft => {
-      const existing = draft.Properties.find(p => p.TypeId === id)
+      const existing = draft.Properties.find(p => p.TypeId === prop.TypeId)
       if (existing) {
         existing.Value = value
       } else {
         draft.Properties.push({
-          TypeId: id,
+          SemanticType: prop.SemanticType,
+          TypeId: prop.TypeId,
           Value: value
         })
       }
@@ -61,7 +63,7 @@ function LinkCreator (props: Props) {
             config={e.propertyConfiguration}
             autofocus={first === 0}
             validChanged={(validity) => { setValidity(e.propertyConfiguration.TypeId, validity) }}
-            onChange={(newValue) => { setProperty(e.propertyConfiguration.TypeId, newValue) }} />
+            onChange={(newValue) => { setProperty(e.propertyConfiguration, newValue) }} />
         )
       })}
     </div>

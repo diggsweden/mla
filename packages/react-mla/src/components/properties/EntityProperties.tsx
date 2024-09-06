@@ -12,6 +12,7 @@ import Icon from '../common/Icon'
 import useAppStore from '../../store/app-store'
 import { getId } from '../../utils/utils'
 import Button from '../common/Button'
+import { IPropertyConfiguration } from '../../interfaces/configuration'
 
 interface Props {
   entity: IEntity
@@ -29,11 +30,11 @@ function EntityProperties (props: Props) {
     }
   }, [placeEntity, entity])
 
-  function entityChanged (entity: IEntity, newValue: string | number | boolean | undefined, propertyId: string) {
+  function entityChanged (entity: IEntity, newValue: string | number | boolean | undefined, property: IPropertyConfiguration) {
     const update = produce(entity, copy => {
-      const prop = copy.Properties.find(p => p.TypeId === propertyId)
+      const prop = copy.Properties.find(p => p.TypeId === property.TypeId || p.SemanticType === property.SemanticType)
       if (prop == null) {
-        copy.Properties.push({ TypeId: propertyId, Value: newValue })
+        copy.Properties.push({ TypeId: property.TypeId, Value: newValue, SemanticType: property.SemanticType })
       } else {
         prop.Value = newValue
       }
@@ -95,10 +96,10 @@ function EntityProperties (props: Props) {
     <div className="m-px-3 m-mt-3">
       <div>
         {configService.getProperties(entity).map(e => (
-          <Property key={entity.Id + e.propertyConfiguration.TypeId + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
+          <Property key={entity.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.SemanticType + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
             value={e.property?.Value}
             config={e.propertyConfiguration}
-            onChange={(newValue) => { entityChanged(entity, newValue, e.propertyConfiguration.TypeId) }} />
+            onChange={(newValue) => { entityChanged(entity, newValue, e.propertyConfiguration) }} />
         ))}
       </div>
       { usingMap && <div>

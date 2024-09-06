@@ -252,6 +252,7 @@
             {
                 "TypeId": "ET1",
                 "Name": "Person",
+                "SemanticType": "person",
                 "Description": "En fysiker",
                 "MatchRules": [
                     {
@@ -265,25 +266,29 @@
                         "Name": "Personnummer",
                         "Description": "Personnummret i 12 siffror",
                         "FieldType": "String",
-                        "FieldValidation": "[0-9]+"
+                        "FieldValidation": "[0-9]+",
+                        "SemanticType": "identification"
                     },
                     {
                         "TypeId": "ET1E2",
                         "Name": "Förnamn",
                         "Description": "Personens förnamn",
-                        "FieldType": "String"
+                        "FieldType": "String",
+                        "SemanticType": "first_name"
                     },
                     {
                         "TypeId": "ET1E3",
                         "Name": "Efternamn",
                         "Description": "Personens efternamn",
-                        "FieldType": "String"
+                        "FieldType": "String",
+                        "SemanticType": "last_name"
                     },
                     {
                         "TypeId": "ET1E4",
                         "Name": "Födelsedatum",
                         "Description": "År månad dag när personed föddes",
-                        "FieldType": "Date"
+                        "FieldType": "Date",
+                        "SemanticType": "birth_date"
                     },
                     {
                         "TypeId": "ET1E5",
@@ -323,18 +328,21 @@
                         "Regex": "(?:16)?(\\d+)[-]?(\\d+)"
                     }
                 ],
+                "SemanticType": "organization",
                 "Properties": [
                     {
                         "TypeId": "ET2E1",
                         "Name": "Organisationsnummer",
-                        "Description": "Den juridiska indEntityen",
-                        "FieldType": "String"
+                        "Description": "Den juridiska identiteten",
+                        "FieldType": "String",
+                        "SemanticType": "identification"
                     },
                     {
                         "TypeId": "ET2E2",
                         "Name": "Name",
                         "Description": "Namnet på bolaget",
-                        "FieldType": "String"
+                        "FieldType": "String",
+                        "SemanticType": "name"
                     },
                     {
                         "TypeId": "ET2E3",
@@ -375,12 +383,15 @@
                 "TypeId": "ET4",
                 "Name": "Adress",
                 "Description": "En plats",
+                "SemanticType": "place",
                 "Properties": [
                     {
                         "TypeId": "ET4E1",
                         "Name": "Gatuadress 1",
                         "Description": "",
-                        "FieldType": "String"
+                        "FieldType": "String",
+                        "SemanticType": "address"
+
                     },
                     {
                         "TypeId": "ET4E2",
@@ -392,7 +403,8 @@
                         "TypeId": "ET4E3",
                         "Name": "Postnummer",
                         "Description": "",
-                        "FieldType": "String"
+                        "FieldType": "String",
+                        "SemanticType": "postal_code"
                     },
                     {
                         "TypeId": "ET4E4",
@@ -404,7 +416,8 @@
                         "TypeId": "ET4E5",
                         "Name": "Land",
                         "Description": "",
-                        "FieldType": "String"
+                        "FieldType": "String",
+                        "SemanticType": "country"
                     }
                 ]
             },
@@ -462,18 +475,21 @@
                 "TypeId": "ET7",
                 "Name": "Händelse",
                 "Description": "Händelse",
+                "SemanticType": "event",
                 "Properties": [
                     {
                         "TypeId": "ET7E1",
                         "Name": "Rubrik",
                         "Description": "",
-                        "FieldType": "String"
+                        "FieldType": "String",
+                        "SemanticType": "title"
                     },
                     {
                         "TypeId": "ET7E2",
                         "Name": "Description",
                         "Description": "",
-                        "FieldType": "String"
+                        "FieldType": "Multiline",
+                        "SemanticType": "description"
                     }
                 ]
             }

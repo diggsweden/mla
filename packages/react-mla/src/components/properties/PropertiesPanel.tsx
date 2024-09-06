@@ -44,17 +44,17 @@ function PropertiesPanel (props: Props) {
   useLayoutEffect(() => {
     let name = 'Properties'
     if (entity) {
-      name = configService.getEntityConfiguration(entity.TypeId).Name
+      name = configService.getEntityConfiguration(entity.TypeId)?.Name ?? ''
       setSource(entity.SourceSystemId)
     }
 
     if (link) {
-      name = configService.getLinkConfiguration(link.TypeId).Name
+      name = configService.getLinkConfiguration(link.TypeId)?.Name ?? ''
       setSource(link.SourceSystemId)
     }
 
     if (computedLink) {
-      name = configService.getEventConfiguration(computedLink.EventTypeId).Name
+      name = configService.getEventConfiguration(computedLink.EventTypeId)?.Name ?? ''
       setSource('')
     }
 

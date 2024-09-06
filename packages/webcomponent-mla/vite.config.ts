@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        'react-mla': path.resolve(__dirname, mode === 'development' ? '../react-mla/index.ts' : '../react-mla/dist/react-mla.umd.cjs')
+        'react-mla': path.resolve(__dirname, mode === 'development' ? '../react-mla/index.ts' : '../react-mla/dist/react-mla.js')
       }
     }
   }

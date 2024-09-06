@@ -475,8 +475,14 @@ const useMainStore = create<MainState>((set, get) => ({
     }))
 
     const file = {
-      Entities: Object.values(get().entities).flat(),
-      Links: Object.values(get().links).flat(),
+      Entities: Object.values(get().entities).flat().map(x => ({
+        ...x,
+        InternalId: undefined
+      })),
+      Links: Object.values(get().links).flat().map(x => ({
+        ...x,
+        InternalId: undefined
+      })),
       Events: Object.values(get().events),
       PhaseEvents: Object.values(get().phaseEvents),
       GeoFeatures: Object.values(get().geoFeatures),

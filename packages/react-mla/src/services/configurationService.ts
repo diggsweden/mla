@@ -3,9 +3,11 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import { freeze } from 'immer'
-import type { IConfiguration, IEntityConfiguration, IEventConfiguration, IImportConfiguration, ILinkConfiguration, IPropertyConfiguration, IQueryIntegration, IWorkflowConfiguration } from '../interfaces/configuration'
+import type { IBaseThing, IConfiguration, IEntityConfiguration, IEventConfiguration, IImportConfiguration, ILinkConfiguration, IPropertyConfiguration, IQueryIntegration, IWorkflowConfiguration } from '../interfaces/configuration'
 import type { IBase, IProperty } from '../interfaces/data-models'
 import { loadScript } from '../utils/script-loader'
+
+import * as global from '../global.json'
 
 export interface PropertyAndConfiguration {
   property?: IProperty
@@ -114,20 +116,24 @@ class ConfigurationService {
     return this.configuration?.Integrations?.Import ?? []
   }
 
-  public getEntityConfiguration (TypeId: string): IEntityConfiguration {
-    return this.entitiesConfiguration[TypeId]
+  public getEntityConfiguration (TypeId: string, SemanticType?: string): IEntityConfiguration | undefined {
+    return this.entitiesConfiguration[TypeId] ?? global.Entities.find(x => x.SemanticType == SemanticType)
   }
 
-  public getLinkConfiguration (TypeId: string): ILinkConfiguration {
-    return this.linksConfiguration[TypeId]
+  public getLinkConfiguration (TypeId: string, SemanticType?: string): ILinkConfiguration | undefined {
+    return this.linksConfiguration[TypeId] ?? global.Links.find(x => x.SemanticType == SemanticType)
   }
 
-  public getEventConfiguration (TypeId: string): IEventConfiguration {
+  public getEventConfiguration (TypeId: string): IEventConfiguration | undefined {
     return this.eventsConfiguration[TypeId]
   }
 
-  public getThingConfiguration (TypeId: string) {
-    const config = (this.getEntityConfiguration(TypeId) ?? this.getLinkConfiguration(TypeId) ?? this.getEventConfiguration(TypeId))
+  public getThingConfiguration (TypeId: string, SemanticType?: string): IBaseThing {
+    const config = (
+      this.getEntityConfiguration(TypeId, SemanticType) ?? 
+      this.getLinkConfiguration(TypeId, SemanticType) ?? 
+      this.getEventConfiguration(TypeId)
+    )
     if (config == null) {
       throw new Error(TypeId + ' is not mapped in config')
     }
@@ -136,16 +142,16 @@ class ConfigurationService {
   }
 
   public getTypeName (thing: IBase): string {
-    const name = (this.getEntityConfiguration(thing.TypeId) ?? this.getLinkConfiguration(thing.TypeId) ?? this.getEventConfiguration(thing.TypeId))?.Name
-    if (name == null) {
+    const config = (this.getEntityConfiguration(thing.TypeId, thing.SemanticType) ?? this.getLinkConfiguration(thing.TypeId, thing.SemanticType) ?? this.getEventConfiguration(thing.TypeId))
+    if (config == null) {
       throw new Error(thing.TypeId + ' is not mapped in config')
     }
 
-    return name
+    return config.Name ?? config.SemanticType ?? config.TypeId
   }
 
   public getProperties (thing: IBase): PropertyAndConfiguration[] {
-    const props = (this.getEntityConfiguration(thing.TypeId) ?? this.getLinkConfiguration(thing.TypeId) ?? this.getEventConfiguration(thing.TypeId))?.Properties
+    const props = (this.getEntityConfiguration(thing.TypeId, thing.SemanticType) ?? this.getLinkConfiguration(thing.TypeId, thing.SemanticType) ?? this.getEventConfiguration(thing.TypeId))?.Properties
     if (props == null) {
       throw new Error(thing.TypeId + ' is not mapped in config')
     }
@@ -153,7 +159,7 @@ class ConfigurationService {
     return props.map(e => {
       return {
         propertyConfiguration: e,
-        property: thing.Properties.find(ee => ee.TypeId === e.TypeId)
+        property: thing.Properties.find(ee => ee.TypeId === e.TypeId || ee.SemanticType === e.SemanticType)
       }
     })
   }
