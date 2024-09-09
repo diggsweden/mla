@@ -8,6 +8,7 @@ import configService from '../../services/configurationService'
 import useMainStore from '../../store/main-store'
 import Property from '../common/property'
 import { IPropertyConfiguration } from '../../interfaces/configuration'
+import { isSameType } from '../../utils/utils'
 
 interface Props {
   link: ILink
@@ -19,7 +20,7 @@ function LinkProperties (props: Props) {
 
   function linkChanged (link: ILink, newValue: string | number | boolean | undefined, property: IPropertyConfiguration) {
     const update = produce(link, copy => {
-      const prop = copy.Properties.find(p => p.TypeId === property.TypeId || p.SemanticType === property.SemanticType)
+      const prop = copy.Properties.find(p => isSameType(p, property))
       if (prop == null) {
         copy.Properties.push({ TypeId: property.TypeId, Value: newValue, SemanticType: property.SemanticType })
       } else {

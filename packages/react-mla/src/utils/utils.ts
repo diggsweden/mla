@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import type { IEntityTypeConfiguration, IMatchRule, IQueryIntegration } from '../interfaces/configuration'
+import type { IBasePropertyConfiguration, IEntityTypeConfiguration, IMatchRule, IQueryIntegration } from '../interfaces/configuration'
 import type { IBase, IChartBase, IEntity, IHistory, ILink, IProperty } from '../interfaces/data-models'
 import { DateTime } from 'luxon'
 
@@ -172,6 +172,18 @@ function findId (thing: IChartBase, config: IMatchRule[], things: IChartBase[]):
   return undefined
 }
 
+function isSameType(p1: IBasePropertyConfiguration | IProperty, p2: IBasePropertyConfiguration | IProperty) : boolean {
+  if (p1.TypeId == p2.TypeId) {
+    return true
+  }
+
+  if (p1.SemanticType != null && p2.SemanticType != null && p1.SemanticType == p2.SemanticType) {
+    return true
+  }
+
+  return false
+}
+
 function getText (str: string, regex: RegExp): string {
   const res = str.match(regex)
   if (res != null && res.length > 0) {
@@ -253,6 +265,7 @@ export {
   isLinked,
   isLinkedId,
   isSubSetOf,
+  isSameType,
   mergeContext,
   mergeProps,
   randomNumber,

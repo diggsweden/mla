@@ -8,6 +8,7 @@ import type { IBase, IProperty } from '../interfaces/data-models'
 import { loadScript } from '../utils/script-loader'
 
 import * as global from '../global.json'
+import { isSameType } from '../utils/utils'
 
 export interface PropertyAndConfiguration {
   property?: IProperty
@@ -46,11 +47,19 @@ class ConfigurationService {
 
       this.entitiesConfiguration = freeze(config.Domain.EntityTypes.reduce(function (map, obj) {
         map[obj.TypeId] = obj
+
+        if (obj.SemanticType) {
+          map[obj.SemanticType] = obj
+        }
         return map
       }, {} as Record<string, IEntityConfiguration>))
 
       this.linksConfiguration = freeze(config.Domain.LinkTypes.reduce(function (map, obj) {
         map[obj.TypeId] = obj
+
+        if (obj.SemanticType) {
+          map[obj.SemanticType] = obj
+        }
         return map
       }, {} as Record<string, ILinkConfiguration>))
 
@@ -117,11 +126,11 @@ class ConfigurationService {
   }
 
   public getEntityConfiguration (TypeId: string, SemanticType?: string): IEntityConfiguration | undefined {
-    return this.entitiesConfiguration[TypeId] ?? global.Entities.find(x => x.SemanticType == SemanticType)
+    return this.entitiesConfiguration[TypeId] ?? this.entitiesConfiguration[SemanticType ?? ""] ?? global.Entities.find(x => x.SemanticType == SemanticType)
   }
 
   public getLinkConfiguration (TypeId: string, SemanticType?: string): ILinkConfiguration | undefined {
-    return this.linksConfiguration[TypeId] ?? global.Links.find(x => x.SemanticType == SemanticType)
+    return this.linksConfiguration[TypeId] ?? this.linksConfiguration[SemanticType ?? ""] ?? global.Links.find(x => x.SemanticType == SemanticType)
   }
 
   public getEventConfiguration (TypeId: string): IEventConfiguration | undefined {
@@ -159,7 +168,7 @@ class ConfigurationService {
     return props.map(e => {
       return {
         propertyConfiguration: e,
-        property: thing.Properties.find(ee => ee.TypeId === e.TypeId || ee.SemanticType === e.SemanticType)
+        property: thing.Properties.find(ee => isSameType(ee, e))
       }
     })
   }

@@ -10,7 +10,7 @@ import Property from '../common/property'
 import { useEffect, useState } from 'react'
 import Icon from '../common/Icon'
 import useAppStore from '../../store/app-store'
-import { getId } from '../../utils/utils'
+import { getId, isSameType } from '../../utils/utils'
 import Button from '../common/Button'
 import { IPropertyConfiguration } from '../../interfaces/configuration'
 
@@ -32,7 +32,7 @@ function EntityProperties (props: Props) {
 
   function entityChanged (entity: IEntity, newValue: string | number | boolean | undefined, property: IPropertyConfiguration) {
     const update = produce(entity, copy => {
-      const prop = copy.Properties.find(p => p.TypeId === property.TypeId || p.SemanticType === property.SemanticType)
+      const prop = copy.Properties.find(p => isSameType(p, property))
       if (prop == null) {
         copy.Properties.push({ TypeId: property.TypeId, Value: newValue, SemanticType: property.SemanticType })
       } else {

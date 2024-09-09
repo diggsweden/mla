@@ -59,6 +59,9 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           if (entity.Coordinates) {
             draft.ShowOnMap = true
           }
+
+          // Align semantic type
+          draft.TypeId = config.TypeId
         })
 
         if (entity.DateFrom != null && entity.DateFrom < min) {
@@ -110,6 +113,9 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
 
         link = produce(link, draft => {
           updateProps(draft)
+
+          // Align semantic type
+          draft.TypeId = config.TypeId
         })
 
         if (link.DateFrom != null && link.DateFrom < min) {
