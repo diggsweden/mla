@@ -15,7 +15,7 @@ import { internalAdd, internalRemove, internalUpdate } from './internal-actions'
 import { assignLinks, computeLinks, filterEvents } from '../utils/event-utils'
 import type { IEventFilter } from '../interfaces/configuration/event-operations'
 import { DateTime } from 'luxon'
-import { fixDate } from '../utils/date'
+import { fixDate, removeInternals } from '../utils/date'
 import { IGeoFeature } from '../interfaces/data-models/geo'
 
 export type IntervalType = 'day' | 'week' | 'month' | 'custom'
@@ -475,21 +475,15 @@ const useMainStore = create<MainState>((set, get) => ({
     }))
 
     const file = {
-      Entities: Object.values(get().entities).flat().map(x => ({
-        ...x,
-        InternalId: undefined
-      })),
-      Links: Object.values(get().links).flat().map(x => ({
-        ...x,
-        InternalId: undefined
-      })),
+      Entities: Object.values(get().entities).flat().map(x => removeInternals(x)),
+      Links: Object.values(get().links).flat().map(x => removeInternals(x)),
       Events: Object.values(get().events),
       PhaseEvents: Object.values(get().phaseEvents),
       GeoFeatures: Object.values(get().geoFeatures),
       context: get().context
     }
 
-    const json = JSON.stringify(file)
+    const json = JSON.stringify(file, null, 4)
     return json
   },
   open: (json: string) => {

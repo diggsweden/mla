@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-import { IHistory, ITimeSpan } from "../interfaces/data-models"
+import { IChartBase, IHistory, ITimeSpan } from "../interfaces/data-models"
 import { DateTime } from 'luxon'
 
 export function toDateString (d?: DateTime): string | undefined {
@@ -80,5 +80,15 @@ export function fixDate (value: string | undefined | Date | DateTime): DateTime 
     }
 
     return date
+  }
+}
+
+export function removeInternals(base: IChartBase) : any {
+  return {
+    ...base,
+    InternalId: undefined,
+    LabelChart: undefined,
+    LabelLong: undefined,
+    LabelShort: undefined
   }
 }
