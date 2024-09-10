@@ -42,7 +42,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
       }
 
       for (let entity of entities) {
-        const config = configService.getEntityConfiguration(entity.TypeId, entity.SemanticType)
+        const config = configService.getEntityConfiguration(entity.TypeId, entity.GlobalType)
         if (config == null) {
           console.error("Could not map, skipping", entity)
           continue
@@ -60,7 +60,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
             draft.ShowOnMap = true
           }
 
-          // Align semantic type
+          // Align global type
           draft.TypeId = config.TypeId
         })
 
@@ -101,7 +101,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
 
     const stateUpLinks = produce(state.links, stateDraft => {
       for (let link of links) {
-        const config = configService.getLinkConfiguration(link.TypeId, link.SemanticType)
+        const config = configService.getLinkConfiguration(link.TypeId, link.GlobalType)
         if (config == null) {
           console.error("Could not map, skipping", link)
           continue
@@ -114,7 +114,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
         link = produce(link, draft => {
           updateProps(draft)
 
-          // Align semantic type
+          // Align global type
           draft.TypeId = config.TypeId
         })
 

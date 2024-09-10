@@ -82,7 +82,7 @@ class ViewService {
   }
 
   public async getIconByRule (entity: IEntity, viewConfiguration: IViewConfiguration): Promise<IIcon | undefined> {
-    const view = viewService.getView(entity.TypeId, entity.SemanticType)
+    const view = viewService.getView(entity.TypeId, entity.GlobalType)
     const configurationRule = this.getRule(entity, viewConfiguration)
     const icon = configurationRule?.Icon ?? view.Icon
     const shadeColor = entity.Color ?? configurationRule?.Color ?? view.Color
@@ -103,25 +103,25 @@ class ViewService {
     return this.theme
   }
 
-  public getDefaultView (TypeId: string, SemanticType?: string): IBaseViewConfiguration {
+  public getDefaultView (TypeId: string, GlobalType?: string): IBaseViewConfiguration {
     let defaultView = (
       this.defaultViewConfiguration[TypeId] ??
-      global.Entities.find(x => x.SemanticType == SemanticType) ?? 
-      global.Links.find(x => x.SemanticType == SemanticType)
+      global.Entities.find(x => x.GlobalType == GlobalType) ?? 
+      global.Links.find(x => x.GlobalType == GlobalType)
      ) as IBaseViewConfiguration
 
 
     if (defaultView == null) {
-      throw new Error(TypeId + ' - ' + SemanticType + ' view is not mapped')
+      throw new Error(TypeId + ' - ' + GlobalType + ' view is not mapped')
     }
 
     return defaultView
   }
 
-  public getView (TypeId: string, SemanticType? :string): IBaseViewConfiguration {
+  public getView (TypeId: string, GlobalType? :string): IBaseViewConfiguration {
     const selectedView = useAppStore.getState().thingViewConfiguration[TypeId]
 
-    return { ...this.getDefaultView(TypeId, SemanticType), ...selectedView }
+    return { ...this.getDefaultView(TypeId, GlobalType), ...selectedView }
   }
 
   public getLongName (thing: IChartBase): string {
@@ -138,9 +138,9 @@ class ViewService {
 
   public getAttributes (thing: IChartBase): Array<{ text: string, color: string }> {
     const result = [] as Array<{ text: string, color: string }>
-    const config = configService.getEntityConfiguration(thing.TypeId, thing.SemanticType) ?? configService.getLinkConfiguration(thing.TypeId, thing.SemanticType)
+    const config = configService.getEntityConfiguration(thing.TypeId, thing.GlobalType) ?? configService.getLinkConfiguration(thing.TypeId, thing.GlobalType)
     if (config == null) {
-      throw new Error('Configuration missing: ' + thing.TypeId + " - " + thing.SemanticType)
+      throw new Error('Configuration missing: ' + thing.TypeId + " - " + thing.GlobalType)
     }
 
     if (config.Attributes) {
@@ -164,7 +164,7 @@ class ViewService {
   }
 
   private getLabel (thing: IChartBase, labelType: LabelType) {
-    const props = this.getView(thing.TypeId, thing.SemanticType)
+    const props = this.getView(thing.TypeId, thing.GlobalType)
     const config = configService.getProperties(thing)
 
     if (props == null || config == null) {
@@ -203,7 +203,7 @@ class ViewService {
             break
           default:
             propertyAndConfiguration = config.find(e => 
-              e.propertyConfiguration.TypeId === propertyTypeId || e.propertyConfiguration.SemanticType === propertyTypeId
+              e.propertyConfiguration.TypeId === propertyTypeId || e.propertyConfiguration.GlobalType === propertyTypeId
             )
             if (propertyAndConfiguration) {
               value = this.getValue(propertyAndConfiguration) ?? ''

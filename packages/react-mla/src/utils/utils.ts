@@ -177,7 +177,7 @@ function isSameType(p1: IBasePropertyConfiguration | IProperty, p2: IBasePropert
     return true
   }
 
-  if (p1.SemanticType != null && p2.SemanticType != null && p1.SemanticType == p2.SemanticType) {
+  if (p1.GlobalType != null && p2.GlobalType != null && p1.GlobalType == p2.GlobalType) {
     return true
   }
 

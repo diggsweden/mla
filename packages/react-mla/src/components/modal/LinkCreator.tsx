@@ -26,7 +26,7 @@ function LinkCreator (props: Props) {
         existing.Value = value
       } else {
         draft.Properties.push({
-          SemanticType: prop.SemanticType,
+          GlobalType: prop.GlobalType,
           TypeId: prop.TypeId,
           Value: value
         })

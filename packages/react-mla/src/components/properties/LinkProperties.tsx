@@ -22,7 +22,7 @@ function LinkProperties (props: Props) {
     const update = produce(link, copy => {
       const prop = copy.Properties.find(p => isSameType(p, property))
       if (prop == null) {
-        copy.Properties.push({ TypeId: property.TypeId, Value: newValue, SemanticType: property.SemanticType })
+        copy.Properties.push({ TypeId: property.TypeId, Value: newValue, GlobalType: property.GlobalType })
       } else {
         prop.Value = newValue
       }
@@ -47,7 +47,7 @@ function LinkProperties (props: Props) {
     <div className="m-px-3 m-mt-3">
       <div>
         {configService.getProperties(link).map(e => (
-          <Property key={link.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.SemanticType + link.DateFrom?.toISO() + link.DateTo?.toISO()}
+          <Property key={link.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType + link.DateFrom?.toISO() + link.DateTo?.toISO()}
             value={e.property?.Value}
             config={e.propertyConfiguration}
             onChange={(value) => { linkChanged(link, value, e.propertyConfiguration) }} />

@@ -34,7 +34,7 @@ function EntityProperties (props: Props) {
     const update = produce(entity, copy => {
       const prop = copy.Properties.find(p => isSameType(p, property))
       if (prop == null) {
-        copy.Properties.push({ TypeId: property.TypeId, Value: newValue, SemanticType: property.SemanticType })
+        copy.Properties.push({ TypeId: property.TypeId, Value: newValue, GlobalType: property.GlobalType })
       } else {
         prop.Value = newValue
       }
@@ -96,7 +96,7 @@ function EntityProperties (props: Props) {
     <div className="m-px-3 m-mt-3">
       <div>
         {configService.getProperties(entity).map(e => (
-          <Property key={entity.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.SemanticType + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
+          <Property key={entity.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
             value={e.property?.Value}
             config={e.propertyConfiguration}
             onChange={(newValue) => { entityChanged(entity, newValue, e.propertyConfiguration) }} />

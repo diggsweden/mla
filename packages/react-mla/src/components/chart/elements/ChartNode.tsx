@@ -48,7 +48,7 @@ function ChartNode (props: Props) {
   }, [entity, viewConfig])
 
   const view = useMemo(() => {
-    return { ...viewService.getDefaultView(entity.TypeId, entity.SemanticType), ...selectedView }
+    return { ...viewService.getDefaultView(entity.TypeId, entity.GlobalType), ...selectedView }
   }, [entity.TypeId, selectedView])
 
   const node = useMemo(() => {

@@ -231,7 +231,7 @@
             {
                 "TypeId": "person",
                 "Name": "Person",
-                "SemanticType": "person",
+                "GlobalType": "person",
                 "Description": "En fysisk person",
                 "MatchRules": [
                     {
@@ -242,7 +242,7 @@
                 "Properties": [
                     {
                         "TypeId": "personE1",
-                        "SemanticType": "identification",
+                        "GlobalType": "identification",
                         "Name": "Person-/samordningsnummer",
                         "Description": "Personnummret i 12 siffror",
                         "FieldType": "String",
@@ -272,7 +272,7 @@
                         "TypeId": "personE2",
                         "Name": "Förnamn",
                         "Description": "Personens förnamn",
-                        "SemanticType": "first_name",
+                        "GlobalType": "first_name",
                         "FieldType": "String"
                     },
                     {

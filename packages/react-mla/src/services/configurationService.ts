@@ -48,8 +48,8 @@ class ConfigurationService {
       this.entitiesConfiguration = freeze(config.Domain.EntityTypes.reduce(function (map, obj) {
         map[obj.TypeId] = obj
 
-        if (obj.SemanticType) {
-          map[obj.SemanticType] = obj
+        if (obj.GlobalType) {
+          map[obj.GlobalType] = obj
         }
         return map
       }, {} as Record<string, IEntityConfiguration>))
@@ -57,8 +57,8 @@ class ConfigurationService {
       this.linksConfiguration = freeze(config.Domain.LinkTypes.reduce(function (map, obj) {
         map[obj.TypeId] = obj
 
-        if (obj.SemanticType) {
-          map[obj.SemanticType] = obj
+        if (obj.GlobalType) {
+          map[obj.GlobalType] = obj
         }
         return map
       }, {} as Record<string, ILinkConfiguration>))
@@ -125,22 +125,22 @@ class ConfigurationService {
     return this.configuration?.Integrations?.Import ?? []
   }
 
-  public getEntityConfiguration (TypeId: string, SemanticType?: string): IEntityConfiguration | undefined {
-    return this.entitiesConfiguration[TypeId] ?? this.entitiesConfiguration[SemanticType ?? ""] ?? global.Entities.find(x => x.SemanticType == SemanticType)
+  public getEntityConfiguration (TypeId: string, GlobalType?: string): IEntityConfiguration | undefined {
+    return this.entitiesConfiguration[TypeId] ?? this.entitiesConfiguration[GlobalType ?? ""] ?? global.Entities.find(x => x.GlobalType == GlobalType)
   }
 
-  public getLinkConfiguration (TypeId: string, SemanticType?: string): ILinkConfiguration | undefined {
-    return this.linksConfiguration[TypeId] ?? this.linksConfiguration[SemanticType ?? ""] ?? global.Links.find(x => x.SemanticType == SemanticType)
+  public getLinkConfiguration (TypeId: string, GlobalType?: string): ILinkConfiguration | undefined {
+    return this.linksConfiguration[TypeId] ?? this.linksConfiguration[GlobalType ?? ""] ?? global.Links.find(x => x.GlobalType == GlobalType)
   }
 
   public getEventConfiguration (TypeId: string): IEventConfiguration | undefined {
     return this.eventsConfiguration[TypeId]
   }
 
-  public getThingConfiguration (TypeId: string, SemanticType?: string): IBaseThing {
+  public getThingConfiguration (TypeId: string, GlobalType?: string): IBaseThing {
     const config = (
-      this.getEntityConfiguration(TypeId, SemanticType) ?? 
-      this.getLinkConfiguration(TypeId, SemanticType) ?? 
+      this.getEntityConfiguration(TypeId, GlobalType) ?? 
+      this.getLinkConfiguration(TypeId, GlobalType) ?? 
       this.getEventConfiguration(TypeId)
     )
     if (config == null) {
@@ -151,16 +151,16 @@ class ConfigurationService {
   }
 
   public getTypeName (thing: IBase): string {
-    const config = (this.getEntityConfiguration(thing.TypeId, thing.SemanticType) ?? this.getLinkConfiguration(thing.TypeId, thing.SemanticType) ?? this.getEventConfiguration(thing.TypeId))
+    const config = (this.getEntityConfiguration(thing.TypeId, thing.GlobalType) ?? this.getLinkConfiguration(thing.TypeId, thing.GlobalType) ?? this.getEventConfiguration(thing.TypeId))
     if (config == null) {
       throw new Error(thing.TypeId + ' is not mapped in config')
     }
 
-    return config.Name ?? config.SemanticType ?? config.TypeId
+    return config.Name ?? config.GlobalType ?? config.TypeId
   }
 
   public getProperties (thing: IBase): PropertyAndConfiguration[] {
-    const props = (this.getEntityConfiguration(thing.TypeId, thing.SemanticType) ?? this.getLinkConfiguration(thing.TypeId, thing.SemanticType) ?? this.getEventConfiguration(thing.TypeId))?.Properties
+    const props = (this.getEntityConfiguration(thing.TypeId, thing.GlobalType) ?? this.getLinkConfiguration(thing.TypeId, thing.GlobalType) ?? this.getEventConfiguration(thing.TypeId))?.Properties
     if (props == null) {
       throw new Error(thing.TypeId + ' is not mapped in config')
     }

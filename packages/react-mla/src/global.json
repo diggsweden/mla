@@ -1,92 +1,92 @@
 {
   "Entities": [
     {
-      "SemanticType": "person",
+      "GlobalType": "person",
       "Icon": "person_fill",
       "Description": "A human being",
       "LabelShort": "{identification}\n{first_name} {last_name}",
       "Properties": [
         {
-          "SemanticType": "identification",
+          "GlobalType": "identification",
           "Description": "Unique identifier for a person",
           "FieldType": "String"
         },
         {
-          "SemanticType": "first_name",
+          "GlobalType": "first_name",
           "Description": "",
           "FieldType": "String"
         },
         {
-          "SemanticType": "last_name",
+          "GlobalType": "last_name",
           "Description": "",
           "FieldType": "String"
         },
         {
-          "SemanticType": "birth_date",
+          "GlobalType": "birth_date",
           "Description": "",
           "FieldType": "Date"
         }
       ]
     },
     {
-      "SemanticType": "organization",
+      "GlobalType": "organization",
       "Icon": "outlined_apartment",
       "Description": "An oganized group of people",
       "LabelShort": "{identification}\n{name}",
       "Properties": [
         {
-          "SemanticType": "identification",
+          "GlobalType": "identification",
           "Description": "Unique identifier for an organization",
           "FieldType": "String"
         },
         {
-          "SemanticType": "name",
+          "GlobalType": "name",
           "Description": "",
           "FieldType": "String"
         }
       ]
     },
     {
-      "SemanticType": "place",
+      "GlobalType": "place",
       "Icon": "outlined_map",
       "Description": "A position or place on the planet",
       "LabelShort": "{address}\n{name}",
       "Properties": [
         {
-          "SemanticType": "address",
+          "GlobalType": "address",
           "Description": "",
           "FieldType": "String"
         },
         {
-          "SemanticType": "postal_code",
+          "GlobalType": "postal_code",
           "Description": "",
           "FieldType": "String"
         },
         {
-          "SemanticType": "contry",
+          "GlobalType": "contry",
           "Description": "",
           "FieldType": "String"
         },
         {
-          "SemanticType": "name",
+          "GlobalType": "name",
           "Description": "",
           "FieldType": "String"
         }
       ]
     },
     {
-      "SemanticType": "event",
+      "GlobalType": "event",
       "Icon": "outlined_event",
       "Description": "Something that happened",
       "LabelShort": "{title}\n{DateFrom}",
       "Properties": [
         {
-          "SemanticType": "title",
+          "GlobalType": "title",
           "Description": "",
           "FieldType": "String"
         },
         {
-          "SemanticType": "description",
+          "GlobalType": "description",
           "Description": "",
           "FieldType": "Multiline"
         }
@@ -95,11 +95,11 @@
   ],
   "Links": [
     {
-      "SemanticType": "person_relation",
+      "GlobalType": "person_relation",
       "Description": "A relation between humans",
       "Properties": [
         {
-          "SemanticType": "description",
+          "GlobalType": "description",
           "Description": "",
           "FieldType": "String"
         }

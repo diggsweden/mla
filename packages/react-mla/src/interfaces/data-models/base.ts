@@ -26,7 +26,7 @@ interface ILinked {
 interface IBase {
   Id: string
   TypeId: string
-  SemanticType?: string
+  GlobalType?: string
   Properties: IProperty[]
 }
 
