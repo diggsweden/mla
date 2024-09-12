@@ -98,7 +98,7 @@ export default function GraphTools (props: Props) {
           return
         }
 
-        const matchRules = configService.getEntityConfiguration(e.TypeId).MatchRules
+        const matchRules = configService.getEntityConfiguration(e.TypeId)?.MatchRules
         if (matchRules != null) {
           const existingId = findId(e, matchRules, Object.values(entities).flat().filter(x => x.InternalId !== e.InternalId))
           if (existingId != null) {
@@ -132,7 +132,7 @@ export default function GraphTools (props: Props) {
             return
           }
 
-          const matchRules = configService.getLinkConfiguration(l.TypeId).MatchRules
+          const matchRules = configService.getLinkConfiguration(l.TypeId)?.MatchRules
           if (matchRules != null) {
             const existingId = findId(l, matchRules, Object.values(links).flat().filter(x => x.InternalId !== l.InternalId))
             if (existingId != null) {
@@ -179,10 +179,10 @@ export default function GraphTools (props: Props) {
           <ul className="m-list-inside m-list-disc">
             {joinResult.filter(r => r.show).map(r => (<>
               {r.entity &&
-                <li key={r.entity.InternalId}>{configService.getEntityConfiguration(r.entity.TypeId).Name}: {r.entity.LabelShort} </li>
+                <li key={r.entity.InternalId}>{configService.getEntityConfiguration(r.entity.TypeId)?.Name}: {r.entity.LabelShort} </li>
               }
               {r.link &&
-                <li key={r.link.InternalId}>{configService.getLinkConfiguration(r.link.TypeId).Name}: {r.link.LabelShort} </li>
+                <li key={r.link.InternalId}>{configService.getLinkConfiguration(r.link.TypeId)?.Name}: {r.link.LabelShort} </li>
               }
             </>
             ))}

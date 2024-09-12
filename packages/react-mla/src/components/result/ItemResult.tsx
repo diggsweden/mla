@@ -118,7 +118,7 @@ function ItemResult (props: Props) {
 
   return (
     <div ref={drag} className={props.className + (isDragging ? ' m-opacity-50' : ' m-opacity-100') + ' m-w-full m-rounded m-border-solid m-border m-bg-white m-mb-1 m-py-1 m-relative'}>
-      {config.Internal !== true && props.onClick != null &&
+      {config && config.Internal !== true && props.onClick != null &&
         <span className='m-absolute m-top-4 -m-right-4 -m-translate-y-1/2' onClick={() => { add() }}>
           <button className="m-text-white m-bg-primary m-rounded-full m-text-lg m-px-2 m-m-2 m-h-5 m-w-5 m-leading-5 m-flex m-justify-center">+</button>
         </span>

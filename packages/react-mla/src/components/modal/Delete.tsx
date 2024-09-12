@@ -16,10 +16,10 @@ function Delete (props: Props) {
       <p className="m-mb-1">Följande objekt är markerade</p>
       <ul className="m-list-inside m-list-disc">
         {props.entities.map(e => (
-          <li key={e.InternalId}>{configService.getEntityConfiguration(e.TypeId).Name}: {e.LabelShort} </li>
+          <li key={e.InternalId}>{configService.getEntityConfiguration(e.TypeId)?.Name}: {e.LabelShort} </li>
         ))}
         {props.links.map(e => (
-          <li key={e.InternalId}>{configService.getLinkConfiguration(e.TypeId).Name}: {e.LabelShort} </li>
+          <li key={e.InternalId}>{configService.getLinkConfiguration(e.TypeId)?.Name}: {e.LabelShort} </li>
         ))}
       </ul>
       <p className="m-font-medium m-mt-3">Vill du radera dem?</p>

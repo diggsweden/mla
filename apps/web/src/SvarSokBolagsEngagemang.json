@@ -1,6 +1,25 @@
 {
 	"Entities": [
 		{
+			"Id": "191212121212",
+			"TypeId": "person",
+			"SourceSystemId": "Spar",
+			"Properties": [
+				{
+					"TypeId": "personE1",
+					"Value": "191212121212"
+				},
+				{
+					"TypeId": "personE2",
+					"Value": "Anders"
+				},
+				{
+					"TypeId": "personE3",
+					"Value": "Karlsson"
+				}
+			]
+		},
+		{
 			"Id": "165501010101",
 			"TypeId": "organisation",
 			"SourceSystemId": "Testdata",
@@ -36,7 +55,7 @@
 			"Id": "L1",
 			"TypeId": "LT1",
 			"SourceSystemId": "Testdata",
-			"FromEntityId": "6258a2e9-1918-4af3-8a00-000000000000",
+			"FromEntityId": "191212121212",
 			"FromEntityTypeId": "person",
 			"ToEntityId": "165501010101",
 			"ToEntityTypeId": "organisation",
@@ -52,7 +71,7 @@
 			"Id": "L2",
 			"TypeId": "LT1",
 			"SourceSystemId": "Bolagsverket",
-			"FromEntityId": "6258a2e9-1918-4af3-8a00-000000000000",
+			"FromEntityId": "191212121212",
 			"FromEntityTypeId": "person",
 			"ToEntityId": "165512121212",
 			"ToEntityTypeId": "organisation",

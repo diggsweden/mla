@@ -201,7 +201,7 @@ class QueryService {
         e.LabelShort = viewService.getShortName(e)
         e.LabelLong = viewService.getLongName(e)
 
-        const matchRules = configService.getEntityConfiguration(e.TypeId).MatchRules
+        const matchRules = configService.getEntityConfiguration(e.TypeId)?.MatchRules
         if (matchRules != null) {
           const existingId = findId(e, matchRules, entities)
           if (existingId != null) {
@@ -232,7 +232,7 @@ class QueryService {
           l.ToEntityId = idMap.get(l.ToEntityId)!
         }
 
-        const matchRules = configService.getLinkConfiguration(l.TypeId).MatchRules
+        const matchRules = configService.getLinkConfiguration(l.TypeId)?.MatchRules
         if (matchRules != null) {
           const existingId = findId(l, matchRules, links)
           if (existingId != null) {

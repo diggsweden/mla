@@ -60,12 +60,17 @@ export default function SearchTool (props: Props) {
       text += '\nMarkera '
       const params: string[] = []
       service.Parameters.EntityTypes.forEach(e => {
+        const config = configService.getEntityConfiguration(e.TypeId)
+        if (config == null) {
+          return
+        }
+
         if (e.Max === e.Min) {
-          params.push(`${e.Min} ${configService.getEntityConfiguration(e.TypeId).Name.toLowerCase()}`)
+          params.push(`${e.Min} ${config.Name.toLowerCase()}`)
         } else if (e.Max != null) {
-          params.push(`${e.Min} till ${e.Max} ${configService.getEntityConfiguration(e.TypeId).Name.toLowerCase()}`)
+          params.push(`${e.Min} till ${e.Max} ${config.Name.toLowerCase()}`)
         } else {
-          params.push(`minst ${e.Min} ${configService.getEntityConfiguration(e.TypeId).Name.toLowerCase()}`)
+          params.push(`minst ${e.Min} ${config.Name.toLowerCase()}`)
         }
       })
       text += params.join(service.Parameters.EntityConfiguration === 'OR' ? ' eller ' : ' och ')

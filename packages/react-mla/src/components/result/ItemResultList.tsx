@@ -226,10 +226,10 @@ function ItemResultList (props: ItemResultProps) {
       <span className="m-block m-sm:inline">{result.ErrorMessage}</span>
     </div>
     }
-    {(Object.keys(mainEntities).length + eventGroups.length) > 0 &&
+    {(Object.keys(mainEntities).length + eventGroups.length) > 1 &&
       <div className="m-relative">
         <p className="m-leading-normal m-font-sm m-uppercase m-text-center m-mb-2">Resultat</p>
-        <Button className="m-absolute m-right-0 m-top-0" onClick={addAll}>Lägg till allt</Button>
+        <Button className="m-right-0 m-top-0" onClick={addAll}>Lägg till allt</Button>
       </div>
     }
     {Object.keys(mainEntities).length > 0 &&

@@ -84,7 +84,7 @@ export function computeLinks (events: IEvent[], date: ITimeSpan | undefined): IE
 
     const props = [] as IProperty[]
     const group = gr.Events
-    const generate = config.Generate.find(c => c.TypeId === gr.TypeId)!
+    const generate = config?.Generate.find(c => c.TypeId === gr.TypeId)!
     for (const propConfig of generate.Properties) {
       let val = undefined as undefined | string | number
 
@@ -126,27 +126,29 @@ export function computeLinks (events: IEvent[], date: ITimeSpan | undefined): IE
       })
     }
 
-    const link: IEventLink = {
-      Id: key + generate.TypeId,
-      TypeId: generate.TypeId,
-      InternalId: generateUUID(),
-      EventTypeId: config.TypeId,
-      Events: group,
-      LabelLong: '',
-      LabelShort: '',
-      LabelChart: '',
-      SourceSystemId: 'Beräknad utifrån händelser',
-      FromEntityId: group[0].LinkFrom[generate.TypeId].Id,
-      ToEntityId: group[0].LinkTo[generate.TypeId].Id,
-      FromEntityTypeId: group[0].LinkFrom[generate.TypeId].TypeId,
-      ToEntityTypeId: group[0].LinkTo[generate.TypeId].TypeId,
-      Properties: props,
-      Direction: 'TO'
+    if (config) {
+      const link: IEventLink = {
+        Id: key + generate.TypeId,
+        TypeId: generate.TypeId,
+        InternalId: generateUUID(),
+        EventTypeId: config.TypeId,
+        Events: group,
+        LabelLong: '',
+        LabelShort: '',
+        LabelChart: '',
+        SourceSystemId: 'Beräknad utifrån händelser',
+        FromEntityId: group[0].LinkFrom[generate.TypeId].Id,
+        ToEntityId: group[0].LinkTo[generate.TypeId].Id,
+        FromEntityTypeId: group[0].LinkFrom[generate.TypeId].TypeId,
+        ToEntityTypeId: group[0].LinkTo[generate.TypeId].TypeId,
+        Properties: props,
+        Direction: 'TO'
+      }
+      link.LabelLong = viewService.getLongName(link)
+      link.LabelShort = viewService.getShortName(link)
+      link.LabelChart = viewService.getChartName(link)
+      res.push(link)
     }
-    link.LabelLong = viewService.getLongName(link)
-    link.LabelShort = viewService.getShortName(link)
-    link.LabelChart = viewService.getChartName(link)
-    res.push(link)
   }
 
   return res
@@ -159,6 +161,9 @@ export function assignLinks (events: IEvent[], entities: IEntity[]): IEvent[] {
   for (let ev of events) {
     if (!testIsLinked(ev)) {
       const config = configService.getEventConfiguration(ev.TypeId)
+      if (config == null) {
+        continue
+      }
 
       ev = produce(ev, draft => {
         draft.LinkFrom = {}

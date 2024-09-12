@@ -147,19 +147,27 @@ function ActivityAnalysis (props: Props) {
       } else {
         if (link.FromEntityTypeId !== config.EntityTypeId) {
           const ent = getEntity(link.FromEntityId + link.FromEntityTypeId)
-          result.push({
-            Id: link.FromEntityId,
-            Type: link.FromEntityTypeId,
-            Name: ent ? ent.LabelShort : configService.getEntityConfiguration(link.FromEntityTypeId).Name
-          })
+          const config = configService.getEntityConfiguration(link.FromEntityTypeId)
+
+          if (ent != null && config != null) {
+            result.push({
+              Id: link.FromEntityId,
+              Type: link.FromEntityTypeId,
+              Name: ent ? ent.LabelShort : config.Name
+            })
+          }
         }
         if (link.ToEntityTypeId !== config.EntityTypeId) {
           const ent = getEntity(link.ToEntityId + link.ToEntityTypeId)
-          result.push({
-            Id: link.ToEntityId,
-            Type: link.ToEntityTypeId,
-            Name: ent ? ent.LabelShort : configService.getEntityConfiguration(link.ToEntityTypeId).Name
-          })
+          const config = configService.getEntityConfiguration(link.ToEntityTypeId);
+
+          if (ent != null && config != null) {
+            result.push({
+              Id: link.ToEntityId,
+              Type: link.ToEntityTypeId,
+              Name: ent ? ent.LabelShort : config.Name
+            })
+          }
         }
       }
 
