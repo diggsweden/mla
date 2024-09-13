@@ -13,9 +13,11 @@ import queryService from '../../../services/queryService'
 import Modal from '../../common/Modal'
 import configService from '../../../services/configurationService'
 import ImportToolbox from '../toolbox/ImportToolbox'
+import { useTranslation } from 'react-i18next'
 
 function ArchiveTabPanel () {
   const config = configService.getConfiguration()
+  const { t } = useTranslation();
 
   const save = useMainStore((state) => state.save)
   const open = useMainStore((state) => state.open)
@@ -64,7 +66,7 @@ function ArchiveTabPanel () {
           setDirty(false)
           closeSave()
         } else {
-          window.alert('Misslyckades med att spara')
+          window.alert('Failed to save')
         }
         setLoading(false)
         setNewFilename('')
@@ -102,10 +104,10 @@ function ArchiveTabPanel () {
 
     if (window.showSaveFilePicker != null) {
       const options = {
-        suggestedName: 'm-projekt.json',
+        suggestedName: t('default_filename'),
         types: [
           {
-            description: 'MLA fil',
+            description: t('default_description'),
             accept: { 'application/json': ['.json'] }
           } satisfies FilePickerAcceptType
         ]
@@ -133,7 +135,7 @@ function ArchiveTabPanel () {
       const url = URL.createObjectURL(blob)
 
       const link = document.createElement('a')
-      link.download = 'm-projekt.json'
+      link.download = t('default_filename')
       link.href = url
 
       link.click()
@@ -148,7 +150,7 @@ function ArchiveTabPanel () {
       const url = canvas.toDataURL('image/png')
 
       const link = document.createElement('a')
-      link.download = 'm-bild.png'
+      link.download = t('default_image')
       link.href = url
 
       link.click()
@@ -177,7 +179,7 @@ function ArchiveTabPanel () {
             setDirty(false)
             closeImageSave()
           } else {
-            window.alert('Misslyckades med att spara')
+            window.alert('Failed to save')
           }
           setLoading(false)
           setNewFilename('')
@@ -226,47 +228,47 @@ function ArchiveTabPanel () {
       onChange={event => { fileChange(event) }}
       hidden
     />
-    <RibbonMenuSection title='Diagram' >
+    <RibbonMenuSection title={t('diagram')} >
       {config.Save === 'file' && (
-        <RibbonMenuButton label='Spara' onClick={saveAsFile} disabled={!checkFileAPI()} iconName="save" />
+        <RibbonMenuButton label={t('save')} onClick={saveAsFile} disabled={!checkFileAPI()} iconName="save" />
       )}
       {config.Save && config.Save.length > 0 && config.Save !== 'file' && <div>
-        <RibbonMenuButton label='Spara' disabled={loading} onClick={() => { saveRemote(filename) }} iconName="save" />
+        <RibbonMenuButton label={t('save')} disabled={loading} onClick={() => { saveRemote(filename) }} iconName="save" />
         {filename && filename?.length > 0 && (
-          <RibbonMenuButton label='Spara som' disabled={loading} onClick={showSaveAs} iconName="move_to_inbox" />
+          <RibbonMenuButton label={t('save as')} disabled={loading} onClick={showSaveAs} iconName="move_to_inbox" />
         )}
       </div>}
 
       {config.Open === 'file' && (
-        <RibbonMenuButton label='Öppna' onClick={() => fileInputRef?.current?.click()} disabled={!checkFileAPI()} iconName="outlined_file_open" />
+        <RibbonMenuButton label={t('open')} onClick={() => fileInputRef?.current?.click()} disabled={!checkFileAPI()} iconName="outlined_file_open" />
       )}
     </RibbonMenuSection>
     <RibbonMenuDivider />
 
-    <RibbonMenuSection title='Dela' >
+    <RibbonMenuSection title={t('share')} >
       {config.SaveImage === 'file' && (
-        <RibbonMenuButton label='Som bild' onClick={ saveImage } iconName="outlined_add_a_photo" />
+        <RibbonMenuButton label={t('as picture')} onClick={ saveImage } iconName="outlined_add_a_photo" />
       )}
       {config.SaveImage && config.SaveImage !== '' && config.SaveImage.length > 0 && config.SaveImage !== 'file' && (
-        <RibbonMenuButton label='Som bild' onClick={ saveImageRemote } iconName="outlined_add_a_photo" />
+        <RibbonMenuButton label={t('as picture')} onClick={ saveImageRemote } iconName="outlined_add_a_photo" />
       )}
     </RibbonMenuSection>
     <RibbonMenuDivider />
     <ImportToolbox show={config.Menu?.Archive?.Import} />
-
+fas
     <Modal mode="save" show={showSave} title="Spara som" onNegative={closeSave} onPositive={() => { saveRemote(newFilename) }}>
       <div className="m-text-start m-px-4 m-py-1">
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Spara som namn">Filnamn</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Spara som namn">{t('filename')}</span>
         <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
-        {loading && <p>Sparar...</p>}
+        {loading && <p>{t('saving')}</p>}
       </div>
     </Modal>
 
     <Modal mode="save" show={showImageSave} title="Spara bild som" onNegative={closeImageSave} onPositive={() => { saveImageRemote(newFilename) }}>
       <div className="m-text-start m-px-4 m-py-1">
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Spara som namn">Filnamn</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Spara som namn">{t('filename')}</span>
         <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
-        {loading && <p>Sparar...</p>}
+        {loading && <p>{t('saving')}</p>}
       </div>
     </Modal>
 

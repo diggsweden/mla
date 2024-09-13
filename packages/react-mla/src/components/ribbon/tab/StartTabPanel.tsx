@@ -10,8 +10,10 @@ import GraphToolbox from '../toolbox/GraphToolbox'
 import useMainStore from '../../../store/main-store'
 import configService from '../../../services/configurationService'
 import UndoToolbox from '../toolbox/UndoToolbox'
+import { useTranslation } from 'react-i18next'
 
 function StartTabPanel () {
+  const { t } = useTranslation();
   const config = configService.getConfiguration()
   const network = useMainStore((state) => state.network)
 
@@ -26,8 +28,8 @@ function StartTabPanel () {
     <UndoToolbox show={config.Menu?.Start?.Undo} />
     <GraphToolbox show={config.Menu?.Start?.Tools} />
 
-    <RibbonMenuSection title='Visa' visible={config.Menu?.Start?.ViewAll ?? true}>
-      <RibbonMenuButton label='Visa allt' onClick={() => { fit() }} iconName="center_focus_strong"/>
+    <RibbonMenuSection title={t('show')} visible={config.Menu?.Start?.ViewAll ?? true}>
+      <RibbonMenuButton label={t('show all')} onClick={() => { fit() }} iconName="center_focus_strong"/>
     </RibbonMenuSection>
     <RibbonMenuDivider />
   </div>

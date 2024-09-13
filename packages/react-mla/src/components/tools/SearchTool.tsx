@@ -7,8 +7,10 @@ import useSearchStore from '../../store/search-state'
 import ItemResultList from '../result/ItemResultList'
 import Property from '../common/property'
 import Button from '../common/Button'
+import { useTranslation } from 'react-i18next'
 
 function SearchTool () {
+  const { t } = useTranslation();
   const selectedTool = useSearchStore((state) => state.searchTool)
   const loading = useSearchStore((state) => state.loading)
   const result = useSearchStore((state) => state.result)
@@ -77,7 +79,7 @@ function SearchTool () {
                 validChanged={(validity) => { setValidity(prop.TypeId, validity) }}
                 onChange={(newValue) => { setParamValue(prop.TypeId, newValue) }} />
             ))}
-            <Button onClick={search} disabled={!valid} className='m-w-full'>Sök</Button>
+            <Button onClick={search} disabled={!valid} className='m-w-full'>{t('search')}</Button>
           </div>
         }
       </div>

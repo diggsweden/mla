@@ -9,6 +9,7 @@ import { useDrag } from 'react-dnd'
 import viewService from '../../services/viewService'
 import useMainStore from '../../store/main-store'
 import { positionGroup } from '../../utils/vis-data-utils'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
@@ -29,6 +30,7 @@ export interface IEntityGroup {
 }
 
 function InternalResult (props: InternalProps) {
+  const { t } = useTranslation() 
   const { item } = props
   const view = viewService.getView(props.item.primary.TypeId)
 
@@ -43,7 +45,7 @@ function InternalResult (props: InternalProps) {
   function getLinkLabel (link: ILink) {
     const label = getLabel(link)
     if (label.length === 0) {
-      return 'Länkad'
+      return t('linked')
     }
 
     return label

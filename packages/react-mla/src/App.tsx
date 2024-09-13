@@ -19,6 +19,7 @@ import ErrorBoundary from './components/common/ErrorBoundary'
 import AppShortcuts from './components/common/AppShortcuts'
 import Footer from './components/common/Footer'
 import Map from './components/map/Map'
+import i18n from "i18next";
 
 import 'vis-network/dist/dist/vis-network.min.css'
 import './App.scss'
@@ -27,7 +28,7 @@ export default function App () {
   const history = useAppStore((state) => state.historyMode)
   const map = useAppStore((state) => state.showMap)
   const context = useMainStore((state) => state.context)
-  const title = useMemo(() => getContextValue(context, 'title') ?? 'Mönster Länk Analys - verktyget', [context])
+  const title = useMemo(() => getContextValue(context, 'title') ?? i18n.t('name'), [context])
 
   return (
     <AppShortcuts className="m-h-full m-w-full m-max-h-full m-max-w-full m-text-base m-flex m-flex-col">

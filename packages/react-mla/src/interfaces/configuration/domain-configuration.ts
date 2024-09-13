@@ -15,6 +15,7 @@ import { type IEventConfiguration } from './event-configuration'
 
 interface IConfiguration {
   Version: string
+  Language?: string,
   Menu?: IMenuConfiguration
   Theme?: IThemeConfiguration
   Display: IViewConfiguration[]

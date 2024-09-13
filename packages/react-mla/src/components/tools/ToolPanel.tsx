@@ -8,12 +8,15 @@ import ImportTool from './ImportTool'
 import SearchTool from './SearchTool'
 import ActivityTool from './ActivityTool'
 import useSearchStore from '../../store/search-state'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
 }
 
 function ToolPanel (props: Props) {
+  const { t } = useTranslation();
+
   const tool = useAppStore((state) => state.selectedTool)
   const setTool = useAppStore((state) => state.setTool)
   const searchTool = useSearchStore((state) => state.searchTool)
@@ -32,10 +35,10 @@ function ToolPanel (props: Props) {
 
   function getToolName () {
     switch (tool) {
-      case 'search': return searchTool?.Name ?? 'Sök'
-      case 'explore': return exploreTool?.Name ?? 'Hämta'
-      case 'import': return 'Importera ' + importTool?.Name
-      case 'activity': return 'Aktivitetsflöde'
+      case 'search': return searchTool?.Name ?? t('search')
+      case 'explore': return exploreTool?.Name ?? t('fetch')
+      case 'import': return t('import') + ' ' + importTool?.Name
+      case 'activity': return t('activity flow')
       case undefined: return null
     }
   }

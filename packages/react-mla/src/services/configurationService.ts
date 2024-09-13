@@ -9,6 +9,7 @@ import { loadScript } from '../utils/script-loader'
 
 import * as global from '../global.json'
 import { isSameType } from '../utils/utils'
+import i18n from 'i18next';
 
 export interface PropertyAndConfiguration {
   property?: IProperty
@@ -33,7 +34,7 @@ class ConfigurationService {
       await this.init(configurationJson, context, publicUrl)
     } catch (error) {
       console.error(error)
-      window.alert('Misslyckades med att ladda ' + configUrl)
+      window.alert('Could not load config: ' + configUrl)
     }
   }
 
@@ -44,6 +45,8 @@ class ConfigurationService {
 
     try {
       const config = configuration
+
+      i18n.changeLanguage(config.Language ?? "en");
 
       this.entitiesConfiguration = freeze(config.Domain.EntityTypes.reduce(function (map, obj) {
         map[obj.TypeId] = obj

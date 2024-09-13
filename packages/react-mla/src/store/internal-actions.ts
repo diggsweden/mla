@@ -12,6 +12,7 @@ import useMainStore from './main-store'
 import { setPositions } from '../utils/vis-data-utils'
 import viewService from '../services/viewService'
 import { fixDate } from '../utils/date'
+import i18n from "i18next";
 
 function updateProps(draft: WritableDraft<IChartBase>) {
   if (draft.InternalId == null) {
@@ -83,7 +84,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
         } else {
           const found = existing.find(x => x.InternalId === entity.InternalId || (x.DateFrom === entity.DateFrom && x.DateTo === entity.DateTo))
           if (found !== undefined) {
-            console.warn('Det finns redan en Entity med detta id och datum, data skrivs över')
+            console.warn('There is already an entity with this id and date date, overwriting')
             const updateEntity = produce(entity, draft => {
               draft.InternalId = found.InternalId
               draft.Properties = mergeProps(found.Properties, entity.Properties)
@@ -137,7 +138,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
         } else {
           const found = existing.find(x => x.InternalId === link.InternalId || (x.DateFrom === link.DateFrom && x.DateTo === link.DateTo))
           if (found !== undefined) {
-            console.warn('Det finns redan en länk med detta id och datum, data skrivs över')
+            console.warn('There is already a link with this id and date date, overwriting')
             const updateLink = produce(link, draft => {
               draft.InternalId = found.InternalId
               draft.Properties = mergeProps(found.Properties, link.Properties)
@@ -198,7 +199,7 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
     const stateUpEntities = produce(state.entities, stateDraft => {
       for (let entity of entities) {
         entity = produce(entity, draft => {
-          draft.SourceSystemId = 'Modifierad'
+          draft.SourceSystemId = i18n.t("modified")
           updateProps(draft)
         })
         const existing = stateDraft[getId(entity)]
@@ -217,7 +218,7 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
     const stateUpLinks = produce(state.links, stateDraft => {
       for (let link of links) {
         link = produce(link, draft => {
-          draft.SourceSystemId = 'Modifierad'
+          draft.SourceSystemId = i18n.t("modified")
           updateProps(draft)
         })
         const existing = stateDraft[getId(link)]

@@ -20,12 +20,14 @@ import { IEntity } from '../../interfaces/data-models'
 import { TileConfiguration, WmsConfiguration } from '../../interfaces/configuration/map-configuration'
 import { IGeoFeatureBounds } from '../../interfaces/data-models/geo'
 import GeoFeature from './elements/GeoFeature'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
 }
 
 export default function Map(props: Props) {
+  const { t } = useTranslation();
   const showContextMenu = useAppStore(state => state.showContextMenu)
   const showMap = useAppStore(state => state.showMap)
   const setSelectedGeoFeature = useAppStore(state => state.setSelectedGeoFeature)
@@ -259,7 +261,7 @@ export default function Map(props: Props) {
       <div className="m-h-full m-w-full m-relative">
         {placeEntityId && <div className="m-absolute m-h-full m-w-full m-z-30 m-opacity-75 m-pointer-events-none">
           <p className="m-bg-white m-mx-20 m-mt-5 m-text-center m-rounded-md">
-            Klicka på kartan för att placera {getEntity(placeEntityId)!.LabelShort}
+            {t('click to place', { name: getEntity(placeEntityId)!.LabelShort})}
           </p>
         </div>}
 

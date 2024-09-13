@@ -10,6 +10,7 @@ import viewService from '../../services/viewService'
 import { toDateAndTimeString } from '../../utils/date'
 import configService from '../../services/configurationService'
 import type { IEventFilter } from '../../interfaces/configuration/event-operations'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   typeId: string
@@ -21,6 +22,7 @@ interface Props {
 }
 
 function Table (props: Props) {
+  const { t } = useTranslation();
   const tableTop = useRef<null | HTMLTableElement>(null)
   function sortArrows (property: IBasePropertyConfiguration, sortConfig: SortConfig | undefined): ReactNode {
     return <span className="m-relative m-text-xl m-leading-none">
@@ -54,7 +56,7 @@ function Table (props: Props) {
       <thead className="m-sticky m-top-0 m-h-8 m-select-none m-text-gray-900 m-bg-gray-100 m-border m-border-gray-100 m-uppercase">
         <tr>
           {isEvent && <th className="m-cursor-pointer m-pl-1.5 m-text-gray-300 hover:m-text-blue-400">
-            <span className="m-text-gray-900">Tid</span>
+            <span className="m-text-gray-900">[{t('time')}]</span>
           </th>
           }
           {properties.map(p =>

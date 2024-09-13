@@ -12,12 +12,14 @@ import TimelineBar from './TimlineBar'
 import { HistoryDot, createHistoryDots } from './common'
 import { DateTime } from 'luxon'
 import { useEffectDebugger } from '../../utils/debug'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
 }
 
 function Timeline (props: Props) {
+  const { t } = useTranslation();
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
 
   const entities = useMainStore((state) => state.entities)
@@ -179,19 +181,19 @@ function Timeline (props: Props) {
       </div>
       
       <div className="m-flex m-flex-row m-justify-center m-flex-nowrap m-shrink-0 m-grow-0 m-mt-4 m-cursor-pointer">
-        <span className='m-mr-5 m-backdrop-blur-md m-bg-white/3' title="Bakåt" onClick={() => { if (play === 0) { next(-1) } }}>
+        <span className='m-mr-5 m-backdrop-blur-md m-bg-white/3' title={t('back')} onClick={() => { if (play === 0) { next(-1) } }}>
           <Icon name="skip_previous" className={'m-w-8 ' + (getNextDate(-1, currentDate) == undefined || play > 0 ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
-        <span className="m-backdrop-blur-md m-bg-white/3" title="Pausa uppspelning" onClick={() => { setPlay(0) }}>
+        <span className="m-backdrop-blur-md m-bg-white/3" title={t('pause play')} onClick={() => { setPlay(0) }}>
           <Icon name="pause" className={'m-w-8 ' + (play === 0 ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
-        <span className="m-backdrop-blur-md m-bg-white/3" title="Spela upp aktiviteter" onClick={() => { if (getNextDate(1, currentDate) != undefined) { activatePlay(1) } }}>
+        <span className="m-backdrop-blur-md m-bg-white/3" title={t('play activities')} onClick={() => { if (getNextDate(1, currentDate) != undefined) { activatePlay(1) } }}>
           <Icon name="play_arrow" className={'m-w-8 ' + (play === 1 ? 'animate-pulse ' : '') + (getNextDate(1, currentDate) == undefined ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
-        <span className="m-backdrop-blur-md m-bg-white/3" title="Spela upp snabbare" onClick={() => { if (play >= 1) { setPlay(play + 3) } }}>
+        <span className="m-backdrop-blur-md m-bg-white/3" title={t('play fast')} onClick={() => { if (play >= 1) { setPlay(play + 3) } }}>
           <Icon name="fast_forward" className={'m-w-8 ' + (play > 1 ? 'animate-pulse ' : '') + (play === 0 ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
-        <span className='m-ml-5 m-backdrop-blur-md m-bg-white/3' title="Framåt" onClick={() => { if (play === 0) { next(1) } }}>
+        <span className='m-ml-5 m-backdrop-blur-md m-bg-white/3' title={t('forward')} onClick={() => { if (play === 0) { next(1) } }}>
           <Icon name="skip_next" className={'m-w-8 ' + (getNextDate(1, currentDate) == undefined || play > 0 ? 'm-text-neutral-300' : 'm-text-primary')}></Icon>
         </span>
       </div>

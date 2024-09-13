@@ -18,12 +18,14 @@ import RibbonMenuIconButton from '../RibbonMenuIconButton'
 import RibbonMenuSection from '../RibbonMenuSection'
 import { compareWildcard, generateUUID, getId } from '../../../utils/utils'
 import Icon from '../../common/Icon'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   show?: boolean
 }
 
 export default function CreateToolbox (props: Props) {
+  const { t } = useTranslation()
   const config = configService.getConfiguration()
 
   const selectedEntities = useMainStore((state) => state.selectedEntities())
@@ -143,7 +145,7 @@ export default function CreateToolbox (props: Props) {
   }
 
   return (<>
-    <RibbonMenuSection title='Skapa' >
+    <RibbonMenuSection title={t('create')} >
       <RibbonMenuButtonGroup>
         {config.Domain.EntityTypes.filter(e => e.Internal !== true).map(e => (
           <RibbonEntityButton key={e.TypeId} entity={e} onClick={() => { addEntityClick(e) }} onDrop={(x, y) => { addEntityOnPosition(x, y, e) }}></RibbonEntityButton>
@@ -152,7 +154,7 @@ export default function CreateToolbox (props: Props) {
     </RibbonMenuSection>
     <RibbonMenuDivider />
 
-    <RibbonMenuSection title='Länka' >
+    <RibbonMenuSection title={t('link')} >
       <RibbonMenuButtonGroup>
         {config.Domain.LinkTypes.map(e => (
           <RibbonMenuIconButton key={e.TypeId} disabled={!isLinkAvailable(e)} onClick={() => { addLinkClick(selectedEntities[0], selectedEntities[1], e) }} label={e.Name} title={e.Description} icon="add_link"></RibbonMenuIconButton>
@@ -162,7 +164,7 @@ export default function CreateToolbox (props: Props) {
     <RibbonMenuDivider />
 
     {typeToAdd &&
-      <Modal mode="save" valid={addValid} show={typeToAdd != null} title={'Skapa: ' + typeToAdd?.Name} onNegative={onAbort} onPositive={() => { onAddEntity(entityToAdd) }} sidebar={
+      <Modal mode="save" valid={addValid} show={typeToAdd != null} title={t('create') + ": " + typeToAdd?.Name} onNegative={onAbort} onPositive={() => { onAddEntity(entityToAdd) }} sidebar={
         <div>
           <div className="m-flex m-justify-center">
             <Icon name={viewService.getView(typeToAdd.TypeId).Icon} className="m-text-primary m-relative m-h-16 m-w-16 m-my-2"></Icon>
@@ -182,7 +184,7 @@ export default function CreateToolbox (props: Props) {
     }
 
     {linkTypeToAdd &&
-      <Modal mode="save" valid={addValid} show={linkTypeToAdd != null} title={'Skapa länk: ' + linkTypeToAdd?.Name} onNegative={onAbort} onPositive={() => { onAddLink() }} sidebar={
+      <Modal mode="save" valid={addValid} show={linkTypeToAdd != null} title={t('create') + ": " + linkTypeToAdd?.Name} onNegative={onAbort} onPositive={() => { onAddLink() }} sidebar={
         <div>
           <div className="m-flex m-justify-center">
             <Icon name='open_in_full' className="m-text-primary m-relative m-h-16 m-w-16 m-my-2"></Icon>

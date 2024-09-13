@@ -19,10 +19,12 @@ import EventFilterTool from '../../tools/EventFilterTool'
 import type { IEventFilter } from '../../../interfaces/configuration/event-operations'
 import TableTool from '../../tools/TableTool'
 import { DateTime } from 'luxon'
+import { useTranslation } from 'react-i18next'
 
 type IntervalType = 'day' | 'week' | 'month' | 'custom'
 
 function AnalysisTabPanel () {
+  const { t } = useTranslation();
   const config = configService.getConfiguration()
   const history = useAppStore((state) => state.historyMode)
   const selectedEntities = useMainStore((state) => state.selectedEntities())
@@ -84,35 +86,35 @@ function AnalysisTabPanel () {
     <div className="m-flex m-text-center m-h-full m-p-1">
       <GraphToolbox />
 
-      <RibbonMenuSection title='Visa som tabell' >
-        <RibbonMenuButton label='Entiteter' title='Visa valda entiteter som tabell' disabled={selectedEntities.length === 0} onClick={() => { setShowTableTool(true) }} iconName="apps" />
-        <RibbonMenuButton label='Händelser' title='Visa händelser som tabell' disabled={Object.keys(events).length === 0} onClick={() => { setShowEventModal(true) }} iconName="date_range" />
+      <RibbonMenuSection title={t('show as table')} >
+        <RibbonMenuButton label={t('entities')} title={t('entities as table')} disabled={selectedEntities.length === 0} onClick={() => { setShowTableTool(true) }} iconName="apps" />
+        <RibbonMenuButton label={t('events')} title={t('events as table')} disabled={Object.keys(events).length === 0} onClick={() => { setShowEventModal(true) }} iconName="date_range" />
       </RibbonMenuSection>
       <RibbonMenuDivider />
 
       {config.TimeAnalysis != null && <>
-        <RibbonMenuSection title='Tidsanalys' >
-          <RibbonMenuButton label='Tidslinjal' active={history} onClick={() => { toggleHistory() }} iconName="straighten" />
+        <RibbonMenuSection title={t('time analysis')} >
+          <RibbonMenuButton label={t('timeline')} active={history} onClick={() => { toggleHistory() }} iconName="straighten" />
           {config.TimeAnalysis.PhaseAnalysis && <>
-            <RibbonMenuButton label='Lägg till fas' onClick={() => { setShowModal(true) }} iconName="add_column_right" />
-            <RibbonMenuButton label='Fasanalys' onClick={() => { setShowAnalysisModal(true) }} iconName="outlined_view_week" />
+            <RibbonMenuButton label={t('add phase')} onClick={() => { setShowModal(true) }} iconName="add_column_right" />
+            <RibbonMenuButton label={t('phase analysis')} onClick={() => { setShowAnalysisModal(true) }} iconName="outlined_view_week" />
           </>
           }
         </RibbonMenuSection>
 
-        <RibbonMenuSection title='Välj tidsintervall' >
+        <RibbonMenuSection title={t('select time interval')} >
           <div className="m-text-left m-px-1">
-            <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">Från - Till</span>
+            <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('from')} - {t('to')}</span>
             <input type='Date' required min={toDateString(min)} value={toDateString(date.DateFrom)} onChange={dateChanged} className={timePickerClass}></input>
             <input type='Date' min={toDateString(date.DateFrom)} max={toDateString(max)} required readOnly={interval !== 'custom'} value={toDateString(date.DateTo)} onChange={dateToChanged} className={timePickerClass}></input>
           </div>
           <div className="m-px-1">
-            <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">Tidsintervall</span>
+            <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('time interval')}</span>
             <select required value={interval} onChange={(e) => { setInterval(e.target.value as IntervalType) }} className={timePickerClass}>
-              <option value={'day'}>dag</option>
-              <option value={'week'}>vecka</option>
-              <option value={'month'}>månad</option>
-              <option value={'custom'}>valfritt</option>
+              <option value={'day'}>{t('day')}</option>
+              <option value={'week'}>{t('week')}</option>
+              <option value={'month'}>{t('month')}</option>
+              <option value={'custom'}>{t('custom')}</option>
             </select>
           </div>
         </RibbonMenuSection>
@@ -120,12 +122,12 @@ function AnalysisTabPanel () {
       </>}
 
       {showAnalysisModal && config.TimeAnalysis?.PhaseAnalysis != null &&
-        <Modal mode="accept" wide show={showAnalysisModal} title="Fasanalys" onNegative={() => { setShowAnalysisModal(false) }}>
+        <Modal mode="accept" wide show={showAnalysisModal} title={t('phase analysis')} onNegative={() => { setShowAnalysisModal(false) }}>
           <ActivityAnalysis config={config.TimeAnalysis.PhaseAnalysis} />
         </Modal>
       }
       {showPhaseEventModal &&
-        <Modal mode="save" show={showPhaseEventModal} title="Skapa fas" onNegative={() => {
+        <Modal mode="save" show={showPhaseEventModal} title={t('add phase')} onNegative={() => {
           setShowModal(false)
           setUpdateEvent(undefined)
         }} onPositive={addEvent}>
@@ -133,13 +135,13 @@ function AnalysisTabPanel () {
         </Modal>
       }
       {showEventModal &&
-        <Modal mode='save' wide={true} show={showEventModal} title={'Händelser'} onNegative={() => { setShowEventModal(false) }} onPositive={() => { saveFilter(); setShowEventModal(false) }}>
+        <Modal mode='save' wide={true} show={showEventModal} title={t('events')} onNegative={() => { setShowEventModal(false) }} onPositive={() => { saveFilter(); setShowEventModal(false) }}>
           <EventFilterTool items={Object.values(events).flat()} onChange={filterChanged} />
         </Modal>
       }
     </div>
     { showTableTool &&
-      <Modal mode={'ok'} wide={true} show={showTableTool} title={'Tabelldata'} onNegative={() => { setShowTableTool(false) }} onPositive={() => { setShowTableTool(false) }}>
+      <Modal mode={'ok'} wide={true} show={showTableTool} title={t('table data')} onNegative={() => { setShowTableTool(false) }} onPositive={() => { setShowTableTool(false) }}>
         <TableTool items={[...selectedEntities, ...selectedLinks]} />
       </Modal>
     }

@@ -15,6 +15,7 @@ import { findId } from '../../../utils/utils'
 import type { IEntity, ILink } from '../../../interfaces/data-models'
 import { produce } from 'immer'
 import { internalAdd, internalRemove } from '../../../store/internal-actions'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   show?: boolean
@@ -29,6 +30,8 @@ interface JoinResult {
 }
 
 export default function GraphTools (props: Props) {
+  const { t } = useTranslation();
+
   const selection = useMainStore((state) => state.selectedIds)
   const selectedEntities = useMainStore((state) => state.selectedEntities())
   const entities = useMainStore((state) => state.entities)
@@ -165,17 +168,17 @@ export default function GraphTools (props: Props) {
   }
 
   return (<>
-    <RibbonMenuSection title='Verktyg'>
-      <RibbonMenuButton label='Hitta länk' title='Hittar den kortaste vägen mellan 2 entiteter' disabled={selectedEntities.length !== 2} onClick={() => { djikstra() }} iconName="route" />
-      <RibbonMenuButton label='Slå samman' title='Slår samman entiteter som är samma enligt matchningsregler' disabled={(data.nodes.length + data.edges.length) === 0} onClick={() => { setShowJoin(true) }} iconName="join_left" />
+    <RibbonMenuSection title={(t('tools'))}>
+      <RibbonMenuButton label={t('find link')} title={t('find link desc')} disabled={selectedEntities.length !== 2} onClick={() => { djikstra() }} iconName="route" />
+      <RibbonMenuButton label={t('merge')} title={t('merge desc')} disabled={(data.nodes.length + data.edges.length) === 0} onClick={() => { setShowJoin(true) }} iconName="join_left" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
 
     { showJoin &&
-      <Modal mode={joinResult.length > 0 ? 'accept' : 'ok'} show={showJoin} title={'Slå samman'} onNegative={() => { setShowJoin(false) }} onPositive={() => { join() }}>
+      <Modal mode={joinResult.length > 0 ? 'accept' : 'ok'} show={showJoin} title={t('merge')} onNegative={() => { setShowJoin(false) }} onPositive={() => { join() }}>
         { joinLoading && <Spinner />}
         { !joinLoading && joinResult.length > 0 && <div className="m-text-left m-px-3 m-py-2">
-          <p>Följande slås samman:</p>
+          <p>{t('merge')}</p>
           <ul className="m-list-inside m-list-disc">
             {joinResult.filter(r => r.show).map(r => (<>
               {r.entity &&
@@ -189,7 +192,7 @@ export default function GraphTools (props: Props) {
           </ul>
         </div>}
         { !joinLoading && joinResult.length === 0 && <>
-          <p className="m-py-3">Hittade ingen data som kunde slås samman.</p>
+          <p className="m-py-3">{t('nothing to merge')}</p>
         </>}
       </Modal>
     }

@@ -19,13 +19,13 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch (error: Error, errorInfo: ErrorInfo) {
-    console.error('En komponent gick sönder: ', error, errorInfo)
+    console.error('Something broke: ', error, errorInfo)
     this.setState({ hasError: true })
   }
 
   render () {
     if (this.state.hasError) {
-      return <h1>Ett fel inträffade.</h1>
+      return <h1>An error occured</h1>
     }
 
     return this.props.children

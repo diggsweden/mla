@@ -14,7 +14,7 @@ import useSearchStore from './search-state'
 import { internalUpdateLabels } from './internal-actions'
 import useMainStore from './main-store'
 
-export type Tab = 'Arkiv' | 'Start' | 'Sök & Hämta' | 'Analysera' | 'Markera' | 'Utseende' | 'Visa' | 'Karta'
+export type Tab = 'archive' | 'start' | 'search find' | 'analysis' | 'select' | 'look feel' | 'show' | 'map'
 export type Tool = 'search' | 'explore' | 'import' | 'activity'
 
 interface AppState {
@@ -136,7 +136,7 @@ const useAppStore = create<AppState>((set, get) => ({
     }))
   },
 
-  selectedTab: 'Start',
+  selectedTab: 'start',
   setTab: (tab) => {
     set((state) => ({
       selectedTab: tab

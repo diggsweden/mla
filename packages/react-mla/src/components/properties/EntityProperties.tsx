@@ -13,12 +13,14 @@ import useAppStore from '../../store/app-store'
 import { getId, isSameType } from '../../utils/utils'
 import Button from '../common/Button'
 import { IPropertyConfiguration } from '../../interfaces/configuration'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   entity: IEntity
 }
 
 function EntityProperties (props: Props) {
+  const { t } = useTranslation();
   const { entity } = props
   const updateEntity = useMainStore((state) => state.updateEntity)
   const placeEntity = useAppStore((state) => state.setPlaceEntityId)
@@ -103,9 +105,9 @@ function EntityProperties (props: Props) {
         ))}
       </div>
       { usingMap && <div>
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Latitud och Longitud">Position</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Latitud och Longitud">{t('position')}</span>
         <input type="text" value={inputCoords} onChange={(e) => { updateCoords(e.target.value) }} className={'m-border-gray-300 m-bg-white m-border m-text-gray-900 m-rounded-lg m-block m-w-full m-p-1'}></input>
-        <Button className="m-w-full" onClick={() => { place(entity) }}><Icon name="pin_drop" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon> Placera på karta</Button>
+        <Button className="m-w-full" onClick={() => { place(entity) }}><Icon name="pin_drop" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon>{t('place on map')}</Button>
       </div>}
     </div>
   )

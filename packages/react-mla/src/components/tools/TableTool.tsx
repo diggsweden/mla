@@ -8,6 +8,7 @@ import { type IBase } from '../../interfaces/data-models'
 import Table from '../common/Table'
 import Icon from '../common/Icon'
 import viewService from '../../services/viewService'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   items: IBase[]
@@ -20,6 +21,8 @@ export interface SortConfig {
 }
 
 function TableTool (props: Props) {
+  const { t } = useTranslation();
+
   if (props.items.length === 0) {
     throw new Error("Cannot display without items")
   }
@@ -127,9 +130,9 @@ function TableTool (props: Props) {
       <div className="m-flex m-justify-between m-mt-0.5 m-align-top m-text-gray-500 m-text-sm">
         {props.showExport !== false && <button className="bg-gray-200 mt-1.5 px-2 py-1 font-medium text-gray-800" onClick={(e: any) => { exportToCsv(e) }}>
           <Icon name="ios_share" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1 m-me-1"></Icon>
-          Exportera CSV
+          {t('export csv')}
         </button>}
-        <span>Antal: {showList.length}</span>
+        <span>{t('count of', { count: showList.length})}</span>
       </div>
     </section>
   </div >

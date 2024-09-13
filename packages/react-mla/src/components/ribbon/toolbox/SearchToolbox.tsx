@@ -13,12 +13,14 @@ import { filterEntityIntegrations } from '../../../utils/utils'
 import useAppStore from '../../../store/app-store'
 import useMainStore from '../../../store/main-store'
 import type { IQueryIntegration } from '../../../interfaces/configuration'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   show?: boolean
 }
 
 export default function SearchTool (props: Props) {
+  const { t } = useTranslation();
   const geoFeature = useAppStore((state) => state.selectedGeoFeature)
   const selectedEntities = useMainStore((state) => state.selectedEntities())
 
@@ -57,7 +59,7 @@ export default function SearchTool (props: Props) {
     let text = service.Description
 
     if (service.Parameters.EntityTypes != null) {
-      text += '\nMarkera '
+      text += ('\n' + t('select') + ' ')
       const params: string[] = []
       service.Parameters.EntityTypes.forEach(e => {
         const config = configService.getEntityConfiguration(e.TypeId)
@@ -68,24 +70,24 @@ export default function SearchTool (props: Props) {
         if (e.Max === e.Min) {
           params.push(`${e.Min} ${config.Name.toLowerCase()}`)
         } else if (e.Max != null) {
-          params.push(`${e.Min} till ${e.Max} ${config.Name.toLowerCase()}`)
+          params.push(`${e.Min} ${t('to')} ${e.Max} ${config.Name.toLowerCase()}`)
         } else {
-          params.push(`minst ${e.Min} ${config.Name.toLowerCase()}`)
+          params.push(`${'at least'} ${e.Min} ${config.Name.toLowerCase()}`)
         }
       })
-      text += params.join(service.Parameters.EntityConfiguration === 'OR' ? ' eller ' : ' och ')
+      text += params.join(` ${t(service.Parameters.EntityConfiguration === 'OR' ? 'or' : 'and')} `)
     }
 
     if (service.Parameters.GeoData === true) {
       if (service.Parameters.EntityTypes != null) {
-        text += ' eller välj Geoposition'
+        text += t('or select position')
       } else {
-        text += '\nVälj plats på kartan'
+        text += ('\n' + t('select on map'))
       }
     }
 
     if (service.Parameters.EntityTypes != null || service.Parameters.GeoData === true) {
-      text += ' för att hämta uppgifterna'
+      text += t('to fetch information')
     }
 
     return text
@@ -93,7 +95,7 @@ export default function SearchTool (props: Props) {
 
   return <>
     { props.show !== false && searchToolsAvailable && <>
-      <RibbonMenuSection title='Sök' >
+      <RibbonMenuSection title={t('search')} >
         <RibbonMenuButtonGroup>
           { configService.getSearchServices().filter(s => s.Parameters.Form != null).map(e => (
             <RibbonMenuIconButton key={e.Id} label={e.Name} active={searchTool?.Id === e.Id} title={getTitle(e)} icon={e.Icon ?? 'manage_search'} onClick={() => { setSearchTool(e.Id) }}></RibbonMenuIconButton>
@@ -104,7 +106,7 @@ export default function SearchTool (props: Props) {
     </>
     }
     { props.show !== false && exploreToolsAvailable && <>
-      <RibbonMenuSection title='Hämta' >
+      <RibbonMenuSection title={t('fetch')} >
         <RibbonMenuButtonGroup>
           { configService.getSearchServices().filter(s => s.Parameters.EntityTypes != null || s.Parameters.GeoData != null).map(e => (
             <RibbonMenuIconButton key={e.Id} label={e.Name} active={exploreTool?.Id === e.Id} title={getTitle(e)} icon={e.Icon ?? 'manage_search'} disabled={!availableTools.some(x => x.Id === e.Id)} onClick={() => { explore(e.Id) }}></RibbonMenuIconButton>

@@ -1,5 +1,6 @@
 {
     "Version": "0.1",
+    "Language": "sv",
     "Theme": {
         "Primary": "rgb(68, 105, 149)",
         "CustomIconColorPicklist": [

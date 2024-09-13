@@ -16,6 +16,25 @@ import ErrorBoundary from './components/common/ErrorBoundary'
 import App from './App'
 
 import './MLA.scss'
+import { useTranslation } from 'react-i18next'
+
+import i18n from "i18next";
+import { initReactI18next } from 'react-i18next'
+import en from '../i18n/en.json'
+import sv from '../i18n/sv.json'
+
+i18n
+.use(initReactI18next)
+.init({
+  resources: {
+    en: { translation: en },
+    sv: { translation: sv }
+  },
+  fallbackLng: "sv",
+  interpolation: {
+    escapeValue: false // react already safes from xss
+  }
+});
 
 export interface MlaProps {
   config?: string
@@ -27,6 +46,7 @@ export interface MlaProps {
 
 export function MLA (props: MlaProps) {
   const [ready, setReady] = useState(false)
+
   useEffect(() => {
     async function init () {
       if (configService.isConfigured()) {
@@ -38,7 +58,7 @@ export function MLA (props: MlaProps) {
       } else if (props.configSrc) {
         await configService.init_src(props.configSrc, props.context, props.publicUrl)
       } else {
-        throw new Error('Du måste ange config eller configSrc')
+        throw new Error('missing config or configSrc')
       }
 
       useMainStore.getState().setContext(props.context ?? '')
@@ -63,18 +83,17 @@ export function MLA (props: MlaProps) {
     void init()
   }, [props])
 
-  const loading = (
-    <div id="loader">
-      <h1>Mönster Länk Analysverktyget startar...</h1>
-      <div className="m-h-16 m-w-16 m-m-auto">
-        <Spinner />
-      </div>
-    </div>
-  )
-
+  const { t } = useTranslation()
   return (
     <div className='mla-component'>
-      { !ready && loading }
+      { !ready &&
+        <div id="loader">
+          <h1>{t('starting')}</h1>
+          <div className="m-h-16 m-w-16 m-m-auto">
+            <Spinner />
+          </div>
+        </div>
+      }
       { ready &&
         <ErrorBoundary>
             <App />

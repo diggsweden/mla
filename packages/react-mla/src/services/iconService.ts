@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import { freeze } from 'immer'
-import * as icons from '../icons.json'
+import icons from '../icons.json'
 import { toPng } from '../utils/canvas'
 import configService from './configurationService'
 import viewService from './viewService'

@@ -15,8 +15,10 @@ import SearchTabPanel from './tab/SearchTabPanel'
 
 import configService from '../../services/configurationService'
 import useAppStore, { type Tab } from '../../store/app-store'
+import { useTranslation } from 'react-i18next'
 
 function RibbonMenu () {
+  const { t } = useTranslation();
   const configuration = configService.getConfiguration()
 
   const activeTab = useAppStore((state) => state.selectedTab)
@@ -30,21 +32,21 @@ function RibbonMenu () {
 
   function getTab (tab: Tab) {
     switch (tab) {
-      case 'Arkiv':
+      case 'archive':
         return <ArchiveTabPanel />
-      case 'Start':
+      case 'start':
         return <StartTabPanel />
-      case 'Sök & Hämta':
+      case 'search find':
         return <SearchTabPanel />
-      case 'Analysera':
+      case 'analysis':
         return <AnalysisTabPanel />
-      case 'Utseende':
+      case 'look feel':
         return <StyleTabPanel />
-      case 'Visa':
+      case 'show':
         return <LayoutTabPanel />
-      case 'Markera':
+      case 'select':
         return <ToolsTabPanel />
-      case 'Karta':
+      case 'map':
         return <MapTabPanel />
       default:
         return null
@@ -59,18 +61,18 @@ function RibbonMenu () {
   }, [])
 
   const tabs = useMemo(() => {
-    let tabs = ['Arkiv', 'Start', 'Sök & Hämta', 'Analysera', 'Utseende', 'Markera', 'Visa', 'Karta'] as Tab[]
+    let tabs = ['archive', 'start', 'search find', 'analysis', 'look feel', 'select', 'show', 'map'] as Tab[]
 
     if (configuration.Menu?.Archive?.Show === false) {
-      tabs = tabs.filter(t => t !== 'Arkiv')
+      tabs = tabs.filter(t => t !== 'archive')
     }
 
     if (configuration.MapConfiguration == null) {
-      tabs = tabs.filter(t => t !== 'Karta')
+      tabs = tabs.filter(t => t !== 'map')
     }
 
     if (!searchToolsAvailable && !exploreToolsAvailable) {
-      tabs = tabs.filter(t => t !== 'Sök & Hämta')
+      tabs = tabs.filter(t => t !== 'look feel')
     }
 
     return tabs
@@ -80,7 +82,7 @@ function RibbonMenu () {
     <div className="m-w-full m-ml-2 m-leading-6">
       <ul>
         {tabs.map(tab =>
-          <li key={tab} className={'m-inline m-whitespace-nowrap m-cursor-pointer m-px-2 m-p-1 m-mx-1 ' + (activeTab === tab ? 'm-bg-gray-100 m-text-black' : 'hover:m-bg-slate-400 hover:m-text-black')} onClick={() => { showTab(tab) }}>{tab}</li>
+          <li key={tab} className={'m-inline m-whitespace-nowrap m-cursor-pointer m-px-2 m-p-1 m-mx-1 ' + (activeTab === tab ? 'm-bg-gray-100 m-text-black' : 'hover:m-bg-slate-400 hover:m-text-black')} onClick={() => { showTab(tab) }}>{t(tab)}</li>
         )}
       </ul>
     </div>

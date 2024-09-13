@@ -211,7 +211,7 @@ class QueryService {
         }
       })
     } else if (res?.Entities != null) {
-      throw new Error('resultatet saknar fältet Entities av typen Entity[]')
+      throw new Error('result.Entities has to be: Entity[]')
     } else {
       res.Entities = []
     }
@@ -242,7 +242,7 @@ class QueryService {
         }
       })
     } else if (res?.Links != null) {
-      throw new Error('resultatet saknar fältet Links av typen Link[]')
+      throw new Error('result.Links has to be: Link[]')
     } else {
       res.Links = []
     }
@@ -252,7 +252,7 @@ class QueryService {
         e.Date = fixDate(e.Date)!
       })
     } else if (res?.Events != null) {
-      throw new Error('resultatet saknar fältet Events av typen Event[]')
+      throw new Error('result.Events has to be: Event[]')
     } else {
       res.Events = []
     }

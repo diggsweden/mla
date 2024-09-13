@@ -16,6 +16,7 @@ import type { IPhaseConfiguration } from '../../interfaces/configuration/phase-c
 import Icon from '../common/Icon'
 import Popover from '../common/Popover'
 import { DateTime, Interval } from 'luxon'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
@@ -73,6 +74,8 @@ function within (period: TimePeriod, thing: IChartBase): boolean {
 }
 
 function ActivityAnalysis (props: Props) {
+  const { t } = useTranslation();
+  
   const entities = useMainStore((state) => state.entities)
   const links = useMainStore((state) => state.links)
   const events = useMainStore((state) => state.phaseEvents)
@@ -314,19 +317,19 @@ function ActivityAnalysis (props: Props) {
   return (
     <div className={('m-bg-stone-400 m-p-5 ' + props.className)}>
       {view.length === 0 &&
-        <div>Inget att visa</div>
+        <div>{t('nothing to show')}</div>
       }
       {view.length > 0 &&
         <div className="m-p-8 m-w-full m-overflow-x m-bg-white m-">
           <div className="m-w-full -m-mt-5 m-mb-4 -m-ml-4">
             <button type="button" onClick={(e) => { show(e) }} className='m-float-left m-text-white m-bg-primary enabled:m-hover:bg-blue-800 focus:m-ring-4 focus:m-ring-blue-300 m-font-medium m-rounded m-px-2 m-py-1'>
-              <Icon name="settings" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon> Inställningar
+              <Icon name="settings" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon>{t('settings')}
             </button>
           </div>
 
           {/* Header */}
           <div className="m-flex m-w-full m-mt-8">
-            <div className="m-flex m-justify-center m-items-center m-w-14"><div className="-m-rotate-90 m-text-xl">Akt</div></div>
+            <div className="m-flex m-justify-center m-items-center m-w-14"><div className="-m-rotate-90 m-text-xl">{t('phase act')}</div></div>
             <div className={'m-grow m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
               {view.map((v, i) =>
                 <div key={i} className="m-h-full">
@@ -348,17 +351,17 @@ function ActivityAnalysis (props: Props) {
 
           {/* Activities */}
           <div className="m-flex m-w-full m-min-h-[80px]">
-            <div className="m-flex m-justify-center m-items-center"><div className="-m-rotate-90 m-text-sm">Aktiviteter</div></div>
+            <div className="m-flex m-justify-center m-items-center"><div className="-m-rotate-90 m-text-sm">{t('activities')}</div></div>
             <div className={'m-grow m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
               {view.map((v, i) =>
                 <div key={i} className="m-flex m-h-full">
                   <div className="m-p-2 m-flex m-grow m-">
                     {v.Description.length === 0 &&
-                      <div className="m-italic">Ingen information finns</div>
+                      <div className="m-italic">{t('no info')}</div>
                     }
 
                     <div className="m-w-full">
-                      <div className="m-font-semibold m-text-left m-text-sm m-ml-2">Dag</div>
+                      <div className="m-font-semibold m-text-left m-text-sm m-ml-2">{t('day')}</div>
                       {v.Description.filter(d => d.Attributes.length === 0 || shouldShowAttribute(...d.Attributes)).map((d, j) => {
                         if (dateDiff) {
                           if (j === 0) {
@@ -393,7 +396,7 @@ function ActivityAnalysis (props: Props) {
 
           {/* Cast */}
           <div className="m-flex m-w-full">
-            <div className="m-flex m-justify-center m-items-center m-w-[49px]"><div className="-m-rotate-90 m-text">Aktörer</div></div>
+            <div className="m-flex m-justify-center m-items-center m-w-[49px]"><div className="-m-rotate-90 m-text">{t('actors')}</div></div>
             <div className="m-grow m-text-left">
               {types.map(t =>
                 <div key={t.Name} className={'m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
@@ -428,7 +431,7 @@ function ActivityAnalysis (props: Props) {
 
       }
       <Popover backgroundClass='bg-gray-400/20' show={showSettings !== undefined} hide={() => { setShowSettings(undefined) } } x={showSettings?.x ?? 0} y={showSettings?.y ?? 0}>
-        <Toggle title="Visa dagar som skillnad från föregående datum:" value={dateDiff} onChange={() => { setDateDiff(!dateDiff) }} className="m-mx-3 m-my-2" />
+        <Toggle title={t('show as date diff')} value={dateDiff} onChange={() => { setDateDiff(!dateDiff) }} className="m-mx-3 m-my-2" />
         {attributes.map((a) => (
           <Toggle key={a.Name} title={a.Name + ':'} value={a.Show} onChange={() => { toggleAttribute(a) }} className="m-mx-3 m-mb-2" />
         ))}

@@ -5,8 +5,10 @@
 import { useState } from 'react'
 import ItemResultList from '../result/ItemResultList'
 import useSearchStore from '../../store/search-state'
+import { useTranslation } from 'react-i18next';
 
 function ImportTool () {
+  const { t } = useTranslation();
   const selectedTool = useSearchStore((state) => state.importTool)
   const loading = useSearchStore((state) => state.loading)
   const result = useSearchStore((state) => state.result)
@@ -21,7 +23,7 @@ function ImportTool () {
       const reader = new FileReader()
       reader.onload = async (e) => {
         if (e.target?.result == null) {
-          throw new Error('Misslyckades med att läsa filen')
+          throw new Error('Failed to read file')
         }
 
         const text = (e.target.result)
@@ -45,7 +47,7 @@ function ImportTool () {
         <p className="m-text-sm m-p-1">{selectedTool.Description}</p>
         <div className="m-pt-2">
           <input className="m-w-full" type="file" onChange={(e) => { setSelectedFile(e.target.files) }}></input>
-          <button disabled={fileContents === ''} onClick={search} className='w-full text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1 mr-2 my-2'>Importera</button>
+          <button disabled={fileContents === ''} onClick={search} className='w-full text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1 mr-2 my-2'>{t('import')}</button>
         </div>
       </div>
       <div className="m-mt-2">

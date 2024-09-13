@@ -15,6 +15,7 @@ import Toggle from '../common/Toggle'
 import useAppStore from '../../store/app-store'
 import Icon from '../common/Icon'
 import { DateTime } from 'luxon'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
@@ -32,6 +33,7 @@ interface History {
 }
 
 function ActivityTool (props: Props) {
+  const { t } = useTranslation();
   const ref = createRef<HTMLDivElement>()
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
 
@@ -126,7 +128,7 @@ function ActivityTool (props: Props) {
                 item: ent,
                 date: ent.DateFrom,
                 rubrik: ent.LabelShort,
-                text: 'Tillkommer\n' + ent.LabelLong,
+                text: t('is added') + '\n' + ent.LabelLong,
                 color: getColor(ent),
                 separator: false
               })
@@ -136,7 +138,7 @@ function ActivityTool (props: Props) {
                 item: ent,
                 date: ent.DateTo,
                 rubrik: ent.LabelShort,
-                text: 'Avslutad\n' + ent.LabelLong,
+                text: t('is removed') + '\n' + ent.LabelLong,
                 color: getColor(ent),
                 separator: false
               })
@@ -166,7 +168,7 @@ function ActivityTool (props: Props) {
                 item: ent,
                 date: ent.DateFrom,
                 rubrik: ent.LabelShort,
-                text: 'Tillkommer\n' + ent.LabelLong,
+                text:  t('is added') + '\n' + ent.LabelLong,
                 color: getColor(ent),
                 separator: false
               })
@@ -175,7 +177,7 @@ function ActivityTool (props: Props) {
                 item: ent,
                 date: ent.DateTo,
                 rubrik: ent.LabelShort,
-                text: 'Avslutad\n' + ent.LabelLong,
+                text:  t('is removed') + '\n' + ent.LabelLong,
                 color: getColor(ent),
                 separator: false
               })
@@ -184,7 +186,7 @@ function ActivityTool (props: Props) {
                 item: ent,
                 date,
                 rubrik: ent.LabelShort,
-                text: 'Uppdaterad\n' + ent.LabelLong,
+                text: t('is updated') + '\n' + ent.LabelLong,
                 color: getColor(ent),
                 separator: false
               })
@@ -232,7 +234,7 @@ function ActivityTool (props: Props) {
     <div className={props.className}>
       { type &&
         <div className="m-w-full m-mb-3">
-          <Toggle title="Visa allt:" value={showAll} onChange={() => { setShowAll(!showAll) }} className=''/>
+          <Toggle title={t('show all')} value={showAll} onChange={() => { setShowAll(!showAll) }} className=''/>
         </div>
       }
       <div className="m-h-full m-w-full m-border-l m-border-gray-300 m-">
@@ -247,7 +249,7 @@ function ActivityTool (props: Props) {
                 <div className="m-text-white m-w-full m-px-3 m-bg-origin-border m-bg-no-repeat m-ms-auto m-me-auto" style={{ backgroundImage: 'conic-gradient(from 45deg at left center, rgb(68, 105, 149) 25%, rgba(0, 0, 0, 0) 0deg), conic-gradient(from -135deg at right center, rgb(68, 105, 149) 25%, rgba(0, 0, 0, 0) 0deg)', backgroundPositionX: '0px, 100%', backgroundPositionY: '50%, 50%', backgroundSize: '51% 100%', borderImageSource: 'linear-gradient(rgba(0, 0, 0, 0) calc(50% - 2px), rgb(196, 77, 88) 0px, rgb(196, 77, 88) calc(50% + 2px), rgba(0, 0, 0, 0) 0px)' }} title={toDateString(m.date)}>
                   <div className="m-w-full m-flex m-p-1">
                     <span className="m-flex-1">{m.rubrik}</span>
-                    <span className="m-ms-2 m-w-4" title="Redigera" onClick={() => {
+                    <span className="m-ms-2 m-w-4" title={t('edit')} onClick={() => {
                       if (m.event != null) {
                         setEditevent({ ...m.event })
                       }
@@ -281,7 +283,7 @@ function ActivityTool (props: Props) {
 
       </div>
       {editEvent &&
-        <Modal mode="save" show={editEvent !== null} title="Ändra fas" onNegative={() => { setEditevent(undefined) }} onPositive={() => { setEvent(editEvent); setEditevent(undefined) }}>
+        <Modal mode="save" show={editEvent !== null} title={t('edit phase')} onNegative={() => { setEditevent(undefined) }} onPositive={() => { setEvent(editEvent); setEditevent(undefined) }}>
           <PhaseCreator value={editEvent} onChange={(e) => { setEditevent(e) }} />
         </Modal>
 

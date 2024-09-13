@@ -13,6 +13,7 @@ import useMainStore from '../../store/main-store'
 import type { IEventFilter } from '../../interfaces/configuration/event-operations'
 import { filterEvents } from '../../utils/event-utils'
 import { produce } from 'immer'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   items: IEvent[]
@@ -25,6 +26,8 @@ export interface SortConfig {
 }
 
 function EventFilterTool (props: Props) {
+  const { t } = useTranslation();
+
   if (props.items.length === 0) {
     throw new Error('No events to filter')
   }
@@ -127,7 +130,7 @@ function EventFilterTool (props: Props) {
   function getfileContent () {
     const config = configService.getThingConfiguration(selectedType)
     function getHeader (): string {
-      return ['Datum', ...config.Properties.map(p => `"${p.Name}"`)].join(';')
+      return [t('Date'), ...config.Properties.map(p => `"${p.Name}"`)].join(';')
     }
     function getBody (): string {
       return showList.map(i => {
@@ -156,9 +159,9 @@ function EventFilterTool (props: Props) {
       <div className="m-flex m-justify-between m-mt-0.5 m-align-top m-text-gray-500 m-text-sm">
         <button className="m-bg-gray-200 m-mt-1.5 m-px-2 m-py-1 m-font-medium m-text-gray-800" onClick={(e: any) => { exportToCsv(e) }}>
           <Icon name="ios_share" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1 m-me-1"></Icon>
-          Exportera CSV
+          {t('export csv')}
         </button>
-        <span>Antal: {showList.length}</span>
+        <span>{t('count of', { count: showList.length})}</span>
       </div>
     </section>
   </div >

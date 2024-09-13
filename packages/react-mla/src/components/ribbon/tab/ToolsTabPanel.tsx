@@ -10,8 +10,10 @@ import configService from '../../../services/configurationService'
 import useMainStore from '../../../store/main-store'
 import { arrayDistinct, getId } from '../../../utils/utils'
 import SelectToolbox from '../toolbox/SelectToolbox'
+import { useTranslation } from 'react-i18next'
 
 function ToolsTabPanel () {
+  const { t } = useTranslation();
   const selection = useMainStore((state) => state.selectedIds)
   const setSelected = useMainStore((state) => state.setSelected)
   const entities = useMainStore((state) => state.entities)
@@ -23,7 +25,7 @@ function ToolsTabPanel () {
   }
 
   return <div className="m-flex m-text-center m-h-full m-p-1">
-    <RibbonMenuSection title='Markera typ'>
+    <RibbonMenuSection title={t('select type')}>
       <RibbonMenuButtonGroup>
         {configService.getConfiguration().Domain.EntityTypes.filter(e => e.Internal !== true).map(e => (
           <RibbonMenuIconButton key={e.TypeId} onClick={() => { selectType(e.TypeId) }} label={(e.Name)} icon="location_searching"></RibbonMenuIconButton>

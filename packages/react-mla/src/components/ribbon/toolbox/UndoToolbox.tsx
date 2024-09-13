@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
+import { useTranslation } from 'react-i18next'
 import useMainStore from '../../../store/main-store'
 import RibbonMenuButtonGroup from '../RibbonMenuButtonGroup'
 import RibbonMenuDivider from '../RibbonMenuDivider'
@@ -13,6 +14,8 @@ interface Props {
 }
 
 export default function UndoTool (props: Props) {
+  const { t } = useTranslation();
+
   const undo = useMainStore((state) => state.undo)
   const canUndo = useMainStore((state) => state.canUndo)
   const redo = useMainStore((state) => state.redo)
@@ -23,10 +26,10 @@ export default function UndoTool (props: Props) {
   }
 
   return (<>
-    <RibbonMenuSection title='Ångra' >
+    <RibbonMenuSection title={t('undo')} >
       <RibbonMenuButtonGroup>
-        <RibbonMenuIconButton label='Föregående' disabled={!canUndo} onClick={undo} icon="outlined_undo" />
-        <RibbonMenuIconButton label='Nästa' disabled={!canRedo} onClick={redo} icon="outlined_redo" />
+        <RibbonMenuIconButton label={t('previous')} disabled={!canUndo} onClick={undo} icon="outlined_undo" />
+        <RibbonMenuIconButton label={t('next')} disabled={!canRedo} onClick={redo} icon="outlined_redo" />
       </RibbonMenuButtonGroup>
     </RibbonMenuSection>
     <RibbonMenuDivider />

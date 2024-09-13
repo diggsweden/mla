@@ -90,7 +90,7 @@ async function global_reverse_geocode(req, context) {
   return res
 }
 
-const apiKey = "your google api key"
+const apiKey = "AIzaSyDYcE3X0_L1L6qm9q5ndXxbFVCxlNp_ePg"
 async function findPosition(street, postalCode) {
   var url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(street)}&key=${apiKey}`
   if (postalCode) {
@@ -108,7 +108,7 @@ async function findPosition(street, postalCode) {
 }
 
 async function findAdress(lat, lng) {
-  var url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}}`
+  var url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
   
   var geocoded = await fetch(url)
 

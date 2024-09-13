@@ -9,12 +9,14 @@ import Property from '../common/property'
 import Modal from '../common/Modal'
 import TableTool from '../tools/TableTool'
 import Icon from '../common/Icon'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   eventLink: IEventLink
 }
 
 function EventListProperties (props: Props) {
+  const { t } = useTranslation();
   const { eventLink } = props
 
   const [showModal, setShowModal] = useState(false)
@@ -34,7 +36,7 @@ function EventListProperties (props: Props) {
       <div>
         <button onClick={() => { setShowModal(true) }} className='w-full text-white bg-primary enabled:hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1 mr-2 my-2 disabled:opacity-50'>
           <Icon name="table_view" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon>
-          Visa som tabell ({eventLink.Events.length})</button>
+          {t('show as table count', { count: eventLink.Events.length})}</button>
       </div>
       {showModal &&
         <Modal mode='ok' wide={true} show={showModal} title={configService.getTypeName(eventLink.Events[0])} onNegative={() => { setShowModal(false) }} onPositive={() => { setShowModal(false) }}>

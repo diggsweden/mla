@@ -18,6 +18,7 @@ import TableTool from '../tools/TableTool'
 import { toDateString } from '../../utils/date'
 import { internalAdd } from '../../store/internal-actions'
 import Button from '../common/Button'
+import { useTranslation } from 'react-i18next'
 
 interface ItemResultProps {
   result: IQueryResponse
@@ -35,6 +36,7 @@ interface EventGroup {
 const last = 'zzzzzzzzzzzz'
 
 function ItemResultList (props: ItemResultProps) {
+  const { t } = useTranslation();
   const network = useMainStore(state => state.network)
 
   const setTool = useAppStore((state) => state.setTool)
@@ -228,8 +230,8 @@ function ItemResultList (props: ItemResultProps) {
     }
     {(Object.keys(mainEntities).length + eventGroups.length) > 1 &&
       <div className="m-relative">
-        <p className="m-leading-normal m-font-sm m-uppercase m-text-center m-mb-2">Resultat</p>
-        <Button className="m-right-0 m-top-0" onClick={addAll}>Lägg till allt</Button>
+        <p className="m-leading-normal m-font-sm m-uppercase m-text-center m-mb-2">{t('results')}</p>
+        <Button className="m-right-0 m-top-0" onClick={addAll}>{t('add all')}</Button>
       </div>
     }
     {Object.keys(mainEntities).length > 0 &&
@@ -257,7 +259,7 @@ function ItemResultList (props: ItemResultProps) {
             <Icon name='calendar_view_day' className="m-text-primary m-relative m-mt-1"></Icon>
           </span>
           <span className=''>
-            {e.Name} - {e.Events.length} händelser
+            {e.Name} - {e.Events.length} {t('events')}
           </span>
         </div>
         <div>
@@ -268,7 +270,7 @@ function ItemResultList (props: ItemResultProps) {
     ))
     }
     {(Object.keys(mainEntities).length + eventGroups.length) === 0 &&
-      <p className="m-italic">Inga träffar...</p>
+      <p className="m-italic">{t('no results')}</p>
     }
     {showEvents.length > 0 &&
       <Modal mode='ok' wide={true} show={showEvents.length > 0} title={'Tabelldata'} onNegative={() => { setShowEvents([]) }} onPositive={() => { setShowEvents([]) }}>

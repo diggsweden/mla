@@ -10,6 +10,7 @@ import { fixDate, toDateAndTimeString, toDateString, toTimeString } from '../../
 import { produce } from 'immer'
 import { generateUUID, getId } from '../../utils/utils'
 import { DateTime } from 'luxon'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
@@ -18,6 +19,7 @@ interface Props {
 }
 
 function HistoryProperties (props: Props) {
+  const { t } = useTranslation();
   const currentDate = useMainStore((state) => state.currentDate)
 
   const entity = useMainStore(state => state.getCurrentEntity(props.entityId ?? ''))
@@ -218,10 +220,10 @@ function HistoryProperties (props: Props) {
 
   const dateTimeClass = "m-w-full m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-p-1 disabled:m-opacity-50";
   return <>
-    <Accordion key={current.InternalId + isEvent} title={isEvent ? 'Aktivitet' : 'Historik'} expanded={(history.length > 1 || current.DateFrom != null || current.DateTo != null)}>
+    <Accordion key={current.InternalId + isEvent} title={isEvent ? t('activity') : t('history')} expanded={(history.length > 1 || current.DateFrom != null || current.DateTo != null)}>
       {isEvent &&
         <div className={props.className}>
-          <span className="m-mt-1 m-text-sm m-font-medium m-text-gray-900" title="Datum och tid då aktivitet inträffar">Inträffar</span>
+          <span className="m-mt-1 m-text-sm m-font-medium m-text-gray-900" title={t('activity date time')}>{t('happens')}</span>
           <div className="m-pb-1 m-grid m-grid-cols-2 m-gap-2">
             <input
               type="date"
@@ -256,7 +258,7 @@ function HistoryProperties (props: Props) {
           </div>
           <div className="m-text-sm m-font-medium m-mt-2">
             <button onClick={() => { setHistory(current) }} className="hover:font-bold text-green-800">
-              Byt typ till historik
+              {t('change to history')}
             </button>
           </div>
         </div>
@@ -265,7 +267,7 @@ function HistoryProperties (props: Props) {
         <div className={props.className}>
           <div className="m-pb-3 m-grid m-grid-cols-2 m-gap-2">
             <div className="">
-              <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Datum från">Från</span>
+              <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={('date from')}>{('from')}</span>
               <input
                 type="date"
                 value={toDateString(current.DateFrom)}
@@ -284,7 +286,7 @@ function HistoryProperties (props: Props) {
               </input>
             </div>
             <div>
-              <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Datum till">Till</span>
+              <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={('date to')}>{('to')}</span>
               <input
                 type="date"
                 value={toDateString(current.DateTo)}
@@ -340,16 +342,16 @@ function HistoryProperties (props: Props) {
               <div className="m-text-sm m-font-medium">
                 {history.length === 1 &&
                   <button disabled={current.DateFrom == null} onClick={() => { setEvent(current) }} className="hover:m-font-bold m-text-green-800 disabled:m-opacity-50">
-                    Byt typ till aktivitet
+                    {t('change to activity')}
                   </button>
                 }
               </div>
               <button onClick={() => { addForDate() }} className="hover:m-font-bold m-text-green-800">
-                Skapa ny version
+                {t('create new version')}
               </button>
             </div>
             <div className='m-cursor-default m-font-semibold m-text-center m-relative before:m-block before:m-absolute before:m-h-1 before:m-bg-primary before:m-left-0 before:m-w-16 before:m-top-1/2 after:m-block after:m-absolute after:m-h-1 after:m-bg-primary after:m-right-0 after:m-w-16 after:m-top-1/2'>
-              <div>Versioner</div>
+              <div>{t('versions')}</div>
             </div>
             <div className="m-text-sm m-font-medium">
               {history.map(h =>
@@ -358,7 +360,7 @@ function HistoryProperties (props: Props) {
                     {textFormatDate(h.DateFrom) + ' - ' + textFormatDate(h.DateTo)}
                   </button>
                   <button className="hover:m-font-bold m-text-red-800 disabled:m-opacity-50" disabled={history.length == 1} onClick={() => { removeHistory(h) }}>
-                    Radera
+                    {t('delete')}
                   </button>
                 </div>
               )}

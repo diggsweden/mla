@@ -11,8 +11,10 @@ import { type IEntity } from '../../../interfaces/data-models'
 import configService from '../../../services/configurationService'
 import { getId } from '../../../utils/utils'
 import { produce } from 'immer'
+import { useTranslation } from 'react-i18next'
 
 function MapTabPanel () {
+  const { t } = useTranslation();
   const config = configService.getConfiguration()
 
   const selectedEntities = useMainStore((state) => state.selectedEntities())
@@ -43,15 +45,15 @@ function MapTabPanel () {
   }
 
   return <div className="m-flex m-text-center m-h-full m-p-1">
-    <RibbonMenuSection title='Karta' >
-      <RibbonMenuButton active={showMap} label='Kartläge' title="Visa kartan" onClick={() => { setShowMap(!showMap) }} iconName="public" />
+    <RibbonMenuSection title={t('map')} >
+      <RibbonMenuButton active={showMap} label={t('map mode')} title="Visa kartan" onClick={() => { setShowMap(!showMap) }} iconName="public" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
-    <RibbonMenuSection title='Visning' >
-      <RibbonMenuButton label='Lägg till' disabled={(selectedEntities.length === 0) || !selectedEntities.some(e => e.ShowOnMap === false)} onClick={() => { set(selectedEntities, true) }} iconName="add_location_alt_fill" />
-      <RibbonMenuButton label='Dölj' disabled={(selectedEntities.length === 0) || !selectedEntities.some(e => e.ShowOnMap === true)} onClick={() => { set(selectedEntities, false) }} iconName="outlined_wrong_location" />
-      <RibbonMenuButton label='Lägg till alla' onClick={() => { set(Object.values(entities).map(e => e[0]), true) }} iconName="add_location_alt_fill" />
-      <RibbonMenuButton label='Dölj alla' onClick={() => { set(Object.values(entities).map(e => e[0]), false) }} iconName="wrong_location_fill" />
+    <RibbonMenuSection title={t('display')} >
+      <RibbonMenuButton label={t('show')} disabled={(selectedEntities.length === 0) || !selectedEntities.some(e => e.ShowOnMap === false)} onClick={() => { set(selectedEntities, true) }} iconName="add_location_alt_fill" />
+      <RibbonMenuButton label={t('hide')} disabled={(selectedEntities.length === 0) || !selectedEntities.some(e => e.ShowOnMap === true)} onClick={() => { set(selectedEntities, false) }} iconName="outlined_wrong_location" />
+      <RibbonMenuButton label={t('show all')} onClick={() => { set(Object.values(entities).map(e => e[0]), true) }} iconName="add_location_alt_fill" />
+      <RibbonMenuButton label={t('hide all')} onClick={() => { set(Object.values(entities).map(e => e[0]), false) }} iconName="wrong_location_fill" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
   </div>

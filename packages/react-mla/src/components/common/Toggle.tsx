@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const Toggle = (props: Props) => {
+  const { t } = useTranslation();
   const [isChecked, setIsChecked] = useState(props.value ?? false)
 
   const readOnly = props.readOnly ?? false;
@@ -46,7 +48,7 @@ const Toggle = (props: Props) => {
           ></span>
         </span>
         <span className="m-label m-flex m-items-center m-text-sm m-font-medium m-text-black">
-          {props.title}<span className="m-pl-1"> {isChecked ? (props.yesNo ? ': Ja' : 'På') : (props.yesNo ? ': Nej' : 'Av')} </span>
+          {props.title}<span className="m-pl-1"> {isChecked ? (props.yesNo ? (': ' + t('yes'))  : t('on')) : (props.yesNo ? (': ' + t('no')) : t('off'))} </span>
         </span>
       </label>
     </>

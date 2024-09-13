@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
+import { useTranslation } from 'react-i18next'
 import useMainStore from '../../../store/main-store'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function SelectTool (props: Props) {
+  const { t } = useTranslation()
   const selection = useMainStore((state) => state.selectedIds)
   const setSelected = useMainStore((state) => state.setSelected)
   const entities = useMainStore((state) => state.entities)
@@ -31,9 +33,9 @@ export default function SelectTool (props: Props) {
   }
 
   return (<>
-    <RibbonMenuSection title='Markera'>
-      <RibbonMenuButton disabled={selection.length === 0} onClick={() => { invert() }} label="Invertera" title="Markera det som inte är markerat" iconName="deselect"></RibbonMenuButton>
-      <RibbonMenuButton onClick={() => { selectAll() }} label="Allt" title='Markera alla entiteter och länkar' iconName="select_all"></RibbonMenuButton>
+    <RibbonMenuSection title={t('select')}>
+      <RibbonMenuButton disabled={selection.length === 0} onClick={() => { invert() }} label={t('invert')} title={t('invert desc')} iconName="deselect"></RibbonMenuButton>
+      <RibbonMenuButton onClick={() => { selectAll() }} label={t('all')} title={t('all desc')} iconName="select_all"></RibbonMenuButton>
     </RibbonMenuSection>
     <RibbonMenuDivider />
   </>

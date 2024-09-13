@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
+import * as config from '../../../apps/web/public/config/default.json'
+
 import CreateMLAComponent from "./component"
 
 CreateMLAComponent();
 
-const configUrl = "default.json";
 const mla = document.createElement("mla-component") as any
-mla.configSrc = configUrl;
+mla.config = JSON.stringify(config);
 
 document.body.appendChild(mla)
