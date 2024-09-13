@@ -105,7 +105,7 @@ function EntityProperties (props: Props) {
         ))}
       </div>
       { usingMap && <div>
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Latitud och Longitud">{t('position')}</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={t('lat lng')}>{t('position')}</span>
         <input type="text" value={inputCoords} onChange={(e) => { updateCoords(e.target.value) }} className={'m-border-gray-300 m-bg-white m-border m-text-gray-900 m-rounded-lg m-block m-w-full m-p-1'}></input>
         <Button className="m-w-full" onClick={() => { place(entity) }}><Icon name="pin_drop" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon>{t('place on map')}</Button>
       </div>}

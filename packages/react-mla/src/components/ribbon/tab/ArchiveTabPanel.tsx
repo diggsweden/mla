@@ -256,17 +256,17 @@ function ArchiveTabPanel () {
     <RibbonMenuDivider />
     <ImportToolbox show={config.Menu?.Archive?.Import} />
 fas
-    <Modal mode="save" show={showSave} title="Spara som" onNegative={closeSave} onPositive={() => { saveRemote(newFilename) }}>
+    <Modal mode="save" show={showSave} title={t('save as')} onNegative={closeSave} onPositive={() => { saveRemote(newFilename) }}>
       <div className="m-text-start m-px-4 m-py-1">
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Spara som namn">{t('filename')}</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('filename')}</span>
         <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
         {loading && <p>{t('saving')}</p>}
       </div>
     </Modal>
 
-    <Modal mode="save" show={showImageSave} title="Spara bild som" onNegative={closeImageSave} onPositive={() => { saveImageRemote(newFilename) }}>
+    <Modal mode="save" show={showImageSave} title={t('save image as')}  onNegative={closeImageSave} onPositive={() => { saveImageRemote(newFilename) }}>
       <div className="m-text-start m-px-4 m-py-1">
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title="Spara som namn">{t('filename')}</span>
+        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('filename')}</span>
         <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
         {loading && <p>{t('saving')}</p>}
       </div>

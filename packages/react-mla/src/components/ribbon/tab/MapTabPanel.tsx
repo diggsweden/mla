@@ -46,7 +46,7 @@ function MapTabPanel () {
 
   return <div className="m-flex m-text-center m-h-full m-p-1">
     <RibbonMenuSection title={t('map')} >
-      <RibbonMenuButton active={showMap} label={t('map mode')} title="Visa kartan" onClick={() => { setShowMap(!showMap) }} iconName="public" />
+      <RibbonMenuButton active={showMap} label={t('map mode')} title={t('show map')} onClick={() => { setShowMap(!showMap) }} iconName="public" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
     <RibbonMenuSection title={t('display')} >

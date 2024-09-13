@@ -15,6 +15,7 @@ import WorkflowProgress from '../modal/WorkflowProgress'
 import configService from '../../services/configurationService'
 
 import ContextMenu from "./ContextMenu"
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
@@ -22,6 +23,7 @@ interface Props {
 }
 
 function AppShortcuts (props: Props) {
+  const { t } = useTranslation()
   const workflow = useWorkflowStore((state) => state.workflow)
   const showWorkflow = useWorkflowStore((state) => state.showDialog)
   const setShowWorkflow = useWorkflowStore((state) => state.setShowDialog)
@@ -122,7 +124,7 @@ function AppShortcuts (props: Props) {
   return (
     <>
       <ContextMenu copy={copy} paste={paste} delete={() => { setDelete(true) }}></ContextMenu>
-      <Modal mode="accept" show={showDelete} title="Radera objekt" onNegative={() => { setDelete(false) }} onPositive={performDelete}>
+      <Modal mode="accept" show={showDelete} title={t('delete')} onNegative={() => { setDelete(false) }} onPositive={performDelete}>
         <Delete entities={selectedEntities} links={selectedLinks} />
       </Modal>
       {workflow && <Modal mode="ok" show={showWorkflow} title={configService.getWorkflow(workflow).Name} onNegative={() => { setShowWorkflow(false) }}>
