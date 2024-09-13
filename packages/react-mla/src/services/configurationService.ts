@@ -95,7 +95,7 @@ class ConfigurationService {
           }
           const result = await loadScript(this.getUrl(importer))
           if (!result.status) {
-            throw new Error(result.error ?? 'Fel vid läsning av ' + importer)
+            throw new Error(result.error ?? 'Error parsing ' + importer)
           }
           this.plugins[importer] = true
         }
@@ -104,7 +104,7 @@ class ConfigurationService {
       this.configuration = freeze(config)
     } catch (error) {
       console.error(error)
-      window.alert('Misslyckades med att läsa konfiguration')
+      window.alert('Error reading configuration')
     }
   }
 

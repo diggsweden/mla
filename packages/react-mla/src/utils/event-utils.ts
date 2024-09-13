@@ -9,6 +9,7 @@ import configService from '../services/configurationService'
 import viewService from '../services/viewService'
 import { internalAdd } from '../store/internal-actions'
 import { generateUUID } from './utils'
+import { t } from 'i18next'
 
 const get = (ent: IBase, property: string) => {
   const p = ent.Properties.find(p => p.TypeId === property)
@@ -136,7 +137,7 @@ export function computeLinks (events: IEvent[], date: ITimeSpan | undefined): IE
         LabelLong: '',
         LabelShort: '',
         LabelChart: '',
-        SourceSystemId: 'Beräknad utifrån händelser',
+        SourceSystemId: t('calculated from events'),
         FromEntityId: group[0].LinkFrom[generate.TypeId].Id,
         ToEntityId: group[0].LinkTo[generate.TypeId].Id,
         FromEntityTypeId: group[0].LinkFrom[generate.TypeId].TypeId,
@@ -246,7 +247,7 @@ function createEntity (event: IEvent, target: IEventTarget): IEntity | null {
     LabelLong: '',
     LabelShort: '',
     LabelChart: '',
-    SourceSystemId: 'Genererad från händelse',
+    SourceSystemId: t('calculated from events'),
     Properties: []
   }
 
@@ -264,7 +265,7 @@ function createEntity (event: IEvent, target: IEventTarget): IEntity | null {
       Value: get(event, target.PropertyTypeId)
     })
   } else {
-    ent.Id = get(event, target.PropertyTypeId)?.toString() ?? 'generated-from-event'
+    ent.Id = get(event, target.PropertyTypeId)?.toString() ?? 'calculated-from-event'
   }
 
   return ent

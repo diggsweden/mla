@@ -152,10 +152,10 @@ const useSearchStore = create<SearchState>((set, get) => ({
         result = JSON.parse(fileContents)
       }
       if (result?.Entities == null) {
-        throw new Error('resultatet saknar fältet Entities av typen Entity[]')
+        throw new Error('result.Entities is not Entity[]')
       }
       if (result?.Links == null) {
-        throw new Error('resultatet saknar fältet Links av typen Link[]')
+        throw new Error('result.Links is not Link[]')
       }
 
       set((state) => ({
