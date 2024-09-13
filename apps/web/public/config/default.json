@@ -901,7 +901,6 @@
         ]
     },
     "Plugins": [
-        "/plugins/query/google_maps.js",
         "/plugins/import/csv_importer.js"
     ]
 }
