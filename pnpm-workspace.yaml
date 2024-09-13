@@ -3,5 +3,5 @@
 # SPDX-License-Identifier: CC0-1.0
 
 packages:
-  - 'packages/*'
-  - 'apps/web'
+  - "packages/*"
+  - "apps/web"

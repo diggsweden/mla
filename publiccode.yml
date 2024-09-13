@@ -17,7 +17,7 @@ description:
       - Custom information model
       - Crime Scripting
       - Geo Positioning using maps
-      - Retrive information from external sources      
+      - Retrive information from external sources
       - Customizable
     genericName: MLA
     longDescription: |
@@ -26,7 +26,7 @@ description:
       set theme colors, connect it to existing information sources and alot more.
 
       MLA can run as part of a existing system, as a web application or as a desktop application. 
-      It has no dependencies and works in a air-gaped environment.  
+      It has no dependencies and works in a air-gaped environment.
     shortDescription: Network analysis application that supports Crime Scripting
 developmentStatus: stable
 legal:
