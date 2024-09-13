@@ -520,7 +520,7 @@ const useMainStore = create<MainState>((set, get) => ({
       context: parsed.context ? mergeContext(parsed.context, state.context) : state.context
     }))
 
-    useAppStore.getState().setTab('Start')
+    useAppStore.getState().setTab('start')
   },
   setDirty: (isDirty: boolean) => {
     set((state) => ({
