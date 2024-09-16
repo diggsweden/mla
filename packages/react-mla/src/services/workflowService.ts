@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 //
-// SPDX-License-Identifier: CC0-1.0
+// SPDX-License-Identifier: EUPL-1.2
 
 import { type IChangeLayout, type IDelay, type IQueryAction, type IWorkflowConfiguration } from '../interfaces/configuration/workflow-configuration'
 import useAppStore from '../store/app-store'

@@ -30,7 +30,7 @@ description:
     shortDescription: Network analysis application that supports Crime Scripting
 developmentStatus: stable
 legal:
-  license: CC0-1.0
+  license: EUPL-1.2
 localisation:
   availableLanguages:
     - sv
