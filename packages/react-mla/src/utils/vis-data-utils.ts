@@ -167,8 +167,12 @@ export function isActive (thing: IChartBase, time: ITimeSpan): boolean {
   }
 
   if (thing.DateFrom != null && thing.DateTo != null) {
-    const interval2 = Interval.fromDateTimes(thing.DateFrom!, thing.DateTo!)
-    return interval.intersection(interval2) != null
+    if (thing.DateFrom.toISO() == thing.DateTo.toISO()) {
+      return interval.contains(thing.DateFrom)
+    } else {
+      const interval2 = Interval.fromDateTimes(thing.DateFrom!, thing.DateTo!)
+      return interval.intersection(interval2) != null
+    }
   }
 
   return false

@@ -7,11 +7,16 @@ import { Dijkstra } from './djikstra';
 
 export function StronglyConnected (nodes: DataInterfaceNodes, edges: DataInterfaceEdges): string[] {
   const result = new Map<string, number>()
+  const visited = new Map<string, boolean>()
 
   nodes.forEach(n1 => {
     nodes.forEach(n2 => {
-      if (n1 != n2) {
-        const path = Dijkstra(nodes, edges, n1.id!.toString(), n2.id!.toString())
+      const id1 = n1.id!.toString()
+      const id2 = n2.id!.toString()
+      if (id1 != id2 && !visited.has(id1 + id2)) {
+        visited.set(id1+id2, true)
+        visited.set(id2+id1, true)
+        const path = Dijkstra(nodes, edges, id1, id2)
         path.forEach(r => {
           if (result.has(r)) {
             result.set(r, result.get(r)! + 1)

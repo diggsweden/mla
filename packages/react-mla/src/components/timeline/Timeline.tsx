@@ -170,7 +170,7 @@ function Timeline (props: Props) {
   return (
     <div className={"m-w-full " + props.className}>
       <div className='m-select-none m-absolute m-bottom-16 m-h-11 m-left-1/4 m-right-1/4'>
-        <div className='m-absolute -m-top-6 m-left-1/2 m-font-bold m-text-center m-overflow-hidden'>
+        <div className='m-absolute -m-top-6 m-left-1/2 m-font-bold m-text-center'>
           <div className='m-absolute m-w-44 m-text-center -m-translate-x-1/2 m-backdrop-blur-md m-bg-white/3'>{!isDay ? (toDateString(currentDate.DateFrom) + " - " + toDateString(currentDate.DateTo)) : toDateString(currentDate.DateFrom)}</div>
         </div>
         <div className="m-absolute m-h-full m-w-full m-flex m-justify-center m-pointer-events-none"><div className='m-h-full m-w-0.5 m-bg-blue-800 m-z-10'></div></div>
