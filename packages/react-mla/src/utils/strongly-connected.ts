@@ -1,7 +1,9 @@
-import { Edge, type DataInterfaceEdges, type DataInterfaceNodes } from 'vis-network'
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: CC0-1.0
+
+import {  type DataInterfaceEdges, type DataInterfaceNodes } from 'vis-network'
 import { Dijkstra } from './djikstra';
-
-
 
 export function StronglyConnected (nodes: DataInterfaceNodes, edges: DataInterfaceEdges): string[] {
   const result = new Map<string, number>()
