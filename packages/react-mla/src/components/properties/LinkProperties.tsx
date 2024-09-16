@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 //
-// SPDX-License-Identifier: CC0-1.0
+// SPDX-License-Identifier: EUPL-1.2
 
 import { produce } from 'immer'
 import { type Direction, type ILink } from '../../interfaces/data-models'

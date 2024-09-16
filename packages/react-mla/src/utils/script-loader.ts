@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 //
-// SPDX-License-Identifier: CC0-1.0
+// SPDX-License-Identifier: EUPL-1.2
 
 export async function loadScript (fileUrl: string): Promise<{ status: boolean, error?: string }> {
   return await new Promise((resolve, reject) => {

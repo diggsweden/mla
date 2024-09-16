@@ -42,7 +42,7 @@ Add a video showing the use ov demo version MLA
   - Automaticly rearange objects on the chart
 * Analyze your data in different ways
   - View a timeline of your chart and move forward and backwars in time to se what happend and when
-  - Crime Scripting allows you to add acts to your timeline 
+  - Crime Scripting allows you to add acts to your timeline
 * Customizable
   - Define your own information model
   - Customize the application GUIs colors and icons
@@ -50,7 +50,7 @@ Add a video showing the use ov demo version MLA
   - Use multiple configurations to make the application behave like you want
   - Create plugins
 * Workflows
-  - Create workflows that runs commands in sequence 
+  - Create workflows that runs commands in sequence
 * Integrations
   - Connect your datasources and pull information onto your charts
   - Export your chart in different ways
@@ -76,12 +76,12 @@ $ pnpm install
 $ pnpm run dev
 ```
 
-## Documentation 
+## Documentation
 We have a <a href="">wiki</a>!
 
 ## License
 
-This project is licensed under the Creative Commons Zero v1.0 Universal License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the EUPL 1.2 License- see the [LICENSE](LICENSE) file for details
 
 Most assets released are under Creative Commons CC0-1.0 except for
 
