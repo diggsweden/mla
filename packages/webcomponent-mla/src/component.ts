@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 //
-// SPDX-License-Identifier: CC0-1.0
+// SPDX-License-Identifier: EUPL-1.2
 
 import r2wc from "@r2wc/react-to-web-component"
 import { MLA, MlaProps} from "react-mla"
