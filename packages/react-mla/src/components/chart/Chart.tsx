@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 //
-// SPDX-License-Identifier: CC0-1.0
+// SPDX-License-Identifier: EUPL-1.2
 
 import {  useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { useDrop } from 'react-dnd'
