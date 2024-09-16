@@ -255,7 +255,6 @@ function ArchiveTabPanel () {
     </RibbonMenuSection>
     <RibbonMenuDivider />
     <ImportToolbox show={config.Menu?.Archive?.Import} />
-fas
     <Modal mode="save" show={showSave} title={t('save as')} onNegative={closeSave} onPositive={() => { saveRemote(newFilename) }}>
       <div className="m-text-start m-px-4 m-py-1">
         <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('filename')}</span>
