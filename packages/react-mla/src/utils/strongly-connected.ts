@@ -31,7 +31,6 @@ export function StronglyConnected (nodes: DataInterfaceNodes, edges: DataInterfa
 
   const nodeIds = [...result.keys()].filter(x => result.get(x) === max[1])
   if (nodeIds.length == 2) {
-    const edgeIds = [] as string[]
     edges.forEach(e => {
       if ((e.from == nodeIds[0] || e.from == nodeIds[1]) &&
         (e.to == nodeIds[0] || e.to == nodeIds[1])) {
