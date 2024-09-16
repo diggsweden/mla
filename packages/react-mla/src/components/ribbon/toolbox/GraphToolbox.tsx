@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react'
 import useMainStore from '../../../store/main-store'
 import { Dijkstra } from '../../../utils/djikstra'
+import { StronglyConnected } from '../../../utils/strongly-connected'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
@@ -57,6 +58,11 @@ export default function GraphTools (props: Props) {
       })
     }
 
+    setSelected(result)
+  }
+
+  function stronglyConnected () {
+    const result = StronglyConnected(data.nodes, data.edges)
     setSelected(result)
   }
 
@@ -170,6 +176,7 @@ export default function GraphTools (props: Props) {
   return (<>
     <RibbonMenuSection title={(t('tools'))}>
       <RibbonMenuButton label={t('find link')} title={t('find link desc')} disabled={selectedEntities.length !== 2} onClick={() => { djikstra() }} iconName="route" />
+      <RibbonMenuButton label={t('break network')} title={t('break network desc')} disabled={data.edges.length === 0} onClick={() => { stronglyConnected() }} iconName="rebase" />
       <RibbonMenuButton label={t('merge')} title={t('merge desc')} disabled={(data.nodes.length + data.edges.length) === 0} onClick={() => { setShowJoin(true) }} iconName="join_left" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
