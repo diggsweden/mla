@@ -12,7 +12,7 @@ policies:
       header:
         length: 90
         imperative: true
-        case: lower
+        #        case: lower
         invalidLastCharacters: .
       body:
         required: false
