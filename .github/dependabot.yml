@@ -24,7 +24,7 @@ updates:
     labels:
       - "dependencies"
       - "npm"
-    
+
     # Group definitions for related dependencies
     groups:
       # Group for version control system related dependencies
@@ -35,12 +35,12 @@ updates:
         update-types:
           - "minor"
           - "patch"
-    
+
     # Separate major updates from groups
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-    
+
   # Configuration for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
