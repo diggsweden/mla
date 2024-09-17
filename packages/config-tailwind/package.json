@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^3.4.11",
     "tailwindcss-animate": "^1.0.7"
   }
 }
