@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+---
+name: REUSE Compliance
+
+on: [workflow_call] # yamllint disable-line rule:truthy
+
+jobs:
+  reuse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v4
+

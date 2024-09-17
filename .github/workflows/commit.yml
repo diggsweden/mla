@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+---
+name: Conform DCO (--Sign-off)
+on: [workflow_call] # yamllint disable-line rule:truthy
+
+jobs:
+  signoff:
+    runs-on: ubuntu-latest
+
+    if: ${{ (github.event_name == 'pull_request') && (github.actor != 'dependabot[bot]') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup main branch without switching current branch
+        run: git fetch origin main:main
+
+      - name: Conform Action
+        uses: docker://ghcr.io/siderolabs/conform:v0.1.0-alpha.30-1-ga6572d2
+        with:
+          args: "enforce --base-branch=main"

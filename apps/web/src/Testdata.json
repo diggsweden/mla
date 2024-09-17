@@ -1,0 +1,115 @@
+{
+  "Entities": [
+    {
+      "Id": "5418a2e9-191c-4581-9900-000000000000",
+      "InternalId": "5418a2e9-191c-4581-9900-000000000000",
+      "TypeId": "person",
+      "SourceSystemId": "Modifierad",
+      "Properties": [
+        {
+          "TypeId": "personE1",
+          "Value": "198603232383"
+        },
+        {
+          "TypeId": "personE2",
+          "Value": "Anna"
+        },
+        {
+          "TypeId": "personE3",
+          "Value": "Karlsson"
+        },
+        {
+          "TypeId": "personE5",
+          "Value": "K"
+        }
+      ]
+    },
+    {
+      "Id": "6258a2e9-1918-4af3-8a00-000000000000",
+      "InternalId": "6258a2e9-1918-4af3-8a00-000000000000",
+      "TypeId": "person",
+      "SourceSystemId": "Modifierad",
+      "Properties": [
+        {
+          "TypeId": "personE1",
+          "Value": "191212121212"
+        },
+        {
+          "TypeId": "personE2",
+          "Value": "Anders"
+        },
+        {
+          "TypeId": "personE3",
+          "Value": "Karlsson"
+        },
+        {
+          "TypeId": "personE5",
+          "Value": "M"
+        }
+      ]
+    },
+    {
+      "Id": "90c9a2e9-1914-4c6a-9f00-000000000000",
+      "InternalId": "90c9a2e9-1918-427a-9f00-000000000000",
+      "TypeId": "fordon",
+      "SourceSystemId": "Modifierad",
+      "Properties": [
+        {
+          "TypeId": "fordonE1",
+          "Value": "Volvo"
+        },
+        {
+          "TypeId": "fordonE2",
+          "Value": "MLB802"
+        }
+      ]
+    },
+    {
+      "Id": "dc7aa2e9-1918-43b9-b210-000000000000",
+      "InternalId": "dc7aa2e9-1918-43b9-b210-000000000000",
+      "TypeId": "organisation",
+      "SourceSystemId": "Modifierad",
+      "Properties": [
+        {
+          "TypeId": "organisationE1",
+          "Value": "165128000162"
+        },
+        {
+          "TypeId": "organisationE2",
+          "Value": "Bolagsbolaget AB"
+        }
+      ]
+    }
+  ],
+  "Links": [
+    {
+      "Id": "525bd2e9-1914-454b-b1d0-000000000000",
+      "InternalId": "525bd2e9-1918-4b4b-b1d0-000000000000",
+      "TypeId": "LT4",
+      "SourceSystemId": "Egenskapad",
+      "FromEntityId": "90c9a2e9-1914-4c6a-9f00-000000000000",
+      "FromEntityTypeId": "fordon",
+      "ToEntityId": "5418a2e9-191c-4581-9900-000000000000",
+      "ToEntityTypeId": "person",
+      "Direction": "TO",
+      "Properties": []
+    },
+    {
+      "Id": "90cde2e9-1918-472a-b911-000000000000",
+      "InternalId": "90cde2e9-191c-4d2a-b911-000000000000",
+      "TypeId": "LT1",
+      "SourceSystemId": "Egenskapad",
+      "FromEntityId": "6258a2e9-1918-4af3-8a00-000000000000",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "dc7aa2e9-1918-43b9-b210-000000000000",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT1E1",
+          "Value": "Anställd"
+        }
+      ]
+    }
+  ]
+}

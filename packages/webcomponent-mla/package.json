@@ -1,0 +1,38 @@
+{
+  "name": "webcomponent-mla",
+  "version": "0.0.6-beta.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/mla-component.umd.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "react-mla": "workspace:^",
+    "@r2wc/react-to-web-component": "^2.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "scripts": {
+    "dev": "vite dev --open",
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "@repo/tailwind-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "@types/wicg-file-system-access": "^2023.10.5",
+    "@vitejs/plugin-react": "^4.2.1",
+    "sass-embedded": "^1.77.8",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.3",
+    "vite": "^5.4.2",
+    "vite-plugin-commonjs": "^0.10.1",
+    "vite-plugin-css-injected-by-js": "^3.5.1"
+  },
+  "publishConfig": {
+    "directory": "dist"
+  }
+}

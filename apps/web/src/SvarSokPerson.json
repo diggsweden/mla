@@ -1,0 +1,142 @@
+{
+	"Entities": [
+		{
+			"Id": "191212121212",
+			"TypeId": "person",
+			"SourceSystemId": "Spar",
+			"Properties": [
+				{
+					"TypeId": "personE1",
+					"Value": "191212121212"
+				},
+				{
+					"TypeId": "personE2",
+					"Value": "Anders"
+				},
+				{
+					"TypeId": "personE3",
+					"Value": "Karlsson"
+				}
+			]
+		},
+		{
+			"Id": "ADR1",
+			"TypeId": "adress",
+			"SourceSystemId": "Spar",
+			"Coordinates": {
+				"lat": 57.69783992572588,
+				"lng": 11.94753472213756
+			},
+			"Properties": [
+				{
+					"TypeId": "adressE1",
+					"Value": "Fjärde Långgatan 11"
+				},
+				{
+					"TypeId": "adressE3",
+					"Value": "413 28"
+				},
+				{
+					"TypeId": "adressE4",
+					"Value": "Göteborg"
+				}
+			]
+		},
+		{
+			"Id": "ADR2",
+			"TypeId": "adress",
+			"SourceSystemId": "Spar",
+			"Coordinates": {
+				"lat": 57.71988411300851,
+				"lng": 12.006280860668483
+			},
+			"Properties": [
+				{
+					"TypeId": "adressE1",
+					"Value": "Svangatan 8"
+				},
+				{
+					"TypeId": "adressE3",
+					"Value": "416 68"
+				},
+				{
+					"TypeId": "adressE4",
+					"Value": "Göteborg"
+				}
+			]
+		},
+		{
+			"Id": "JGH423",
+			"TypeId": "fordon",
+			"SourceSystemId": "Bilregistret",
+			"DateFrom": "2022-01-01",
+			"Properties": [
+				{
+					"TypeId": "fordonE1",
+					"Value": "Toyota Prius"
+				},
+				{
+					"TypeId": "fordonE2",
+					"Value": "JGH423"
+				},
+				{
+					"TypeId": "fordonE3",
+					"Value": "Röd"
+				}
+			]
+		}
+
+	],
+	"Links": [
+		{
+			"Id": "L1",
+			"TypeId": "LT3",
+			"DateFrom": "2013-04-30",
+			"DateTo": "2023-11-22",
+			"SourceSystemId": "Spar",
+			"FromEntityTypeId": "adress",
+			"FromEntityId": "ADR1",
+			"ToEntityTypeId": "person",
+			"ToEntityId": "191212121212",
+			"Properties": [
+				{
+					"TypeId": "LT3E1",
+					"Value": "Folkbokföringsadress"
+				}
+			]
+		},
+		{
+			"Id": "L11",
+			"TypeId": "LT3",
+			"DateFrom": "2012-03-03",
+			"DateTo": "2013-04-29",
+			"SourceSystemId": "Spar",
+			"FromEntityTypeId": "adress",
+			"FromEntityId": "ADR2",
+			"ToEntityTypeId": "person",
+			"ToEntityId": "191212121212",
+			"Properties": [
+				{
+					"TypeId": "LT3E1",
+					"Value": "Postadress"
+				}
+			]
+		},
+		{
+			"Id": "L2",
+			"TypeId": "LT4",
+			"SourceSystemId": "Bilregistret",
+			"FromEntityTypeId": "fordon",
+			"FromEntityId": "JGH423",
+			"ToEntityTypeId": "person",
+			"ToEntityId": "191212121212",
+			"Properties": [
+				{
+					"TypeId": "LT4E1",
+					"Value": "Ägare"
+				}
+			]
+		}				
+	],
+	"ErrorMessage": "Alla data som hämtas är fejkad"
+}

@@ -1,0 +1,36 @@
+/*
+ SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+
+ SPDX-License-Identifier: CC0-1.0
+*/
+
+DragPreviwImage {
+  width: 100px;
+  height: 100px;
+}
+
+.mla-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary) var(--primary);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 15px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--primary);
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--secondary);
+  border-radius: 14px;
+  border: 3px solid var(--primary);
+}

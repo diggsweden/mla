@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "noEmit": true,
+    "allowJs": true,
+    "declaration": false,
+    "declarationMap": false,
+    "incremental": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "resolveJsonModule": true,
+    "strict": true,
+    "isolatedModules": false,
+    "useDefineForClassFields": true,
+    "moduleResolution": "bundler"
+  },
+  "exclude": ["node_modules"]
+}

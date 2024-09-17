@@ -1,0 +1,109 @@
+{
+  "Entities": [
+    {
+      "GlobalType": "person",
+      "Icon": "person_fill",
+      "Description": "A human being",
+      "LabelShort": "{identification}\n{first_name} {last_name}",
+      "Properties": [
+        {
+          "GlobalType": "identification",
+          "Description": "Unique identifier for a person",
+          "FieldType": "String"
+        },
+        {
+          "GlobalType": "first_name",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "GlobalType": "last_name",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "GlobalType": "birth_date",
+          "Description": "",
+          "FieldType": "Date"
+        }
+      ]
+    },
+    {
+      "GlobalType": "organization",
+      "Icon": "outlined_apartment",
+      "Description": "An oganized group of people",
+      "LabelShort": "{identification}\n{name}",
+      "Properties": [
+        {
+          "GlobalType": "identification",
+          "Description": "Unique identifier for an organization",
+          "FieldType": "String"
+        },
+        {
+          "GlobalType": "name",
+          "Description": "",
+          "FieldType": "String"
+        }
+      ]
+    },
+    {
+      "GlobalType": "place",
+      "Icon": "outlined_map",
+      "Description": "A position or place on the planet",
+      "LabelShort": "{address}\n{name}",
+      "Properties": [
+        {
+          "GlobalType": "address",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "GlobalType": "postal_code",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "GlobalType": "contry",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "GlobalType": "name",
+          "Description": "",
+          "FieldType": "String"
+        }
+      ]
+    },
+    {
+      "GlobalType": "event",
+      "Icon": "outlined_event",
+      "Description": "Something that happened",
+      "LabelShort": "{title}\n{DateFrom}",
+      "Properties": [
+        {
+          "GlobalType": "title",
+          "Description": "",
+          "FieldType": "String"
+        },
+        {
+          "GlobalType": "description",
+          "Description": "",
+          "FieldType": "Multiline"
+        }
+      ]
+    }
+  ],
+  "Links": [
+    {
+      "GlobalType": "person_relation",
+      "Description": "A relation between humans",
+      "Properties": [
+        {
+          "GlobalType": "description",
+          "Description": "",
+          "FieldType": "String"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+<!--
+ SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+
+ SPDX-License-Identifier: CC0-1.0
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/x-icon" href="/images/icon.ico">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MLA - akilles</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-width: 100vw;
+        overflow: hidden;
+      }
+  
+      mla-component {
+        width: 100vw !important;
+        height: 100vh !important;
+      }
+    </style>
+  </head>
+  <script src="public/mla-component.js"></script>
+  <link rel="stylesheet" href="public/style.css">
+  <link rel="stylesheet" href="style-electron.css">
+  <body>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const configUrl = urlParams.get("config") ?? "public/config/akilles.json";
+      const contextParam = urlParams.get("context") ?? "";
+      const workflow = urlParams.get("workflow");
+
+      const mla = document.createElement("mla-component")
+      mla.configSrc = configUrl;
+      mla.context = contextParam;
+      mla.workflowId = workflow;
+      mla.publicUrl = window.location.href
+
+      document.body.appendChild(mla)
+  </script>
+  </body>
+</html>

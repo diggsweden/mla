@@ -1,0 +1,334 @@
+{
+    "Version": "0.1",
+    "Language": "en",
+    "Theme": {
+        "Primary": "#003366",
+        "CustomIconColorPicklist": [
+            {
+                "Name": "Färg 1",
+                "Color": "#D53302"
+            },
+            {
+                "Name": "Färg 2",
+                "Color": "#FCC560"
+            },
+            {
+                "Name": "Färg 3",
+                "Color": "#A0CBAD"
+            },
+            {
+                "Name": "Färg 4",
+                "Color": "#8FB1BE"
+            },
+            {
+                "Name": "Färg 5",
+                "Color": "#0C012A"
+            }
+        ],
+        "CustomContourColorPicklist": [
+            {
+                "Name": "Färg 1",
+                "Color": "#cc3300"
+            },
+            {
+                "Name": "Färg 2",
+                "Color": "#ff9966"
+            },
+            {
+                "Name": "Färg 3",
+                "Color": "#ffcc00"
+            },
+            {
+                "Name": "Färg 4",
+                "Color": "#99cc33"
+            },
+            {
+                "Name": "Färg 5",
+                "Color": "#339900"
+            }
+        ]
+    },
+    "Menu": {
+        "Start": {},
+        "Archive": {
+            "Import": true
+        }
+    },
+    "Display": [
+        {
+            "Id": "default",
+            "Name": "Standardvy",
+            "Rules": [],
+            "Show": [
+                {
+                    "TypeId": "device",
+                    "Icon": "dns",
+                    "LabelLong": "{ip}\n{name}",
+                    "LabelShort": "{ip}"
+                },
+                {
+                    "TypeId": "rule",
+                    "LabelLong": "{name}",
+                    "LabelShort": "{name}"
+                },
+                {
+                    "TypeId": "allow_connection",
+                    "LabelLong": "{count}",
+                    "LabelShort": "{count}\nPort: {port_to}",
+                    "Color": "#00ff00"
+                },
+                {
+                    "TypeId": "deny_connection",
+                    "LabelLong": "{count}",
+                    "LabelShort": "{count}\nPort: {port_to}",
+                    "Color": "#ff0000"
+                }
+            ]
+        },
+        {
+            "Id": "hide",
+            "Name": "Enbart regler",
+            "Show": [
+                {
+                    "TypeId": "allow_connection",
+                    "Show": false
+                },
+                {
+                    "TypeId": "deny_connection",
+                    "Show": false
+                }
+            ]
+        }
+    ],
+    "TimeAnalysis": {},
+    "Domain": {
+        "EntityTypes": [
+            {
+                "TypeId": "device",
+                "Name": "Dator / server",
+                "Description": "En enhet på nätverket",
+                "MatchRules": [
+                    {
+                        "PropertyTypeId": "ip"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "ip",
+                        "Name": "IP",
+                        "Description": "Enhetens IP adress",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "name",
+                        "Name": "Namn",
+                        "Description": "Enhetens DNS namn",
+                        "FieldType": "String"
+                    }
+                ]
+            }
+        ],
+        "LinkTypes": [
+            {
+                "TypeId": "rule",
+                "Name": "Regel",
+                "Description": "Brandväggsregel",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "device",
+                        "ToEntityTypeId": "device"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "name",
+                        "Name": "Namn",
+                        "Description": "Namn på regeln",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "port",
+                        "Name": "Port",
+                        "Description": "Vilken port regeln gäller",
+                        "FieldType": "Number"
+                    }
+                ]
+            }
+        ],
+        "EventTypes": [
+            {
+                "TypeId": "allow",
+                "Name": "Tillåten anslutning",
+                "Properties": [
+                    {
+                        "TypeId": "port_from",
+                        "Name": "Port från",
+                        "Description": "Port från",
+                        "FieldType": "string"
+                    },
+                    {
+                        "TypeId": "port_to",
+                        "Name": "Port till",
+                        "Description": "port till",
+                        "FieldType": "string"
+                    },
+                    {
+                        "TypeId": "typ",
+                        "Name": "Typ",
+                        "Description": "TCP / UPD",
+                        "FieldType": "string"
+                    },
+                    {
+                        "TypeId": "ip_from",
+                        "Name": "Från",
+                        "Description": "IP från",
+                        "FieldType": "string"
+                    },
+                    {
+                        "TypeId": "ip_to",
+                        "Name": "Till",
+                        "Description": "IP till",
+                        "FieldType": "string"
+                    }
+                ],
+                "Generate": [
+                    {
+                        "TypeId": "allow_connection",
+                        "Properties": [
+                            {
+                                "TypeId": "count",
+                                "Action": "count",
+                                "Name": "Antal",
+                                "FieldType": "Number",
+                                "Description": "Antal anslutningar"
+                            },
+                            {
+                                "TypeId": "port_from",
+                                "Action": "join",
+                                "Name": "Port från",
+                                "FieldType": "String",
+                                "Description": "Källport",
+                                "TargetPropertyTypeId": "port_from"
+                            },
+                            {
+                                "TypeId": "port_to",
+                                "Action": "join",
+                                "Name": "Port till",
+                                "FieldType": "String",
+                                "Description": "Destinationsport",
+                                "TargetPropertyTypeId": "port_to"
+                            }
+                        ],
+                        "LinkTo": [
+                            {
+                                "TypeId": "device",
+                                "PropertyTypeId": "ip_to",
+                                "EntityPropertyTypeId": "ip"
+                            }
+                        ],
+                        "LinkFrom": [
+                            {
+                                "TypeId": "device",
+                                "PropertyTypeId": "ip_from",
+                                "EntityPropertyTypeId": "ip"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "TypeId": "deny",
+                "Name": "Blockerad anslutning",
+                "Properties": [
+                    {
+                        "TypeId": "port_from",
+                        "Name": "Port från",
+                        "Description": "Port från",
+                        "FieldType": "string"
+                    },
+                    {
+                        "TypeId": "port_to",
+                        "Name": "Port till",
+                        "Description": "port till",
+                        "FieldType": "string"
+                    },
+                    {
+                        "TypeId": "typ",
+                        "Name": "Typ",
+                        "Description": "TCP / UPD",
+                        "FieldType": "string"
+                    },
+                    {
+                        "TypeId": "ip_from",
+                        "Name": "Från",
+                        "Description": "IP från",
+                        "FieldType": "string"
+                    },
+                    {
+                        "TypeId": "ip_to",
+                        "Name": "Till",
+                        "Description": "IP till",
+                        "FieldType": "string"
+                    }
+                ],
+                "Generate": [
+                    {
+                        "TypeId": "deny_connection",
+                        "Properties": [
+                            {
+                                "TypeId": "count",
+                                "Action": "count",
+                                "Name": "Antal",
+                                "FieldType": "Number",
+                                "Description": "Antal anslutningar"
+                            },
+                            {
+                                "TypeId": "port_from",
+                                "Action": "join",
+                                "Name": "Port från",
+                                "FieldType": "String",
+                                "Description": "Källport",
+                                "TargetPropertyTypeId": "port_from"
+                            },
+                            {
+                                "TypeId": "port_to",
+                                "Action": "join",
+                                "Name": "Port till",
+                                "FieldType": "String",
+                                "Description": "Destinationsport",
+                                "TargetPropertyTypeId": "port_to"
+                            }
+                        ],
+                        "LinkTo": [
+                            {
+                                "TypeId": "device",
+                                "PropertyTypeId": "ip_to",
+                                "EntityPropertyTypeId": "ip"
+                            }
+                        ],
+                        "LinkFrom": [
+                            {
+                                "TypeId": "device",
+                                "PropertyTypeId": "ip_from",
+                                "EntityPropertyTypeId": "ip"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Integrations": {
+        "Import": [
+            {
+                "Id": "import-firewall",
+                "Name": "Brandväggslogg",
+                "Beskrinving": "importerar loggfil för windows brandvägg",
+                "TransformFunction": "global_firewall_import"
+            }
+        ]
+    },
+    "Plugins": [
+        "/plugins/import/firewall_importer.js"
+    ]
+}

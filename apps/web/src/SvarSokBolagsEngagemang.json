@@ -1,0 +1,87 @@
+{
+	"Entities": [
+		{
+			"Id": "191212121212",
+			"TypeId": "person",
+			"SourceSystemId": "Spar",
+			"Properties": [
+				{
+					"TypeId": "personE1",
+					"Value": "191212121212"
+				},
+				{
+					"TypeId": "personE2",
+					"Value": "Anders"
+				},
+				{
+					"TypeId": "personE3",
+					"Value": "Karlsson"
+				}
+			]
+		},
+		{
+			"Id": "165501010101",
+			"TypeId": "organisation",
+			"SourceSystemId": "Testdata",
+			"Properties": [
+				{
+					"TypeId": "organisationE1",
+					"Value": "550101-0101"
+				},
+				{
+					"TypeId": "organisationE2",
+					"Value": "Alrajt AB"
+				}
+			]
+		},
+		{
+			"Id": "165512121212",
+			"TypeId": "organisation",
+			"SourceSystemId": "Testdata",
+			"Properties": [
+				{
+					"TypeId": "organisationE1",
+					"Value": "551212-1212"
+				},
+				{
+					"TypeId": "organisationE2",
+					"Value": "Lur och frej AB"
+				}
+			]
+		}
+	],
+	"Links": [
+		{
+			"Id": "L1",
+			"TypeId": "LT1",
+			"SourceSystemId": "Testdata",
+			"FromEntityId": "191212121212",
+			"FromEntityTypeId": "person",
+			"ToEntityId": "165501010101",
+			"ToEntityTypeId": "organisation",
+			"Direction": "TO",
+			"Properties": [
+				{
+					"TypeId": "LT1E1",
+					"Value": "Styrelseledarmot"
+				}
+			]
+		},
+		{
+			"Id": "L2",
+			"TypeId": "LT1",
+			"SourceSystemId": "Bolagsverket",
+			"FromEntityId": "191212121212",
+			"FromEntityTypeId": "person",
+			"ToEntityId": "165512121212",
+			"ToEntityTypeId": "organisation",
+			"Direction": "TO",
+			"Properties": [
+				{
+					"TypeId": "LT1E1",
+					"Value": "Suppleant"
+				}
+			]
+		}
+	]
+}

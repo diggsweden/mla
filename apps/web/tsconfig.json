@@ -1,0 +1,13 @@
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: CC0-1.0
+
+{
+  "extends": "@repo/typescript-config/base.json",
+  "include": ["src", "src/index.tsx"],
+  "exclude": ["dist", "node_modules"],
+  "compilerOptions": {
+    "target": "es5",
+    "types": ["@types/wicg-file-system-access"]
+  }
+}

@@ -1,0 +1,19 @@
+{
+	"Entities": [
+		{
+			"Id": "165128000162",
+			"TypeId": "organisation",
+			"SourceSystemId": "Basinfo",
+			"Properties": [
+				{
+					"TypeId": "organisationE1",
+					"Value": "512800-0162"
+				},
+				{
+					"TypeId": "organisationE2",
+					"Value": "Bolagsbolaget AB"
+				}
+			]
+		}
+	]
+}

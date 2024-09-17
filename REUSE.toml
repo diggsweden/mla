@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+version = 1
+
+# configurations
+[[annotations]]
+path = [".nvmrc","pnpm-lock.yaml","packages/react-mla/.babelrc","packages/react-mla/tsconfig.tsbuildinfo"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024 Skatteverket - Swedish Tax Agency"
+SPDX-License-Identifier = "CC0-1.0"
+
+# images etc
+[[annotations]]
+path = ["assets/icon.png","tools/icon-scripts/custom_icons/network_graph.svg","tools/icon-scripts/custom_icons/*.svg assets/*.png"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024 Skatteverket - Swedish Tax Agency"
+SPDX-License-Identifier = "CC0-1.0"
+
+# more images 
+[[annotations]]
+path = ["apps/desktop/images/*.png","apps/desktop/images/*.ico", "apps/web/public/*.ico", "packages/react-mla/src/*.svg"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024 Skatteverket - Swedish Tax Agency"
+SPDX-License-Identifier = "CC0-1.0"
+
+# misc
+[[annotations]]
+path = ["CHANGELOG.md","**/*.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024 Skatteverket - Swedish Tax Agency"
+SPDX-License-Identifier = "CC0-1.0"

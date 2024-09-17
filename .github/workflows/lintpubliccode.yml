@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+---
+name: Lint Public Code MetaData
+on: [workflow_call] # yamllint disable-line rule:truthy
+
+jobs:
+  publiccode_validation:
+    runs-on: ubuntu-latest
+    name: publiccode validation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: italia/publiccode-parser-action@v1
+        with:
+          publiccode: "publiccode.yml"

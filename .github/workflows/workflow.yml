@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+---
+name: CI
+
+on: # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  commit:
+    uses: ./.github/workflows/commit.yml
+  license:
+    uses: ./.github/workflows/license.yml
+  lint:
+    uses: ./.github/workflows/lint.yml
+#  lintpubliccode:
+#    uses: ./.github/workflows/lintpubliccode.yml
