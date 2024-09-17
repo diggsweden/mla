@@ -11,7 +11,7 @@ import configService from '../services/configurationService'
 import { Interval } from 'luxon'
 import { produce } from 'immer'
 
-export function setPositions (n: Network, entities: IEntity[], links: ILink[]): IEntity[] {
+export function setPositions(n: Network, entities: IEntity[], links: ILink[]): IEntity[] {
   const getLinked = (entity: IEntity): IEntity[] => {
     return links.filter(l => isLinked(entity, l))
       .map(l => entities.find(e => e.Id !== entity.Id && isLinked(e, l))).filter(e => e !== undefined) as IEntity[]
@@ -108,7 +108,7 @@ export function setPositions (n: Network, entities: IEntity[], links: ILink[]): 
   return positioned
 }
 
-function closestDistance (positions: Position[], x: number, y: number): number {
+function closestDistance(positions: Position[], x: number, y: number): number {
   let dist = Number.MAX_VALUE
   positions.forEach(p => {
     const a = p.x - x
@@ -121,7 +121,7 @@ function closestDistance (positions: Position[], x: number, y: number): number {
   return dist
 }
 
-export function positionGroup (entity: IEntity, linked: IEntity[], x: number, y: number): IEntity[] {
+export function positionGroup(entity: IEntity, linked: IEntity[], x: number, y: number): IEntity[] {
   const res = [] as IEntity[]
   res.push(produce(entity, draft => {
     if (entity.PosX == null || entity.PosY == null) {
@@ -147,11 +147,11 @@ export function positionGroup (entity: IEntity, linked: IEntity[], x: number, y:
   return res
 }
 
-export function isSelected (thing: IChartBase, selected: string[]): boolean {
+export function isSelected(thing: IChartBase, selected: string[]): boolean {
   return selected.some(s => s === getId(thing))
 }
 
-export function isActive (thing: IChartBase, time: ITimeSpan): boolean {
+export function isActive(thing: IChartBase, time: ITimeSpan): boolean {
   const interval = Interval.fromDateTimes(time.DateFrom, time.DateTo)
 
   if (thing.DateFrom == null && thing.DateTo == null) {
@@ -160,7 +160,7 @@ export function isActive (thing: IChartBase, time: ITimeSpan): boolean {
 
   if (thing.DateFrom == null && thing.DateTo != null) {
     return interval.contains(thing.DateTo)
-  } 
+  }
 
   if (thing.DateTo == null && thing.DateFrom != null) {
     return interval.contains(thing.DateFrom)
@@ -171,14 +171,16 @@ export function isActive (thing: IChartBase, time: ITimeSpan): boolean {
       return interval.contains(thing.DateFrom)
     } else {
       const interval2 = Interval.fromDateTimes(thing.DateFrom!, thing.DateTo!)
-      return interval.intersection(interval2) != null
+      if (interval2.isValid) {
+        return interval.intersection(interval2) != null
+      }
     }
   }
 
   return false
 }
 
-export function mapToNode (entity: IEntity, icon: IIcon | undefined, selected: boolean, active: boolean, historyMode: boolean, config: IViewConfiguration, view: IBaseViewConfiguration): Node {
+export function mapToNode(entity: IEntity, icon: IIcon | undefined, selected: boolean, active: boolean, historyMode: boolean, config: IViewConfiguration, view: IBaseViewConfiguration): Node {
   const usingLevels = config.Show.some(x => x.Level != null)
 
   const level = view.Level ?? (usingLevels ? 0 : undefined)
@@ -205,7 +207,7 @@ export function mapToNode (entity: IEntity, icon: IIcon | undefined, selected: b
   }
 }
 
-export function mapToEdge (link: ILink, selected: boolean, active: boolean, historyMode: boolean, linkCount: number, view: IBaseViewConfiguration): Edge {
+export function mapToEdge(link: ILink, selected: boolean, active: boolean, historyMode: boolean, linkCount: number, view: IBaseViewConfiguration): Edge {
   let label = link.LabelShort
   if (label === configService.getTypeName(link)) {
     label = ''
@@ -231,15 +233,15 @@ export function mapToEdge (link: ILink, selected: boolean, active: boolean, hist
     dashes: getDashes(link),
     smooth: linkCount > 1
       ? {
-          enabled: true,
-          type: 'dynamic',
-          roundness: 0.5
-        }
+        enabled: true,
+        type: 'dynamic',
+        roundness: 0.5
+      }
       : {
-          enabled: false,
-          type: '',
-          roundness: 0
-        },
+        enabled: false,
+        type: '',
+        roundness: 0
+      },
     color: {
       color: link.MarkColor ? link.MarkColor : link.Color ?? view.Color ?? '#848484',
       highlight: link.MarkColor ? link.MarkColor : link.Color ?? view.Color ?? '#848484'
@@ -248,7 +250,7 @@ export function mapToEdge (link: ILink, selected: boolean, active: boolean, hist
   }
 }
 
-export function getDashes (link: ILink): boolean | number[] {
+export function getDashes(link: ILink): boolean | number[] {
   switch (link.Style) {
     case 'DASHED': return true
     case 'DOTTED': return [2, 5]
@@ -256,13 +258,13 @@ export function getDashes (link: ILink): boolean | number[] {
   }
 }
 
-export function getLinks (fromId: string, fromType: string, toId: string, toType: string, links: ILink[]): ILink[] {
+export function getLinks(fromId: string, fromType: string, toId: string, toType: string, links: ILink[]): ILink[] {
   return links.filter(link =>
     ((link.FromEntityId === fromId && link.FromEntityTypeId === fromType) && (link.ToEntityId === toId && link.ToEntityTypeId === toType)) ||
     ((link.FromEntityId === toId && link.FromEntityTypeId === toType) && (link.ToEntityId === fromId && link.ToEntityTypeId === fromType))
   )
 }
 
-export function getLinkCount (link: ILink, links: ILink[]): number {
+export function getLinkCount(link: ILink, links: ILink[]): number {
   return getLinks(link.FromEntityId, link.FromEntityTypeId, link.ToEntityId, link.ToEntityTypeId, links).length
 }
