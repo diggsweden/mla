@@ -14,18 +14,12 @@ SPDX-License-Identifier: CC0-1.0
 
 <h4 align="center">A powerfull, easy to use and intuitive way to create network analysis charts.</h4>
 
-  [![security rating](https://sonarcloud.io/api/project_badges/measure?project=MLA&metric=security_rating)](https://sonarcloud.io/summary/overall?id=MLA)
-  [![reliability rating](https://sonarcloud.io/api/project_badges/measure?project=MLA&metric=reliability_rating)](https://sonarcloud.io/summary/overall?id=MLA)
-  [![maintainability rating](https://sonarcloud.io/api/project_badges/measure?project=MLA&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=MLA)
-  [![CodeQL analysis](https://github.com/diggsweden/mla/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/diggsweden/mla/security/code-scanning?query=is%3Aopen)
-  [![GitHub release](https://img.shields.io/github/v/release/diggsweden/mla)](#)
-  [![GitHub release date](https://img.shields.io/github/release-date/diggsweden/mla)](#)
-  [![GitHub last commit](https://img.shields.io/github/last-commit/diggsweden/mla)](#)
-
+  [![CodeQL analysis](https://github.com/diggsweden/mla/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/diggsweden/mla/security/code-scanning?query=is%3Aopen)
+  [![GitHub release](https://img.shields.io/github/v/release/diggsweden/mla?style=for-the-badge)](#)
+  [![GitHub release date](https://img.shields.io/github/release-date/diggsweden/mla?style=for-the-badge)](#)
+  [![GitHub last commit](https://img.shields.io/github/last-commit/diggsweden/mla?style=for-the-badge)](#)
   [![REUSE](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.reuse.software%2Fstatus%2Fgithub.com%2Fdiggsweden%2Fmla&query=status&style=for-the-badge&label=REUSE)](https://api.reuse.software/info/github.com/diggsweden/mla)
-
   [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/diggsweden/mla/badge?style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/diggsweden/mla)
-
 
 <p align="center">
 ⭐ Star us on GitHub — it motivates us a lot!
