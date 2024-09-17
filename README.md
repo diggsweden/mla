@@ -14,7 +14,6 @@ SPDX-License-Identifier: CC0-1.0
 
 <h4 align="center">A powerfull, easy to use and intuitive way to create network analysis charts.</h4>
 
-  [![CodeQL analysis](https://github.com/diggsweden/mla/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/diggsweden/mla/security/code-scanning?query=is%3Aopen)
   [![GitHub release](https://img.shields.io/github/v/release/diggsweden/mla?style=for-the-badge)](#)
   [![GitHub release date](https://img.shields.io/github/release-date/diggsweden/mla?style=for-the-badge)](#)
   [![GitHub last commit](https://img.shields.io/github/last-commit/diggsweden/mla?style=for-the-badge)](#)
