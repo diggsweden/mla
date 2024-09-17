@@ -43,6 +43,7 @@ function ItemResultList (props: ItemResultProps) {
   const setEvents = useMainStore((state) => state.setEvent)
   const { result, seeds } = props
   const [mainEntities, setMainEntities] = useState<Record<string, IEntityGroup[]>>({})
+  const [count, setCount] = useState(0)
   const [eventGroups, setEventGroups] = useState<EventGroup[]>([])
   const [showEvents, setShowEvents] = useState<IEvent[]>([])
 
@@ -129,9 +130,11 @@ function ItemResultList (props: ItemResultProps) {
     const res: Record<string, IEntityGroup[]> = {}
 
     if (result && result.Entities.length > 0) {
+      let counter = 0;
       let usedTotal: Record<string, boolean> = {}
 
       const addGroup = (groupname: string, entity: IEntity, parentEntity: IEntity | undefined, parentGroup: IEntityGroup | undefined, used: Record<string, boolean>) => {
+        counter++;
         used[getId(entity)] = true
         if (res[groupname] === undefined) {
           res[groupname] = []
@@ -187,6 +190,8 @@ function ItemResultList (props: ItemResultProps) {
 
         addGroup(last, entity, undefined, undefined, usedTotal)
       }
+
+      setCount(counter)
     }
 
     setMainEntities(res)
@@ -228,7 +233,7 @@ function ItemResultList (props: ItemResultProps) {
       <span className="m-block m-sm:inline">{result.ErrorMessage}</span>
     </div>
     }
-    {(Object.keys(mainEntities).length + eventGroups.length) > 1 &&
+    {count > 1 &&
       <div className="m-relative">
         <p className="m-leading-normal m-font-sm m-uppercase m-text-center m-mb-2">{t('results')}</p>
         <Button className="m-right-0 m-top-0" onClick={addAll}>{t('add all')}</Button>

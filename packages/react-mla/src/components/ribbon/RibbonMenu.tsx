@@ -60,9 +60,9 @@ function RibbonMenu () {
     ]
   }, [])
 
+  const ALL_TABS = ['archive', 'start', 'search find', 'analysis', 'look feel', 'select', 'show', 'map'] as Tab[]
   const tabs = useMemo(() => {
-    let tabs = ['archive', 'start', 'search find', 'analysis', 'look feel', 'select', 'show', 'map'] as Tab[]
-
+    let tabs = ALL_TABS;
     if (configuration.Menu?.Archive?.Show === false) {
       tabs = tabs.filter(t => t !== 'archive')
     }
@@ -72,7 +72,7 @@ function RibbonMenu () {
     }
 
     if (!searchToolsAvailable && !exploreToolsAvailable) {
-      tabs = tabs.filter(t => t !== 'look feel')
+      tabs = tabs.filter(t => t !== 'search find')
     }
 
     return tabs

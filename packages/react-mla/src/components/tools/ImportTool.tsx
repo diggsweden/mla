@@ -6,6 +6,7 @@ import { useState } from 'react'
 import ItemResultList from '../result/ItemResultList'
 import useSearchStore from '../../store/search-state'
 import { useTranslation } from 'react-i18next';
+import Button from '../common/Button';
 
 function ImportTool () {
   const { t } = useTranslation();
@@ -47,7 +48,7 @@ function ImportTool () {
         <p className="m-text-sm m-p-1">{selectedTool.Description}</p>
         <div className="m-pt-2">
           <input className="m-w-full" type="file" onChange={(e) => { setSelectedFile(e.target.files) }}></input>
-          <button disabled={fileContents === ''} onClick={search} className='w-full text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1 mr-2 my-2'>{t('import')}</button>
+          <Button className="m-right-0 m-top-0" disabled={fileContents === ''} onClick={search}>{t('import')}</Button>
         </div>
       </div>
       <div className="m-mt-2">
