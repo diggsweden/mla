@@ -7,21 +7,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ## 1.0.0 - 2024-09-17
-
-## 0.0.6-beta.0 - 2024-09-03
-
-## 0.0.4-beta.0 - 2024-09-03
-
-## 0.0.2-beta.0 - 2024-09-03
-
-## 0.0.0 - 2024-09-03
-
-## 0.0.0-beta.2 - 2024-09-02
-
-## 0.0.0-beta.1 - 2024-09-02
-### Added
-- Upload asset to release
-
-## 0.0.0-beta.0 - 2024-09-02
 ### Added
 - Initial release
