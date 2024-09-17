@@ -75,7 +75,7 @@ $ pnpm run dev
 ```
 
 ## Documentation
-We have a <a href="">wiki</a>!
+We have a <a href="https://github.com/diggsweden/mla/wiki">wiki</a>!
 
 ## License
 
