@@ -76,7 +76,7 @@ export function fixDate (value: string | undefined | Date | DateTime): DateTime 
 
     if (date == undefined || !date.isValid) {
       console.error("unknown date", value)
-      date = DateTime.now()
+      date = undefined
     }
 
     return date
