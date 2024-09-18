@@ -3,16 +3,17 @@ SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 
 SPDX-License-Identifier: CC0-1.0
 -->
+
 <a name="top"></a>
 <h1 align="center">
   <br>
-  <img src="https://github.com/diggsweden/mla/blob/main/assets/icon.png" alt="MLA" width="200">
+  <img src="https://github.com/diggsweden/mla/blob/main/assets/icon_banner.png" alt="MLA" width="200">
   <br>
   MLA
   <br>
 </h1>
 
-<h4 align="center">A powerfull, easy to use and intuitive way to create network analysis charts.</h4>
+<h4 align="center">A powerful, easy to use and intuitive way to create network analysis charts.</h4>
 
   [![GitHub release](https://img.shields.io/github/v/release/diggsweden/mla?style=for-the-badge)](#)
   [![GitHub release date](https://img.shields.io/github/release-date/diggsweden/mla?style=for-the-badge)](#)
@@ -31,7 +32,7 @@ SPDX-License-Identifier: CC0-1.0
   <a href="#license">License</a>
 </p>
 
-Add a video showing the use ov demo version MLA
+![screenshot](https://github.com/diggsweden/mla/blob/main/assets/mla_demo.gif)
 
 ## Key Features
 
@@ -79,11 +80,10 @@ We have a <a href="https://github.com/diggsweden/mla/wiki">wiki</a>!
 
 ## License
 
-This project is licensed under the EUPL 1.2 License- see the [LICENSE](LICENSE) file for details
+This project is licensed under the EUPL 1.2 License- see the [LICENSE](https://github.com/diggsweden/mla/blob/main/LICENSE) file for details
 
-Most assets released are under Creative Commons CC0-1.0 except for
-
-CODE_OF_CONDUCT.md template:
+Most assets released are under Creative Commons CC0-1.0 except for:
+CODE_OF_CONDUCT.md
 
 Copyright: [Contributor Covenant](https://www.contributor-covenant.org/)
 License: [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
