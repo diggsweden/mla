@@ -13,7 +13,7 @@ SPDX-License-Identifier = "CC0-1.0"
 
 # images etc
 [[annotations]]
-path = ["assets/icon.png","tools/icon-scripts/custom_icons/network_graph.svg","tools/icon-scripts/custom_icons/*.svg assets/*.png"]
+path = ["tools/icon-scripts/custom_icons/network_graph.svg","tools/icon-scripts/custom_icons/*.svg","assets/*.png","assets/*.gif"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2024 Skatteverket - Swedish Tax Agency"
 SPDX-License-Identifier = "CC0-1.0"
