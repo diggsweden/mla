@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="/images/icon.ico">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MLA - akilles</title>
+    <title>MLA - demo</title>
     <style>
       body {
         margin: 0;
@@ -31,7 +31,7 @@
   <body>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      const configUrl = urlParams.get("config") ?? "public/config/akilles.json";
+      const configUrl = urlParams.get("config") ?? "public/config/default.json";
       const contextParam = urlParams.get("context") ?? "";
       const workflow = urlParams.get("workflow");
 
