@@ -7,7 +7,7 @@ SPDX-License-Identifier: CC0-1.0
 <a name="top"></a>
 <h1 align="center">
   <br>
-  <img src="https://github.com/diggsweden/mla/blob/main/assets/icon_banner.png" alt="MLA" width="200">
+  <img src="https://github.com/diggsweden/mla/blob/main/assets/icon.png" alt="MLA" width="200">
   <br>
   MLA
   <br>

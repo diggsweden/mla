@@ -27,7 +27,7 @@ SPDX-License-Identifier = "CC0-1.0"
 
 # misc
 [[annotations]]
-path = ["CHANGELOG.md","**/*.json"]
+path = ["CHANGELOG.md","**/*.json",".github/pull_request_template.md"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2024 Skatteverket - Swedish Tax Agency"
 SPDX-License-Identifier = "CC0-1.0"

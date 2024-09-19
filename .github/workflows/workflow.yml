@@ -15,12 +15,18 @@ on: # yamllint disable-line rule:truthy
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   commit:
     uses: ./.github/workflows/commit.yml
   license:
     uses: ./.github/workflows/license.yml
   lint:
+    permissions:
+      contents: read
+      security-events: write  
     uses: ./.github/workflows/lint.yml
   lintpubliccode:
     uses: ./.github/workflows/lintpubliccode.yml
