@@ -20,8 +20,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/config-typescript
       http-request-mock:
-        specifier: ^1.8.19
-        version: 1.8.28
+        specifier: ^2.0.1
+        version: 2.0.1
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -84,8 +84,8 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0
       http-request-mock:
-        specifier: ^1.8.19
-        version: 1.8.28
+        specifier: ^2.0.1
+        version: 2.0.1
       i18next:
         specifier: ^23.15.1
         version: 23.15.1
@@ -1641,8 +1641,8 @@ packages:
     resolution: {integrity: sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==}
     engines: {node: '>=8.0.0'}
 
-  http-request-mock@1.8.28:
-    resolution: {integrity: sha512-BGbE/VGF9+psLcgp7z7qkZEGSXTCQUDZirnXJZ8bOnUVgf+taNzngjoIYut0YP86ozegSihq1QEU+3lbN8fccQ==}
+  http-request-mock@2.0.1:
+    resolution: {integrity: sha512-eJ+837OOBINXK/t+uuITEJ6wpEO17mf6mWckd4AARJDGRkc+giTpIA/7SZ0fAr5MePRXKn2XeXQC7sNc4Gd4TA==}
     engines: {node: ^12.18.0 || >=14.13.1}
     hasBin: true
 
@@ -4425,7 +4425,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  http-request-mock@1.8.28:
+  http-request-mock@2.0.1:
     dependencies:
       '@ngneat/falso': 4.0.0
       '@types/follow-redirects': 1.14.4
