@@ -122,8 +122,8 @@ jobs:
         uses: thomaseizinger/create-pull-request@1.0.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          head: release/v${{ env.NEW_VERSION }}
+          head: release/${{ env.NEW_VERSION }}
           base: main
-          title: New release v${{ env.NEW_VERSION }}
+          title: New release ${{ env.NEW_VERSION }}
           body: |
               chore: New release
