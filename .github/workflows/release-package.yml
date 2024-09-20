@@ -22,11 +22,17 @@ on:
           - 'prerelease'        
 
 permissions:
+  actions: read
   contents: write
+  id-token: write
 
 jobs:
   build:
-    name: Build and release
+    name: Build
+    outputs:
+      hashes: ${{ steps.hash.outputs.hashes }}
+      changelog: ${{ steps.get-changelog.outputs.changelog }}
+      version: ${{ steps.create-semver.outputs.version }}
     runs-on: ubuntu-latest
     steps:
       # Checkout project repository
@@ -81,10 +87,12 @@ jobs:
           RELEASE_TYPE: ${{ github.event.inputs.release-type }}
 
       # Create semver version
-      - name: Create semver version
+      - id: create-semver
+        name: Create semver version
         run: |
           NEW_VERSION=${{ env.NEW_VERSION }}
           echo "NEW_SEMVER_VERSION=${NEW_VERSION//v}" >> "$GITHUB_ENV"
+          echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
 
       # Update changelog unreleased section with new version
       - name: Update changelog
@@ -149,14 +157,54 @@ jobs:
           version: ${{ env.NEW_VERSION }}
           operation: read
 
+      # Generate hashes needed for provenance
+      - id: hash
+        name: Generate hashes for release artifacts
+        shell: bash
+        run: |
+          echo "hashes=$(sha256sum ./packages/webcomponent-mla/dist/mla-component.umd.cjs | base64 -w0)" >> "$GITHUB_OUTPUT"
+
+      # Upload artifact
+      - name: Upload mla-component.umd.cjs
+        uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3.1.0
+        with:
+          name: mla-component.umd.cjs
+          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+          if-no-files-found: error
+          retention-days: 5
+
+  # This step calls the generic workflow to generate provenance.
+  provenance:
+    needs: [build]
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
+    with:
+      base64-subjects: "${{ needs.build.outputs.hashes }}"
+      # Upload provenance to a new release
+      upload-assets: true
+
+  # This step uploads our artifacts to the tagged GitHub release.
+  release:
+    needs: [build, provenance]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download mla-component.umd.cjs
+        uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427 # v4.1.4
+        with:
+          name: mla-component.umd.cjs
+
       # Update GitHub release with changelog
       - name: Update GitHub release documentation
         uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
         with:
-          tag_name: ${{ env.NEW_VERSION }}
-          body: ${{ steps.get-changelog.outputs.changelog }}
+          tag_name: ${{ needs.build.output.version }}
+          body: ${{ needs.build.outputs.changelog }}
           prerelease: ${{ startsWith(github.event.inputs.release-type, 'pre') }}
           files: |
-            ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+            mla-component.umd.cjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
