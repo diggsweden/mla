@@ -169,8 +169,8 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       eslint-plugin-autofix:
-        specifier: ^2.1.0
-        version: 2.1.0(eslint@8.57.0)
+        specifier: ^2.2.0
+        version: 2.2.0(eslint@8.57.0)
       eslint-plugin-react:
         specifier: ^7.34.1
         version: 7.35.0(eslint@8.57.0)
@@ -1390,8 +1390,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-plugin-autofix@2.1.0:
-    resolution: {integrity: sha512-4ya5flaJ7P+s4WeCe7mVd5Mmv0ayghl9Xz1MDewQqDNXn3SFkvTMqbCuJT5fsTl+BdtJ/CFNV48YrABohQu1VQ==}
+  eslint-plugin-autofix@2.2.0:
+    resolution: {integrity: sha512-lu8+0r+utyTroROqXIL+a8sUpICi6za22hIzlpb0+x0tQGRnOjhOKU7v8mC/NS/faDoVsw6xW3vUpc+Mcz5NWA==}
     engines: {node: '>=18'}
     peerDependencies:
       eslint: '>=8'
@@ -4109,13 +4109,12 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-plugin-autofix@2.1.0(eslint@8.57.0):
+  eslint-plugin-autofix@2.2.0(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
       eslint-rule-composer: 0.3.0
       espree: 9.6.1
       esutils: 2.0.3
-      lodash: 4.17.21
       string-similarity: 4.0.4
 
   eslint-plugin-react-hooks@4.6.2(eslint@8.57.0):
