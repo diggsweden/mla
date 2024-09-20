@@ -10,6 +10,41 @@ updates:
     schedule:
       interval: "weekly"
 
+  - package-ecosystem: npm
+    directory: /apps/desktop
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: npm
+    directory: /apps/web
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: npm
+    directory: /packages/config-tailwind
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: npm
+    directory: /packages/config-typescript
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: npm
+    directory: /packages/react-mla
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: npm
+    directory: /packages/webcomponent-mla
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: npm
+    directory: /tools/icon-scripts
+    schedule:
+      interval: "weekly"
+
     # Configure commit messages to follow conventional commit format
     commit-message:
       prefix: "fix"
