@@ -38,6 +38,7 @@ jobs:
       # Checkout project repository
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 #v4.1.7
+
       # Install pnpm
       - name: Install pnpm
         uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
@@ -52,6 +53,13 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
+      # Import GPG key to use for signing
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
+
       # Tests
       #- name: Run tests
       #  run: pnpm test
@@ -59,8 +67,9 @@ jobs:
       # Configure Git
       - name: Git configuration
         run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "GitHub Actions"
+          git config --global user.email "169906257+Whiteflight@users.noreply.github.com"
+          git config --global user.name "MLA Release Bot"
+          git config --global user.signingkey F01381E089AEBE67
 
        # Install dependencies
       - name: Install dependencies
@@ -119,8 +128,8 @@ jobs:
           git add "./packages/webcomponent-mla/package.json"
           git add "package.json"
           git add "CHANGELOG.md"
-          git commit -S -m "chore: release ${{ env.NEW_VERSION }}"
-          git tag ${{ env.NEW_VERSION }}
+          git commit -S -m "chore: release ${{ env.NEW_VERSION }}" -s
+          git tag -m "Release ${{ env.NEW_VERSION }}" -s ${{ env.NEW_VERSION }}
 
         # Build
       - name: Build
@@ -141,13 +150,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
 
-      # Push repository changes
-      - name: Push changes to repository
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git push origin && git push --tags
-
       # Read version changelog
       - id: get-changelog
         name: Get version changelog
@@ -164,17 +166,39 @@ jobs:
         run: |
           echo "hashes=$(sha256sum ./packages/webcomponent-mla/dist/mla-component.umd.cjs | base64 -w0)" >> "$GITHUB_OUTPUT"
 
+        # Create signature
+      - name: Create signature
+        run: |
+          gpg --armor --detach-sign ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+
       # Upload artifact
       - name: Upload mla-component.umd.cjs
-        uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3.1.0
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 #v4.4.0
         with:
           name: mla-component.umd.cjs
           path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
           if-no-files-found: error
           retention-days: 5
 
+      # Upload signature
+      - name: Upload mla-component.umd.cjs
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 #v4.4.0
+        with:
+          name: mla-component.umd.cjs.asc
+          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.asc
+          if-no-files-found: error
+          retention-days: 5
+
+      # Push repository changes
+      - name: Push changes to repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin && git push origin tag ${{ env.NEW_VERSION }}
+
   # This step calls the generic workflow to generate provenance.
   provenance:
+    name: Create provenance
     needs: [build]
     permissions:
       actions: read
@@ -184,27 +208,39 @@ jobs:
     with:
       base64-subjects: "${{ needs.build.outputs.hashes }}"
       # Upload provenance to a new release
-      upload-assets: true
+      upload-assets: false
 
   # This step uploads our artifacts to the tagged GitHub release.
   release:
+    name: Create release
     needs: [build, provenance]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download mla-component.umd.cjs
         uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427 # v4.1.4
         with:
           name: mla-component.umd.cjs
 
+      - name: Download mla-component.umd.cjs.asc
+        uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427 # v4.1.4
+        with:
+          name: mla-component.umd.cjs.asc
+
+      - name: Download mla-component.umd.cjs.intoto.jsonl
+        uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427 # v4.1.4
+        with:
+          name: mla-component.umd.cjs.intoto.jsonl
+
       # Update GitHub release with changelog
       - name: Update GitHub release documentation
         uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
         with:
-          tag_name: ${{ needs.build.output.version }}
+          tag_name: ${{ needs.build.outputs.version }}
           body: ${{ needs.build.outputs.changelog }}
           prerelease: ${{ startsWith(github.event.inputs.release-type, 'pre') }}
           files: |
             mla-component.umd.cjs
+            mla-component.umd.cjs.asc
+            mla-component.umd.cjs.intoto.jsonl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
