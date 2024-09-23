@@ -6,7 +6,6 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /tools/icon-scripts
     directories:
       - "/"
       - "/apps/desktop"
