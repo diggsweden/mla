@@ -17,6 +17,7 @@ jobs:
   megalinter:
     name: megalint
     runs-on: ubuntu-latest
+    if: ${{ (github.event_name == 'pull_request') && (github.actor != 'dependabot[bot]') }}    
     permissions:
       # Needed for Code scanning upload
       security-events: write
