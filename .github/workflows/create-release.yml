@@ -53,6 +53,13 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
+      # Import GPG key to use for signing
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
+
       # Bump package version
       # Use tag latest
       - name: Bump release version
@@ -81,8 +88,9 @@ jobs:
       # Configure Git
       - name: Git configuration
         run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "GitHub Actions"
+          git config --global user.email "169906257+Whiteflight@users.noreply.github.com"
+          git config --global user.name "MLA Release Bot"
+          git config --global user.signingkey F01381E089AEBE67
 
       # Create a new release branch
       - name: Create release branch
