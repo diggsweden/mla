@@ -108,21 +108,11 @@ jobs:
         working-directory: ./packages/webcomponent-mla
 
       # Update changelog unreleased section with new version
-      - name: Build Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v5
+      - name: Update changelog
+        id: update_changelog
+        uses: thomaseizinger/keep-a-changelog-new-release@3.1.0
         with:
-          outputFile: CHANGELOG.md
-          fromTag: "v1.0.0"
-          toTag: ${{ github.sha }}
-          configurationJson: |
-            {
-              "ignore_labels": [
-                "release"
-              ]
-            }
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ env.NEW_VERSION }}
 
       # Commit changes
       - name: Commit CHANGELOG.md and package.json changes and create tag
@@ -151,4 +141,4 @@ jobs:
           base: main
           labels: release
           title: "chore: Release ${{ env.NEW_VERSION }}"
-          body: ${{ steps.github_release.outputs.changelog }}
+          body: ${{ steps.update_changelog.outputs.release-notes }}
