@@ -97,15 +97,6 @@ jobs:
       - name: Create release branch
         run: git checkout -b release/${{ env.NEW_VERSION }}
 
-      # Update changelog unreleased section with new version
-      - name: Build Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v5
-        with:
-          outputFile: CHANGELOG.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       # Update package versions 
       - name: Update package versions react-mla
         run: jq ".version = \"${{ env.NEW_SEMVER_VERSION }}\"" package.json > package.json.tmp && mv package.json.tmp package.json
@@ -115,6 +106,23 @@ jobs:
       - name: Update package versions webcomponent-mla
         run: jq ".version = \"${{ env.NEW_SEMVER_VERSION }}\"" package.json > package.json.tmp && mv package.json.tmp package.json
         working-directory: ./packages/webcomponent-mla
+
+      # Update changelog unreleased section with new version
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v5
+        with:
+          outputFile: CHANGELOG.md
+          fromTag: "v1.0.0"
+          toTag: ${{ github.sha }}
+          configurationJson: |
+            {
+              "ignore_labels": [
+                "release"
+              ]
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Commit changes
       - name: Commit CHANGELOG.md and package.json changes and create tag
@@ -141,5 +149,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           head: release/${{ env.NEW_VERSION }}
           base: main
+          labels: release
           title: "chore: Release ${{ env.NEW_VERSION }}"
-          body: ${{steps.github_release.outputs.changelog}}
+          body: ${{ steps.github_release.outputs.changelog }}
