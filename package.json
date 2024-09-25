@@ -6,7 +6,7 @@
     "build:packages": "pnpm --filter ./packages/* build"
   },
   "packageManager": "pnpm@9.7.1",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "pnpm": {
     "overrides": {
       "micromatch": "^4.0.8"
