@@ -83,6 +83,7 @@ jobs:
         run: |
           NEW_VERSION=${{ env.BRANCH_NAME }}
           NEW_VERSION=${NEW_VERSION//-beta}
+          NEW_VERSION=${NEW_VERSION//release/}
           echo "NEW_VERSION=${NEW_VERSION}" >> "$GITHUB_ENV"
           echo "NEW_SEMVER_VERSION=${NEW_VERSION//v}" >> "$GITHUB_ENV"
           echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
