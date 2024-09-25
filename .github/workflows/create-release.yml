@@ -109,10 +109,18 @@ jobs:
 
       # Update changelog unreleased section with new version
       - name: Update changelog
-        id: update_changelog
-        uses: thomaseizinger/keep-a-changelog-new-release@3.1.0
+        uses: superfaceai/release-changelog-action@38646ad355e5d79bf7aa12e233a1573e4d36faee # v2.1.3
         with:
           version: ${{ env.NEW_VERSION }}
+          operation: release
+
+        # Read changelog 
+        - name: Get changelog
+          id: get-changelog
+          uses: superfaceai/release-changelog-action@38646ad355e5d79bf7aa12e233a1573e4d36faee # v2.1.3
+          with:
+            version: ${{ env.NEW_VERSION }}
+            operation: read
 
       # Commit changes
       - name: Commit CHANGELOG.md and package.json changes and create tag
@@ -141,4 +149,4 @@ jobs:
           base: main
           labels: release
           title: "chore: Release ${{ env.NEW_VERSION }}"
-          body: ${{ steps.update_changelog.outputs.release-notes }}
+          body: ${{ steps.get-changelog.outputs.changelog }}
