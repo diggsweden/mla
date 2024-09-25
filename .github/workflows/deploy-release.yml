@@ -6,11 +6,10 @@
 name: Deploy release
 
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - closed       
-    branches:
-      - 'release/**'
 
 permissions:
   actions: read
@@ -18,9 +17,9 @@ permissions:
   id-token: write
 
 jobs:
-  build:
-    if: github.event.pull_request.merged == true
-    name: Build
+  build-release:
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'release')) )
+    name: Build release
     outputs:
       hashes: ${{ steps.hash.outputs.hashes }}
       changelog: ${{ steps.get-changelog.outputs.changelog }}
@@ -40,6 +39,13 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
+      # Import GPG key to use for signing
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
+
       # Configure Git
       - name: Git configuration
         run: |
@@ -53,17 +59,15 @@ jobs:
           echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
           echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_OUTPUT"
 
-      # Bump package version
-      # Use tag latest
+      # Get release tag
       - name: Bump release version
-        if: endsWith(env.BRANCH_NAME, 'beta') != true
+        if: contains(env.BRANCH_NAME, 'beta') != true
         run: |
           echo "RELEASE_TAG=latest" >> "$GITHUB_ENV"
 
-      # Bump package pre-release version
-      # Use tag beta for pre-release versions
+      # Get release tag if pre release
       - name: Bump pre-release version
-        if: endsWith(env.BRANCH_NAME, 'beta')
+        if: contains(env.BRANCH_NAME, 'beta')
         run: |
           echo "RELEASE_TAG=beta" >> "$GITHUB_ENV"
 
@@ -137,21 +141,20 @@ jobs:
 
   # This step calls the generic workflow to generate provenance.
   provenance:
-    needs: [build]
+    needs: [build-release]
     permissions:
       actions: read
       id-token: write
       contents: write
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
     with:
-      base64-subjects: "${{ needs.build.outputs.hashes }}"
-      # Upload provenance to a new release
+      base64-subjects: "${{ needs.build-release.outputs.hashes }}"
       upload-assets: false
 
   # This step uploads our artifacts to the tagged GitHub release.
   release:
     name: Create release
-    needs: [build, provenance]
+    needs: [build-release, provenance]
     runs-on: ubuntu-latest
     steps:
       - name: Download mla-component.umd.cjs
@@ -173,9 +176,9 @@ jobs:
       - name: Update GitHub release documentation
         uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
         with:
-          tag_name: ${{ needs.build.outputs.version }}
-          body: ${{ needs.build.outputs.changelog }}
-          prerelease: ${{ startsWith(github.event.inputs.release-type, 'pre') }}
+          tag_name: ${{ needs.build-release.outputs.version }}
+          body: ${{ needs.build-release.outputs.changelog }}
+          prerelease: contains(needs.build-release.outputs.branch, 'beta')
           files: |
             mla-component.umd.cjs
             mla-component.umd.cjs.asc
