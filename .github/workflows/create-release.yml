@@ -95,7 +95,7 @@ jobs:
 
       # Create a new release branch
       - name: Create release branch
-        run: git checkout -track -b release/${{ env.NEW_VERSION }}
+        run: git checkout -b release/${{ env.NEW_VERSION }}
 
       # Update changelog unreleased section with new version
       - name: Update changelog
@@ -130,6 +130,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git push --set-upstream origin release/${{ env.NEW_VERSION }}
           git push && git push origin tag ${{ env.NEW_VERSION }}
 
       # Push repository changes
