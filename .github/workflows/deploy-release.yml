@@ -10,7 +10,7 @@ on:
     types:
       - closed       
     branches:
-      - 'releases/**'
+      - 'release/**'
 
 permissions:
   actions: read
@@ -112,12 +112,26 @@ jobs:
         run: |
           echo "hashes=$(sha256sum ./packages/webcomponent-mla/dist/mla-component.umd.cjs | base64 -w0)" >> "$GITHUB_OUTPUT"
 
+        # Create signature
+      - name: Create signature
+        run: |
+          gpg --armor --detach-sign ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+
       # Upload artifact
       - name: Upload mla-component.umd.cjs
-        uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3.1.0
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 #v4.4.0
         with:
           name: mla-component.umd.cjs
           path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+          if-no-files-found: error
+          retention-days: 5
+
+      # Upload signature
+      - name: Upload mla-component.umd.cjs
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 #v4.4.0
+        with:
+          name: mla-component.umd.cjs.asc
+          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.asc
           if-no-files-found: error
           retention-days: 5
 
@@ -132,10 +146,11 @@ jobs:
     with:
       base64-subjects: "${{ needs.build.outputs.hashes }}"
       # Upload provenance to a new release
-      upload-assets: true
+      upload-assets: false
 
   # This step uploads our artifacts to the tagged GitHub release.
   release:
+    name: Create release
     needs: [build, provenance]
     runs-on: ubuntu-latest
     steps:
@@ -144,14 +159,26 @@ jobs:
         with:
           name: mla-component.umd.cjs
 
+      - name: Download mla-component.umd.cjs.asc
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: mla-component.umd.cjs.asc
+
+      - name: Download mla-component.umd.cjs.intoto.jsonl
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: mla-component.umd.cjs.intoto.jsonl
+
       # Update GitHub release with changelog
       - name: Update GitHub release documentation
         uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
         with:
-          tag_name: ${{ needs.build.output.version }}
+          tag_name: ${{ needs.build.outputs.version }}
           body: ${{ needs.build.outputs.changelog }}
-          prerelease: ${{ startsWith(needs.build.output.branch, 'beta') }}
+          prerelease: ${{ startsWith(github.event.inputs.release-type, 'pre') }}
           files: |
             mla-component.umd.cjs
+            mla-component.umd.cjs.asc
+            mla-component.umd.cjs.intoto.jsonl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
