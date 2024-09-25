@@ -1,11 +1,37 @@
-# Changelog
-All notable changes to this project will be documented in this file.
+## 📦 Uncategorized
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- fix: correct spelling, styling and dates
+   - PR: #18
+- Cleanup after release
+   - PR: #17
+- chore: Update packages according to audit
+   - PR: #19
+- fix: add demo .gif to readme
+   - PR: #20
+- Fix megalinter sarif report upload and sha on github actions
+   - PR: #21
+- fix: correct title in electron app
+   - PR: #23
+- chore: harden workflow by pinning actions
+   - PR: #24
+- fix: add build step to ci workflow
+   - PR: #38
+- fix: add slsa
+   - PR: #39
+- fix: add workflow for release
+   - PR: #40
+- fix: remove old workflows and add signing
+   - PR: #44
+- fix: add directories to configuration
+   - PR: #45
+- fix: correct configuration
+   - PR: #47
+- fix(deps): Bump github/codeql-action from 4a01ec798636a8442fbe054c7795e139a5960d29 to 323f5ef653b88011bf10e9a0a56d70d742463c9a
+   - PR: #42
+- fix(deps): Bump actions/download-artifact from 4.1.4 to 4.1.8 in the actions-dependencies group across 1 directory
+   - PR: #46
+- fix: Optimize workflow
+   - PR: #50
+- fix: new release workflow
+   - PR: #51
 
-## Unreleased
-
-## 1.0.0 - 2024-09-17
-### Added
-- Initial release
