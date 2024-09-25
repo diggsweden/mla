@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 ---
-name: Create release
+name: Create release draft
 
 on:
   workflow_dispatch:
@@ -87,11 +87,17 @@ jobs:
           echo "NEW_SEMVER_VERSION=${NEW_VERSION//v}" >> "$GITHUB_ENV"
 
       # Configure Git
+      #- name: Git configuration
+      #  run: |
+      #    git config --global user.email "169906257+Whiteflight@users.noreply.github.com"
+      #    git config --global user.name "MLA Release Bot"
+      #    git config --global user.signingkey F01381E089AEBE67
+
+      # Configure Git
       - name: Git configuration
         run: |
-          git config --global user.email "169906257+Whiteflight@users.noreply.github.com"
-          git config --global user.name "MLA Release Bot"
-          git config --global user.signingkey F01381E089AEBE67
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
 
       # Create a new release branch
       - name: Create release branch
@@ -123,13 +129,23 @@ jobs:
           operation: read
 
       # Commit changes
+      #- name: Commit CHANGELOG.md and package.json changes and create tag
+      #  run: |
+      #    git add "./packages/react-mla/package.json"
+      #    git add "./packages/webcomponent-mla/package.json"
+      #    git add "package.json"
+      #    git add "CHANGELOG.md"
+      #    git commit -S -m "chore: release ${{ env.NEW_VERSION }}"
+      #    git tag ${{ env.NEW_VERSION }}
+
+      # Commit changes
       - name: Commit CHANGELOG.md and package.json changes and create tag
         run: |
           git add "./packages/react-mla/package.json"
           git add "./packages/webcomponent-mla/package.json"
           git add "package.json"
           git add "CHANGELOG.md"
-          git commit -S -m "chore: release ${{ env.NEW_VERSION }}"
+          git commit -m "chore: release ${{ env.NEW_VERSION }}"
           git tag ${{ env.NEW_VERSION }}
 
       # Push repository changes
