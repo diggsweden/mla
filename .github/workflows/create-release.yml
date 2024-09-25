@@ -98,12 +98,13 @@ jobs:
         run: git checkout -b release/${{ env.NEW_VERSION }}
 
       # Update changelog unreleased section with new version
-      - name: Update changelog
-        uses: superfaceai/release-changelog-action@38646ad355e5d79bf7aa12e233a1573e4d36faee # v2.1.3
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v5
         with:
-          path-to-changelog: CHANGELOG.md
-          version: ${{ env.NEW_VERSION }}
-          operation: release
+          outputFile: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Update package versions 
       - name: Update package versions react-mla
@@ -140,6 +141,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           head: release/${{ env.NEW_VERSION }}
           base: main
-          title: New release ${{ env.NEW_VERSION }}
-          body: |
-              chore: New release
+          title: "chore: Release ${{ env.NEW_VERSION }}"
+          body: ${{steps.github_release.outputs.changelog}}
