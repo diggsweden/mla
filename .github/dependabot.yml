@@ -16,7 +16,7 @@ updates:
       - "/packages/webcomponent-mla"
       - "/tools/icon-scripts"
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
     # Configure commit messages to follow conventional commit format
     commit-message:
@@ -25,7 +25,6 @@ updates:
 
     # Configure the format of pull request branch names
     pull-request-branch-name:
-      # Use hyphens as separators in branch names
       separator: "-"
 
     # Automatically add these labels to created pull requests
@@ -35,18 +34,19 @@ updates:
 
     # Group definitions for related dependencies
     groups:
-      # Group for version control system related dependencies
-      actions-dependencies:
-        patterns:
-          - "*"
-        # Only group minor and patch updates
+      prod-npm-minor-dependencies:
+        dependency-type: "production"    
+        update-types:
+          - "minor"
+          - "patch"
+      dev-npm-minor-dependencies:
+        dependency-type: "development"
         update-types:
           - "minor"
           - "patch"
 
-    # Separate major updates from groups
     ignore:
-      - dependency-name: "*"
+      - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
 
   # Configuration for GitHub Actions
@@ -63,7 +63,6 @@ updates:
 
     # Configure the format of pull request branch names
     pull-request-branch-name:
-      # Use hyphens as separators in branch names
       separator: "-"
 
     # Automatically add these labels to created pull requests
@@ -71,21 +70,10 @@ updates:
       - "dependencies"
       - "actions"
 
-      # Group definitions for related dependencies
     groups:
-      # Group for version control system related dependencies
       actions-dependencies:
         patterns:
           - "*"
-        # Only group minor and patch updates
         update-types:
           - "minor"
           - "patch"
-
-    # Separate major updates from groups
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
-
-    # Limit the number of open pull requests Dependabot can have at one time
-    open-pull-requests-limit: 5
