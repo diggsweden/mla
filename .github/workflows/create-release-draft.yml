@@ -158,7 +158,7 @@ jobs:
 
       # Push repository changes
       - name: Create pull request into main
-        uses: thomaseizinger/create-pull-request@1.4.0
+        uses: thomaseizinger/create-pull-request@955adb4634198898bc24dca0468514c63a8fc98d # 1.4.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           head: release/${{ env.NEW_VERSION }}
