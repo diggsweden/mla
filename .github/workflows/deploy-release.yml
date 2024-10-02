@@ -114,7 +114,7 @@ jobs:
       # Read version changelog
       - id: get-changelog
         name: Get version changelog
-        uses: superfaceai/release-changelog-action@38646ad355e5d79bf7aa12e233a1573e4d36faee # v2.1.3
+        uses: superfaceai/release-changelog-action@090da7c28214d336d285ddd0d607b042c79bf663 # v3
         with:
           path-to-changelog: CHANGELOG.md
           version: ${{ env.NEW_VERSION }}
