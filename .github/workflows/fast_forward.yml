@@ -47,6 +47,7 @@ jobs:
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions"        
+          git fetch
           git checkout $HEAD_BRANCH
           git checkout $BASE_BRANCH
           git merge $HEAD_BRANCH --ff-only
@@ -59,7 +60,7 @@ jobs:
         with:
           route: POST /repos/{repository}/issues/{issue_number}/comments
           repository: ${{ github.repository }}
-          issue_number: ${{ github.event.issue.number }}
+          issue_number: ${{ github.event.pull_request.number }}
           body: ${{ steps.merge-status.outputs.message }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -71,7 +72,7 @@ jobs:
         with:
           route: POST /repos/{repository}/issues/{issue_number}/comments
           repository: ${{ github.repository }}
-          issue_number: ${{ github.event.issue.number }}
+          issue_number: ${{ github.event.pull_request.number }}
           body: Unable to fast forward. Check the Actions execution tab for details.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
