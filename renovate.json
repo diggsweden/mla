@@ -6,15 +6,25 @@
   ],
   "packageRules": [
       {
+        "matchManagers": ["github-actions"],
+        "addLabels": ["actions"]
+      },    
+      {
+        "matchManagers": ["npm"],
+        "addLabels": ["npm"]
+      },    
+      {
         "matchDepTypes": ["devDependencies"],
         "matchUpdateTypes": ["patch", "minor"],
-        "groupName": "dev Dependencies (non-major)",       
+        "groupName": "dev Dependencies (non-major)",
+        "addLabels": ["dependencies"],
         "automerge": true
       },
       {
         "matchDepTypes": ["dependencies"],
         "matchUpdateTypes": ["patch", "minor"],
-        "groupName": "dependencies (non-major)",       
+        "groupName": "dependencies (non-major)",
+        "addLabels": ["dependencies"],
         "automerge": true
       }            
   ]  
