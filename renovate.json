@@ -9,13 +9,13 @@
         "matchDepTypes": ["devDependencies"],
         "matchUpdateTypes": ["patch", "minor"],
         "groupName": "dev Dependencies (non-major)",       
-        "automerge": false
+        "automerge": true
       },
       {
         "matchDepTypes": ["dependencies"],
         "matchUpdateTypes": ["patch", "minor"],
         "groupName": "dependencies (non-major)",       
-        "automerge": false
+        "automerge": true
       }            
   ]  
 }
