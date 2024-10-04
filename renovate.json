@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":gitSignOff"
+  ],
+  "packageRules": [
+      {
+        "matchManagers": ["github-actions"],
+        "addLabels": ["actions"]
+      },    
+      {
+        "matchManagers": ["npm"],
+        "addLabels": ["npm"]
+      },    
+      {
+        "matchDepTypes": ["devDependencies"],
+        "matchUpdateTypes": ["patch", "minor"],
+        "groupName": "dev Dependencies (non-major)",
+        "addLabels": ["dependencies"],
+        "automerge": true
+      },
+      {
+        "matchDepTypes": ["dependencies"],
+        "matchUpdateTypes": ["patch", "minor"],
+        "groupName": "dependencies (non-major)",
+        "addLabels": ["dependencies"],
+        "automerge": true
+      }            
+  ]  
+}
