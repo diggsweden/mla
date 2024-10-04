@@ -5,7 +5,7 @@
   "dependencies": {
     "@repo/tailwind-config": "workspace:^",
     "@repo/typescript-config": "workspace:^",
-    "http-request-mock": "^1.8.19",
+    "http-request-mock": "^2.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-mla": "workspace:^"
