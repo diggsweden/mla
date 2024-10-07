@@ -204,7 +204,7 @@ function ActivityTool (props: Props) {
     history.sort((a, b) => a.date.diff(b.date).milliseconds)
 
     return history
-  }, [phaseEvents, entities, links, type, showAll, getColor])
+  }, [phaseEvents, entities, links, type, showAll, getColor, t])
 
   // Add the current date to the correct relative position
   const historyView = useMemo(() => {

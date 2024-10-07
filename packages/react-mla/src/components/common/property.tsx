@@ -39,7 +39,7 @@ function Property (props: Props) {
     if (validChanged) {
       validChanged(valid)
     }
-  }, [valid])
+  }, [valid, validChanged])
 
   useLayoutEffect(() => {
     const input = inputRef.current

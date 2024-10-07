@@ -17,6 +17,8 @@ import configService from '../../services/configurationService'
 import useAppStore, { type Tab } from '../../store/app-store'
 import { useTranslation } from 'react-i18next'
 
+const ALL_TABS = ['archive', 'start', 'search find', 'analysis', 'look feel', 'select', 'show', 'map'] as Tab[]
+
 function RibbonMenu () {
   const { t } = useTranslation();
   const configuration = configService.getConfiguration()
@@ -60,7 +62,6 @@ function RibbonMenu () {
     ]
   }, [])
 
-  const ALL_TABS = ['archive', 'start', 'search find', 'analysis', 'look feel', 'select', 'show', 'map'] as Tab[]
   const tabs = useMemo(() => {
     let tabs = ALL_TABS;
     if (configuration.Menu?.Archive?.Show === false) {
@@ -76,7 +77,7 @@ function RibbonMenu () {
     }
 
     return tabs
-  }, [configuration.Menu?.Archive?.Show, configuration.MapConfiguration, exploreToolsAvailable, searchToolsAvailable])
+  }, [configuration.Menu?.Archive?.Show, configuration.MapConfiguration, searchToolsAvailable, exploreToolsAvailable])
 
   return <div className="m-flex m-flex-col m-select-none">
     <div className="m-w-full m-ml-2 m-leading-6">

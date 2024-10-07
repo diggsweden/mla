@@ -50,7 +50,7 @@ function GeoFeature (props: Props) {
     return () => {
       poly?.removeFrom(map)
     }
-  }, [click, poly, map, geo])
+  }, [click, poly, map, geo, setSelectedGeoFeature, showContextMenu])
 
   return <></>
 }

@@ -48,6 +48,7 @@ function LinkCreator (props: Props) {
 
   useEffect(() => {
     onChange(link)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   let first = -1

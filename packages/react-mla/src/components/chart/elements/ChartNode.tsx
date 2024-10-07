@@ -49,7 +49,7 @@ function ChartNode (props: Props) {
 
   const view = useMemo(() => {
     return { ...viewService.getDefaultView(entity.TypeId, entity.GlobalType), ...selectedView }
-  }, [entity.TypeId, selectedView])
+  }, [entity, selectedView])
 
   const node = useMemo(() => {
     if (entity == null) {
@@ -84,6 +84,7 @@ function ChartNode (props: Props) {
         created.current = false
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <></>
