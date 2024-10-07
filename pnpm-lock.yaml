@@ -131,8 +131,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0
       '@eslint/js':
-        specifier: 9.11.1
-        version: 9.11.1
+        specifier: 9.12.0
+        version: 9.12.0
       '@repo/tailwind-config':
         specifier: workspace:*
         version: link:../config-tailwind
@@ -182,8 +182,8 @@ importers:
         specifier: 7.37.1
         version: 7.37.1(eslint@9.12.0(jiti@1.21.6))
       eslint-plugin-react-hooks:
-        specifier: 5.1.0-rc-1460d67c-20241003
-        version: 5.1.0-rc-1460d67c-20241003(eslint@9.12.0(jiti@1.21.6))
+        specifier: 5.1.0-rc-fb9a90fa48-20240614
+        version: 5.1.0-rc-fb9a90fa48-20240614(eslint@9.12.0(jiti@1.21.6))
       eslint-plugin-react-refresh:
         specifier: 0.4.12
         version: 0.4.12(eslint@9.12.0(jiti@1.21.6))
@@ -593,10 +593,6 @@ packages:
 
   '@eslint/eslintrc@3.1.0':
     resolution: {integrity: sha512-4Bfj15dVJdoy3RfZmmo86RK1Fwzn6SstsvK9JS+BaVKqC6QQQQyXekNaC+g+LKNgkQ+2VhGAzm6hO40AhMR3zQ==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@eslint/js@9.11.1':
-    resolution: {integrity: sha512-/qu+TWz8WwPWc7/HcIJKi+c+MOm46GdVaSlTTQcaqaL53+GsoA6MxWp5PtTx48qbSP7ylM1Kn7nhvkugfJvRSA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/js@9.12.0':
@@ -1367,8 +1363,8 @@ packages:
     peerDependencies:
       eslint: '>=8'
 
-  eslint-plugin-react-hooks@5.1.0-rc-1460d67c-20241003:
-    resolution: {integrity: sha512-6RB5ld4hvk8hDc0JNMyid5/+SQ0ZyRtmmZV2lSvnWAA0zLIANUpSf7QNb7gtPYVop4qSu79hJpBsDGwdtXluig==}
+  eslint-plugin-react-hooks@5.1.0-rc-fb9a90fa48-20240614:
+    resolution: {integrity: sha512-xsiRwaDNF5wWNC4ZHLut+x/YcAxksUd9Rizt7LaEn3bV8VyYRpXnRJQlLOfYaVy9esk4DFP4zPPnoNVjq5Gc0w==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -3009,8 +3005,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint/js@9.11.1': {}
-
   '@eslint/js@9.12.0': {}
 
   '@eslint/object-schema@2.1.4': {}
@@ -3977,7 +3971,7 @@ snapshots:
       esutils: 2.0.3
       string-similarity: 4.0.4
 
-  eslint-plugin-react-hooks@5.1.0-rc-1460d67c-20241003(eslint@9.12.0(jiti@1.21.6)):
+  eslint-plugin-react-hooks@5.1.0-rc-fb9a90fa48-20240614(eslint@9.12.0(jiti@1.21.6)):
     dependencies:
       eslint: 9.12.0(jiti@1.21.6)
 
