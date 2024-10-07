@@ -27,6 +27,12 @@
         "groupName": "dependencies (non-major)",
         "addLabels": ["dependencies"],
         "automerge": true
-      }            
+      },
+      {
+        "description": "Block typescript from upgrading until eslint supports 5.6",
+        "packageNames": ["typescript"],
+        "matchUpdateTypes": ["major", "minor"],
+        "enabled": false      
+      }
   ]  
 }

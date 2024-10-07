@@ -104,7 +104,7 @@ class ViewService {
   }
 
   public getDefaultView (TypeId: string, GlobalType?: string): IBaseViewConfiguration {
-    let defaultView = (
+    const defaultView = (
       this.defaultViewConfiguration[TypeId] ??
       global.Entities.find(x => x.GlobalType == GlobalType) ?? 
       global.Links.find(x => x.GlobalType == GlobalType)

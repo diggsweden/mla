@@ -18,7 +18,6 @@ function ExploreTool () {
 
   useEffect(() => {
     setSeeds(selection)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result])
 
   if (selectedTool == null) {
