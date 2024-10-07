@@ -51,5 +51,6 @@ export default [{
 
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-unused-expressions": 0,
+        ...reactHooks.configs.recommended.rules
     },
 }];
