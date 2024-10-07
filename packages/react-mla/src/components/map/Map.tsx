@@ -155,12 +155,14 @@ export default function Map(props: Props) {
 
     function getGeo (e: { shape: PM.SUPPORTED_SHAPES, layer: L.Layer }): IGeoFeatureBounds | undefined {
       switch (e.shape) {
-        case 'Circle': 
+        case 'Circle': {
           const circle = e.layer as L.Circle
           return { Id: (circle as any)._leaflet_id.toString(), Circle: { Position: { lat: circle.getLatLng().lat, lng: circle.getLatLng().lng }, Radius: circle.getRadius() } }
-        case 'Polygon': 
+        }
+        case 'Polygon': {
           const poly = e.layer as L.Polygon
           return { Id: (poly as any)._leaflet_id.toString(), Polygon: (poly.getLatLngs() as L.LatLng[]) }
+        }
       }
 
       return undefined

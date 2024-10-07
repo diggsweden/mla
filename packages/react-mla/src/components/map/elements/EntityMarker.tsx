@@ -66,7 +66,7 @@ function EntityMarker (props: Props) {
       }
     }
     return { from, last }
-  }, [entities, currentDate])
+  }, [positionedCb, currentDate])
 
   if (historymode) {
     const positioned = historyPositionedCb()

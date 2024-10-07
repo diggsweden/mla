@@ -39,8 +39,7 @@ function Property (props: Props) {
     if (validChanged) {
       validChanged(valid)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valid])
+  }, [valid, validChanged])
 
   useLayoutEffect(() => {
     const input = inputRef.current

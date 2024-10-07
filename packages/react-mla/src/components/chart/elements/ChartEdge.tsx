@@ -31,7 +31,7 @@ function ChartEdge (props: Props) {
 
   const view = useMemo(() => {
     return { ...viewService.getDefaultView(link.TypeId, link.GlobalType), ...selectedView }
-  }, [link.TypeId, selectedView])
+  }, [link, selectedView])
 
   const selected = useMemo(() => {
     if (link != null && from != null && to != null) {
