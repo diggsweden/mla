@@ -8,7 +8,6 @@ on: [workflow_call] # yamllint disable-line rule:truthy
 
 permissions:
   contents: read
-  security-events: write
 
 env:
   MEGALINTER_CONFIG: /github/workspace/build-tools/mega-linter.yml

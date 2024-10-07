@@ -22,10 +22,7 @@ on:
           - 'prerelease'        
 
 permissions:
-  actions: read
-  contents: write
-  id-token: write
-  pull-requests: write  
+  contents: read
 
 jobs:
   build:
@@ -35,6 +32,9 @@ jobs:
       changelog: ${{ steps.get-changelog.outputs.changelog }}
       version: ${{ steps.create-semver.outputs.version }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       # Checkout project repository
       - name: Checkout
@@ -53,13 +53,6 @@ jobs:
           node-version-file: ".nvmrc"
           cache: pnpm
           registry-url: https://registry.npmjs.org
-
-      # Import GPG key to use for signing
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
 
       # Bump package version
       # Use tag latest
