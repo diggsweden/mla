@@ -37,7 +37,7 @@ export default [{
         parser: tsParser,
     },
 
-    rules: {
+    rules: { 
         yoda: "warn",
         "autofix/no-debugger": "warn",
 
