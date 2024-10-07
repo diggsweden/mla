@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
