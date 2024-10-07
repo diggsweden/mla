@@ -22,11 +22,21 @@
         "automerge": true
       },
       {
+        "matchDepTypes": ["devDependencies"],
+        "matchUpdateTypes": ["major"],
+        "addLabels": ["dependencies"]
+      },
+      {
         "matchDepTypes": ["dependencies"],
         "matchUpdateTypes": ["patch", "minor"],
         "groupName": "dependencies (non-major)",
         "addLabels": ["dependencies"],
         "automerge": true
+      },
+      {
+        "matchDepTypes": ["dependencies"],
+        "matchUpdateTypes": ["major"],
+        "addLabels": ["dependencies"]
       },
       {
         "description": "Block typescript from upgrading until eslint supports 5.6",
