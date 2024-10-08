@@ -131,7 +131,7 @@ jobs:
           git add "package.json"
           git add "CHANGELOG.md"
           git commit -S -m "chore: release ${{ env.NEW_VERSION }}"
-          git tag ${{ env.NEW_VERSION }}
+          git tag ${{ env.NEW_VERSION }} -m "release ${{ env.NEW_VERSION }}"
           git push --set-upstream origin release/${{ env.NEW_VERSION }}
           git push && git push origin tag ${{ env.NEW_VERSION }}
         env:
