@@ -92,14 +92,12 @@ jobs:
           git_user_signingkey: true
           git_commit_gpgsign: true
           git_tag_gpgsign: true
-          git_push_gpgsign: true
 
       # Configure Git
       - name: Git configuration
         run: |
           git config --global user.email "169906257+Whiteflight@users.noreply.github.com"
           git config --global user.name "MLA Release Bot"
-          git remote set-url origin https://x-access-token:${{ secrets.RELEASE_GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
       # Create a new release branch
       - name: Create release branch
