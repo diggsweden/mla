@@ -28,6 +28,11 @@
       "matchPackageNames": ["typescript"],
       "matchUpdateTypes": ["major", "minor"],
       "enabled": false
-    }
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["slsa-framework/slsa-github-generator"],
+      "pinDigests": false
+    }    
   ]
 }
