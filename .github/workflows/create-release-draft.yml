@@ -94,6 +94,12 @@ jobs:
           git_tag_gpgsign: true
           git_push_gpgsign: true
 
+      # Configure Git
+      - name: Git configuration
+        run: |
+          git config --global user.email "169906257+Whiteflight@users.noreply.github.com"
+          git config --global user.name "MLA Release Bot"
+
       # Create a new release branch
       - name: Create release branch
         run: git checkout -b release/${{ env.NEW_VERSION }}
