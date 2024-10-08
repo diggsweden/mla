@@ -20,7 +20,7 @@ SPDX-License-Identifier: CC0-1.0
   [![GitHub last commit](https://img.shields.io/github/last-commit/diggsweden/mla?style=for-the-badge)](#)
   [![REUSE](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.reuse.software%2Fstatus%2Fgithub.com%2Fdiggsweden%2Fmla&query=status&style=for-the-badge&label=REUSE)](https://api.reuse.software/info/github.com/diggsweden/mla)
   [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/diggsweden/mla/badge?style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/diggsweden/mla)
-  [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9533/badge)](https://www.bestpractices.dev/projects/9533)
+  [![OpenSSF Best Practices](https://img.shields.io/cii/level/9533?style=for-the-badge&label=OPENSSF%20BEST%20PRACTICES)](https://www.bestpractices.dev/projects/9533)
 
 <p align="center">
 ⭐ Star us on GitHub — it motivates us a lot!
