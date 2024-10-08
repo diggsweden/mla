@@ -5,82 +5,27 @@
     ":gitSignOff",
     ":maintainLockFilesWeekly"
   ],
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "automerge": true
+  },  
   "packageRules": [
     {
-      "matchManagers": [
-        "github-actions"
-      ],
-      "addLabels": [
-        "actions"
-      ]
+      "matchManagers": ["github-actions"],
+      "addLabels": ["actions"]
     },
     {
-      "matchManagers": [
-        "npm"
-      ],
-      "addLabels": [
-        "npm"
-      ]
+      "matchManagers": ["npm"],
+      "addLabels": ["npm", "dependencies"]
     },
     {
-      "matchDepTypes": [
-        "devDependencies"
-      ],
-      "matchUpdateTypes": [
-        "patch",
-        "minor"
-      ],
-      "groupName": "dev Dependencies (non-major)",
-      "addLabels": [
-        "dependencies"
-      ],
-      "automerge": true
-    },
-    {
-      "matchDepTypes": [
-        "devDependencies"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "addLabels": [
-        "dependencies"
-      ]
-    },
-    {
-      "matchDepTypes": [
-        "dependencies"
-      ],
-      "matchUpdateTypes": [
-        "patch",
-        "minor"
-      ],
-      "groupName": "dependencies (non-major)",
-      "addLabels": [
-        "dependencies"
-      ],
-      "automerge": true
-    },
-    {
-      "matchDepTypes": [
-        "dependencies"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "addLabels": [
-        "dependencies"
-      ]
+      "matchDepTypes": ["devDependencies"],
+      "semanticCommitScope": "deps-dev"
     },
     {
       "description": "Block typescript from upgrading until eslint supports 5.6",
-      "matchPackageNames": [
-        "typescript"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor"
-      ],
+      "matchPackageNames": ["typescript"],
+      "matchUpdateTypes": ["major", "minor"],
       "enabled": false
     }
   ]
