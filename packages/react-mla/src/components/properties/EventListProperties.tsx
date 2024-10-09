@@ -5,7 +5,7 @@
 import { useState } from 'react'
 import type { IEventLink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
-import Property from '../common/property'
+import Property from '../common/Property'
 import Modal from '../common/Modal'
 import TableTool from '../tools/TableTool'
 import Icon from '../common/Icon'

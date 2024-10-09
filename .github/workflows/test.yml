@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 ---
-name: Build
+name: Test
 on: [workflow_call] # yamllint disable-line rule:truthy
 
 permissions:
@@ -35,9 +35,9 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile          
+      - name: Install Playwright Browsers
+        run: pnpm test:install
 
-      # Build
-      - name: Build
-        run: |
-          pnpm run -r build
-          
+      # Tests
+      - name: Run tests
+        run: pnpm test

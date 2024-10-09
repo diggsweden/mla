@@ -5,7 +5,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import useSearchStore from '../../store/search-state'
 import ItemResultList from '../result/ItemResultList'
-import Property from '../common/property'
+import Property from '../common/Property'
 import Button from '../common/Button'
 import { useTranslation } from 'react-i18next'
 
