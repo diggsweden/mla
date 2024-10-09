@@ -32,3 +32,5 @@ jobs:
     uses: ./.github/workflows/lintpubliccode.yml
   build:
     uses: ./.github/workflows/build.yml
+  test:
+    uses: ./.github/workflows/test.yml
