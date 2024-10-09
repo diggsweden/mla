@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "types": ["@vitest/browser/providers/playwright", "@testing-library/react"]
+}

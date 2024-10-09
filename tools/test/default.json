@@ -1,0 +1,580 @@
+{
+    "Version": "0.1",
+    "Language": "en",
+    "Theme": {
+        "Primary": "rgb(68, 105, 149)",
+        "CustomIconColorPicklist": [
+            {
+                "Name": "Färg 1",
+                "Color": "#D53302"
+            },
+            {
+                "Name": "Färg 2",
+                "Color": "#FCC560"
+            },
+            {
+                "Name": "Färg 3",
+                "Color": "#A0CBAD"
+            },
+            {
+                "Name": "Färg 4",
+                "Color": "#8FB1BE"
+            },
+            {
+                "Name": "Färg 5",
+                "Color": "#0C012A"
+            }
+        ],
+        "CustomContourColorPicklist": [
+            {
+                "Name": "Färg 1",
+                "Color": "#cc3300"
+            },
+            {
+                "Name": "Färg 2",
+                "Color": "#ff9966"
+            },
+            {
+                "Name": "Färg 3",
+                "Color": "#ffcc00"
+            },
+            {
+                "Name": "Färg 4",
+                "Color": "#99cc33"
+            },
+            {
+                "Name": "Färg 5",
+                "Color": "#339900"
+            }
+        ]
+    },
+    "Menu": {
+        "Start": {},
+        "Archive": {
+            "Import": true
+        }
+    },
+    "Display": [
+        {
+            "Id": "default",
+            "Name": "Standardvy",
+            "Rules": [
+                {
+                    "TypeId": "person",
+                    "PropertyTypeId": "personE5",
+                    "Equals": "M",
+                    "Icon": "man",
+                    "Color": "#542246"
+                },
+                {
+                    "TypeId": "person",
+                    "PropertyTypeId": "personE5",
+                    "Equals": "I",
+                    "Icon": "boy",
+                    "Color": "#542246"
+                },
+                {
+                    "TypeId": "person",
+                    "PropertyTypeId": "personE5",
+                    "Equals": "K",
+                    "Icon": "woman",
+                    "Color": "#542246"
+                },
+                {
+                    "TypeId": "person",
+                    "PropertyTypeId": "personE6",
+                    "Equals": "falsk identitet",
+                    "Icon": "supervisor_account",
+                    "Color": "#ff1414"
+                },
+                {
+                    "TypeId": "person",
+                    "PropertyTypeId": "personE6",
+                    "Equals": "avliden",
+                    "Icon": "person_off",
+                    "Color": "#807d7d"
+                }
+            ],
+            "Show": [
+                {
+                    "TypeId": "person",
+                    "Icon": "person_fill",
+                    "Color": "#54b946",
+                    "LabelLong": "{personE1}\n{personE2} {personE3}",
+                    "LabelShort": "{personE2} {personE3}"
+                },
+                {
+                    "TypeId": "organisation",
+                    "Icon": "outlined_apartment",
+                    "Color": "#58cee8",
+                    "LabelLong": "{organisationE1}\n{organisationE2}",
+                    "LabelShort": "{organisationE2}"
+                },
+                {
+                    "TypeId": "fordon",
+                    "Icon": "directions_car_fill",
+                    "Color": "#d41919",
+                    "LabelLong": "{fordonE2}\n{fordonE1}",
+                    "LabelShort": "{fordonE2} {fordonE1}"
+                },
+                {
+                    "TypeId": "adress",
+                    "Icon": "outlined_map",
+                    "LabelLong": "{adressE1}\n{adressE3} {adressE3}",
+                    "LabelShort": "{adressE1}, {adressE4}"
+                },
+                {
+                    "TypeId": "konto",
+                    "Icon": "account_balance",
+                    "LabelLong": "{kontoE1}\n{kontoE2}",
+                    "LabelShort": "{kontoE1}, {kontoE2}"
+                },
+                {
+                    "TypeId": "handelse",
+                    "Icon": "calendar_month",
+                    "LabelLong": "{handelseE1}",
+                    "LabelShort": "{handelseE2}",
+                    "LabelChart": "{handelseE1}\n{DateFrom}"
+                },
+                {
+                    "TypeId": "LT1",
+                    "LabelLong": "{LT1E1}",
+                    "LabelShort": "{LT1E1}"
+                },
+                {
+                    "TypeId": "LT3",
+                    "LabelLong": "{LT3E1}",
+                    "LabelShort": "{LT3E1}"
+                },
+                {
+                    "TypeId": "LT4",
+                    "LabelLong": "{LT4E1}",
+                    "LabelShort": "{LT4E1}"
+                },
+                {
+                    "TypeId": "LT6",
+                    "LabelLong": "{LT6E1}",
+                    "LabelShort": "{LT6E1}"
+                },
+                {
+                    "TypeId": "relation",
+                    "LabelLong": "{relationslank}",
+                    "LabelShort": "{relationslank}"
+                },
+                {
+                    "TypeId": "EV1G1",
+                    "LabelLong": "{EV1GP1} kronor",
+                    "LabelShort": "{EV1GP1} kr",
+                    "Color": "#4169e1"
+                },
+                {
+                    "TypeId": "EV1G2",
+                    "LabelLong": "{EV1GP21} kronor",
+                    "LabelShort": "{EV1GP21} kr",
+                    "Color": "#4169e1",
+                    "Show": false
+                }
+            ]
+        }
+    ],
+    "MapConfiguration": {
+        "MapLayers": [
+            {
+                "Url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                "Attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+                "Name": "Open Streetmap"
+            },
+            {
+                "Url": "http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}",
+                "MaxZoom": 20,
+                "SubDomains":["mt0","mt1","mt2","mt3"],
+                "Name": "Gooogle Satellite"
+            },
+            {
+                "Url": "http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}",
+                "MaxZoom": 20,
+                "SubDomains":["mt0","mt1","mt2","mt3"],
+                "Name": "Gooogle Streets"
+            }
+        ]
+    },
+    "TimeAnalysis": {
+        "PhaseAnalysis": {
+            "EntityTypeId": "handelse",
+            "LinkTypeId": "LT6",
+            "LinkPropertyId": "LT6E1"
+        }
+    },
+    "Domain": {
+        "EntityTypes": [
+            {
+                "TypeId": "person",
+                "Name": "Person",
+                "Description": "En fysisk person",
+                "GlobalType": "person",
+                "MatchRules": [
+                    {
+                        "PropertyTypeId": "personE1",
+                        "Regex": "(\\d+)[-]?(\\d+)"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "personE1",
+                        "GlobalType": "identification",
+                        "Name": "Person-/samordningsnummer",
+                        "Description": "Personnummret i 12 siffror",
+                        "FieldType": "String",
+                        "FieldValidation": "[0-9]+"
+                    },
+                    {
+                        "TypeId": "personE5",
+                        "Name": "Kön",
+                        "Description": "Personens kön",
+                        "FieldType": "Select",
+                        "FieldOptions": [
+                            {
+                                "Value": "M",
+                                "Name": "Man"
+                            },
+                            {
+                                "Value": "K",
+                                "Name": "Kvinna"
+                            },
+                            {
+                                "Value": "0",
+                                "Name": "Okänt"
+                            }
+                        ]
+                    },
+                    {
+                        "TypeId": "personE2",
+                        "Name": "Förnamn",
+                        "GlobalType": "first_name",
+                        "Description": "Personens förnamn",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "personE3",
+                        "Name": "Efternamn",
+                        "Description": "Personens efternamn",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "personE4",
+                        "Name": "Födelsedatum",
+                        "Description": "År månad dag när personed föddes",
+                        "FieldType": "Date"
+                    },
+                    {
+                        "TypeId": "personE6",
+                        "Name": "Status",
+                        "Description": "Personens ID status",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "organisation",
+                "Name": "Bolag",
+                "Description": "Ett aktiebolag, kommanditbolag eller annan form av juridisk person",
+                "MatchRules": [
+                    {
+                        "PropertyTypeId": "organisationE1",
+                        "Regex": "(?:16)?(\\d+)[-]?(\\d+)"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "organisationE1",
+                        "Name": "Organisationsnummer",
+                        "Description": "Bolagets organisationsnummer",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "organisationE2",
+                        "Name": "Namn",
+                        "Description": "Bolagets juridiska namn",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "fordon",
+                "Name": "Bil",
+                "Description": "",
+                "LabelLong": "{fordonE2}\n{fordonE1}",
+                "LabelShort": "{fordonE2} {fordonE1}",
+                "Properties": [
+                    {
+                        "TypeId": "fordonE1",
+                        "Name": "Bilmärke",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "fordonE2",
+                        "Name": "Registreringsnummer",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "fordonE3",
+                        "Name": "Färg",
+                        "Description": "",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "adress",
+                "Name": "Adress",
+                "Description": "En fysisk plats",
+                "Properties": [
+                    {
+                        "TypeId": "adressE1",
+                        "Name": "Gatuadress",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "adressE2",
+                        "Name": "c/o",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "adressE3",
+                        "Name": "Postnummer",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "adressE4",
+                        "Name": "Ort",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "adressE5",
+                        "Name": "Land",
+                        "Description": "",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "konto",
+                "Name": "Konto",
+                "Description": "Bankkonto eller värdefack",
+                "Properties": [
+                    {
+                        "TypeId": "kontoE1",
+                        "Name": "Kontonummer",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "kontoE2",
+                        "Name": "Kontotyp",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "kontoE3",
+                        "Name": "Land",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "kontoE4",
+                        "Name": "Bank",
+                        "Description": "Banken som äger kontot",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "handelse",
+                "Name": "Händelse",
+                "Description": "Något som har inträffat",
+                "Properties": [
+                    {
+                        "TypeId": "handelseE1",
+                        "Name": "Rubrik",
+                        "Description": "",
+                        "FieldType": "String"
+                    },
+                    {
+                        "TypeId": "handelseE2",
+                        "Name": "Beskrivning",
+                        "Description": "",
+                        "FieldType": "String"
+                    }
+                ]
+            }
+        ],
+        "LinkTypes": [
+            {
+                "TypeId": "LT1",
+                "Name": "Engagemang",
+                "Description": "Beskriver relationen mellan en person och ett bolag",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "person",
+                        "ToEntityTypeId": "organisation"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT1E1",
+                        "Name": "Engagemangstyp",
+                        "Description": "Description av den relation personen har till bolaget, text styrelseledarmot",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "LT3",
+                "Name": "Adressrelation",
+                "Description": "Beskriver relationen mellan en adress och ett bolag/person",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "adress",
+                        "ToEntityTypeId": "person"
+                    },
+                    {
+                        "FromEntityTypeId": "adress",
+                        "ToEntityTypeId": "organisation"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT3E1",
+                        "Name": "Typ",
+                        "Description": "Beskriver typen av relation",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "LT4",
+                "Name": "Ägs/nyttjas av",
+                "Description": "Beskriver hur en person/bolag äger eller nyttjar en resurs",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "fordon",
+                        "ToEntityTypeId": "person"
+                    },
+                    {
+                        "FromEntityTypeId": "konto",
+                        "ToEntityTypeId": "person"
+                    },
+                    {
+                        "FromEntityTypeId": "konto",
+                        "ToEntityTypeId": "organisation"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT4E1",
+                        "Name": "Typ",
+                        "Description": "Beskriver typen av förhållande",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "LT6",
+                "Name": "Händelserelation",
+                "Description": "Beskriver relationen mellan en händelse och entiteter",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "handelse",
+                        "ToEntityTypeId": "person"
+                    },
+                    {
+                        "FromEntityTypeId": "handelse",
+                        "ToEntityTypeId": "organisation"
+                    },
+                    {
+                        "FromEntityTypeId": "handelse",
+                        "ToEntityTypeId": "fordon"
+                    },
+                    {
+                        "FromEntityTypeId": "handelse",
+                        "ToEntityTypeId": "adress"
+                    },
+                    {
+                        "FromEntityTypeId": "handelse",
+                        "ToEntityTypeId": "konto"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "LT6E1",
+                        "Name": "Roll",
+                        "Description": "Beskriver vilken roll relationen har",
+                        "FieldType": "String"
+                    }
+                ]
+            },
+            {
+                "TypeId": "relation",
+                "Name": "Relation",
+                "Description": "En generell relation som kan används för att länka samman alla olika entitetstyper",
+                "AllowedRelations": [
+                    {
+                        "FromEntityTypeId": "*",
+                        "ToEntityTypeId": "*"
+                    }
+                ],
+                "Properties": [
+                    {
+                        "TypeId": "relationslank",
+                        "Name": "Relation",
+                        "Description": "Beskriver relationen",
+                        "FieldType": "String"
+                    }
+                ]
+            }
+        ]
+    },
+    "Workflows": [
+    ],
+    "Integrations": {
+        "Search": [
+            {
+                "Id": "ST1",
+                "Name": "Sök person",
+                "Description": "En tjänst för att söka efter en person med personnummer eller andra parametrar",
+                "Icon": "outlined_person_search",
+                "Url": "https://fakeurl.testsystem.se/SokPerson",
+                "Parameters": {
+                    "Form": {
+                        "Fields": [
+                            {
+                                "TypeId": "ST1E1",
+                                "Name": "Personnummer",
+                                "FieldValidation": "[0-9]+",
+                                "FieldType": "String"
+                            },
+                            {
+                                "TypeId": "ST1E2",
+                                "Name": "Adress",
+                                "FieldType": "String"
+                            },
+                            {
+                                "TypeId": "ST1E4",
+                                "Name": "Födelsedatum",
+                                "FieldType": "Date"
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "Import": [
+        ]
+    }
+}

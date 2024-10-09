@@ -147,7 +147,7 @@ function Property (props: Props) {
   return (
     <div className={className}>
       {config.FieldType !== 'Boolean' &&
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={config.Description}>{config.Name ?? config.GlobalType}</span>
+        <label htmlFor={key} className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={config.Description}>{config.Name ?? config.GlobalType}</label>
       }
       {getInput()}
     </div>

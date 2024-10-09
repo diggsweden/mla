@@ -2,11 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { MLA } from './MLA'
 
-import * as config from '../../../apps/web/public/config/default.json'
+import * as config from '../../../tools/test/default.json'
 
 createRoot(document.getElementById('root')!).render(
-  <MLA config={JSON.stringify(config)} />
+  <React.StrictMode>
+    <MLA config={JSON.stringify(config)} />
+  </React.StrictMode>
 )

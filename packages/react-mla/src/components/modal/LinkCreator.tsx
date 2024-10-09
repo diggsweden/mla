@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { type ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
-import Property from '../common/property'
+import Property from '../common/Property'
 import { produce } from 'immer'
 import { IPropertyConfiguration } from '../../interfaces/configuration'
 
