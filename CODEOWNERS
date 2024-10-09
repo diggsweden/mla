@@ -3,4 +3,6 @@
 # SPDX-License-Identifier: CC0-1.0
 
 # Current maintainers.
-*       @Racemovie  @Whiteflight
+*                   @Racemovie @Whiteflight
+package.json        app/renovate-approve
+pnpm-lock.yaml      app/renovate-approve
