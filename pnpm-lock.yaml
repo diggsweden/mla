@@ -60,8 +60,8 @@ importers:
         specifier: 18.3.11
         version: 18.3.11
       '@types/react-dom':
-        specifier: 18.3.0
-        version: 18.3.0
+        specifier: 18.3.1
+        version: 18.3.1
       '@types/wicg-file-system-access':
         specifier: 2023.10.5
         version: 2023.10.5
@@ -167,7 +167,7 @@ importers:
         version: link:../config-typescript
       '@testing-library/react':
         specifier: 16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/leaflet':
         specifier: 1.9.12
         version: 1.9.12
@@ -184,8 +184,8 @@ importers:
         specifier: 18.3.11
         version: 18.3.11
       '@types/react-dom':
-        specifier: 18.3.0
-        version: 18.3.0
+        specifier: 18.3.1
+        version: 18.3.1
       '@types/wicg-file-system-access':
         specifier: 2023.10.5
         version: 2023.10.5
@@ -254,7 +254,7 @@ importers:
         version: 2.1.2(@types/node@20.16.11)(@vitest/browser@2.1.2)(msw@2.4.10(typescript@5.5.4))(sass-embedded@1.79.4)
       vitest-browser-react:
         specifier: 0.0.1
-        version: 0.0.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2)
+        version: 0.0.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2)
     publishDirectory: dist
 
   packages/webcomponent-mla:
@@ -282,8 +282,8 @@ importers:
         specifier: 18.3.11
         version: 18.3.11
       '@types/react-dom':
-        specifier: 18.3.0
-        version: 18.3.0
+        specifier: 18.3.1
+        version: 18.3.1
       '@types/wicg-file-system-access':
         specifier: 2023.10.5
         version: 2023.10.5
@@ -1127,8 +1127,8 @@ packages:
   '@types/prop-types@15.7.13':
     resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
 
-  '@types/react-dom@18.3.0':
-    resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
+  '@types/react-dom@18.3.1':
+    resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
 
   '@types/react@18.3.11':
     resolution: {integrity: sha512-r6QZ069rFTjrEYgFdOck1gK7FLVsgJE7tTz0pQBczlBNUhBNk0MQH4UbnFSwjpQLMkLzgqvBBa+qGpLje16eTQ==}
@@ -4556,7 +4556,7 @@ snapshots:
       lz-string: 1.5.0
       pretty-format: 27.5.1
 
-  '@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.25.7
       '@testing-library/dom': 10.4.0
@@ -4564,7 +4564,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.11
-      '@types/react-dom': 18.3.0
+      '@types/react-dom': 18.3.1
 
   '@testing-library/user-event@14.5.2(@testing-library/dom@10.4.0)':
     dependencies:
@@ -4736,7 +4736,7 @@ snapshots:
 
   '@types/prop-types@15.7.13': {}
 
-  '@types/react-dom@18.3.0':
+  '@types/react-dom@18.3.1':
     dependencies:
       '@types/react': 18.3.11
 
@@ -7507,7 +7507,7 @@ snapshots:
       fsevents: 2.3.3
       sass-embedded: 1.79.4
 
-  vitest-browser-react@0.0.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2):
+  vitest-browser-react@0.0.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2):
     dependencies:
       '@vitest/browser': 2.1.2(@vitest/spy@2.1.2)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.8(@types/node@20.16.11)(sass-embedded@1.79.4))(vitest@2.1.2)
       react: 18.3.1
@@ -7515,7 +7515,7 @@ snapshots:
       vitest: 2.1.2(@types/node@20.16.11)(@vitest/browser@2.1.2)(msw@2.4.10(typescript@5.5.4))(sass-embedded@1.79.4)
     optionalDependencies:
       '@types/react': 18.3.11
-      '@types/react-dom': 18.3.0
+      '@types/react-dom': 18.3.1
 
   vitest@2.1.2(@types/node@20.16.11)(@vitest/browser@2.1.2)(msw@2.4.10(typescript@5.5.4))(sass-embedded@1.79.4):
     dependencies:
