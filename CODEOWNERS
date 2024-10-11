@@ -4,6 +4,6 @@
 
 # Current maintainers.
 *                   @Racemovie @Whiteflight
-package.json        app/renovate-approve @Racemovie @Whiteflight
-package-lock.json   app/renovate-approve @Racemovie @Whiteflight
-pnpm-lock.yaml      app/renovate-approve @Racemovie @Whiteflight
+package.json
+package-lock.json
+pnpm-lock.yaml
