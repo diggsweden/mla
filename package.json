@@ -9,7 +9,7 @@
     "test:install": "pnpm -r test:install",
     "build:packages": "pnpm --filter ./packages/* build",
     "lint": "pnpm --filter ./packages/react-mla run lint",
-    "commit": "cz commit -- -s"
+    "commit": "git-cz --signoff"
   },
   "validate-branch-name": {
     "pattern": "^(feat|fix|hotfix|release|test|experimental)/.+$",
