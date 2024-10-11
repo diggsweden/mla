@@ -8,6 +8,7 @@
   ],
   "vulnerabilityAlerts": {
     "labels": ["security"],
+    "enabled": true,
     "automerge": true
   },  
   "packageRules": [
