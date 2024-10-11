@@ -7,6 +7,7 @@ settings:
 overrides:
   micromatch: ^4.0.8
   rollup@>=4.0.0 <4.22.4: '>=4.22.4'
+  cookie@<0.7.0: '>=0.7.0'
 
 importers:
 
@@ -180,7 +181,7 @@ importers:
         version: 2.1.2(@vitest/spy@2.1.2)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.8(@types/node@20.16.11)(sass-embedded@1.79.4))(vitest@2.1.2)
       '@vitest/coverage-v8':
         specifier: 2.1.2
-        version: 2.1.2(@vitest/browser@2.1.2)(vitest@2.1.2)
+        version: 2.1.2(@vitest/browser@2.1.2(@vitest/spy@2.1.2)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.8(@types/node@20.16.11)(sass-embedded@1.79.4))(vitest@2.1.2))(vitest@2.1.2(@types/node@20.16.11)(@vitest/browser@2.1.2)(msw@2.4.10(typescript@5.5.4))(sass-embedded@1.79.4))
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.47)
@@ -231,7 +232,7 @@ importers:
         version: 2.1.2(@types/node@20.16.11)(@vitest/browser@2.1.2)(msw@2.4.10(typescript@5.5.4))(sass-embedded@1.79.4)
       vitest-browser-react:
         specifier: 0.0.1
-        version: 0.0.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2)
+        version: 0.0.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(@vitest/browser@2.1.2(@vitest/spy@2.1.2)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.8(@types/node@20.16.11)(sass-embedded@1.79.4))(vitest@2.1.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2(@types/node@20.16.11)(@vitest/browser@2.1.2)(msw@2.4.10(typescript@5.5.4))(sass-embedded@1.79.4))
     publishDirectory: dist
 
   packages/webcomponent-mla:
@@ -1431,9 +1432,9 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  cookie@0.5.0:
-    resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
-    engines: {node: '>= 0.6'}
+  cookie@1.0.0:
+    resolution: {integrity: sha512-bsSztFoaR8bw9MlFCrTHzc1wOKCUKOBsbgFdoDilZDkETAOOjKSqV7L+EQLbTaylwvZasd9vM4MGKotJaUfSpA==}
+    engines: {node: '>=18'}
 
   cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -3376,7 +3377,7 @@ snapshots:
 
   '@bundled-es-modules/cookie@2.0.0':
     dependencies:
-      cookie: 0.5.0
+      cookie: 1.0.0
 
   '@bundled-es-modules/statuses@1.0.1':
     dependencies:
@@ -4093,7 +4094,7 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@2.1.2(@vitest/browser@2.1.2)(vitest@2.1.2)':
+  '@vitest/coverage-v8@2.1.2(@vitest/browser@2.1.2(@vitest/spy@2.1.2)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.8(@types/node@20.16.11)(sass-embedded@1.79.4))(vitest@2.1.2))(vitest@2.1.2(@types/node@20.16.11)(@vitest/browser@2.1.2)(msw@2.4.10(typescript@5.5.4))(sass-embedded@1.79.4))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -4460,7 +4461,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  cookie@0.5.0: {}
+  cookie@1.0.0: {}
 
   cross-spawn@7.0.3:
     dependencies:
@@ -6181,7 +6182,7 @@ snapshots:
       fsevents: 2.3.3
       sass-embedded: 1.79.4
 
-  vitest-browser-react@0.0.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(@vitest/browser@2.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2):
+  vitest-browser-react@0.0.1(@types/react-dom@18.3.0)(@types/react@18.3.11)(@vitest/browser@2.1.2(@vitest/spy@2.1.2)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.8(@types/node@20.16.11)(sass-embedded@1.79.4))(vitest@2.1.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.2(@types/node@20.16.11)(@vitest/browser@2.1.2)(msw@2.4.10(typescript@5.5.4))(sass-embedded@1.79.4)):
     dependencies:
       '@vitest/browser': 2.1.2(@vitest/spy@2.1.2)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.8(@types/node@20.16.11)(sass-embedded@1.79.4))(vitest@2.1.2)
       react: 18.3.1
