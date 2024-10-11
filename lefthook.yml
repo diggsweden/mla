@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: '*.{js,ts,jsx,tsx}' # glob filter for list of files
+      run: pnpm lint
+pre-push:
+  parallel: true
+  commands:
+    branchName:
+      run: pnpm exec validate-branch-name
+    packages-audit:
+      tags: frontend security
+      run: pnpm audit
+commit-msg:
+  parallel: true
+  scripts:
+    "commitlint.sh":
+      runner: bash
