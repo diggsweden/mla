@@ -30,7 +30,7 @@ i18n
     en: { translation: en },
     sv: { translation: sv }
   },
-  fallbackLng: "sv",
+  fallbackLng: "en",
   interpolation: {
     escapeValue: false // react already safes from xss
   }

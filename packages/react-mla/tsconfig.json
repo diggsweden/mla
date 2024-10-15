@@ -1,5 +1,7 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "include": ["index.ts", "src"],
-  "exclude": ["dist", "node_modules", "**/*.test.ts", "**/*.test.tsx"]
+  "compilerOptions": {
+    "types": ["@vitest/browser/providers/playwright"],
+  }
 }

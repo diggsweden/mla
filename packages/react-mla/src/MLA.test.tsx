@@ -12,7 +12,7 @@ import React from 'react'
 test("should render", async () => {
     render(<MLA config={JSON.stringify(config)} />)
 
-    const loader = page.getByText("Mönster Länk Analys startar...")
+    const loader = page.getByText("Multi Link Analysis is starting...")
     await expect.element(loader).toBeInTheDocument()
 })
 

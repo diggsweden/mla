@@ -50,7 +50,7 @@
     "test": "vitest run --browser.headless --browser.name=chromium --browser.provider=playwright --reporter=dot",
     "test:coverage": "vitest run --browser.headless --browser.name=chromium --browser.provider=playwright --coverage",
     "test:install": "pnpm exec playwright install chromium",
-    "test:browser": "vitest --workspace=vitest.workspace.ts"
+    "test:browser": "vitest"
   },
   "devDependencies": {
     "@eslint/compat": "1.2.0",
@@ -59,6 +59,7 @@
     "@playwright/test": "1.48.0",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "16.0.1",
     "@types/leaflet": "1.9.12",
     "@types/luxon": "3.4.2",
