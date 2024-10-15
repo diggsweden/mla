@@ -69,8 +69,8 @@ importers:
         specifier: 4.3.2
         version: 4.3.2(vite@5.4.9(@types/node@22.7.5)(sass-embedded@1.79.5))
       tailwindcss:
-        specifier: 3.4.13
-        version: 3.4.13
+        specifier: 3.4.14
+        version: 3.4.14
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -87,11 +87,11 @@ importers:
         specifier: workspace:*
         version: link:../config-typescript
       tailwindcss:
-        specifier: 3.4.13
-        version: 3.4.13
+        specifier: 3.4.14
+        version: 3.4.14
       tailwindcss-animate:
         specifier: 1.0.7
-        version: 1.0.7(tailwindcss@3.4.13)
+        version: 1.0.7(tailwindcss@3.4.14)
 
   packages/config-typescript:
     devDependencies:
@@ -138,8 +138,8 @@ importers:
         specifier: ^15.0.1
         version: 15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwindcss:
-        specifier: 3.4.13
-        version: 3.4.13
+        specifier: 3.4.14
+        version: 3.4.14
       vis-data:
         specifier: ^7.1.9
         version: 7.1.9(uuid@8.3.2)(vis-util@5.0.7(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1))
@@ -206,7 +206,7 @@ importers:
         version: 2.1.3(@vitest/spy@2.1.3)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.9(@types/node@20.16.11)(sass-embedded@1.79.5))(vitest@2.1.3)
       '@vitest/coverage-v8':
         specifier: 2.1.3
-        version: 2.1.3(@vitest/browser@2.1.3(@vitest/spy@2.1.3)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.9(@types/node@20.16.11)(sass-embedded@1.79.5))(vitest@2.1.3))(vitest@2.1.3(@types/node@20.16.11)(@vitest/browser@2.1.3)(msw@2.4.11(typescript@5.5.4))(sass-embedded@1.79.5))
+        version: 2.1.3(@vitest/browser@2.1.3)(vitest@2.1.3)
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.47)
@@ -257,7 +257,7 @@ importers:
         version: 2.1.3(@types/node@20.16.11)(@vitest/browser@2.1.3)(msw@2.4.11(typescript@5.5.4))(sass-embedded@1.79.5)
       vitest-browser-react:
         specifier: 0.0.1
-        version: 0.0.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(@vitest/browser@2.1.3(@vitest/spy@2.1.3)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.9(@types/node@20.16.11)(sass-embedded@1.79.5))(vitest@2.1.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.3(@types/node@20.16.11)(@vitest/browser@2.1.3)(msw@2.4.11(typescript@5.5.4))(sass-embedded@1.79.5))
+        version: 0.0.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(@vitest/browser@2.1.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.3)
     publishDirectory: dist
 
   packages/webcomponent-mla:
@@ -297,8 +297,8 @@ importers:
         specifier: 1.79.5
         version: 1.79.5
       tailwindcss:
-        specifier: 3.4.13
-        version: 3.4.13
+        specifier: 3.4.14
+        version: 3.4.14
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -3439,8 +3439,8 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
 
-  tailwindcss@3.4.13:
-    resolution: {integrity: sha512-KqjHOJKogOUt5Bs752ykCeiwvi0fKVkr5oqsFNt/8px/tA8scFPIlkygsf6jXrfCqGHz7VflA6+yytWuM+XhFw==}
+  tailwindcss@3.4.14:
+    resolution: {integrity: sha512-IcSvOcTRcUtQQ7ILQL5quRDg7Xs93PdJEk1ZLbhhvJc7uj/OAhYOnruEiwnGgBvUtaUAJ8/mhSw1o8L2jCiENA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -4915,7 +4915,7 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@2.1.3(@vitest/browser@2.1.3(@vitest/spy@2.1.3)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.9(@types/node@20.16.11)(sass-embedded@1.79.5))(vitest@2.1.3))(vitest@2.1.3(@types/node@20.16.11)(@vitest/browser@2.1.3)(msw@2.4.11(typescript@5.5.4))(sass-embedded@1.79.5))':
+  '@vitest/coverage-v8@2.1.3(@vitest/browser@2.1.3)(vitest@2.1.3)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -7254,11 +7254,11 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  tailwindcss-animate@1.0.7(tailwindcss@3.4.13):
+  tailwindcss-animate@1.0.7(tailwindcss@3.4.14):
     dependencies:
-      tailwindcss: 3.4.13
+      tailwindcss: 3.4.14
 
-  tailwindcss@3.4.13:
+  tailwindcss@3.4.14:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -7555,7 +7555,7 @@ snapshots:
       fsevents: 2.3.3
       sass-embedded: 1.79.5
 
-  vitest-browser-react@0.0.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(@vitest/browser@2.1.3(@vitest/spy@2.1.3)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.9(@types/node@20.16.11)(sass-embedded@1.79.5))(vitest@2.1.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.3(@types/node@20.16.11)(@vitest/browser@2.1.3)(msw@2.4.11(typescript@5.5.4))(sass-embedded@1.79.5)):
+  vitest-browser-react@0.0.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(@vitest/browser@2.1.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.3):
     dependencies:
       '@vitest/browser': 2.1.3(@vitest/spy@2.1.3)(playwright@1.48.0)(typescript@5.5.4)(vite@5.4.9(@types/node@20.16.11)(sass-embedded@1.79.5))(vitest@2.1.3)
       react: 18.3.1
