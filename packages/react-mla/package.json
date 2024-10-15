@@ -33,6 +33,7 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.0.1",
+    "tailwindcss": "3.4.13",
     "vis-data": "^7.1.9",
     "vis-network": "^9.1.9",
     "zustand": "^5.0.0"
