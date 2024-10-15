@@ -9,7 +9,7 @@ import Icon from './Icon'
 
 function Footer () {
   const { t } = useTranslation()
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
   const dirty = useMainStore((state) => state.dirty)
   const network = useMainStore((state) => state.network)
 

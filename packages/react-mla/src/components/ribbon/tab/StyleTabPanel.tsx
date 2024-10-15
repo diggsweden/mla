@@ -17,8 +17,8 @@ function StyleTabPanel () {
   const { t } = useTranslation();
   const config = viewService.getTheme()
   const selection = useMainStore((state) => state.selectedIds)
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
-  const selectedLinks = useMainStore((state) => state.selectedLinks())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
+  const selectedLinks = useMainStore((state) => state.selectedLinks)
 
   const updateEntity = useMainStore((state) => state.updateEntity)
   const updateLink = useMainStore((state) => state.updateLink)

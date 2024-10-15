@@ -29,6 +29,17 @@ function hasDifferentLabel(b1: IChartBase, b2: IChartBase) {
   return b1.LabelShort !== b2.LabelShort || b1.LabelLong !== b2.LabelLong || b1.LabelChart !== b2.LabelChart
 }
 
+export const updateSelected = (selectedIds?: string[]) => {
+  useMainStore.setState(state => {
+    const ids = selectedIds ?? state.selectedIds
+    return {
+      selectedIds:ids,
+      selectedEntities: (ids).map(id => state.getCurrentEntity(id)).filter(e => e !== undefined) as IEntity[],
+      selectedLinks: ids.map(id => state.getCurrentLink(id)).filter(l => l !== undefined) as ILink[],
+    }
+  })
+}
+
 export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILink[], setSelected = false) => {
   const updateEntities: IEntity[] = []
   const updateLinks: ILink[] = []
@@ -186,6 +197,8 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
     })
   })
 
+  updateSelected();
+
   if (addHistory) {
     console.debug('[history-add]', useMainStore.getState().history)
   }
@@ -276,6 +289,8 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
     })
   })
 
+  updateSelected();
+
   if (addHistory) {
     console.debug('[history-update]', useMainStore.getState().history)
   }
@@ -356,6 +371,8 @@ export const internalRemove = (addHistory: boolean, entities: IEntity[], links: 
       }
     })
   })
+
+  updateSelected();
 
   if (addHistory) {
     console.debug('[history-remove]', useMainStore.getState().history)

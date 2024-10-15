@@ -26,8 +26,8 @@ export default function ContextMenu (props: Props) {
 
   const geoFeature = useAppStore((state) => state.selectedGeoFeature)
 
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
-  const selectedLinks = useMainStore((state) => state.selectedLinks())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
+  const selectedLinks = useMainStore((state) => state.selectedLinks)
   const entities = useMainStore((state) => state.entities)
   const setSelected = useMainStore((state) => state.setSelected)
   const setExploreTool = useSearchStore((state) => state.setExploreTool)

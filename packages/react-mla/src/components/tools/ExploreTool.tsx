@@ -9,7 +9,7 @@ import useSearchStore from '../../store/search-state'
 import ItemResultList from '../result/ItemResultList'
 
 function ExploreTool () {
-  const selection = useMainStore(state => state.selectedEntities)()
+  const selection = useMainStore(state => state.selectedEntities)
   const [seeds, setSeeds] = useState([] as IEntity[])
 
   const selectedTool = useSearchStore((state) => state.exploreTool)
