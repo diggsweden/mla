@@ -2,6 +2,6 @@
   "extends": "@repo/typescript-config/base.json",
   "include": ["index.ts", "src"],
   "compilerOptions": {
-    "types": ["@vitest/browser/providers/playwright"],
+    "types": [ "@types/wicg-file-system-access", "@vitest/browser/providers/playwright", "@testing-library/react"]
   }
 }
