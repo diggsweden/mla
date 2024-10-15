@@ -28,8 +28,8 @@ function AppShortcuts (props: Props) {
   const showWorkflow = useWorkflowStore((state) => state.showDialog)
   const setShowWorkflow = useWorkflowStore((state) => state.setShowDialog)
 
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
-  const selectedLinks = useMainStore((state) => state.selectedLinks())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
+  const selectedLinks = useMainStore((state) => state.selectedLinks)
 
   const addEntity = useMainStore((state) => state.addEntity)
   const addLink = useMainStore((state) => state.addLink)

@@ -11,7 +11,7 @@ import useAppStore from './app-store'
 import { type DataInterfaceEdges, type DataInterfaceNodes, type Edge, type Network, type Node } from 'vis-network'
 import { DataSet } from 'vis-data'
 import { produce } from 'immer'
-import { internalAdd, internalRemove, internalUpdate } from './internal-actions'
+import { internalAdd, internalRemove, internalUpdate, updateSelected } from './internal-actions'
 import { assignLinks, computeLinks, filterEvents } from '../utils/event-utils'
 import type { IEventFilter } from '../interfaces/configuration/event-operations'
 import { DateTime } from 'luxon'
@@ -59,8 +59,8 @@ export interface MainState {
   context: string
   setContext: (ctx: string) => void
 
-  selectedEntities: () => IEntity[]
-  selectedLinks: () => ILink[]
+  selectedEntities: IEntity[]
+  selectedLinks: ILink[]
   selectedIds: string[]
 
   network: Network | undefined
@@ -423,15 +423,12 @@ const useMainStore = create<MainState>((set, get) => ({
     })
   },
 
-  selectedEntities: () => get().selectedIds.map(id => get().getCurrentEntity(id)).filter(e => e !== undefined) as IEntity[],
-  selectedLinks: () => get().selectedIds.map(id => get().getCurrentLink(id)).filter(l => l !== undefined) as ILink[],
+  selectedEntities: [],
+  selectedLinks: [],
   selectedIds: [],
   setSelected: (selectedIds: string[]) => {
     useAppStore.getState().setSelectedGeoFeature(undefined)
-
-    set((state) => ({
-      selectedIds
-    }))
+    updateSelected(selectedIds);
   },
 
   setPhaseEvent: (event: IPhaseEvent) => {

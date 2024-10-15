@@ -111,7 +111,7 @@ const useSearchStore = create<SearchState>((set, get) => ({
   },
   explore: async () => {
     useAppStore.getState().setTool('explore')
-    const query = useMainStore.getState().selectedEntities()
+    const query = useMainStore.getState().selectedEntities
     const shape = useAppStore.getState().selectedGeoFeature
 
     set((state) => ({

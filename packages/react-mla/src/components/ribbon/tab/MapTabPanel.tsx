@@ -17,7 +17,7 @@ function MapTabPanel () {
   const { t } = useTranslation();
   const config = configService.getConfiguration()
 
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
   const entities = useMainStore((state) => state.entities)
   const update = useMainStore((state) => state.updateEntity)
 

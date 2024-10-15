@@ -27,8 +27,8 @@ function AnalysisTabPanel () {
   const { t } = useTranslation();
   const config = configService.getConfiguration()
   const history = useAppStore((state) => state.historyMode)
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
-  const selectedLinks = useMainStore((state) => state.selectedLinks())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
+  const selectedLinks = useMainStore((state) => state.selectedLinks)
   const setHistory = useAppStore((state) => state.setHistoryMode)
   const date = useMainStore((state) => state.currentDate)
   const min = useMainStore((state) => state.minDate)

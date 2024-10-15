@@ -22,7 +22,7 @@ interface Props {
 export default function SearchTool (props: Props) {
   const { t } = useTranslation();
   const geoFeature = useAppStore((state) => state.selectedGeoFeature)
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
 
   const searchTool = useSearchStore((state) => state.searchTool)
   const exploreTool = useSearchStore((state) => state.exploreTool)

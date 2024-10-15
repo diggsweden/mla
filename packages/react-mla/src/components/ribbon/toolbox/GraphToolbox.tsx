@@ -34,7 +34,7 @@ export default function GraphTools (props: Props) {
   const { t } = useTranslation();
 
   const selection = useMainStore((state) => state.selectedIds)
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
   const entities = useMainStore((state) => state.entities)
   const links = useMainStore((state) => state.links)
   const events = useMainStore((state) => state.events)

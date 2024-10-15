@@ -28,8 +28,8 @@ export default function CreateToolbox (props: Props) {
   const { t } = useTranslation()
   const config = configService.getConfiguration()
 
-  const selectedEntities = useMainStore((state) => state.selectedEntities())
-  const selectedLinks = useMainStore((state) => state.selectedLinks())
+  const selectedEntities = useMainStore((state) => state.selectedEntities)
+  const selectedLinks = useMainStore((state) => state.selectedLinks)
   const setSelected = useMainStore((state) => state.setSelected)
 
   const addEntity = useMainStore((state) => state.addEntity)
