@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 - Update zustand to v5
+- fix: Use property value instead of view value for rules
 
 ## 1.1.3 - 2024-10-08
 
