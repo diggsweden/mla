@@ -15,6 +15,7 @@
     "strict": true,
     "isolatedModules": false,
     "useDefineForClassFields": true,
+    "skipLibCheck": true,
     "moduleResolution": "bundler"
   },
   "exclude": ["node_modules"]

@@ -39,15 +39,12 @@ class ConfigurationService {
   }
 
   public async init (configurationJson: string, context?: string, publicUrl?: string) {
-    const configuration = JSON.parse(configurationJson) as IConfiguration
+    const config = JSON.parse(configurationJson) as IConfiguration
 
     this.publicUrl = publicUrl ?? ''
+    i18n.changeLanguage(config.Language ?? "en");
 
     try {
-      const config = configuration
-
-      i18n.changeLanguage(config.Language ?? "en");
-
       this.entitiesConfiguration = freeze(config.Domain.EntityTypes.reduce(function (map, obj) {
         map[obj.TypeId] = obj
 

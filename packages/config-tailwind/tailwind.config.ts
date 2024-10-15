@@ -21,11 +21,6 @@ const config: Omit<Config, "content"> = {
       lg: ['16px', '22px'],
       xl: ['20px', '28px'],
     },
-    fontFamily: {
-      sans: ['"Segoe UI"', 'Roboto'],
-      body: ['"Segoe UI"', 'Roboto'],
-      mono: ['source-code-pro', 'Menlo', 'Monaco', 'Consolas', 'Courier New', 'monospace']
-    },
     extend: {
       colors: {
         primary: 'var(--color-mla-primary)',
