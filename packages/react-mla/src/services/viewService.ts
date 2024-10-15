@@ -78,7 +78,7 @@ class ViewService {
       }
     })) satisfies IRuleConfiguration[]
 
-    return propertyRules.find(x => this.getPropertyValue(entity, x.PropertyTypeId) === x.Equals)
+    return propertyRules.find(x => this.getPropertyPlainValue(entity, x.PropertyTypeId) === x.Equals)
   }
 
   public async getIconByRule (entity: IEntity, viewConfiguration: IViewConfiguration): Promise<IIcon | undefined> {
@@ -233,6 +233,15 @@ class ViewService {
     }
 
     return result
+  }
+
+  public getPropertyPlainValue (thing: IBase, propTypeId: string): string | boolean | number | undefined {
+    const prop = thing.Properties.find(p => p.TypeId === propTypeId);
+    if (prop) {
+      return prop?.Value
+    }
+
+    return undefined
   }
 
   public getPropertyValue (thing: IBase, propTypeId: string): string | undefined {
