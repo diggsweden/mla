@@ -112,7 +112,7 @@ importers:
         version: 2.0.2
       i18next:
         specifier: ^23.15.1
-        version: 23.16.2
+        version: 23.16.3
       immer:
         specifier: ^10.1.1
         version: 10.1.1
@@ -136,7 +136,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       react-i18next:
         specifier: ^15.0.1
-        version: 15.1.0(i18next@23.16.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 15.1.0(i18next@23.16.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwindcss:
         specifier: 3.4.14
         version: 3.4.14
@@ -455,6 +455,10 @@ packages:
 
   '@babel/runtime@7.25.7':
     resolution: {integrity: sha512-FjoyLe754PMiYsFaN5C94ttGiOmBNYTf6pLr4xXHAT5uctHb092PBszndLDR5XA/jghQvn4n7JMHl7dmTgbm9w==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.25.9':
+    resolution: {integrity: sha512-4zpTHZ9Cm6L9L+uIqghQX8ZXg8HKFcjYO3qHoO8zTmRm6HQUJ8SSJ+KRvbMBZn0EGVlT4DRYeQ/6hjlyXBh+Kg==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.25.7':
@@ -2239,8 +2243,8 @@ packages:
     engines: {node: ^12.18.0 || >=14.13.1}
     hasBin: true
 
-  i18next@23.16.2:
-    resolution: {integrity: sha512-dFyxwLXxEQK32f6tITBMaRht25mZPJhQ0WbC0p3bO2mWBal9lABTMqSka5k+GLSRWLzeJBKDpH7BeIA9TZI7Jg==}
+  i18next@23.16.3:
+    resolution: {integrity: sha512-e8q9gFyjrou5v/hBXgRwtWVK7Gp5So19Kf42spJlijGDfkin5abYFHlblonmD2GFYcsf9XIT7MpVuveJq/VCcA==}
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -4076,6 +4080,10 @@ snapshots:
       '@babel/helper-plugin-utils': 7.25.7
 
   '@babel/runtime@7.25.7':
+    dependencies:
+      regenerator-runtime: 0.14.1
+
+  '@babel/runtime@7.25.9':
     dependencies:
       regenerator-runtime: 0.14.1
 
@@ -6242,9 +6250,9 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  i18next@23.16.2:
+  i18next@23.16.3:
     dependencies:
-      '@babel/runtime': 7.25.7
+      '@babel/runtime': 7.25.9
 
   iconv-lite@0.4.24:
     dependencies:
@@ -7016,11 +7024,11 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-i18next@15.1.0(i18next@23.16.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-i18next@15.1.0(i18next@23.16.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.25.7
       html-parse-stringify: 3.0.1
-      i18next: 23.16.2
+      i18next: 23.16.3
       react: 18.3.1
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
@@ -7051,7 +7059,7 @@ snapshots:
 
   redux@4.2.1:
     dependencies:
-      '@babel/runtime': 7.25.7
+      '@babel/runtime': 7.25.9
 
   reflect.getprototypeof@1.0.6:
     dependencies:
