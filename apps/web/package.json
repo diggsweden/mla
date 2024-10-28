@@ -13,7 +13,9 @@
   "scripts": {
     "dev": "vite --open",
     "preview": "vite preview --open",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "predeploy": "pnpm run build",
+    "deploy": "gh-pages -d dist"    
   },
   "browserslist": {
     "production": [
@@ -32,6 +34,7 @@
     "@types/react-dom": "18.3.1",
     "@types/wicg-file-system-access": "2023.10.5",
     "@vitejs/plugin-react": "4.3.3",
+    "gh-pages": "^6.2.0",
     "tailwindcss": "3.4.14",
     "typescript": "5.6.3",
     "vite": "5.4.10",
