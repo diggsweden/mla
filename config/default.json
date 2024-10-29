@@ -901,6 +901,6 @@
         ]
     },
     "Plugins": [
-        "/plugins/import/csv_importer.js"
+        "./plugins/import/csv_importer.js"
     ]
 }
