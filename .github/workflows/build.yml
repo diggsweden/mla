@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+---
+name: Build
+on: [workflow_call] # yamllint disable-line rule:truthy
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout project repository
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      # Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+        with:
+          run_install: false      
+      
+      # Setup Node.js environment
+      - name: Install Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      # Install dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile          
+
+      # Build
+      - name: Build
+        run: |
+          pnpm run -r build
+          

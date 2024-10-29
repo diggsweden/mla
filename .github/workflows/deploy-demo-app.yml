@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+---
+name: Deploy demo app
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout project repository
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      # Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+        with:
+          run_install: false      
+      
+      # Setup Node.js environment
+      - name: Install Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      # Install dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile     
+
+      # Checkout project repository
+      - name: Deploy demo app
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          pnpm gh-pages -d dist -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: ./apps/web

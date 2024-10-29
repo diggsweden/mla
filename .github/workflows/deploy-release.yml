@@ -1,0 +1,198 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+---
+name: Deploy release
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - closed       
+
+permissions:
+  contents: read
+
+jobs:
+  build-release:
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'release')) )
+    name: Build release
+    outputs:
+      hashes: ${{ steps.hash.outputs.hashes }}
+      changelog: ${{ steps.get-changelog.outputs.changelog }}
+      version: ${{ steps.get-version.outputs.version }}
+      branch: ${{ steps.get-branch.outputs.branch }}
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout project repository
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      # Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+        with:
+          run_install: false    
+
+      # Setup Node.js environment
+      - name: Install Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      # Import GPG key to use for signing
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@cb9bde2e2525e640591a934b1fd28eef1dcaf5e5 # v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
+
+      # Configure Git
+      - name: Git configuration
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+
+      # Get branch name
+      - id: get-branch
+        name: Get branch name
+        run: |
+          echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_OUTPUT"
+
+      # Get release tag
+      - name: Bump release version
+        if: contains(env.BRANCH_NAME, 'beta') != true
+        run: |
+          echo "RELEASE_TAG=latest" >> "$GITHUB_ENV"
+
+      # Get release tag if pre release
+      - name: Bump pre-release version
+        if: contains(env.BRANCH_NAME, 'beta')
+        run: |
+          echo "RELEASE_TAG=beta" >> "$GITHUB_ENV"
+
+      # Create semver version
+      - id: get-version
+        name: Get version
+        run: |
+          NEW_VERSION=${{ env.BRANCH_NAME }}
+          NEW_VERSION=${NEW_VERSION//-beta}
+          NEW_VERSION=${NEW_VERSION//release\/}
+          echo "NEW_VERSION=${NEW_VERSION}" >> "$GITHUB_ENV"
+          echo "NEW_SEMVER_VERSION=${NEW_VERSION//v}" >> "$GITHUB_ENV"
+          echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+
+       # Install dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile      
+
+        # Build
+      - name: Build
+        run: |
+          pnpm run -r build
+          cp ./packages/react-mla/package.json ./packages/react-mla/dist
+          cp ./packages/webcomponent-mla/package.json ./packages/webcomponent-mla/dist
+
+      # Publish version to public repository
+      - name: Publish react-mla
+        run: pnpm publish ./packages/react-mla --access restricted --tag ${{ env.RELEASE_TAG }} --no-git-checks --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+
+      # Publish version to public repository
+      - name: Publish webcomponent-mla
+        run: pnpm publish ./packages/webcomponent-mla --access restricted --tag ${{ env.RELEASE_TAG }} --no-git-checks --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+
+      # Read version changelog
+      - id: get-changelog
+        name: Get version changelog
+        uses: superfaceai/release-changelog-action@38646ad355e5d79bf7aa12e233a1573e4d36faee # v2.1.3
+        with:
+          path-to-changelog: CHANGELOG.md
+          version: ${{ env.NEW_VERSION }}
+          operation: read
+
+      # Generate hashes needed for provenance
+      - id: hash
+        name: Generate hashes for release artifacts
+        shell: bash
+        run: |
+          echo "hashes=$(sha256sum ./packages/webcomponent-mla/dist/mla-component.umd.cjs | base64 -w0)" >> "$GITHUB_OUTPUT"
+
+        # Create signature
+      - name: Create signature
+        run: |
+          gpg --armor --detach-sign ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+
+      # Upload artifact
+      - name: Upload mla-component.umd.cjs
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: mla-component.umd.cjs
+          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+          if-no-files-found: error
+          retention-days: 5
+
+      # Upload signature
+      - name: Upload mla-component.umd.cjs
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: mla-component.umd.cjs.asc
+          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.asc
+          if-no-files-found: error
+          retention-days: 5
+
+  # This step calls the generic workflow to generate provenance.
+  provenance:
+    needs: [build-release]
+    permissions:
+      contents: write
+      actions: read
+      id-token: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
+    with:
+      base64-subjects: "${{ needs.build-release.outputs.hashes }}"
+      upload-assets: false
+
+  # This step uploads our artifacts to the tagged GitHub release.
+  release:
+    name: Create release
+    needs: [build-release, provenance]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download mla-component.umd.cjs
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: mla-component.umd.cjs
+
+      - name: Download mla-component.umd.cjs.asc
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: mla-component.umd.cjs.asc
+
+      - name: Download mla-component.umd.cjs.intoto.jsonl
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: mla-component.umd.cjs.intoto.jsonl
+
+      # Update GitHub release with changelog
+      - name: Update GitHub release documentation
+        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
+        with:
+          tag_name: ${{ needs.build-release.outputs.version }}
+          body: ${{ needs.build-release.outputs.changelog }}
+          prerelease: contains(needs.build-release.outputs.branch, 'beta')
+          files: |
+            mla-component.umd.cjs
+            mla-component.umd.cjs.asc
+            mla-component.umd.cjs.intoto.jsonl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
