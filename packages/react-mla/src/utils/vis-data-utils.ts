@@ -208,7 +208,7 @@ export function mapToNode(entity: IEntity, icon: IIcon | undefined, selected: bo
 }
 
 export function mapToEdge(link: ILink, selected: boolean, active: boolean, historyMode: boolean, linkCount: number, view: IBaseViewConfiguration): Edge {
-  let label = link.LabelShort
+  let label = link.LabelChart
   if (label === configService.getTypeName(link)) {
     label = ''
   }

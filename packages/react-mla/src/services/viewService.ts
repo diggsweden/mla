@@ -212,11 +212,7 @@ class ViewService {
         }
 
         if (value) {
-          if (result === '') {
-            result += value
-          } else {
-            result += temp + value
-          }
+          result += temp + value
         }
         temp = ''
       } else if (extractingPropertyTypeId) {
@@ -226,13 +222,15 @@ class ViewService {
       }
     }
 
-    result += temp
+    if (result != '') {
+      result += temp
+    }
 
     if (result === '') {
       result = configService.getTypeName(thing)
     }
 
-    return result
+    return result.trim();
   }
 
   public getPropertyPlainValue (thing: IBase, propTypeId: string): string | boolean | number | undefined {
