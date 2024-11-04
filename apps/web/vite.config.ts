@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
       react(),
       commonjs()
     ],
+    base: './',
     build: {
       chunkSizeWarningLimit: 10000
     },

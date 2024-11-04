@@ -329,6 +329,6 @@
         ]
     },
     "Plugins": [
-        "/plugins/import/firewall_importer.js"
+        "./plugins/import/firewall_importer.js"
     ]
 }
