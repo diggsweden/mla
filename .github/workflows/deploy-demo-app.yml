@@ -9,11 +9,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
-    name: Build
+    name: Build and deploy
     runs-on: ubuntu-latest
     steps:
       # Checkout project repository
@@ -39,10 +39,14 @@ jobs:
         run: pnpm install --frozen-lockfile     
 
       # Checkout project repository
-      - name: Deploy demo app
+      - name: Build
+        run: |
+          pnpm run build
+
+      # Checkout project repository
+      - name: Deploy
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          pnpm gh-pages -d dist -u "github-actions-bot <support+actions@github.com>"
+          pnpm run deploy:app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          working-directory: ./apps/web
