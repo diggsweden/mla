@@ -9,12 +9,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
     name: Build and deploy
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       # Checkout project repository
       - name: Checkout
