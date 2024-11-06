@@ -34,6 +34,12 @@
       "matchManagers": ["github-actions"],
       "matchPackageNames": ["slsa-framework/slsa-github-generator"],
       "pinDigests": false
-    }    
+    },
+    {
+      "description": "Ignore major node versions",
+      "matchPackageNames": ["node"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
   ]
 }
