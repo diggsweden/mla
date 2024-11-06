@@ -31,7 +31,8 @@ SPDX-License-Identifier: CC0-1.0
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-build">How to Build</a> •
   <a href="#documentation">Documentation</a> •
-  <a href="#license">License</a>
+  <a href="#license">License</a> •
+  <a href="https://diggsweden.github.io/mla/" target="_blank">Demo</a>
 </p>
 
 ![screenshot](https://github.com/diggsweden/mla/blob/main/assets/mla_demo.gif)
