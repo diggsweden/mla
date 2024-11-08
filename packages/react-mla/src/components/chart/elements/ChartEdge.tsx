@@ -15,7 +15,7 @@ interface Props {
   data: DataInterfaceEdges
 }
 
-function ChartEdge (props: Props) {
+function ChartEdge(props: Props) {
   const link = props.link
 
   const getEntity = useMainStore(state => state.getCurrentEntity)
