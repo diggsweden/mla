@@ -1091,9 +1091,6 @@ packages:
   '@turf/bbox@6.5.0':
     resolution: {integrity: sha512-RBbLaao5hXTYyyg577iuMtDB8ehxMlUqHEJiMs8jT1GHkFhr6sYre3lmLsPeYEi/ZKj5TP5tt7fkzNdJ4GIVyw==}
 
-  '@turf/bbox@7.1.0':
-    resolution: {integrity: sha512-PdWPz9tW86PD78vSZj2fiRaB8JhUHy6piSa/QXb83lucxPK+HTAdzlDQMTKj5okRCU8Ox/25IR2ep9T8NdopRA==}
-
   '@turf/bearing@6.5.0':
     resolution: {integrity: sha512-dxINYhIEMzgDOztyMZc20I7ssYVNEpSv04VbMo5YPQsqa80KO3TFvbuCahMsCAW5z8Tncc8dwBlEFrmRjJG33A==}
 
@@ -1115,9 +1112,6 @@ packages:
   '@turf/helpers@6.5.0':
     resolution: {integrity: sha512-VbI1dV5bLFzohYYdgqwikdMVpe7pJ9X3E+dlr425wa2/sMJqYDhTO++ec38/pcPvPE6oD9WEEeU3Xu3gza+VPw==}
 
-  '@turf/helpers@7.1.0':
-    resolution: {integrity: sha512-dTeILEUVeNbaEeoZUOhxH5auv7WWlOShbx7QSd4s0T4Z0/iz90z9yaVCtZOLbU89umKotwKaJQltBNO9CzVgaQ==}
-
   '@turf/invariant@6.5.0':
     resolution: {integrity: sha512-Wv8PRNCtPD31UVbdJE/KVAWKe7l6US+lJItRR/HOEW3eh+U/JwRCSUl/KZ7bmjM/C+zLNoreM2TU6OoLACs4eg==}
 
@@ -1135,9 +1129,6 @@ packages:
 
   '@turf/meta@6.5.0':
     resolution: {integrity: sha512-RrArvtsV0vdsCBegoBtOalgdSOfkBrTJ07VkpiCnq/491W67hnMWmDu7e6Ztw0C3WldRYTXkg3SumfdzZxLBHA==}
-
-  '@turf/meta@7.1.0':
-    resolution: {integrity: sha512-ZgGpWWiKz797Fe8lfRj7HKCkGR+nSJ/5aKXMyofCvLSc2PuYJs/qyyifDPWjASQQCzseJ7AlF2Pc/XQ/3XkkuA==}
 
   '@turf/nearest-point-on-line@6.5.0':
     resolution: {integrity: sha512-WthrvddddvmymnC+Vf7BrkHGbDOUu6Z3/6bFYUGv1kxw8tiZ6n83/VG6kHz4poHOfS0RaNflzXSkmCi64fLBlg==}
@@ -4815,13 +4806,6 @@ snapshots:
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
 
-  '@turf/bbox@7.1.0':
-    dependencies:
-      '@turf/helpers': 7.1.0
-      '@turf/meta': 7.1.0
-      '@types/geojson': 7946.0.14
-      tslib: 2.8.1
-
   '@turf/bearing@6.5.0':
     dependencies:
       '@turf/helpers': 6.5.0
@@ -4856,11 +4840,6 @@ snapshots:
       '@turf/invariant': 6.5.0
 
   '@turf/helpers@6.5.0': {}
-
-  '@turf/helpers@7.1.0':
-    dependencies:
-      '@types/geojson': 7946.0.14
-      tslib: 2.8.1
 
   '@turf/invariant@6.5.0':
     dependencies:
@@ -4900,11 +4879,6 @@ snapshots:
   '@turf/meta@6.5.0':
     dependencies:
       '@turf/helpers': 6.5.0
-
-  '@turf/meta@7.1.0':
-    dependencies:
-      '@turf/helpers': 7.1.0
-      '@types/geojson': 7946.0.14
 
   '@turf/nearest-point-on-line@6.5.0':
     dependencies:
@@ -6148,7 +6122,7 @@ snapshots:
 
   geojson-rbush@3.2.0:
     dependencies:
-      '@turf/bbox': 7.1.0
+      '@turf/bbox': 6.5.0
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
       '@types/geojson': 7946.0.8
