@@ -28,63 +28,64 @@ function ChartNode (props: Props) {
 
   const iconId = useRef('')
   useEffect(() => {
-    if (entity) {
-      const asyncUpdateIcon = async () => {
-        const newIcon = await viewService.getIconByRule(entity, viewConfig)
-        if (newIcon != null && newIcon?.id !== iconId.current) {
-          setIcon(newIcon)
-          iconId.current = newIcon.id
-        }
+    const asyncUpdateIcon = async () => {
+      const newIcon = await viewService.getIconByRule(entity, viewConfig)
+      if (newIcon != null && newIcon?.id !== iconId.current) {
+        setIcon(newIcon)
+        iconId.current = newIcon.id
       }
-      void asyncUpdateIcon()
     }
+    void asyncUpdateIcon()
   }, [entity, viewConfig])
 
-  const node = useMemo(() => {
-    if (entity == null) {
-      return null
-    }
-
-    return {
+  const created = useRef(null as null | string)
+  useEffect(() => {
+    console.debug('[adding]', getId(entity))
+    created.current = props.graph.addNode(getId(entity), { 
       label: entity.LabelChart,
-      size: 20,
       x: entity.PosX,
       y: entity.PosY,
-      image: icon?.unselected,
-      highlighted: selected,
-      fixed: true,
-    }
+      fixed: true, 
+      color: "white",
+      size: 20 
+    })
 
-  }, [entity, icon, selected])
-
-  const created = useRef(false)
-  useEffect(() => {
-    if (node == null || entity == null) {
-      return
-    }
-
-    if (created.current) {
-      console.debug('[updating]', getId(entity))
-      props.graph.updateNode(getId(entity), () => node)
-    } else {
-      console.debug('[adding]', getId(entity))
-      props.graph.addNode(getId(entity), node)
-      created.current = true;
-    }
-  }, [entity, icon, node, props.graph])
-
-  useEffect(() => {
     return () => {
-      if (created.current) {
+      if (created.current && props.graph.hasNode(created.current)) {
         console.debug('[removing]', getId(entity))
         props.graph.dropNode(created.current)
-        created.current = false
+        created.current = null
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <></>
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setNodeAttribute(created.current, "x", entity.PosX)
+    }
+  }, [icon, props.graph, entity.PosX])
+
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setNodeAttribute(created.current, "y", entity.PosY)
+    }
+  }, [icon, props.graph, entity.PosY])
+
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setNodeAttribute(created.current, "label", entity.LabelChart)
+    }
+  }, [icon, props.graph, entity.LabelChart])
+
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setNodeAttribute(created.current, "type", icon ? "image" : undefined)
+      props.graph.setNodeAttribute(created.current, "image", selected ? icon?.selected : icon?.unselected)
+    }
+  }, [icon, props.graph, selected])
+
+  return null
 }
 
 export default ChartNode

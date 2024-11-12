@@ -25,7 +25,16 @@ importers:
         version: 19.5.0
       '@commitlint/cz-commitlint':
         specifier: 19.5.0
-        version: 19.5.0(@types/node@20.17.6)(commitizen@4.3.1(@types/node@20.17.6)(typescript@5.6.3))(inquirer@12.1.0(@types/node@20.17.6))(typescript@5.6.3)
+        version: 19.5.0(@types/node@20.17.6)(commitizen@4.3.1(@types/node@20.17.6)(typescript@5.6.3))(inquirer@12.0.1(@types/node@20.17.6))(typescript@5.6.3)
+      '@eslint/compat':
+        specifier: 1.2.2
+        version: 1.2.2(eslint@9.14.0(jiti@1.21.6))
+      '@eslint/eslintrc':
+        specifier: 3.1.0
+        version: 3.1.0
+      '@eslint/js':
+        specifier: 9.14.0
+        version: 9.14.0
       commitizen:
         specifier: 4.3.1
         version: 4.3.1(@types/node@20.17.6)(typescript@5.6.3)
@@ -48,8 +57,8 @@ importers:
         specifier: 6.2.0
         version: 6.2.0
       inquirer:
-        specifier: 12.1.0
-        version: 12.1.0(@types/node@20.17.6)
+        specifier: 12.0.1
+        version: 12.0.1(@types/node@20.17.6)
       lefthook:
         specifier: 1.8.2
         version: 1.8.2
@@ -129,6 +138,9 @@ importers:
       '@react-sigma/core':
         specifier: ^4.0.3
         version: 4.0.3(graphology@0.25.4(graphology-types@0.24.7))(react@18.3.1)(sigma@3.0.0-beta.36(graphology-types@0.24.7))
+      '@sigma/node-border':
+        specifier: 3.0.0-beta.7
+        version: 3.0.0-beta.7(sigma@3.0.0-beta.36(graphology-types@0.24.7))
       '@sigma/node-image':
         specifier: 3.0.0-beta.16
         version: 3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.7))
@@ -243,7 +255,7 @@ importers:
         version: 2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4)
       '@vitest/coverage-v8':
         specifier: 2.1.4
-        version: 2.1.4(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.10(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))
+        version: 2.1.4(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.48)
@@ -279,7 +291,7 @@ importers:
         version: 2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6)
       vitest-browser-react:
         specifier: 0.0.3
-        version: 0.0.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.10(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))
+        version: 0.0.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))
     publishDirectory: dist
 
   packages/webcomponent-mla:
@@ -1105,6 +1117,11 @@ packages:
 
   '@rushstack/ts-command-line@4.23.0':
     resolution: {integrity: sha512-jYREBtsxduPV6ptNq8jOKp9+yx0ld1Tb/Tkdnlj8gTjazl1sF3DwX2VbluyYrNd0meWIL0bNeer7WDf5tKFjaQ==}
+
+  '@sigma/node-border@3.0.0-beta.7':
+    resolution: {integrity: sha512-M4ivn9H5BNMZudeQJ63Kfngu4Uwn0QM3qXZeWjDKp/X6c1Bsf44furMf2EmMbBmGYvYS5ummi03CQ33lh//DeQ==}
+    peerDependencies:
+      sigma: '>=3.0.0-beta.17'
 
   '@sigma/node-image@3.0.0-beta.16':
     resolution: {integrity: sha512-MLFlgQL7IfML4THaR3pK77t9cIxopXW/Vrb+7GGYvMuF4Pp15ufZFhMJG/YQSoKn/J30eLQnWKv+ErBeK/xglg==}
@@ -2418,8 +2435,8 @@ packages:
     resolution: {integrity: sha512-QQnnxNyfvmHFIsj7gkPcYymR8Jdw/o7mp5ZFihxn6h8Ci6fh3Dx4E1gPjpQEpIuPo9XVNY/ZUwh4BPMjGyL01g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  inquirer@12.1.0:
-    resolution: {integrity: sha512-3/iexk64jn3EF0tjWYfOJi/DNWtcSSwg4ER67cnopO2xlCTUQjFCTMH9NBNQAMO/+dC3sEvKJtGJsqXnCkSsFg==}
+  inquirer@12.0.1:
+    resolution: {integrity: sha512-o11Jc2Go6wDZA17SWofiJ6L8k7mB8lsdKB/QY0bI+8e+ATiAvQzmROjqoTd1iAY8RI6N/EDcQcxbQa4JYviDWg==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -4299,14 +4316,14 @@ snapshots:
       '@commitlint/types': 19.5.0
       ajv: 8.17.1
 
-  '@commitlint/cz-commitlint@19.5.0(@types/node@20.17.6)(commitizen@4.3.1(@types/node@20.17.6)(typescript@5.6.3))(inquirer@12.1.0(@types/node@20.17.6))(typescript@5.6.3)':
+  '@commitlint/cz-commitlint@19.5.0(@types/node@20.17.6)(commitizen@4.3.1(@types/node@20.17.6)(typescript@5.6.3))(inquirer@12.0.1(@types/node@20.17.6))(typescript@5.6.3)':
     dependencies:
       '@commitlint/ensure': 19.5.0
       '@commitlint/load': 19.5.0(@types/node@20.17.6)(typescript@5.6.3)
       '@commitlint/types': 19.5.0
       chalk: 5.3.0
       commitizen: 4.3.1(@types/node@20.17.6)(typescript@5.6.3)
-      inquirer: 12.1.0(@types/node@20.17.6)
+      inquirer: 12.0.1(@types/node@20.17.6)
       lodash.isplainobject: 4.0.6
       word-wrap: 1.2.5
     transitivePeerDependencies:
@@ -4563,7 +4580,7 @@ snapshots:
   '@inquirer/core@10.0.1(@types/node@20.17.6)':
     dependencies:
       '@inquirer/figures': 1.0.7
-      '@inquirer/type': 3.0.0(@types/node@20.17.6)
+      '@inquirer/type': 3.0.1(@types/node@20.17.6)
       ansi-escapes: 4.3.2
       cli-width: 4.1.0
       mute-stream: 2.0.0
@@ -4894,6 +4911,10 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
+  '@sigma/node-border@3.0.0-beta.7(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
+    dependencies:
+      sigma: 3.0.0-beta.36(graphology-types@0.24.7)
+
   '@sigma/node-image@3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
     dependencies:
       sigma: 3.0.0-beta.36(graphology-types@0.24.7)
@@ -5213,7 +5234,7 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@2.1.4(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.10(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))':
+  '@vitest/coverage-v8@2.1.4(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -6492,7 +6513,7 @@ snapshots:
 
   ini@4.1.1: {}
 
-  inquirer@12.1.0(@types/node@20.17.6):
+  inquirer@12.0.1(@types/node@20.17.6):
     dependencies:
       '@inquirer/core': 10.1.0(@types/node@20.17.6)
       '@inquirer/prompts': 7.1.0(@types/node@20.17.6)
@@ -7963,7 +7984,7 @@ snapshots:
       fsevents: 2.3.3
       sass-embedded: 1.80.6
 
-  vitest-browser-react@0.0.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.10(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6)):
+  vitest-browser-react@0.0.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6)):
     dependencies:
       '@vitest/browser': 2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4)
       react: 18.3.1

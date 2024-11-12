@@ -5,6 +5,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import { NodeImageProgram } from "@sigma/node-image";
+import { NodeBorderProgram } from "@sigma/node-border";
 import Graph from "graphology";
 import Sigma from "sigma";
 
@@ -49,15 +50,15 @@ function Chart(props: Props) {
 
     const graph = new Graph();
     const renderer = new Sigma(graph, sigmaContainer.current, {
-      defaultNodeType: "image",
       nodeProgramClasses: {
         image: NodeImageProgram,
+        border: NodeBorderProgram,
       },
       renderEdgeLabels: true,
       nodeReducer: (node, data) => {
         const newData = { ...data, highlighted: data.highlighted || false, color: "" };
 
-        if (!disableHoverEffect && hoveredNode) {
+        if (!disableHoverEffect && hoveredNode && graph.hasNode(hoveredNode)) {
           if (node === hoveredNode || graph.neighbors(hoveredNode).includes(node)) {
             newData.highlighted = true;
           } else {
@@ -70,7 +71,7 @@ function Chart(props: Props) {
       edgeReducer: (edge, data) => {
         const newData = { ...data, hidden: false };
 
-        if (!disableHoverEffect && hoveredNode && !graph.extremities(edge).includes(hoveredNode)) {
+        if (!disableHoverEffect && hoveredNode && graph.hasNode(hoveredNode) && !graph.extremities(edge).includes(hoveredNode)) {
           newData.hidden = true;
         }
         return newData;
@@ -173,7 +174,8 @@ function Chart(props: Props) {
     return () => {
       renderer.kill()
     }
-  }, [disableHoverEffect, getHistory, hoveredNode, init, setSelectedIds, showContextMenu, sigmaContainer, update])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (sigma) {

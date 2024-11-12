@@ -22,8 +22,8 @@ function ChartEdge(props: Props) {
   const selectedIds = useMainStore(state => state.selectedIds)
   const selectedView = useAppStore(state => state.thingViewConfiguration[link.TypeId])
 
-  const from = useMemo(() => link != null ? getEntity(link?.FromEntityId + link?.FromEntityTypeId, date.DateFrom) : null, [getEntity, link, date])
-  const to = useMemo(() => link != null ? getEntity(link?.ToEntityId + link?.ToEntityTypeId, date.DateFrom) : null, [getEntity, link, date])
+  const from = useMemo(() => getEntity(link.FromEntityId + link.FromEntityTypeId, date.DateFrom)!, [getEntity, link, date])
+  const to = useMemo(() => getEntity(link.ToEntityId + link.ToEntityTypeId, date.DateFrom)!, [getEntity, link, date])
 
   const view = useMemo(() => {
     return { ...viewService.getDefaultView(link.TypeId, link.GlobalType), ...selectedView }
@@ -37,60 +37,39 @@ function ChartEdge(props: Props) {
     return false
   }, [from, link, selectedIds, to, view.Show])
 
-  // const count = useMemo(() => {
-  //   if (link == null) {
-  //     return 0
-  //   }
-
-  //   const count = getLinkCount(link, allLinks)
-  //   return count
-  // }, [allLinks, link])
-
-  const edge = useMemo(() => {
-    return {
+  
+  const created = useRef(null as null | string)
+  useEffect(() => {
+    console.debug('[adding]', getId(link))
+    created.current = props.graph.addEdgeWithKey(getId(link), getId(from), getId(to), {
       size: 2,
-      highlighted: selected,
+      label: link.LabelChart,
       drawLabel: true
-    }
-  }, [selected])
+    });
 
-  const created = useRef(false)
-  useEffect(() => {
-    if (edge == null) {
-      return
-    }
-
-    if (created.current) {
-      console.debug('[updating]', getId(link))
-      props.graph.updateEdgeWithKey(getId(link), link.FromEntityId + link.FromEntityTypeId, link.ToEntityId + link.ToEntityTypeId, () => edge);
-
-    } else {
-      console.debug('[adding]', getId(link))
-      try {
-        const from = link.FromEntityId + link.FromEntityTypeId;
-        const to = link.ToEntityId + link.ToEntityTypeId
-        if (props.graph.hasNode(from) && props.graph.hasNode(to)) {
-          props.graph.addEdgeWithKey(getId(link), link.FromEntityId + link.FromEntityTypeId, link.ToEntityId + link.ToEntityTypeId, edge);
-          created.current = true
-        }
-      } catch (e) {
-        console.error(e)
-      }
-    }
-  }, [edge, link, props.graph])
-
-  useEffect(() => {
     return () => {
-      if (created.current) {
+      if (created.current && props.graph.hasEdge(created.current)) {
         console.debug('[removing]', getId(link))
         props.graph.dropEdge(getId(link))
-        created.current = false
+        created.current = null
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <></>
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setEdgeAttribute(created.current, "label", link.LabelChart)
+    }
+  }, [from, link, props.graph, to])
+
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setEdgeAttribute(created.current, "highlighted", selected)
+    }
+  }, [from, link, props.graph, selected, to])
+
+  return null
 }
 
 export default ChartEdge

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 export async function toPng (svgString: string, color: string, size: number, svgString2?: string, color2?: string, withSelectedStyle?: boolean): Promise<string> {
-  const scale = 1.5
+  const scale = 1.2
   const offset = (scale * size - size) / 2
 
   const canvas = new OffscreenCanvas(size * scale, size * scale)
@@ -23,12 +23,13 @@ export async function toPng (svgString: string, color: string, size: number, svg
   }
 
   if (withSelectedStyle) {
-    const squareOffset = 20
-    ctx.lineWidth = 4
-    ctx.setLineDash([5, 15])
+    const w = size * scale;
+    ctx.lineWidth = 5
     ctx.lineCap = 'round'
     ctx.strokeStyle = '#00008B'
-    ctx.strokeRect(squareOffset, squareOffset, (size * scale) - (squareOffset * 2), (size * scale) - (squareOffset * 2))
+    ctx.beginPath();
+    ctx.arc(w/2, w/2, (w/2 - 10), 0, 2 * Math.PI)
+    ctx.stroke();
   }
 
   // Should be in types

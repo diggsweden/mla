@@ -11,7 +11,6 @@ import * as L from 'leaflet'
 
 import './Map.scss'
 import '@geoman-io/leaflet-geoman-free'
-import './fullscreen/Control.FullScreen'
 
 import { produce } from 'immer'
 import EntityMarker from './elements/EntityMarker'

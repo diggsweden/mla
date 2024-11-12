@@ -23,6 +23,7 @@
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.17.0",
     "@react-sigma/core": "^4.0.3",
+    "@sigma/node-border": "3.0.0-beta.7",
     "@sigma/node-image": "3.0.0-beta.16",
     "@sigma/utils": "3.0.0-beta.6",
     "glob": "^11.0.0",

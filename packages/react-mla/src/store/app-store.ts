@@ -138,7 +138,7 @@ const useAppStore = create<AppState>((set, get) => ({
     }))
   },
 
-  hoverEffect: true,
+  hoverEffect: false,
   setHoverEffect: (enabled) => {
     set((state) => ({
       hoverEffect: enabled
