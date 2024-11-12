@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import type { IBasePropertyConfiguration, IEntityTypeConfiguration, IMatchRule, IQueryIntegration } from '../interfaces/configuration'
-import type { IBase, IChartBase, IEntity, IHistory, ILink, IProperty } from '../interfaces/data-models'
-import { DateTime } from 'luxon'
+import type { IBase, IChartBase, IEntity, IHistory, ILink, IProperty, ITimeSpan } from '../interfaces/data-models'
+import { DateTime, Interval } from 'luxon'
 
 function getId (thing?: IBase): string {
   if (thing) {
@@ -247,6 +247,39 @@ function find (thing: IHistory, things: IChartBase[]): IChartBase | undefined {
   return things.find(x => compareDates(x, thing))
 }
 
+function isSelected(thing: IChartBase, selected: string[]): boolean {
+  return selected.some(s => s === getId(thing))
+}
+
+function isActive(thing: IChartBase, time: ITimeSpan): boolean {
+  const interval = Interval.fromDateTimes(time.DateFrom, time.DateTo)
+
+  if (thing.DateFrom == null && thing.DateTo == null) {
+    return true
+  }
+
+  if (thing.DateFrom == null && thing.DateTo != null) {
+    return interval.contains(thing.DateTo)
+  }
+
+  if (thing.DateTo == null && thing.DateFrom != null) {
+    return interval.contains(thing.DateFrom)
+  }
+
+  if (thing.DateFrom != null && thing.DateTo != null) {
+    if (thing.DateFrom.toISO() == thing.DateTo.toISO()) {
+      return interval.contains(thing.DateFrom)
+    } else {
+      const interval2 = Interval.fromDateTimes(thing.DateFrom!, thing.DateTo!)
+      if (interval2.isValid) {
+        return interval.intersection(interval2) != null
+      }
+    }
+  }
+
+  return false
+}
+
 export {
   areArraysEqualSets,
   arrayDistinct,
@@ -264,6 +297,8 @@ export {
   hasDate,
   isLinked,
   isLinkedId,
+  isActive,
+  isSelected,
   isSubSetOf,
   isSameType,
   mergeContext,

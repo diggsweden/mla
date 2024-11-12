@@ -39,6 +39,7 @@ interface AppState {
   interaction: any
   historyMode: boolean
   showMap: boolean
+  hoverEffect: boolean
 
   mapLayers: number[]
   setMapLayers: (layers: number[]) => void
@@ -52,6 +53,7 @@ interface AppState {
   setView: (viewId: string) => void
   setTool: (tool?: Tool) => void
   setHistoryMode: (value: boolean) => void
+  setHoverEffect: (value: boolean) => void
 }
 
 const useAppStore = create<AppState>((set, get) => ({
@@ -136,6 +138,12 @@ const useAppStore = create<AppState>((set, get) => ({
     }))
   },
 
+  hoverEffect: true,
+  setHoverEffect: (enabled) => {
+    set((state) => ({
+      hoverEffect: enabled
+    }))
+  },
   selectedTab: 'start',
   setTab: (tab) => {
     set((state) => ({

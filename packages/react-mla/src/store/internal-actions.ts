@@ -13,8 +13,10 @@ import { setPositions } from '../utils/vis-data-utils'
 import viewService from '../services/viewService'
 import { fixDate } from '../utils/date'
 import i18n from "i18next";
+import forceLayout from 'graphology-layout-force'
+import forceAtlas2 from 'graphology-layout-forceatlas2'
 
-function updateProps(draft: WritableDraft<IChartBase>) {
+function updateProps(draft: WritableDraft<IChartBase>, ) {
   if (draft.InternalId == null) {
     draft.InternalId = generateUUID()
   }
@@ -33,7 +35,7 @@ export const updateSelected = (selectedIds?: string[]) => {
   useMainStore.setState(state => {
     const ids = selectedIds ?? state.selectedIds
     return {
-      selectedIds:ids,
+      selectedIds: ids,
       selectedEntities: (ids).map(id => state.getCurrentEntity(id)).filter(e => e !== undefined) as IEntity[],
       selectedLinks: ids.map(id => state.getCurrentLink(id)).filter(l => l !== undefined) as ILink[],
     }
@@ -48,9 +50,21 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
     let max = state.maxDate
 
     const stateUpEntities = produce(state.entities, stateDraft => {
-      const n = state.network
-      if (n != null && entities.some(e => e.PosX == null || e.PosY == null)) {
-        entities = setPositions(n, entities, links)
+      let positions = {} as {[key: string]: {x: number; y: number}}
+      if (entities.some(e => e.PosX == null || e.PosY == null)) {
+        const getRandomPosition = () => {
+          return Math.floor(Math.random() * 10) -5;
+        }
+        const test = state.graph!.copy()
+        entities.filter(e => !test.hasNode(getId(e))).forEach(e => test.addNode(getId(e), { x: e.PosX ?? getRandomPosition(), y: e.PosY ?? getRandomPosition(), fixed: false}))
+        links.forEach(e => test.updateEdgeWithKey(e.Id, e.FromEntityId + e.FromEntityTypeId, e.ToEntityId + e.ToEntityTypeId))
+        positions = forceLayout(test, {
+          maxIterations: 50,
+          settings: {
+            gravity: 10
+          },
+          isNodeFixed: (_, attr) => attr.fixed
+        });
       }
 
       for (let entity of entities) {
@@ -66,6 +80,12 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
 
         entity = produce(entity, draft => {
           updateProps(draft)
+
+          if (draft.PosX == null || draft.PosY == null && positions[getId(draft)] != null) {
+            draft.PosX = positions[getId(draft)].x
+            draft.PosY = positions[getId(draft)].y
+            console.log("assinged position", positions[getId(draft)])
+          }
 
           // Show on map
           if (entity.Coordinates) {

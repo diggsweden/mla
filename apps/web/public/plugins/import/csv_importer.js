@@ -12,14 +12,14 @@ function global_csv_import (csvfile) {
   const lines = csvfile.split('\n')
 
   for (let i = 1; i < lines.length; i++) {
-    const data = lines[i].split('\t')
+    const data = lines[i].split(';')
     console.log(data)
 
     if (data.length < 10) {
       continue
     }
 
-    const name = data[3].split(' ')
+    const name = data[5].split(' ')
     let fornamn = data[3]
     let efternamn = ''
     if (name.length == 2) {
@@ -35,24 +35,24 @@ function global_csv_import (csvfile) {
     }
 
     const person = {
-      TypeId: 'ET1',
-      Id: data[2],
+      TypeId: 'person',
+      Id: data[4],
       DateFrom: date,
       Properties: [
         {
-          TypeId: 'ET1E6',
+          TypeId: 'personE6',
           Value: data[0]
         },
         {
-          TypeId: 'ET1E1',
-          Value: data[2]
+          TypeId: 'personE1',
+          Value: data[4]
         },
         {
-          TypeId: 'ET1E2',
+          TypeId: 'personE2',
           Value: fornamn
         },
         {
-          TypeId: 'ET1E3',
+          TypeId: 'personE3',
           Value: efternamn
         }
       ]
@@ -60,37 +60,23 @@ function global_csv_import (csvfile) {
 
     result.Entities.push(person)
 
-    if (data[5] && data[5].length > 1 && data[5] !== '-') {
-      let postnummer = data[6]
-      let ort
-      if (data[6]) {
-        let sp = data[6].split(' ')
-        if (sp.length === 3) {
-          postnummer = sp[0] + sp[1]
-          ort = sp[2]
-        }
-      }
-
+    if (data[7] && data[7].length > 1 && data[7] !== '-') {
       const adress = {
-        TypeId: 'ET4',
+        TypeId: 'adress',
         Id: data[5] + data[6],
         DateFrom: date,
         Properties: [
           {
-            TypeId: 'ET4E1',
-            Value: data[5]
+            TypeId: 'adressE1',
+            Value: data[7]
           },
           {
-            TypeId: 'ET4E2',
-            Value: data[4]
+            TypeId: 'adressE2',
+            Value: data[6]
           },
           {
-            TypeId: 'ET4E3',
-            Value: postnummer
-          },
-          {
-            TypeId: 'ET4E4',
-            Value: ort
+            TypeId: 'adressE4',
+            Value: data[8]
           }
         ]
       }
@@ -101,8 +87,8 @@ function global_csv_import (csvfile) {
         TypeId: 'LT3',
         FromEntityId: adress.Id,
         ToEntityId: person.Id,
-        FromEntityTypeId: 'ET4',
-        ToEntityTypeId: 'ET1',
+        FromEntityTypeId: 'adress',
+        ToEntityTypeId: 'person',
         Properties: [
         ]
       }
@@ -114,45 +100,45 @@ function global_csv_import (csvfile) {
       result.Links.push(adressLink)
     }
 
-    if (data[7] && data[7].length > 1 && data[7] !== '-') {
-      const telefon = {
-        TypeId: 'ET6',
-        Id: data[7],
-        Properties: [
-          {
-            TypeId: 'ET6E1',
-            Value: data[7]
-          }
-        ]
-      }
+    // if (data[7] && data[7].length > 1 && data[7] !== '-') {
+    //   const telefon = {
+    //     TypeId: 'ET6',
+    //     Id: data[7],
+    //     Properties: [
+    //       {
+    //         TypeId: 'ET6E1',
+    //         Value: data[7]
+    //       }
+    //     ]
+    //   }
 
-      result.Entities.push(telefon)
-      var telefonLink = {
-        Id: person.Id + telefon.Id,
-        TypeId: 'LT4',
-        FromEntityId: telefon.Id,
-        ToEntityId: person.Id,
-        FromEntityTypeId: 'ET6',
-        ToEntityTypeId: 'ET1',
-        Properties: [
-        ]
-      }
+    //   result.Entities.push(telefon)
+    //   var telefonLink = {
+    //     Id: person.Id + telefon.Id,
+    //     TypeId: 'LT4',
+    //     FromEntityId: telefon.Id,
+    //     ToEntityId: person.Id,
+    //     FromEntityTypeId: 'ET6',
+    //     ToEntityTypeId: 'person',
+    //     Properties: [
+    //     ]
+    //   }
 
-      result.Links.push(telefonLink)
-    }
+    //   result.Links.push(telefonLink)
+    // }
 
-    if (data[9] && data[9].length > 1 && data[9] !== '-') {
+    if (data[12] && data[12].length > 1 && data[12] !== '-') {
       const organisation = {
-        TypeId: 'ET2',
-        Id: data[9],
+        TypeId: 'organisation',
+        Id: data[12],
         Properties: [
           {
-            TypeId: 'ET2E1',
-            Value: data[9]
+            TypeId: 'organisationE1',
+            Value: data[12]
           },
           {
-            TypeId: 'ET2E2',
-            Value: data[8]
+            TypeId: 'organisationE2',
+            Value: data[14]
           }
         ]
       }
@@ -163,73 +149,73 @@ function global_csv_import (csvfile) {
         TypeId: 'LT1',
         FromEntityId: person.Id,
         ToEntityId: organisation.Id,
-        FromEntityTypeId: 'ET1',
-        ToEntityTypeId: 'ET2',
+        FromEntityTypeId: 'person',
+        ToEntityTypeId: 'organisation',
         Properties: [
         ]
       }
 
       result.Links.push(orgLink)
 
-      if (data[10] && data[10].length > 1 && data[10] !== '-') {
-        let bolagAdr = data[10]
-        let ort = ''
-        let postnummer = ''
+      // if (data[10] && data[10].length > 1 && data[10] !== '-') {
+      //   let bolagAdr = data[10]
+      //   let ort = ''
+      //   let postnummer = ''
 
-        if (data[10].indexOf(',') >= 0) {
-          var first = bolagAdr.substring(0, bolagAdr.lastIndexOf(",") + 1);
-          var last = bolagAdr.substring(bolagAdr.lastIndexOf(",") + 1, bolagAdr.length);
-          var sp = last.split[' ']
+      //   if (data[10].indexOf(',') >= 0) {
+      //     var first = bolagAdr.substring(0, bolagAdr.lastIndexOf(",") + 1);
+      //     var last = bolagAdr.substring(bolagAdr.lastIndexOf(",") + 1, bolagAdr.length);
+      //     var sp = last.split[' ']
 
-          if (sp) {
-            var addingPostnr = true
-            for (var s of sp) {
-              if (addingPostnr && !isNaN(s)) {
-                postnummer += (s)
-              } else {
-                addingPostnr = false
-                ort += (s + " ")
-              }
-            }
+      //     if (sp) {
+      //       var addingPostnr = true
+      //       for (var s of sp) {
+      //         if (addingPostnr && !isNaN(s)) {
+      //           postnummer += (s)
+      //         } else {
+      //           addingPostnr = false
+      //           ort += (s + " ")
+      //         }
+      //       }
   
-            bolagAdr = first
-          }
-        }
+      //       bolagAdr = first
+      //     }
+      //   }
 
-        const adress = {
-          TypeId: 'ET4',
-          Id: data[10],
-          DateFrom: date,
-          Properties: [
-            {
-              TypeId: 'ET4E1',
-              Value: bolagAdr
-            },
-            {
-              TypeId: 'ET4E3',
-              Value: postnummer
-            },
-            {
-              TypeId: 'ET4E4',
-              Value: ort
-            }
-          ]
-        }
+      //   const adress = {
+      //     TypeId: 'adress',
+      //     Id: data[10],
+      //     DateFrom: date,
+      //     Properties: [
+      //       {
+      //         TypeId: 'adressE1',
+      //         Value: bolagAdr
+      //       },
+      //       {
+      //         TypeId: 'adressE3',
+      //         Value: postnummer
+      //       },
+      //       {
+      //         TypeId: 'adressE4',
+      //         Value: ort
+      //       }
+      //     ]
+      //   }
   
-        result.Entities.push(adress)
-        var adressLink = {
-          Id: adress.Id + organisation.Id,
-          TypeId: 'LT3',
-          FromEntityId: adress.Id,
-          ToEntityId: organisation.Id,
-          FromEntityTypeId: 'ET4',
-          ToEntityTypeId: 'ET2',
-          Properties: [
-          ]
-        }
+      //   result.Entities.push(adress)
+      //   var adressLink = {
+      //     Id: adress.Id + organisation.Id,
+      //     TypeId: 'LT3',
+      //     FromEntityId: adress.Id,
+      //     ToEntityId: organisation.Id,
+      //     FromEntityTypeId: 'adress',
+      //     ToEntityTypeId: 'organisation',
+      //     Properties: [
+      //     ]
+      //   }
   
-        result.Links.push(adressLink)
-      }
+      //   result.Links.push(adressLink)
+      // }
     }
   }
 

@@ -5,11 +5,11 @@
 import useMainStore from '../../../store/main-store'
 import viewService, { type IIcon } from '../../../services/viewService'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { isActive, isSelected } from '../../../utils/vis-data-utils'
 import useAppStore from '../../../store/app-store'
 import { Icon, LatLng, Marker } from 'leaflet'
 import * as L from 'leaflet'
 import { IEntity } from '../../../interfaces/data-models'
+import { isActive, isSelected } from '../../../utils/utils'
 
 interface Props {
   from?: IEntity

@@ -2,37 +2,29 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { type DataInterfaceNodes } from 'vis-network'
 import useMainStore from '../../../store/main-store'
 import viewService, { type IIcon } from '../../../services/viewService'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { mapToNode } from '../../../utils/vis-data-utils'
 import useAppStore from '../../../store/app-store'
 import type { IEntity } from '../../../interfaces/data-models'
-import { isActive, isSelected } from '../../../utils/utils'
+import { getId, isSelected } from '../../../utils/utils'
+import Graph from 'graphology'
 
 interface Props {
   entity: IEntity
-  data: DataInterfaceNodes
+  graph: Graph
 }
 
 function ChartNode (props: Props) {
   const entity = props.entity
 
-  const date = useMainStore(state => state.currentDate)
   const selectedIds = useMainStore(state => state.selectedIds)
-  const historyMode = useAppStore(state => state.historyMode)
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
-  const selectedView = useAppStore(state => state.thingViewConfiguration[entity.TypeId])
   const [icon, setIcon] = useState(undefined as IIcon | undefined)
 
   const selected = useMemo(() => {
     return entity != null ? isSelected(entity, selectedIds) : false
   }, [entity, selectedIds])
-
-  const active = useMemo(() => {
-    return entity != null ? selected || isActive(entity, date) : false
-  }, [entity, date, selected])
 
   const iconId = useRef('')
   useEffect(() => {
@@ -48,17 +40,22 @@ function ChartNode (props: Props) {
     }
   }, [entity, viewConfig])
 
-  const view = useMemo(() => {
-    return { ...viewService.getDefaultView(entity.TypeId, entity.GlobalType), ...selectedView }
-  }, [entity, selectedView])
-
   const node = useMemo(() => {
     if (entity == null) {
       return null
     }
 
-    return mapToNode(entity, icon, selected, active, historyMode, viewConfig, view)
-  }, [entity, historyMode, icon, selected, active, viewConfig, view])
+    return {
+      label: entity.LabelChart,
+      size: 20,
+      x: entity.PosX,
+      y: entity.PosY,
+      image: icon?.unselected,
+      highlighted: selected,
+      fixed: true,
+    }
+
+  }, [entity, icon, selected])
 
   const created = useRef(false)
   useEffect(() => {
@@ -66,22 +63,21 @@ function ChartNode (props: Props) {
       return
     }
 
-    const dataset = props.data.getDataSet()
     if (created.current) {
-      console.debug('[updating]', node.id)
-      dataset.updateOnly(node as any)
+      console.debug('[updating]', getId(entity))
+      props.graph.updateNode(getId(entity), () => node)
     } else {
-      console.debug('[adding]', node.id)
-      dataset.update(node)
-      created.current = true
+      console.debug('[adding]', getId(entity))
+      props.graph.addNode(getId(entity), node)
+      created.current = true;
     }
-  }, [entity, icon, node, props.data])
+  }, [entity, icon, node, props.graph])
 
   useEffect(() => {
     return () => {
-      if (node != null) {
-        console.debug('[removing]', node.id)
-        props.data.getDataSet().remove(node.id!)
+      if (created.current) {
+        console.debug('[removing]', getId(entity))
+        props.graph.dropNode(created.current)
         created.current = false
       }
     }

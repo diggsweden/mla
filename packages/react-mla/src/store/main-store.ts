@@ -4,13 +4,20 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { create } from 'zustand'
+import { produce } from 'immer'
 
 import type { IEntity, IEvent, IEventLink, ILink, IPhaseEvent, ITimeSpan } from '../interfaces/data-models'
 import { generateUUID, mergeContext } from '../utils/utils'
 import useAppStore from './app-store'
+
+// VIS
 import { type DataInterfaceEdges, type DataInterfaceNodes, type Edge, type Network, type Node } from 'vis-network'
 import { DataSet } from 'vis-data'
-import { produce } from 'immer'
+
+// Sigma
+import Graph from "graphology";
+import Sigma from "sigma";
+
 import { internalAdd, internalRemove, internalUpdate, updateSelected } from './internal-actions'
 import { assignLinks, computeLinks, filterEvents } from '../utils/event-utils'
 import type { IEventFilter } from '../interfaces/configuration/event-operations'
@@ -62,6 +69,11 @@ export interface MainState {
   selectedEntities: IEntity[]
   selectedLinks: ILink[]
   selectedIds: string[]
+
+
+  graph: Graph | undefined
+  sigma: Sigma | undefined
+  initSigma: (graph: Graph, sigma: Sigma) => void
 
   network: Network | undefined
   setNetwork: (network: Network | undefined) => void
@@ -121,10 +133,19 @@ const useMainStore = create<MainState>((set, get) => ({
   interval: 'day',
   currentDate: {
     DateFrom: DateTime.now().startOf("day"),
-    DateTo:DateTime.now().endOf("day")
+    DateTo: DateTime.now().endOf("day")
   },
-  maxDate: DateTime.now().startOf("day").plus( { months: 6 }),
-  minDate: DateTime.now().startOf("day").minus( { months: 6 }),
+  maxDate: DateTime.now().startOf("day").plus({ months: 6 }),
+  minDate: DateTime.now().startOf("day").minus({ months: 6 }),
+
+  graph: undefined,
+  sigma: undefined,
+  initSigma: (graph, sigma) => {
+    set((state) => ({
+      graph,
+      sigma
+    }))
+  },
 
   data: {
     nodes: new DataSet<Node, 'id'>(),
@@ -144,7 +165,7 @@ const useMainStore = create<MainState>((set, get) => ({
       let fromDate = state.currentDate.DateFrom
       let toDate = state.currentDate.DateTo
       switch (interval) {
-        case 'day': 
+        case 'day':
           fromDate = fromDate.startOf("day")
           toDate = fromDate.endOf("day")
           break
@@ -183,7 +204,7 @@ const useMainStore = create<MainState>((set, get) => ({
     set((state) => {
       const diff = state.currentDate.DateTo.diff(state.currentDate.DateFrom)
       if (!isToDate) {
-        const toDate =  date.plus(diff)
+        const toDate = date.plus(diff)
         result = {
           DateFrom: date,
           DateTo: toDate.endOf("day")
@@ -238,28 +259,25 @@ const useMainStore = create<MainState>((set, get) => ({
     return result
   },
   storePositions: () => {
-    const { network, data, entities } = get()
+    const { network, data, entities, graph } = get()
     const update = [] as IEntity[]
-    if (network) {
-      network.storePositions()
-      data.nodes.getDataSet().forEach(n => {
-        n.fixed = true
-        if (n.id == null) {
-          return
-        }
-        const id = n.id
-        for (const e of entities[id]) {
-          if (e.PosX !== n.x || e.PosY !== n.y) {
+    if (graph) {
+      graph?.forEachNode(n => {
+        graph.setNodeAttribute(n, "fixed", true)
+        const x = graph.getNodeAttribute(n, "x")
+        const y = graph.getNodeAttribute(n, "y")
+        for (const e of entities[n]) {
+          if (e.PosX !== x || e.PosY !== y) {
             update.push(produce(e, draft => {
-              draft.PosX = n.x
-              draft.PosY = n.y
+              draft.PosX = x
+              draft.PosY = y
             }))
           }
         }
       })
+      internalUpdate(true, update, [])
     }
 
-    internalUpdate(true, update, [])
   },
   getEntity: (entityId: string, internalId: string): IEntity | undefined => {
     const existing = get().entities[entityId]
@@ -361,7 +379,7 @@ const useMainStore = create<MainState>((set, get) => ({
               eDraft.Id = generateUUID()
             }
           })
-          
+
           if (draft.Date < state.minDate) {
             minDate = draft.Date
           }

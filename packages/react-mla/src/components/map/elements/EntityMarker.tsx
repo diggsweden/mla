@@ -9,7 +9,7 @@ import { IEntity } from '../../../interfaces/data-models'
 import { useCallback } from 'react'
 import MapLine from './MapLine'
 import useAppStore from '../../../store/app-store'
-import { isActive } from '../../../utils/vis-data-utils'
+import { isActive } from '../../../utils/utils'
 
 interface Props {
   entityId: string

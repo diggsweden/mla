@@ -1,30 +1,25 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 //
 // SPDX-License-Identifier: EUPL-1.2
-
-import { type DataInterfaceEdges } from 'vis-network'
 import useMainStore from '../../../store/main-store'
 import { useEffect, useMemo, useRef } from 'react'
-import { getLinkCount, mapToEdge } from '../../../utils/vis-data-utils'
 import useAppStore from '../../../store/app-store'
 import type { ILink } from '../../../interfaces/data-models'
 import viewService from '../../../services/viewService'
-import { isActive, isSelected } from '../../../utils/utils'
+import { getId, isSelected } from '../../../utils/utils'
+import Graph from 'graphology'
 
 interface Props {
   link: ILink
-  data: DataInterfaceEdges
+  graph: Graph
 }
 
 function ChartEdge(props: Props) {
   const link = props.link
 
   const getEntity = useMainStore(state => state.getCurrentEntity)
-  const links = useMainStore(state => state.links)
-  const computedLinks = useMainStore(state => state.computedLinks)
   const date = useMainStore(state => state.currentDate)
   const selectedIds = useMainStore(state => state.selectedIds)
-  const historyMode = useAppStore(state => state.historyMode)
   const selectedView = useAppStore(state => state.thingViewConfiguration[link.TypeId])
 
   const from = useMemo(() => link != null ? getEntity(link?.FromEntityId + link?.FromEntityTypeId, date.DateFrom) : null, [getEntity, link, date])
@@ -42,30 +37,22 @@ function ChartEdge(props: Props) {
     return false
   }, [from, link, selectedIds, to, view.Show])
 
-  const allLinks = useMemo(() => {
-    return [...Object.values(links).map(l => l[0]), ...computedLinks]
-  }, [links, computedLinks])
+  // const count = useMemo(() => {
+  //   if (link == null) {
+  //     return 0
+  //   }
 
-  const active = useMemo(() => {
-    if (link != null && from != null && to != null) {
-      return selected || (isActive(link, date) && isActive(from, date) && isActive(to, date))
-    }
-
-    return false
-  }, [link, date, selected, from, to])
-
-  const count = useMemo(() => {
-    if (link == null) {
-      return 0
-    }
-
-    const count = getLinkCount(link, allLinks)
-    return count
-  }, [allLinks, link])
+  //   const count = getLinkCount(link, allLinks)
+  //   return count
+  // }, [allLinks, link])
 
   const edge = useMemo(() => {
-    return (link) ? mapToEdge(link, selected, active, historyMode, count, view) : null
-  }, [link, selected, active, historyMode, count, view])
+    return {
+      size: 2,
+      highlighted: selected,
+      drawLabel: true
+    }
+  }, [selected])
 
   const created = useRef(false)
   useEffect(() => {
@@ -73,22 +60,30 @@ function ChartEdge(props: Props) {
       return
     }
 
-    const dataset = props.data.getDataSet()
     if (created.current) {
-      console.debug('[updating]', edge.id)
-      dataset.updateOnly(edge as any)
+      console.debug('[updating]', getId(link))
+      props.graph.updateEdgeWithKey(getId(link), link.FromEntityId + link.FromEntityTypeId, link.ToEntityId + link.ToEntityTypeId, () => edge);
+
     } else {
-      console.debug('[adding]', edge.id)
-      dataset.update(edge)
-      created.current = true
+      console.debug('[adding]', getId(link))
+      try {
+        const from = link.FromEntityId + link.FromEntityTypeId;
+        const to = link.ToEntityId + link.ToEntityTypeId
+        if (props.graph.hasNode(from) && props.graph.hasNode(to)) {
+          props.graph.addEdgeWithKey(getId(link), link.FromEntityId + link.FromEntityTypeId, link.ToEntityId + link.ToEntityTypeId, edge);
+          created.current = true
+        }
+      } catch (e) {
+        console.error(e)
+      }
     }
-  }, [edge, props.data])
+  }, [edge, link, props.graph])
 
   useEffect(() => {
     return () => {
-      if (edge != null) {
-        console.debug('[removing]', edge.id)
-        props.data.getDataSet().remove(edge.id!)
+      if (created.current) {
+        console.debug('[removing]', getId(link))
+        props.graph.dropEdge(getId(link))
         created.current = false
       }
     }

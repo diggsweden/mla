@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [
     react(),
     dts({ rollupTypes: true }),
-    cssInjectedByJsPlugin()
+    cssInjectedByJsPlugin(),
   ],
   build: {
     outDir: './dist',

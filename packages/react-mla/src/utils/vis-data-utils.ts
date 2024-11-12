@@ -2,13 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { Direction, IChartBase, IEntity, ILink, ITimeSpan } from '../interfaces/data-models'
+import { Direction, IEntity, ILink } from '../interfaces/data-models'
 import { getId, isLinked, randomNumber } from './utils'
 import viewService, { IIcon } from '../services/viewService'
 import { Edge, Network, Node, Position } from 'vis-network'
 import { IBaseViewConfiguration, IViewConfiguration, } from '../interfaces/configuration/view-configuration'
 import configService from '../services/configurationService'
-import { Interval } from 'luxon'
 import { produce } from 'immer'
 
 export function setPositions(n: Network, entities: IEntity[], links: ILink[]): IEntity[] {
@@ -145,39 +144,6 @@ export function positionGroup(entity: IEntity, linked: IEntity[], x: number, y: 
   res.push(...linked.filter(l => l.PosX != null && l.PosY != null))
 
   return res
-}
-
-export function isSelected(thing: IChartBase, selected: string[]): boolean {
-  return selected.some(s => s === getId(thing))
-}
-
-export function isActive(thing: IChartBase, time: ITimeSpan): boolean {
-  const interval = Interval.fromDateTimes(time.DateFrom, time.DateTo)
-
-  if (thing.DateFrom == null && thing.DateTo == null) {
-    return true
-  }
-
-  if (thing.DateFrom == null && thing.DateTo != null) {
-    return interval.contains(thing.DateTo)
-  }
-
-  if (thing.DateTo == null && thing.DateFrom != null) {
-    return interval.contains(thing.DateFrom)
-  }
-
-  if (thing.DateFrom != null && thing.DateTo != null) {
-    if (thing.DateFrom.toISO() == thing.DateTo.toISO()) {
-      return interval.contains(thing.DateFrom)
-    } else {
-      const interval2 = Interval.fromDateTimes(thing.DateFrom!, thing.DateTo!)
-      if (interval2.isValid) {
-        return interval.intersection(interval2) != null
-      }
-    }
-  }
-
-  return false
 }
 
 export function mapToNode(entity: IEntity, icon: IIcon | undefined, selected: boolean, active: boolean, historyMode: boolean, config: IViewConfiguration, view: IBaseViewConfiguration): Node {

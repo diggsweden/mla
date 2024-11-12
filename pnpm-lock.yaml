@@ -12,6 +12,10 @@ overrides:
 importers:
 
   .:
+    dependencies:
+      globals:
+        specifier: 15.12.0
+        version: 15.12.0
     devDependencies:
       '@commitlint/cli':
         specifier: 19.5.0
@@ -25,6 +29,21 @@ importers:
       commitizen:
         specifier: 4.3.1
         version: 4.3.1(@types/node@20.17.6)(typescript@5.6.3)
+      eslint:
+        specifier: 9.14.0
+        version: 9.14.0(jiti@1.21.6)
+      eslint-plugin-autofix:
+        specifier: 2.2.0
+        version: 2.2.0(eslint@9.14.0(jiti@1.21.6))
+      eslint-plugin-react:
+        specifier: 7.37.2
+        version: 7.37.2(eslint@9.14.0(jiti@1.21.6))
+      eslint-plugin-react-hooks:
+        specifier: 5.1.0-rc-fb9a90fa48-20240614
+        version: 5.1.0-rc-fb9a90fa48-20240614(eslint@9.14.0(jiti@1.21.6))
+      eslint-plugin-react-refresh:
+        specifier: 0.4.14
+        version: 0.4.14(eslint@9.14.0(jiti@1.21.6))
       gh-pages:
         specifier: 6.2.0
         version: 6.2.0
@@ -107,9 +126,27 @@ importers:
       '@geoman-io/leaflet-geoman-free':
         specifier: ^2.17.0
         version: 2.17.0(leaflet@1.9.4)
+      '@react-sigma/core':
+        specifier: ^4.0.3
+        version: 4.0.3(graphology@0.25.4(graphology-types@0.24.7))(react@18.3.1)(sigma@3.0.0-beta.36(graphology-types@0.24.7))
+      '@sigma/node-image':
+        specifier: 3.0.0-beta.16
+        version: 3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.7))
+      '@sigma/utils':
+        specifier: 3.0.0-beta.6
+        version: 3.0.0-beta.6(sigma@3.0.0-beta.36(graphology-types@0.24.7))
       glob:
         specifier: ^11.0.0
         version: 11.0.0
+      graphology:
+        specifier: ^0.25.4
+        version: 0.25.4(graphology-types@0.24.7)
+      graphology-layout-force:
+        specifier: ^0.2.4
+        version: 0.2.4(graphology-types@0.24.7)
+      graphology-layout-forceatlas2:
+        specifier: ^0.10.1
+        version: 0.10.1(graphology-types@0.24.7)
       http-request-mock:
         specifier: ^2.0.0
         version: 2.0.2
@@ -140,6 +177,9 @@ importers:
       react-i18next:
         specifier: ^15.0.1
         version: 15.1.1(i18next@23.16.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      sigma:
+        specifier: 3.0.0-beta.36
+        version: 3.0.0-beta.36(graphology-types@0.24.7)
       tailwindcss:
         specifier: 3.4.14
         version: 3.4.14
@@ -153,15 +193,6 @@ importers:
         specifier: ^5.0.0
         version: 5.0.1(@types/react@18.3.12)(immer@10.1.1)(react@18.3.1)
     devDependencies:
-      '@eslint/compat':
-        specifier: 1.2.2
-        version: 1.2.2(eslint@9.14.0(jiti@1.21.6))
-      '@eslint/eslintrc':
-        specifier: 3.1.0
-        version: 3.1.0
-      '@eslint/js':
-        specifier: 9.14.0
-        version: 9.14.0
       '@playwright/test':
         specifier: 1.48.2
         version: 1.48.2
@@ -212,25 +243,10 @@ importers:
         version: 2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4)
       '@vitest/coverage-v8':
         specifier: 2.1.4
-        version: 2.1.4(@vitest/browser@2.1.4)(vitest@2.1.4)
+        version: 2.1.4(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.10(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.48)
-      eslint:
-        specifier: 9.14.0
-        version: 9.14.0(jiti@1.21.6)
-      eslint-plugin-autofix:
-        specifier: 2.2.0
-        version: 2.2.0(eslint@9.14.0(jiti@1.21.6))
-      eslint-plugin-react:
-        specifier: 7.37.2
-        version: 7.37.2(eslint@9.14.0(jiti@1.21.6))
-      eslint-plugin-react-hooks:
-        specifier: 5.1.0-rc-fb9a90fa48-20240614
-        version: 5.1.0-rc-fb9a90fa48-20240614(eslint@9.14.0(jiti@1.21.6))
-      eslint-plugin-react-refresh:
-        specifier: 0.4.14
-        version: 0.4.14(eslint@9.14.0(jiti@1.21.6))
       globals:
         specifier: 15.12.0
         version: 15.12.0
@@ -263,7 +279,7 @@ importers:
         version: 2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6)
       vitest-browser-react:
         specifier: 0.0.3
-        version: 0.0.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(@vitest/browser@2.1.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.4)
+        version: 0.0.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.10(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))
     publishDirectory: dist
 
   packages/webcomponent-mla:
@@ -962,6 +978,13 @@ packages:
   '@react-dnd/shallowequal@4.0.2':
     resolution: {integrity: sha512-/RVXdLvJxLg4QKvMoM5WlwNR9ViO9z8B/qPcc+C0Sa/teJY7QG7kJ441DwzOjMYEY7GmU4dj5EcGHIkKZiQZCA==}
 
+  '@react-sigma/core@4.0.3':
+    resolution: {integrity: sha512-/y/U1GH18xjGYMWNYXXqHGJ+8tHf+e4z1i0gNSm9iuhch8sGFJooO3VfyPJlBox42Wl4/gCapQhOHAfVW0pRtw==}
+    peerDependencies:
+      graphology: ^0.25.4
+      react: ^18.0.0
+      sigma: ^3.0.0-beta.24
+
   '@rollup/pluginutils@5.1.3':
     resolution: {integrity: sha512-Pnsb6f32CD2W3uCaLZIzDmeFyQ2b8UWMFI7xtwUezpcGBDVDW6y9XgAWIlARiGAo6eNF5FK5aQTr0LFyNyqq5A==}
     engines: {node: '>=14.0.0'}
@@ -1082,6 +1105,16 @@ packages:
 
   '@rushstack/ts-command-line@4.23.0':
     resolution: {integrity: sha512-jYREBtsxduPV6ptNq8jOKp9+yx0ld1Tb/Tkdnlj8gTjazl1sF3DwX2VbluyYrNd0meWIL0bNeer7WDf5tKFjaQ==}
+
+  '@sigma/node-image@3.0.0-beta.16':
+    resolution: {integrity: sha512-MLFlgQL7IfML4THaR3pK77t9cIxopXW/Vrb+7GGYvMuF4Pp15ufZFhMJG/YQSoKn/J30eLQnWKv+ErBeK/xglg==}
+    peerDependencies:
+      sigma: '>=3.0.0-beta.10'
+
+  '@sigma/utils@3.0.0-beta.6':
+    resolution: {integrity: sha512-CKu0BvSKPKr0CVTfR+1tyqs9xtZ7VlHqtoPuzybGj4DqhwD3ysfa+32x5QWwy3ocNwFl9WmW7n4hGAvZGtuF/w==}
+    peerDependencies:
+      sigma: '>=3.0.0-beta.29'
 
   '@testing-library/dom@10.4.0':
     resolution: {integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==}
@@ -2009,6 +2042,10 @@ packages:
   eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
 
+  events@3.3.0:
+    resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
+    engines: {node: '>=0.8.x'}
+
   execa@0.6.3:
     resolution: {integrity: sha512-/teX3MDLFBdYUhRk8WCBYboIMUmqeizu0m9Z3YF3JWrbEh/SlZg00vLJSaAGWw3wrZ9tE0buNw79eaAPYhUuvg==}
     engines: {node: '>=4'}
@@ -2245,6 +2282,29 @@ packages:
 
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
+
+  graphology-layout-force@0.2.4:
+    resolution: {integrity: sha512-NYZz0YAnDkn5pkm30cvB0IScFoWGtbzJMrqaiH070dYlYJiag12Oc89dbVfaMaVR/w8DMIKxn/ix9Bqj+Umm9Q==}
+    peerDependencies:
+      graphology-types: '>=0.19.0'
+
+  graphology-layout-forceatlas2@0.10.1:
+    resolution: {integrity: sha512-ogzBeF1FvWzjkikrIFwxhlZXvD2+wlY54lqhsrWprcdPjopM2J9HoMweUmIgwaTvY4bUYVimpSsOdvDv1gPRFQ==}
+    peerDependencies:
+      graphology-types: '>=0.19.0'
+
+  graphology-types@0.24.7:
+    resolution: {integrity: sha512-tdcqOOpwArNjEr0gNQKCXwaNCWnQJrog14nJNQPeemcLnXQUUGrsCWpWkVKt46zLjcS6/KGoayeJfHHyPDlvwA==}
+
+  graphology-utils@2.5.2:
+    resolution: {integrity: sha512-ckHg8MXrXJkOARk56ZaSCM1g1Wihe2d6iTmz1enGOz4W/l831MBCKSayeFQfowgF8wd+PQ4rlch/56Vs/VZLDQ==}
+    peerDependencies:
+      graphology-types: '>=0.23.0'
+
+  graphology@0.25.4:
+    resolution: {integrity: sha512-33g0Ol9nkWdD6ulw687viS8YJQBxqG5LWII6FI6nul0pq6iM2t5EKquOTFDbyTblRB3O9I+7KX4xI8u5ffekAQ==}
+    peerDependencies:
+      graphology-types: '>=0.24.0'
 
   graphql@16.9.0:
     resolution: {integrity: sha512-GGTKBX4SD7Wdb8mqeDLni2oaRGYQWjWHGKPQ24ZMnUtKfcsVoiv4uX8+LJr1K6U5VW2Lu1BwJnj7uiori0YtRw==}
@@ -2914,6 +2974,9 @@ packages:
     resolution: {integrity: sha512-yBYjY9QX2hnRmZHAjG/f13MzmBzxzYgQhFrke06TTyKY5zSTEqkOeukBzIdVA3j3ulu8Qa3MbVFShV7T2RmGtQ==}
     engines: {node: '>= 0.4'}
 
+  obliterator@2.0.4:
+    resolution: {integrity: sha512-lgHwxlxV1qIg1Eap7LgIeoBWIMFibOjbrYPIPJZcI1mmGAI2m3lNYpK12Y+GBdPQ0U1hRwSord7GIaawz962qQ==}
+
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
@@ -3470,6 +3533,9 @@ packages:
 
   siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
+
+  sigma@3.0.0-beta.36:
+    resolution: {integrity: sha512-Ir60NbnZT2bMhU+1OxCVpMOSGxVqjbY6Gh5J6vqFNHDyp4BdG2lam9H/uZtTpWA9lQPMQmnKfya6EzicS0Q+dA==}
 
   signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
@@ -4726,6 +4792,12 @@ snapshots:
 
   '@react-dnd/shallowequal@4.0.2': {}
 
+  '@react-sigma/core@4.0.3(graphology@0.25.4(graphology-types@0.24.7))(react@18.3.1)(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
+    dependencies:
+      graphology: 0.25.4(graphology-types@0.24.7)
+      react: 18.3.1
+      sigma: 3.0.0-beta.36(graphology-types@0.24.7)
+
   '@rollup/pluginutils@5.1.3(rollup@4.25.0)':
     dependencies:
       '@types/estree': 1.0.6
@@ -4821,6 +4893,14 @@ snapshots:
       string-argv: 0.3.2
     transitivePeerDependencies:
       - '@types/node'
+
+  '@sigma/node-image@3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
+    dependencies:
+      sigma: 3.0.0-beta.36(graphology-types@0.24.7)
+
+  '@sigma/utils@3.0.0-beta.6(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
+    dependencies:
+      sigma: 3.0.0-beta.36(graphology-types@0.24.7)
 
   '@testing-library/dom@10.4.0':
     dependencies:
@@ -5133,7 +5213,7 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@2.1.4(@vitest/browser@2.1.4)(vitest@2.1.4)':
+  '@vitest/coverage-v8@2.1.4(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.10(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -6008,6 +6088,8 @@ snapshots:
 
   eventemitter3@4.0.7: {}
 
+  events@3.3.0: {}
+
   execa@0.6.3:
     dependencies:
       cross-spawn: 5.1.0
@@ -6288,6 +6370,28 @@ snapshots:
   graceful-fs@4.2.11: {}
 
   graphemer@1.4.0: {}
+
+  graphology-layout-force@0.2.4(graphology-types@0.24.7):
+    dependencies:
+      graphology-types: 0.24.7
+      graphology-utils: 2.5.2(graphology-types@0.24.7)
+
+  graphology-layout-forceatlas2@0.10.1(graphology-types@0.24.7):
+    dependencies:
+      graphology-types: 0.24.7
+      graphology-utils: 2.5.2(graphology-types@0.24.7)
+
+  graphology-types@0.24.7: {}
+
+  graphology-utils@2.5.2(graphology-types@0.24.7):
+    dependencies:
+      graphology-types: 0.24.7
+
+  graphology@0.25.4(graphology-types@0.24.7):
+    dependencies:
+      events: 3.3.0
+      graphology-types: 0.24.7
+      obliterator: 2.0.4
 
   graphql@16.9.0: {}
 
@@ -6916,6 +7020,8 @@ snapshots:
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
 
+  obliterator@2.0.4: {}
+
   once@1.4.0:
     dependencies:
       wrappy: 1.0.2
@@ -7435,6 +7541,13 @@ snapshots:
 
   siginfo@2.0.0: {}
 
+  sigma@3.0.0-beta.36(graphology-types@0.24.7):
+    dependencies:
+      events: 3.3.0
+      graphology-utils: 2.5.2(graphology-types@0.24.7)
+    transitivePeerDependencies:
+      - graphology-types
+
   signal-exit@3.0.7: {}
 
   signal-exit@4.1.0: {}
@@ -7850,7 +7963,7 @@ snapshots:
       fsevents: 2.3.3
       sass-embedded: 1.80.6
 
-  vitest-browser-react@0.0.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(@vitest/browser@2.1.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.4):
+  vitest-browser-react@0.0.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(@vitest/browser@2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.10(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.4(@types/node@20.17.6)(@vitest/browser@2.1.4)(msw@2.6.4(@types/node@20.17.6)(typescript@5.5.4))(sass-embedded@1.80.6)):
     dependencies:
       '@vitest/browser': 2.1.4(@types/node@20.17.6)(playwright@1.48.2)(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))(vitest@2.1.4)
       react: 18.3.1
