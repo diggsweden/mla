@@ -52,15 +52,6 @@ function Chart(props: Props) {
       // defaultDrawNodeLabel: drawLabel,
     });
 
-    renderer.on("clickEdge", (e) => {
-      if (e.event.original.ctrlKey) {
-        const selected = useMainStore.getState().selectedIds;
-        setSelected([e.edge, ...selected])
-      } else {
-        setSelected([e.edge])
-      }
-    })
-
     init(renderer);
 
     return () => {

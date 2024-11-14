@@ -32,6 +32,8 @@ interface JoinResult {
   show: boolean
 }
 
+// TODO använd: https://graphology.github.io/standard-library/communities-louvain
+
 export default function GraphTools (props: Props) {
   const { t } = useTranslation();
 

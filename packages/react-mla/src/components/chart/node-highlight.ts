@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 import { useEffect, useState } from "react";
 import Sigma from "sigma";
 import useAppStore from "../../store/app-store";
@@ -56,5 +60,10 @@ export function useNodeHighlight(renderer: Sigma | undefined) {
             }
             return newData;
         });
+
+        return () => {
+            renderer.setSetting("nodeReducer", null)
+            renderer.setSetting("edgeReducer", null)
+        }
     }, [hoveredNode, disableHoverEffect, renderer]);
 }

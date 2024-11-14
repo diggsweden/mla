@@ -6,7 +6,7 @@ import { RefObject, useEffect, useRef } from 'react'
 
 import useAppStore from '../../store/app-store'
 import Sigma from 'sigma'
-import { SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
+import { SigmaEdgeEventPayload, SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
 import useMainStore from '../../store/main-store'
 
 const LEFT_CLICK = 0
@@ -31,6 +31,26 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
     useEffect(() => {
         if (renderer == null) return
 
+        const canv = renderer.getCanvases()["multiselect"] ?? renderer.createCanvas("multiselect")
+        const container = renderer.getContainer();
+        canv.style.userSelect = "none";
+        canv.style.touchAction = "none";
+        canv.style.pointerEvents = "none";
+        canv.style["width"] = `${container.clientWidth}px`;
+        canv.style["height"] = `${container.clientHeight}px`;
+        canv.setAttribute("width", `${container.clientWidth}px`)
+        canv.setAttribute("height", `${container.clientHeight}px`)
+
+        canvas.current = canv
+
+        return () => {
+            canvas.current = null;
+        }
+    })
+
+    useEffect(() => {
+        if (renderer == null || canvas.current == null) return
+
         if (canvas.current == null) {
             const container = renderer.getContainer();
             const canv = renderer.createCanvas("multiselect")
@@ -45,7 +65,7 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             canvas.current = canv
         }
 
-        const selectFromDOMRect = (ctrlKey: boolean) => {
+        const selectInGraph = (ctrlKey: boolean) => {
             const rect = graphSelect.current
             const order = (a: number, b: number) => {
                 return b < a ? [b, a] : [a, b]
@@ -55,20 +75,20 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             const [sY, eY] = order(rect.startY, rect.endY)
 
             const result = ctrlKey ? [...selectedIds]  : []
-            Object.keys(entities).forEach(e => {
-              const entity = entities[e][0]
+            for (const entityId of Object.keys(entities)) {
+                const entity = entities[entityId][0]
         
-              const t = {
-                x: entity.PosX ?? 0,
-                y: entity.PosY ?? 0
-              }
-      
-              if (sX <= t.x && t.x <= eX && sY <= t.y && t.y <= eY) {
-                if (!result.includes(e)) {
-                    result.push(e)
+                const t = {
+                  x: entity.PosX ?? 0,
+                  y: entity.PosY ?? 0
                 }
-              }
-            })
+        
+                if (sX <= t.x && t.x <= eX && sY <= t.y && t.y <= eY) {
+                  if (!result.includes(entityId)) {
+                      result.push(entityId)
+                  }
+                }
+            }
 
             setSelected(result)
         }
@@ -174,7 +194,7 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
 
                     const diff = Date.now() - time.current
                     if (diff > CONTEXT_TIMEOUT) {
-                        selectFromDOMRect(click.ctrlKey)
+                        selectInGraph(click.ctrlKey)
                     }
     
                     drawMultiselect()
@@ -193,12 +213,38 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
 
                     const diff = Date.now() - time.current
                     if (diff > CONTEXT_TIMEOUT) {
-                        selectFromDOMRect(click.ctrlKey)
+                        selectInGraph(click.ctrlKey)
                     }
     
                     drawMultiselect()
                 } else {
-                    setSelected([e.node])
+                    if (e.event.original.ctrlKey) {
+                        setSelected([e.node, ...selectedIds])
+                    } else {
+                        setSelected([e.node])
+                    }
+                }
+            }
+        }
+
+        const upLeftEdge = (e: SigmaEdgeEventPayload) => {
+            const click = e.event.original as MouseEvent;
+            if (click.button === LEFT_CLICK) {
+                if (drag.current) {
+                    drag.current = false;
+
+                    const diff = Date.now() - time.current
+                    if (diff > CONTEXT_TIMEOUT) {
+                        selectInGraph(click.ctrlKey)
+                    }
+    
+                    drawMultiselect()
+                } else {
+                    if (e.event.original.ctrlKey) {
+                        setSelected([e.edge, ...selectedIds])
+                    } else {
+                        setSelected([e.edge])
+                    }
                 }
             }
         }
@@ -222,6 +268,7 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
         renderer.on("moveBody", move)
         renderer.on("upStage", upLeft)
         renderer.on("upNode", upLeftNode)
+        renderer.on("upEdge", upLeftEdge)
         renderer.on("rightClickNode", rightClickNode);
         renderer.on("rightClickStage", rightClickStage);
 
@@ -231,6 +278,7 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             renderer.off("moveBody", move)
             renderer.off("upStage", upLeft)
             renderer.off("upNode", upLeftNode)
+            renderer.off("upEdge", upLeftEdge)
             renderer.off("rightClickNode", rightClickNode);
             renderer.off("rightClickStage", rightClickStage);
         }
