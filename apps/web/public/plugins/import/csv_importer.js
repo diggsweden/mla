@@ -3,17 +3,13 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 function global_csv_import (csvfile) {
-  const result = {
-    Entities: [],
-    Links: [],
-    ErrorMessage: ""
-  }
+  const entities = {}
+  const links = {}
 
   const lines = csvfile.split('\n')
 
   for (let i = 1; i < lines.length; i++) {
     const data = lines[i].split(';')
-    console.log(data)
 
     if (data.length < 10) {
       continue
@@ -57,13 +53,12 @@ function global_csv_import (csvfile) {
         }
       ]
     }
-
-    result.Entities.push(person)
+    entities[person.Id] = person
 
     if (data[7] && data[7].length > 1 && data[7] !== '-') {
       const adress = {
         TypeId: 'adress',
-        Id: data[5] + data[6],
+        Id: data[7] + data[8],
         DateFrom: date,
         Properties: [
           {
@@ -80,8 +75,7 @@ function global_csv_import (csvfile) {
           }
         ]
       }
-
-      result.Entities.push(adress)
+      entities[adress.Id] = adress
       var adressLink = {
         Id: adress.Id + person.Id,
         TypeId: 'LT3',
@@ -97,7 +91,7 @@ function global_csv_import (csvfile) {
         adressLink.Properties.push({ TypeId: 'LT2E1', Value: 'Folkbokförd' })
       }
 
-      result.Links.push(adressLink)
+      links[adressLink.Id] = adressLink
     }
 
     // if (data[7] && data[7].length > 1 && data[7] !== '-') {
@@ -143,7 +137,7 @@ function global_csv_import (csvfile) {
         ]
       }
 
-      result.Entities.push(organisation)
+      entities[organisation.Id] = organisation
       var orgLink = {
         Id: person.Id + organisation.Id,
         TypeId: 'LT1',
@@ -155,7 +149,7 @@ function global_csv_import (csvfile) {
         ]
       }
 
-      result.Links.push(orgLink)
+      links[orgLink.Id] = orgLink
 
       // if (data[10] && data[10].length > 1 && data[10] !== '-') {
       //   let bolagAdr = data[10]
@@ -219,5 +213,9 @@ function global_csv_import (csvfile) {
     }
   }
 
-  return result
+
+  return {
+    Entities: Object.values(entities),
+    Links: Object.values(links)
+  }
 }

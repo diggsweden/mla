@@ -4,19 +4,21 @@
 
 import { useEffect, useState } from 'react'
 import useMainStore from '../../../store/main-store'
-import { Dijkstra } from '../../../utils/djikstra'
-import { StronglyConnected } from '../../../utils/strongly-connected'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
 import Modal from '../../common/Modal'
 import Spinner from '../../common/Spinner'
 import configService from '../../../services/configurationService'
-import { findId } from '../../../utils/utils'
+import { findId, getId } from '../../../utils/utils'
 import type { IEntity, ILink } from '../../../interfaces/data-models'
 import { produce } from 'immer'
 import { internalAdd, internalRemove } from '../../../store/internal-actions'
 import { useTranslation } from 'react-i18next'
+
+import { bidirectional } from 'graphology-shortest-path/unweighted';
+import { edgePathFromNodePath } from 'graphology-shortest-path/utils';
+import eccentricity from 'graphology-metrics/node/eccentricity';
 
 interface Props {
   show?: boolean
@@ -33,37 +35,65 @@ interface JoinResult {
 export default function GraphTools (props: Props) {
   const { t } = useTranslation();
 
-  const selection = useMainStore((state) => state.selectedIds)
+  const selectedIds = useMainStore((state) => state.selectedIds)
   const selectedEntities = useMainStore((state) => state.selectedEntities)
   const entities = useMainStore((state) => state.entities)
   const links = useMainStore((state) => state.links)
   const events = useMainStore((state) => state.events)
   const setSelected = useMainStore((state) => state.setSelected)
   const updateEvents = useMainStore((state) => state.setEvent)
-  const data = useMainStore((state) => state.data)
+
+  const graph = useMainStore((state) => state.graph)
 
   const [showJoin, setShowJoin] = useState(false)
   const [joinLoading, setJoinLoading] = useState(false)
   const [joinResult, setJoinResult] = useState([] as JoinResult[])
 
-  function djikstra () {
-    const result = Dijkstra(data.nodes, data.edges, selection[0], selection[1])
-    for (let i = 0; i < result.length; i++) {
-      data.edges.forEach(e => {
-        if ((e.from === result[i] && e.to === result[i + 1]) || (e.to === result[i] && e.from === result[i + 1])) {
-          if (e.id) {
-            result.push(e.id.toString())
-          }
-        }
-      })
-    }
+  function shortestPath () {
+    const nodePath = bidirectional(graph, getId(selectedEntities[0]), getId(selectedEntities[1]));
+    if (nodePath) {
+      const edgePath = edgePathFromNodePath(graph, nodePath);
+      const result = [...nodePath, ...edgePath]
+      setSelected(result)
 
-    setSelected(result)
+      nodePath.forEach(r => {
+        graph.setNodeAttribute(r, "highlighted", true)
+      })
+      edgePath.forEach(r => {
+        graph.setEdgeAttribute(r, "highlighted", true)
+      })
+    } else {
+      window.alert("TODO: Det finns ingen väg mellan noderna")
+    }
   }
 
   function stronglyConnected () {
-    const result = StronglyConnected(data.nodes, data.edges)
-    setSelected(result)
+    let nodes = selectedIds.filter(n => graph.hasNode(n))
+    if (nodes.length == 0) {
+      nodes = Object.keys(entities)
+    }
+
+    const scores = {} as Record<string, number>
+    for (const node of nodes) {
+      scores[node] = eccentricity(graph, node)
+    }
+
+    let maxScore = Number.MAX_VALUE;
+    let max = ""
+    for (const node of Object.keys(scores)) {
+      const score = scores[node]
+      if (score < maxScore) {
+        maxScore = score
+        max = node
+      }
+    }
+
+    if (max) {
+      graph.setNodeAttribute(max, "highlighted", true)
+      setSelected([max])
+    } else {
+      window.alert("TODO: Hittade inget vettigt")
+    }
   }
 
   function join () {
@@ -175,9 +205,9 @@ export default function GraphTools (props: Props) {
 
   return (<>
     <RibbonMenuSection title={(t('tools'))}>
-      <RibbonMenuButton label={t('find link')} title={t('find link desc')} disabled={selectedEntities.length !== 2} onClick={() => { djikstra() }} iconName="route" />
-      <RibbonMenuButton label={t('break network')} title={t('break network desc')} disabled={data.edges.length === 0} onClick={() => { stronglyConnected() }} iconName="rebase" />
-      <RibbonMenuButton label={t('merge')} title={t('merge desc')} disabled={(data.nodes.length + data.edges.length) === 0} onClick={() => { setShowJoin(true) }} iconName="join_left" />
+      <RibbonMenuButton label={t('find link')} title={t('find link desc')} disabled={selectedEntities.length !== 2} onClick={() => { shortestPath() }} iconName="route" />
+      <RibbonMenuButton label={t('break network')} title={t('break network desc')} disabled={Object.keys(links).length === 0} onClick={() => { stronglyConnected() }} iconName="rebase" />
+      <RibbonMenuButton label={t('merge')} title={t('merge desc')} disabled={(Object.keys(entities).length + Object.keys(links).length) === 0} onClick={() => { setShowJoin(true) }} iconName="join_left" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
 

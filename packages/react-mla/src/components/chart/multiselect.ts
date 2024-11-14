@@ -6,7 +6,7 @@ import { RefObject, useEffect, useRef } from 'react'
 
 import useAppStore from '../../store/app-store'
 import Sigma from 'sigma'
-import { SigmaStageEventPayload } from 'sigma/types'
+import { SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
 import useMainStore from '../../store/main-store'
 
 const LEFT_CLICK = 0
@@ -73,11 +73,6 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             setSelected(result)
         }
 
-        renderer.on("rightClickStage", (e) => {
-            e.preventSigmaDefault();
-            e.event.original.preventDefault();
-        });
-
         const drawMultiselect = () => {
             if (renderer == null || canvas.current == null) {
                 return
@@ -110,7 +105,7 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             }
         }
 
-        const down = function (e: SigmaStageEventPayload) {
+        const down = (e: SigmaStageEventPayload) => {
             const click = e.event.original as MouseEvent;
             
             if (click.button == RIGHT_CLICK) {
@@ -134,7 +129,7 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             }
         }
 
-        const move = function (e: SigmaStageEventPayload) {
+        const move = (e: SigmaStageEventPayload) => {
             if (pan.current) {
                 const pos = renderer.viewportToFramedGraph(e.event)
                 const camera = renderer.getCamera()
@@ -157,7 +152,7 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             }
         }
 
-        const upRight = function (e: MouseEvent) {
+        const up = (e: MouseEvent) => {
             if (e.button === RIGHT_CLICK) {
                 e.preventDefault();
                 const diff = Date.now() - time.current
@@ -168,33 +163,76 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
                 }
 
                 pan.current = false;
-
             }
         }
 
-        const upLeft = function (e: SigmaStageEventPayload) {
+        const upLeft = (e: SigmaStageEventPayload) => {
             const click = e.event.original as MouseEvent;
             if (click.button === LEFT_CLICK) {
-                const diff = Date.now() - time.current
-                if (diff > CONTEXT_TIMEOUT && drag.current) {
-                    selectFromDOMRect(click.ctrlKey)
-                }
+                if (drag.current) {
+                    drag.current = false;
 
-                drag.current = false;
-                drawMultiselect();
+                    const diff = Date.now() - time.current
+                    if (diff > CONTEXT_TIMEOUT) {
+                        selectFromDOMRect(click.ctrlKey)
+                    }
+    
+                    drawMultiselect()
+                } else {
+                    setSelected([])
+                }
+            }
+
+        }
+
+        const upLeftNode = (e: SigmaNodeEventPayload) => {
+            const click = e.event.original as MouseEvent;
+            if (click.button === LEFT_CLICK) {
+                if (drag.current) {
+                    drag.current = false;
+
+                    const diff = Date.now() - time.current
+                    if (diff > CONTEXT_TIMEOUT) {
+                        selectFromDOMRect(click.ctrlKey)
+                    }
+    
+                    drawMultiselect()
+                } else {
+                    setSelected([e.node])
+                }
             }
         }
 
-        renderer.getContainer().onmouseup = upRight;
+        const rightClickStage = (e: SigmaStageEventPayload) => {
+            e.preventSigmaDefault();
+            e.event.original.preventDefault();
+        }
+
+        const rightClickNode = (e: SigmaNodeEventPayload) => {
+            setSelected([e.node])
+            const click = e.event.original as MouseEvent;
+            showContextMenu(click.pageX, click.pageY)
+            e.preventSigmaDefault();
+            e.event.original.preventDefault();
+            e.event.original.stopPropagation();
+        }
+
+        renderer.getContainer().onmouseup = up;
         renderer.on("downStage", down)
         renderer.on("moveBody", move)
         renderer.on("upStage", upLeft)
+        renderer.on("upNode", upLeftNode)
+        renderer.on("rightClickNode", rightClickNode);
+        renderer.on("rightClickStage", rightClickStage);
 
         return () => {
             renderer.getContainer().onmouseup = null;
             renderer.off("downStage", down)
             renderer.off("moveBody", move)
             renderer.off("upStage", upLeft)
+            renderer.off("upNode", upLeftNode)
+            renderer.off("rightClickNode", rightClickNode);
+            renderer.off("rightClickStage", rightClickStage);
         }
     }, [containerElement, entities, renderer, selectedIds, setGeo, setSelected, showContextMenu])
 }
