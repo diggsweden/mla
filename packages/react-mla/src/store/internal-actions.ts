@@ -84,7 +84,6 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           if (draft.PosX == null || draft.PosY == null && positions[getId(draft)] != null) {
             draft.PosX = positions[getId(draft)].x
             draft.PosY = positions[getId(draft)].y
-            console.log("assinged position", positions[getId(draft)])
           }
 
           // Show on map

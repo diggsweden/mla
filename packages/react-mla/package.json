@@ -42,8 +42,6 @@
     "react-i18next": "^15.0.1",
     "sigma": "3.0.0-beta.36",
     "tailwindcss": "3.4.14",
-    "vis-data": "^7.1.9",
-    "vis-network": "^9.1.9",
     "zustand": "^5.0.0"
   },
   "peerDependencies": {

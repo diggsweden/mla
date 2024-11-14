@@ -42,7 +42,7 @@ function ChartEdge(props: Props) {
   useEffect(() => {
     console.debug('[adding]', getId(link))
     created.current = props.graph.addEdgeWithKey(getId(link), getId(from), getId(to), {
-      size: 2,
+      size: 4,
       label: link.LabelChart,
       drawLabel: true
     });
@@ -65,7 +65,8 @@ function ChartEdge(props: Props) {
 
   useEffect(() => {
     if (created.current) {
-      props.graph.setEdgeAttribute(created.current, "highlighted", selected)
+      // props.graph.setEdgeAttribute(created.current, "width", selected ? 8 : 4)
+      props.graph.setEdgeAttribute(created.current, "color", selected ? "black" : undefined)
     }
   }, [from, link, props.graph, selected, to])
 

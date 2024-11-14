@@ -6,6 +6,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import { NodeImageProgram } from "@sigma/node-image";
 import { NodeBorderProgram } from "@sigma/node-border";
+
 import Graph from "graphology";
 import Sigma from "sigma";
 
@@ -16,6 +17,7 @@ import useKeyDown from '../../effects/keydown'
 import type { IEntity } from '../../interfaces/data-models'
 import { produce } from 'immer'
 import ContentRenderer from './sigma/ContentRenderer';
+import useMultiselect from './multiselect';
 
 interface Props {
   className?: string
@@ -23,7 +25,7 @@ interface Props {
 }
 
 function Chart(props: Props) {
-  const setSelectedIds = useMainStore((state) => state.setSelected)
+  const setSelected = useMainStore((state) => state.setSelected)
 
   const sigma = useMainStore((state) => state.sigma)
 
@@ -54,28 +56,10 @@ function Chart(props: Props) {
         image: NodeImageProgram,
         border: NodeBorderProgram,
       },
+      enableEdgeEvents: true,
       renderEdgeLabels: true,
-      nodeReducer: (node, data) => {
-        const newData = { ...data, highlighted: data.highlighted || false, color: "" };
-
-        if (!disableHoverEffect && hoveredNode && graph.hasNode(hoveredNode)) {
-          if (node === hoveredNode || graph.neighbors(hoveredNode).includes(node)) {
-            newData.highlighted = true;
-          } else {
-            newData.color = "#E2E2E2";
-            newData.highlighted = false;
-          }
-        }
-        return newData;
-      },
-      edgeReducer: (edge, data) => {
-        const newData = { ...data, hidden: false };
-
-        if (!disableHoverEffect && hoveredNode && graph.hasNode(hoveredNode) && !graph.extremities(edge).includes(hoveredNode)) {
-          newData.hidden = true;
-        }
-        return newData;
-      },
+      autoCenter: false,
+      autoRescale: false,
       // defaultDrawNodeLabel: drawLabel,
     });
 
@@ -134,9 +118,9 @@ function Chart(props: Props) {
       } else {
         if (e.event.original.ctrlKey) {
           const selected = useMainStore.getState().selectedIds;
-          setSelectedIds([e.node, ...selected])
+          setSelected([e.node, ...selected])
         } else {
-          setSelectedIds([e.node])
+          setSelected([e.node])
         }
       }
 
@@ -144,26 +128,26 @@ function Chart(props: Props) {
       draggedNode.current = null;
     });
 
+    renderer.on("clickEdge", (e) => {
+      if (e.event.original.ctrlKey) {
+        const selected = useMainStore.getState().selectedIds;
+        setSelected([e.edge, ...selected])
+      } else {
+        setSelected([e.edge])
+      }
+    })
+
     renderer.on("upStage", () => {
       if (draggedNode.current && isDragging.current) {
         graph.removeNodeAttribute(draggedNode.current, "dragging");
-      } else {
-        setSelectedIds([])
-      }
+      } 
+      
       isDragging.current = false;
       draggedNode.current = null;
     });
 
     renderer.on("rightClickNode", (e) => {
-      setSelectedIds([e.node])
-      const click = e.event.original as MouseEvent;
-      showContextMenu(click.pageX, click.pageY)
-      e.preventSigmaDefault();
-      e.event.original.preventDefault();
-      e.event.original.stopPropagation();
-    });
-
-    renderer.on("rightClickStage", (e) => {
+      setSelected([e.node])
       const click = e.event.original as MouseEvent;
       showContextMenu(click.pageX, click.pageY)
       e.preventSigmaDefault();
@@ -176,6 +160,8 @@ function Chart(props: Props) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useMultiselect(sigmaContainer, sigma)
 
   useEffect(() => {
     if (sigma) {
@@ -204,37 +190,17 @@ function Chart(props: Props) {
     }
   }, [hoveredNode, sigma, disableHoverEffect]);
 
-  // useLayoutEffect(() => {
-  //   if (sigma == null) {
-  //     return
-  //   }
-
-  //   const action = (e: SigmaNodeEventPayload) => {
-  //     console.log(e);
-  //     if (e.event.original.ctrlKey) {
-  //       setSelectedIds([e.node, ...selectedIds])
-  //     } else {
-  //       setSelectedIds([e.node])
-  //     }
-  //   }
-
-  //   sigma.on("upNode", action)
-  //   return () => {
-  //     sigma.off("upNode", action)
-  //   }
-  // }, [sigma, selectedIds])
-
   const dropRef = useDrop(
     () => ({
       accept: ['entity', 'result'],
       drop: (item, monitor) => {
         const clientPosition = monitor.getClientOffset()
-        if (clientPosition == null || sigmaContainer.current == null) {
+        if (clientPosition == null || sigmaContainer.current == null || sigma == null) {
           return
         }
         const offset = sigmaContainer.current.getBoundingClientRect()
         const click = { x: clientPosition.x - offset.x, y: clientPosition.y - offset.y };
-        const pos = sigma?.viewportToGraph(click);
+        const pos = sigma.viewportToGraph(click);
         return pos
       }
     }),
@@ -242,7 +208,7 @@ function Chart(props: Props) {
   )
 
   useKeyDown(() => {
-    setSelectedIds([...Object.keys(entities), ...Object.keys(links)])
+    setSelected([...Object.keys(entities), ...Object.keys(links)])
   }, sigmaContainer, ['KeyA'], true)
 
   return (
@@ -260,23 +226,3 @@ function Chart(props: Props) {
 }
 
 export default Chart
-
-// function drawLabel(
-//   context: CanvasRenderingContext2D,
-//   data: PartialButFor<NodeDisplayData, 'x' | 'y' | 'size' | 'label' | 'color'>,
-//   settings: Settings
-// ): void {
-//   console.log(data)
-//   if (!data.label) return;
-
-//   const size = data.labelSize || settings.labelSize;
-//   const font = settings.labelFont;
-//   const weight = settings.labelWeight;
-//   const color = data.labelColor || settings.labelColor.color;
-
-//   context.fillStyle = color;
-//   context.font = `${weight} ${size}px ${font}`;
-
-//   context.fillText(data.label, data.x - size * 1.5, data.y + data.size + 3);
-//   // context.fillText(data.label, data.x + data.size / 3, data.y + size / 3);
-// }
