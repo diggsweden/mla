@@ -11,10 +11,11 @@ import { type ChangeEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useMainStore from '../../../store/main-store'
 import forceAtlas2 from 'graphology-layout-forceatlas2'
-import circlepack from 'graphology-layout/circlepack';
-import FA2Layout from "graphology-layout-forceatlas2/worker";
-import NoverlapLayout from 'graphology-layout-noverlap/worker';
-import { animateNodes } from "sigma/utils";
+import circlepack from 'graphology-layout/circlepack'
+import louvain from 'graphology-communities-louvain'
+import FA2Layout from "graphology-layout-forceatlas2/worker"
+import NoverlapLayout from 'graphology-layout-noverlap/worker'
+import { animateNodes } from "sigma/utils"
 import { PlainObject } from 'sigma/types'
 import { fitViewportToNodes } from '@sigma/utils'
 
@@ -60,6 +61,7 @@ function LayoutTabPanel() {
     });
 
     cancelAnimation.current = animateNodes(graph, randomPositions, { duration: 2000 }, () => {
+      storePositions();
       fit();
     });
   }
@@ -69,9 +71,19 @@ function LayoutTabPanel() {
       cancelAnimation.current();
     }
 
-    const positions = circlepack(graph);
+    const details = louvain.detailed(graph);
+    console.log(details);
+
+    // To directly assign communities as a node attribute
+    louvain.assign(graph);
+
+    const positions = circlepack(graph, {
+      scale: 2,
+      hierarchyAttributes: ['community'],
+    });
 
     cancelAnimation.current = animateNodes(graph, positions, { duration: 2000 }, () => {
+      storePositions();
       fit();
     });
   }
