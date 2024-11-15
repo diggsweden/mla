@@ -7,8 +7,6 @@ import Icon from '../common/Icon'
 import configService from '../../services/configurationService'
 import { useDrag } from 'react-dnd'
 import viewService from '../../services/viewService'
-import useMainStore from '../../store/main-store'
-import { positionGroup } from '../../utils/vis-data-utils'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
@@ -85,7 +83,6 @@ function InternalResult (props: InternalProps) {
 
 function ItemResult (props: Props) {
   const config = configService.getEntityConfiguration(props.item.primary.TypeId)
-  const network = useMainStore(state => state.network)
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
@@ -93,15 +90,9 @@ function ItemResult (props: Props) {
       end: (item, monitor) => {
         if (monitor.didDrop()) {
           const dropPosition: { x: number, y: number } | null = monitor.getDropResult()
-          if (dropPosition != null && network != null) {
-            const update = positionGroup(props.item.primary, props.item.entities.map(x => x.primary), dropPosition.x, dropPosition.y)
-            props.item.primary.PosX = update[0].PosX
-            props.item.primary.PosY = update[0].PosY
-
-            for (let i = 1; i < update.length; i++) {
-              props.item.entities[i - 1].primary.PosX = update[i].PosX
-              props.item.entities[i - 1].primary.PosY = update[i].PosY
-            }
+          if (dropPosition != null) {
+            props.item.primary.PosX = dropPosition.x
+            props.item.primary.PosY = dropPosition.y
           }
 
           add()

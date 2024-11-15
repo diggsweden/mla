@@ -29,13 +29,8 @@ interface CreateNodeSvgProgramOptions<
   // The padding should be expressed as a [0, 1] percentage.
   // A padding of 0.05 will always be 5% of the diameter of a node.
   padding: number;
-  // Allows using a different color attribute name for fore color.
-  foreColorAttribute: string;
-  // Allows using a different color attribute name for background color.
-  backgroundColorAttribute: string;
   // Allows using a different image attribute name.
   imageAttribute: string;
- 
 }
 
 const DEFAULT_CREATE_NODE_IMAGE_OPTIONS: CreateNodeSvgProgramOptions<Attributes, Attributes, Attributes> = {
@@ -44,8 +39,6 @@ const DEFAULT_CREATE_NODE_IMAGE_OPTIONS: CreateNodeSvgProgramOptions<Attributes,
   drawLabel: undefined,
   drawHover: undefined,
   padding: 0,
-  foreColorAttribute: "foreColor",
-  backgroundColorAttribute: "backgroundColor",
   imageAttribute: "image"
 };
 
@@ -83,8 +76,6 @@ export default function createNodeSvgProgram<
     drawLabel,
     keepWithinCircle,
     padding,
-    foreColorAttribute,
-    backgroundColorAttribute,
     imageAttribute,
     ...textureManagerOptions
   }: CreateNodeSvgProgramOptions<N, E, G> = {
@@ -220,12 +211,13 @@ export default function createNodeSvgProgram<
       super.renderProgram(params, programInfo);
     }
 
-    processVisibleItem(nodeIndex: number, startIndex: number, data: NodeDisplayData & { image?: string, foreColor?: string, backgroundColor: string }): void {
+    processVisibleItem(nodeIndex: number, startIndex: number, data: NodeDisplayData & { image?: string, foreColor?: string, backgroundColor?: string }): void {
       const array = this.array;
 
       const imageSource = data[imageAttribute as "image"];
-      const foreColor = data[foreColorAttribute as "foreColor"];
-      const backgroundColor = floatColor(data[backgroundColorAttribute as "backgroundColor"] ?? "white");
+      const foreColor = data["foreColor"];
+      const backgroundColor = floatColor(data["backgroundColor"] ?? "white");
+
       const imagePosition = imageSource ? this.atlas[imageSource] : undefined;
 
       if (typeof imageSource === "string" && !imagePosition) textureManager.registerImage(imageSource, foreColor);

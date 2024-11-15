@@ -3,9 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import useMainStore from '../../../store/main-store'
 import { useEffect, useMemo, useRef } from 'react'
-import useAppStore from '../../../store/app-store'
 import type { ILink } from '../../../interfaces/data-models'
-import viewService from '../../../services/viewService'
 import { getId, isSelected } from '../../../utils/utils'
 import Graph from 'graphology'
 
@@ -20,29 +18,30 @@ function ChartEdge(props: Props) {
   const getEntity = useMainStore(state => state.getCurrentEntity)
   const date = useMainStore(state => state.currentDate)
   const selectedIds = useMainStore(state => state.selectedIds)
-  const selectedView = useAppStore(state => state.thingViewConfiguration[link.TypeId])
+  // const selectedView = useAppStore(state => state.thingViewConfiguration[link.TypeId])
 
   const from = useMemo(() => getEntity(link.FromEntityId + link.FromEntityTypeId, date.DateFrom)!, [getEntity, link, date])
   const to = useMemo(() => getEntity(link.ToEntityId + link.ToEntityTypeId, date.DateFrom)!, [getEntity, link, date])
 
-  const view = useMemo(() => {
-    return { ...viewService.getDefaultView(link.TypeId, link.GlobalType), ...selectedView }
-  }, [link, selectedView])
+  // const view = useMemo(() => {
+  //   return { ...viewService.getDefaultView(link.TypeId, link.GlobalType), ...selectedView }
+  // }, [link, selectedView])
 
   const selected = useMemo(() => {
     if (link != null && from != null && to != null) {
-      return isSelected(link, selectedIds) || ((view.Show ?? true) && isSelected(from, selectedIds)) || ((view.Show ?? true) && isSelected(to, selectedIds))
+      return isSelected(link, selectedIds)
+      //return isSelected(link, selectedIds) || ((view.Show ?? true) && isSelected(from, selectedIds)) || ((view.Show ?? true) && isSelected(to, selectedIds))
     }
 
     return false
-  }, [from, link, selectedIds, to, view.Show])
+  }, [from, link, selectedIds, to])
 
   
   const created = useRef(null as null | string)
   useEffect(() => {
     console.debug('[adding]', getId(link))
     created.current = props.graph.addEdgeWithKey(getId(link), getId(from), getId(to), {
-      size: 2,
+      size: 4,
       label: link.LabelChart,
       drawLabel: true
     });
@@ -65,7 +64,8 @@ function ChartEdge(props: Props) {
 
   useEffect(() => {
     if (created.current) {
-      props.graph.setEdgeAttribute(created.current, "highlighted", selected)
+      // props.graph.setEdgeAttribute(created.current, "width", selected ? 8 : 4)
+      props.graph.setEdgeAttribute(created.current, "color", selected ? "black" : undefined)
     }
   }, [from, link, props.graph, selected, to])
 

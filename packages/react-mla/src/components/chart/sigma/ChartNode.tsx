@@ -84,6 +84,7 @@ function ChartNode (props: Props) {
       props.graph.setNodeAttribute(created.current, "image", icon?.name)
       props.graph.setNodeAttribute(created.current, "foreColor", icon?.foreColor)
       props.graph.setNodeAttribute(created.current, "backgroundColor", icon?.backgroundColor)
+      //props.graph.setNodeAttribute(created.current, "selected", selected)
     }
   }, [icon, props.graph, selected])
 

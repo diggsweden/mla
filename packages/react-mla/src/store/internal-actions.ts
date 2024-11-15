@@ -9,12 +9,10 @@ import type { IChartBase, IEntity, IHistory, ILink } from '../interfaces/data-mo
 import configService from '../services/configurationService'
 import { generateUUID, getId, isLinked, mergeProps } from '../utils/utils'
 import useMainStore from './main-store'
-import { setPositions } from '../utils/vis-data-utils'
 import viewService from '../services/viewService'
 import { fixDate } from '../utils/date'
 import i18n from "i18next";
 import forceLayout from 'graphology-layout-force'
-import forceAtlas2 from 'graphology-layout-forceatlas2'
 
 function updateProps(draft: WritableDraft<IChartBase>, ) {
   if (draft.InternalId == null) {
@@ -84,7 +82,6 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           if (draft.PosX == null || draft.PosY == null && positions[getId(draft)] != null) {
             draft.PosX = positions[getId(draft)].x
             draft.PosY = positions[getId(draft)].y
-            console.log("assinged position", positions[getId(draft)])
           }
 
           // Show on map

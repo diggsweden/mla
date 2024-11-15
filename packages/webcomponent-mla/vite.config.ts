@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
         entry: resolve(__dirname, 'index.ts'),
         name: "MlaWebComponent",
         fileName: "mla-component",
-        formats: ["umd"]
+        formats: ["es", "umd"]
       },
     },
     resolve: {

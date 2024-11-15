@@ -10,11 +10,6 @@ import type { IEntity, IEvent, IEventLink, ILink, IPhaseEvent, ITimeSpan } from 
 import { generateUUID, mergeContext } from '../utils/utils'
 import useAppStore from './app-store'
 
-// VIS
-import { type DataInterfaceEdges, type DataInterfaceNodes, type Edge, type Network, type Node } from 'vis-network'
-import { DataSet } from 'vis-data'
-
-// Sigma
 import Graph from "graphology";
 import Sigma from "sigma";
 
@@ -71,13 +66,9 @@ export interface MainState {
   selectedIds: string[]
 
 
-  graph: Graph | undefined
+  graph: Graph
   sigma: Sigma | undefined
-  initSigma: (graph: Graph, sigma: Sigma) => void
-
-  network: Network | undefined
-  setNetwork: (network: Network | undefined) => void
-  data: { nodes: DataInterfaceNodes, edges: DataInterfaceEdges }
+  initSigma: (sigma: Sigma) => void
 
   setEvent: (...events: IEvent[]) => void
   removeEvent: (...events: IEvent[]) => void
@@ -138,23 +129,11 @@ const useMainStore = create<MainState>((set, get) => ({
   maxDate: DateTime.now().startOf("day").plus({ months: 6 }),
   minDate: DateTime.now().startOf("day").minus({ months: 6 }),
 
-  graph: undefined,
+  graph: new Graph({ multi: true, type: "undirected" }),
   sigma: undefined,
-  initSigma: (graph, sigma) => {
+  initSigma: (sigma) => {
     set((state) => ({
-      graph,
       sigma
-    }))
-  },
-
-  data: {
-    nodes: new DataSet<Node, 'id'>(),
-    edges: new DataSet<Edge, 'id'>()
-  },
-  network: undefined,
-  setNetwork: (network: Network | undefined) => {
-    set((state) => ({
-      network
     }))
   },
 
@@ -259,7 +238,7 @@ const useMainStore = create<MainState>((set, get) => ({
     return result
   },
   storePositions: () => {
-    const { network, data, entities, graph } = get()
+    const { entities, graph } = get()
     const update = [] as IEntity[]
     if (graph) {
       graph?.forEachNode(n => {
@@ -445,6 +424,7 @@ const useMainStore = create<MainState>((set, get) => ({
   selectedLinks: [],
   selectedIds: [],
   setSelected: (selectedIds: string[]) => {
+    console.log("select", selectedIds)
     useAppStore.getState().setSelectedGeoFeature(undefined)
     updateSelected(selectedIds);
   },

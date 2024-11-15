@@ -22,7 +22,6 @@ import Map from './components/map/Map'
 import i18n from "i18next";
 import CalculateWorker from './worker/calculateWorker?worker';
 
-import 'vis-network/dist/dist/vis-network.min.css'
 import './App.scss'
 
 export default function App () {
