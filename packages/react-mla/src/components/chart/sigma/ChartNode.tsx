@@ -81,7 +81,9 @@ function ChartNode (props: Props) {
   useEffect(() => {
     if (created.current) {
       props.graph.setNodeAttribute(created.current, "type", icon ? "image" : undefined)
-      props.graph.setNodeAttribute(created.current, "image", selected ? icon?.selected : icon?.unselected)
+      props.graph.setNodeAttribute(created.current, "image", icon?.name)
+      props.graph.setNodeAttribute(created.current, "foreColor", icon?.foreColor)
+      props.graph.setNodeAttribute(created.current, "backgroundColor", icon?.backgroundColor)
     }
   }, [icon, props.graph, selected])
 

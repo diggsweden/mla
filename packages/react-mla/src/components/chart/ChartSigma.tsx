@@ -4,7 +4,8 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import { NodeImageProgram } from "@sigma/node-image";
+import { drawDiscNodeHover, drawDiscNodeLabel } from './rendering/node-renderer';
+import { NodeSvgProgram } from "./rendering/svg-node-renderer/index";
 import { NodeBorderProgram } from "@sigma/node-border";
 import Graph from "graphology";
 import Sigma from "sigma";
@@ -51,7 +52,7 @@ function Chart(props: Props) {
     const graph = new Graph();
     const renderer = new Sigma(graph, sigmaContainer.current, {
       nodeProgramClasses: {
-        image: NodeImageProgram,
+        image: NodeSvgProgram,
         border: NodeBorderProgram,
       },
       renderEdgeLabels: true,
@@ -76,7 +77,8 @@ function Chart(props: Props) {
         }
         return newData;
       },
-      // defaultDrawNodeLabel: drawLabel,
+      defaultDrawNodeLabel: drawDiscNodeLabel,
+      defaultDrawNodeHover: drawDiscNodeHover
     });
 
     init(graph, renderer);
@@ -260,23 +262,3 @@ function Chart(props: Props) {
 }
 
 export default Chart
-
-// function drawLabel(
-//   context: CanvasRenderingContext2D,
-//   data: PartialButFor<NodeDisplayData, 'x' | 'y' | 'size' | 'label' | 'color'>,
-//   settings: Settings
-// ): void {
-//   console.log(data)
-//   if (!data.label) return;
-
-//   const size = data.labelSize || settings.labelSize;
-//   const font = settings.labelFont;
-//   const weight = settings.labelWeight;
-//   const color = data.labelColor || settings.labelColor.color;
-
-//   context.fillStyle = color;
-//   context.font = `${weight} ${size}px ${font}`;
-
-//   context.fillText(data.label, data.x - size * 1.5, data.y + data.size + 3);
-//   // context.fillText(data.label, data.x + data.size / 3, data.y + size / 3);
-// }

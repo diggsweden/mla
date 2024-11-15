@@ -8,7 +8,6 @@ import type { IBaseViewConfiguration, IRuleConfiguration, IViewConfiguration } f
 import type { IBase, IChartBase, IEntity } from '../interfaces/data-models'
 import useAppStore from '../store/app-store'
 import configService, { type PropertyAndConfiguration } from './configurationService'
-import iconService from './iconService'
 import { toDateAndTimeString } from '../utils/date'
 import { DateTime } from 'luxon'
 
@@ -16,8 +15,9 @@ import * as global from '../global.json'
 
 export interface IIcon {
   id: string
-  selected: string
-  unselected: string
+  name:string,
+  foreColor: string,
+  backgroundColor: string
 }
 
 export type LabelType = 'short' | 'long' | 'chart'
@@ -90,8 +90,9 @@ class ViewService {
       ? undefined
       : {
         id: `${icon}${shadeColor}${entity.MarkIcon}${entity.MarkColor}`,
-        selected: await iconService.getPNG(icon, shadeColor, entity.MarkIcon, entity.MarkColor, true),
-        unselected: await iconService.getPNG(icon, shadeColor, entity.MarkIcon, entity.MarkColor)
+        name: icon,
+        foreColor: shadeColor,
+        backgroundColor: 'white'
       }
   }
 

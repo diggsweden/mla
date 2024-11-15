@@ -147,6 +147,9 @@ importers:
       '@sigma/utils':
         specifier: 3.0.0-beta.6
         version: 3.0.0-beta.6(sigma@3.0.0-beta.36(graphology-types@0.24.7))
+      events:
+        specifier: ^3.3.0
+        version: 3.3.0
       glob:
         specifier: ^11.0.0
         version: 11.0.0
@@ -159,6 +162,9 @@ importers:
       graphology-layout-forceatlas2:
         specifier: ^0.10.1
         version: 0.10.1(graphology-types@0.24.7)
+      graphology-types:
+        specifier: ^0.24.7
+        version: 0.24.7
       http-request-mock:
         specifier: ^2.0.0
         version: 2.0.2
