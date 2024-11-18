@@ -38,7 +38,7 @@ function ChartNode (props: Props) {
       y: entity.PosY,
       fixed: true, 
       color: "white",
-      size: 20 
+      size: 15
     })
 
     return () => {
@@ -71,17 +71,14 @@ function ChartNode (props: Props) {
 
   useEffect(() => {
     if (created.current) {
-      props.graph.setNodeAttribute(created.current, "type", icon ? "image" : undefined)
       props.graph.setNodeAttribute(created.current, "image", icon?.name)
-      props.graph.setNodeAttribute(created.current, "foreColor", icon?.foreColor)
+      props.graph.setNodeAttribute(created.current, "pictoColor", icon?.foreColor)
     }
   }, [icon, props.graph, selected])
 
   useEffect(() => {
     if (created.current) {
-      props.graph.setNodeAttribute(created.current, "selected", selected)
-      props.graph.setNodeAttribute(created.current, "backgroundColor", selected ? "#cbd5e1" : icon?.backgroundColor)
-
+      props.graph.setNodeAttribute(created.current, "color", selected ? "#dbeafe" : icon?.backgroundColor)
     }
   }, [icon?.backgroundColor, props.graph, selected])
 

@@ -21,6 +21,9 @@ interface CreateNodeSvgProgramOptions<
   E extends Attributes = Attributes,
   G extends Attributes = Attributes,
 > extends TextureManagerOptions {
+  // - If "background", color will be used to color full node behind the image.
+  // - If "color", color will be used to color image pixels (for pictograms)
+  drawingMode: "background" | "color";  
   // If true, the images are always cropped to the circle
   keepWithinCircle: boolean;
   // Allows overriding drawLabel and drawHover returned class methods.
@@ -29,16 +32,20 @@ interface CreateNodeSvgProgramOptions<
   // The padding should be expressed as a [0, 1] percentage.
   // A padding of 0.05 will always be 5% of the diameter of a node.
   padding: number;
+  // Allows using a different color attribute name.
+  colorAttribute: string;  
   // Allows using a different image attribute name.
   imageAttribute: string;
 }
 
 const DEFAULT_CREATE_NODE_IMAGE_OPTIONS: CreateNodeSvgProgramOptions<Attributes, Attributes, Attributes> = {
   ...DEFAULT_TEXTURE_MANAGER_OPTIONS,
+  drawingMode: "background",
   keepWithinCircle: true,
   drawLabel: undefined,
   drawHover: undefined,
   padding: 0,
+  colorAttribute: "color",
   imageAttribute: "image"
 };
 
@@ -74,8 +81,10 @@ export default function createNodeSvgProgram<
   const {
     drawHover,
     drawLabel,
+    drawingMode,
     keepWithinCircle,
     padding,
+    colorAttribute,
     imageAttribute,
     ...textureManagerOptions
   }: CreateNodeSvgProgramOptions<N, E, G> = {
@@ -211,21 +220,20 @@ export default function createNodeSvgProgram<
       super.renderProgram(params, programInfo);
     }
 
-    processVisibleItem(nodeIndex: number, startIndex: number, data: NodeDisplayData & { image?: string, foreColor?: string, backgroundColor?: string }): void {
+    processVisibleItem(nodeIndex: number, startIndex: number, data: NodeDisplayData & { image?: string }): void {
       const array = this.array;
 
-      const imageSource = data[imageAttribute as "image"];
-      const foreColor = data["foreColor"];
-      const backgroundColor = floatColor(data["backgroundColor"] ?? "white");
+      const color = floatColor(data[colorAttribute as "color"]);
 
+      const imageSource = data[imageAttribute as "image"];
       const imagePosition = imageSource ? this.atlas[imageSource] : undefined;
 
-      if (typeof imageSource === "string" && !imagePosition) textureManager.registerImage(imageSource, foreColor);
+      if (typeof imageSource === "string" && !imagePosition) textureManager.registerImage(imageSource);
 
       array[startIndex++] = data.x;
       array[startIndex++] = data.y;
       array[startIndex++] = data.size;
-      array[startIndex++] = backgroundColor;
+      array[startIndex++] = color;
       array[startIndex++] = nodeIndex;
 
       // Reference texture:
@@ -267,8 +275,7 @@ export default function createNodeSvgProgram<
         u_atlas,
         [...new Array(this.textureImages.length)].map((_, i) => i),
       );
-      //gl.uniform1i(u_colorizeImages, drawingMode === "color" ? 1 : 0);
-      gl.uniform1i(u_colorizeImages, 0);
+      gl.uniform1i(u_colorizeImages, drawingMode === "color" ? 1 : 0);
       gl.uniform1i(u_keepWithinCircle, keepWithinCircle ? 1 : 0);
     }
   };

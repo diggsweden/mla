@@ -41,7 +41,7 @@ function ChartEdge(props: Props) {
   useEffect(() => {
     console.debug('[adding]', getId(link))
     created.current = props.graph.addEdgeWithKey(getId(link), getId(from), getId(to), {
-      size: 4,
+      size: 3,
       label: link.LabelChart,
       drawLabel: true
     });

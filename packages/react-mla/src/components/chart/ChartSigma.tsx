@@ -5,8 +5,9 @@
 import { useEffect, useRef } from 'react'
 import { useDrop } from 'react-dnd'
 import { drawDiscNodeHover, drawDiscNodeLabel } from './rendering/node-renderer';
-import { NodeSvgProgram } from "./rendering/svg-node-renderer/index";
-import { NodeBorderProgram } from "@sigma/node-border";
+import { createNodeSvgProgram } from "./rendering/svg-node-renderer/index";
+import { createNodeBorderProgram } from "@sigma/node-border";
+import { createNodeCompoundProgram } from 'sigma/rendering';
 
 import Sigma from "sigma";
 import { Settings } from "sigma/settings";
@@ -44,10 +45,26 @@ function Chart(props: Props) {
       return
     }
 
+    const NodeBorderCustomProgram = createNodeBorderProgram({
+      borders: [
+        { size: { value: 0.1 }, color: { attribute: "pictoColor" } },
+        { size: { fill: true }, color: { attribute: "color" } },
+      ],
+    });
+  
+    const NodePictogramCustomProgram = createNodeSvgProgram({
+      padding: 0.3,
+      size: { mode: "force", value: 256 },
+      drawingMode: "color",
+      colorAttribute: "pictoColor",
+    });
+  
+    const NodeProgram = createNodeCompoundProgram([NodeBorderCustomProgram, NodePictogramCustomProgram]);
+  
     const settings = {
+      defaultNodeType: "pictogram",
       nodeProgramClasses: {
-        image: NodeSvgProgram,
-        border: NodeBorderProgram,
+        pictogram: NodeProgram
       },
       enableEdgeEvents: true,
       renderEdgeLabels: true,

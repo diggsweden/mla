@@ -61,7 +61,7 @@ export const MARGIN_IN_TEXTURE = 1;
  */
 export async function loadSVGImage(
   imageSource: string,
-  { size, foreColor }: { size?: number; foreColor?: string } = {},
+  { size }: { size?: number } = {},
 ): Promise<HTMLImageElement> {
   const svgString = iconService.getSVG(imageSource);
 
@@ -74,10 +74,6 @@ export async function loadSVGImage(
 
   if (!originalWidth || !originalHeight)
     throw new Error("loadSVGImage: cannot use `size` if target SVG has no definite dimensions.");
-
-  if (typeof foreColor === "string") {
-    root.setAttribute("fill", "" + foreColor);
-  }
 
   if (typeof size === "number") {
     root.setAttribute("width", "" + size);
@@ -407,7 +403,7 @@ export class TextureManager extends EventEmitter {
   }
 
   // PUBLIC API:
-  async registerImage(source: string, foreColor?: string) {
+  async registerImage(source: string) {
     if (this.imageStates[source]) return;
 
     this.imageStates[source] = { status: "loading" };
@@ -416,8 +412,7 @@ export class TextureManager extends EventEmitter {
 
       const { size } = this.options;
       const image = await loadSVGImage(source, {
-        size: size.mode === "force" ? size.value : undefined,
-        foreColor: foreColor
+        size: size.mode === "force" ? size.value : undefined
       });
       this.imageStates[source] = {
         status: "ready",
