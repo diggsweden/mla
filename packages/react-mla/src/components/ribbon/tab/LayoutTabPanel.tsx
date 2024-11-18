@@ -103,9 +103,13 @@ function LayoutTabPanel() {
       } else {
         setLayout('fa2')
         const sensibleSettings = forceAtlas2.inferSettings(graph);
+        console.log(sensibleSettings)
         const fa2Layout = new FA2Layout(graph, {
           settings: {
             ...sensibleSettings,
+            gravity: 0.025,
+            scalingRatio: 40,
+            adjustSizes: true
           }
         });
 
