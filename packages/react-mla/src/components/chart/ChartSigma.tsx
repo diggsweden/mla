@@ -62,6 +62,8 @@ function Chart(props: Props) {
     const NodeProgram = createNodeCompoundProgram([NodeBorderCustomProgram, NodePictogramCustomProgram]);
   
     const settings = {
+      minCameraRatio: 0.3,
+      maxCameraRatio: 4.5,
       defaultNodeType: "pictogram",
       nodeProgramClasses: {
         pictogram: NodeProgram
@@ -75,6 +77,11 @@ function Chart(props: Props) {
     } as Partial<Settings>
 
     const renderer = new Sigma(graph, sigmaContainer.current, settings);
+
+    // Ignore all doubleClicks for now
+    renderer.on("doubleClickNode", (e) => e.preventSigmaDefault())
+    renderer.on("doubleClickEdge", (e) => e.preventSigmaDefault())
+    renderer.on("doubleClickStage", (e) => e.preventSigmaDefault())
 
     init(renderer);
 

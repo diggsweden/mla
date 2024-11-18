@@ -10,7 +10,7 @@ interface IChartBase extends IBase, IHistory {
   LabelShort: string
   LabelLong: string
   LabelChart: string
-  InternalId: string
+  InternalId: number
   SourceSystemId: string
   MarkColor?: string
   Color?: string

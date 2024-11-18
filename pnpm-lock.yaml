@@ -74,6 +74,12 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:^
         version: link:../../packages/config-typescript
+      graphology:
+        specifier: ^0.25.4
+        version: 0.25.4(graphology-types@0.24.7)
+      graphology-generators:
+        specifier: ^0.11.2
+        version: 0.11.2(graphology-types@0.24.7)
       http-request-mock:
         specifier: ^2.0.0
         version: 2.0.2
@@ -2310,6 +2316,11 @@ packages:
 
   graphology-communities-louvain@2.0.1:
     resolution: {integrity: sha512-JxEH8uxao6FcWp3UXNDJIRjU3pamzp9aqIWgpfAqWE66aPwHeBIB39YnqTgbe4baUJRdpbcp1u8jJiYvojHGIQ==}
+    peerDependencies:
+      graphology-types: '>=0.19.0'
+
+  graphology-generators@0.11.2:
+    resolution: {integrity: sha512-hx+F0OZRkVdoQ0B1tWrpxoakmHZNex0c6RAoR0PrqJ+6fz/gz6CQ88Qlw78C6yD9nlZVRgepIoDYhRTFV+bEHg==}
     peerDependencies:
       graphology-types: '>=0.19.0'
 
@@ -6411,6 +6422,12 @@ snapshots:
       graphology-utils: 2.5.2(graphology-types@0.24.7)
       mnemonist: 0.39.8
       pandemonium: 2.4.1
+
+  graphology-generators@0.11.2(graphology-types@0.24.7):
+    dependencies:
+      graphology-metrics: 2.3.1(graphology-types@0.24.7)
+      graphology-types: 0.24.7
+      graphology-utils: 2.5.2(graphology-types@0.24.7)
 
   graphology-indices@0.17.0(graphology-types@0.24.7):
     dependencies:

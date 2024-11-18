@@ -89,8 +89,8 @@ function PropertiesPanel (props: Props) {
       </div>
       <div className="m-grow m-overflow-y-auto">
         {computedLink && <EventListProperties eventLink={computedLink} />}
-        {entity && <EntityProperties key={entity.InternalId} entity={entity} />}
-        {link && <LinkProperties key={link.InternalId} link={link} />}
+        {entity && <EntityProperties key={entity.Id + entity.DateFrom?.toISO() + entity.DateTo?.toISO()} entity={entity} />}
+        {link && <LinkProperties key={link.Id + link.DateFrom?.toISO() + link.DateTo?.toISO()} link={link} />}
         {(entity ?? link) && config.TimeAnalysis &&
           <HistoryProperties
             className="m-w-full"

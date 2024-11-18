@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import HttpRequestMock from 'http-request-mock'
 
 import * as sokPerson from './SvarSokPerson.json'
@@ -11,15 +10,28 @@ import * as sokOrganisation from './SvarSokOrganisation.json'
 import * as sokKonton from './SvarSokKonton.json'
 import * as test from './Testdata.json'
 
-function generateUUID () {
+import Graph from 'graphology';
+import { complete } from 'graphology-generators/classic';
+import { clusters } from 'graphology-generators/random';
+import { erdosRenyi } from 'graphology-generators/random';
+
+// Social networks
+import { girvanNewman } from 'graphology-generators/random';
+// const graph = girvanNewman(Graph, {zOut: 4});
+
+// "real" data
+import florentineFamilies from 'graphology-generators/social/florentine-families';
+import karateClub from 'graphology-generators/social/karate-club';
+
+function generateUUID() {
   let d = new Date().getTime()
   let d2 = ((performance?.now && (performance.now() * 1000)) || 0)
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     let r = Math.random() * 1
-    if (d > 0) { 
+    if (d > 0) {
       r = (d + r) % 16 | 0
       d = Math.floor(d / 16)
-    } else { 
+    } else {
       r = (d2 + r) % 16 | 0
       d2 = Math.floor(d2 / 16)
     }
@@ -28,8 +40,79 @@ function generateUUID () {
   })
 }
 
-export default function setupMockApi () {
+function mapGraphToResult(graph) {
+  const result = {
+    Entities: [],
+    Links: []
+  }
+
+  graph.forEachNode(n => {
+    result.Entities.push({
+      Id: n,
+      TypeId: "person",
+      PosX: graph.getNodeAttribute(n, "x"),
+      PosY: graph.getNodeAttribute(n, "y"),
+      Properties: [
+        {
+          TypeId: "personE2",
+          Value: graph.getNodeAttribute(n, "label")
+        }
+      ]
+    })
+  })
+
+  graph.forEachEdge(e => {
+    result.Links.push({
+      Id: e,
+      TypeId: "relation",
+      FromEntityTypeId: "person",
+      ToEntityTypeId: "person",
+      FromEntityId: graph.source(e),
+      ToEntityId: graph.target(e),
+      Properties: []
+    })
+  })
+
+  console.log(result)
+  return result
+}
+
+export default function setupMockApi() {
   const mocker = HttpRequestMock.setup()
+
+  mocker.post('https://fakeurl.testsystem.se/complete', (requestInfo) => {
+    const graph = complete(Graph, 10);
+    return mapGraphToResult(graph)
+  })
+
+  mocker.post('https://fakeurl.testsystem.se/clusters', (requestInfo) => {
+    const graph = clusters(Graph, {
+      order: 100,
+      size: 1000,
+      clusters: 5
+    });
+    return mapGraphToResult(graph)
+  })
+
+  mocker.post('https://fakeurl.testsystem.se/erdos', (requestInfo) => {
+    const graph = erdosRenyi(Graph, { order: 10, probability: 0.5 });
+    return mapGraphToResult(graph)
+  })
+
+  mocker.post('https://fakeurl.testsystem.se/girvanNewman', (requestInfo) => {
+    const graph = girvanNewman(Graph, { zOut: 4 });
+    return mapGraphToResult(graph)
+  })
+
+  mocker.post('https://fakeurl.testsystem.se/florentine', (requestInfo) => {
+    const graph = florentineFamilies(Graph);
+    return mapGraphToResult(graph)
+  })
+
+  mocker.post('https://fakeurl.testsystem.se/karate', (requestInfo) => {
+    const graph = karateClub(Graph);
+    return mapGraphToResult(graph)
+  })
 
   mocker.post('https://fakeurl.testsystem.se/SokAdress', (requestInfo) => {
     if (requestInfo.body.Shape?.Point != null) {
@@ -102,18 +185,8 @@ export default function setupMockApi () {
       Links: []
     }
   }, { delay: 750 })
-  mocker.post('https://fakeurl.testsystem.se/SokRelation', (requestInfo) => {
-    const param = (requestInfo.body?.Entities).find(e => e.Properties?.find(p => p.TypeId === 'personE1' && p.Value === '191212121212'))
-    if (param != null) {
-      return sokRelationer
-    }
-    return {
-      Entities: [],
-      Links: []
-    }
-  }, { delay: 750 })
   mocker.post('https://fakeurl.testsystem.se/SokKonton', (requestInfo) => {
-    const param =(requestInfo.body?.Entities).find(e => e.Properties?.find(p => p.TypeId === 'personE1' && p.Value === '191212121212'))
+    const param = requestInfo.body?.Entities.find(e => e.Properties?.find(p => p.TypeId === 'personE1' && p.Value === '191212121212'))
     if (param != null) {
       return sokKonton
     }

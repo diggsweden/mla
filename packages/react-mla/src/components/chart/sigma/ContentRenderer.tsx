@@ -6,6 +6,7 @@ import ChartEntity from './ChartNode'
 import ChartEdge from './ChartEdge'
 import useMainStore from '../../../store/main-store'
 import { useMemo } from 'react'
+import { getId } from '../../../utils/utils'
 
 function ContentRenderer () {
   const date = useMainStore(state => state.currentDate)
@@ -15,17 +16,11 @@ function ContentRenderer () {
   const graph = useMainStore((state) => state.graph)
   const computedLinks = useMainStore((state) => state.computedLinks)
 
-
   const getEntity = useMainStore(state => state.getCurrentEntity)
   const getLink = useMainStore(state => state.getCurrentLink)
 
-  const nodes = useMemo(() => {
-    return Object.keys(entities).map(k => getEntity(k, date.DateFrom)!)
-  }, [entities, date.DateFrom, getEntity])
-
-  const edges = useMemo(() => {
-    return Object.keys(links).map(k => getLink(k, date.DateFrom)!)
-  }, [links, date.DateFrom, getLink])
+  const nodes = useMemo(() => Object.keys(entities).map(k => getEntity(k, date.DateFrom)!), [entities, date.DateFrom, getEntity])
+  const edges = useMemo(() => Object.keys(links).map(k => getLink(k, date.DateFrom)!), [links, date.DateFrom, getLink])
 
   if (graph == undefined) {
     return;
@@ -33,10 +28,10 @@ function ContentRenderer () {
 
   return (<>
     {nodes.map(s =>
-      <ChartEntity key={s.InternalId} entity={s} graph={graph}></ChartEntity>
+      <ChartEntity key={getId(s)} entity={s} graph={graph}></ChartEntity>
     )}
     {edges.map(s =>
-      <ChartEdge key={s.InternalId} link={s} graph={graph}></ChartEdge>
+      <ChartEdge key={getId(s)} link={s} graph={graph}></ChartEdge>
     )}
     {computedLinks.map(s =>
       <ChartEdge key={s.Id} link={s} graph={graph}></ChartEdge>
