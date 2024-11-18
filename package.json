@@ -28,7 +28,9 @@
     "overrides": {
       "micromatch": "^4.0.8",
       "rollup@>=4.0.0 <4.22.4": ">=4.22.4",
-      "cookie@<0.7.0": ">=0.7.0"
+      "cookie@<0.7.0": ">=0.7.0",
+      "cross-spawn@<7.0.5": ">=7.0.5",
+      "@eslint/plugin-kit@<0.2.3": ">=0.2.3"
     }
   },
   "devDependencies": {
