@@ -200,6 +200,7 @@ class QueryService {
         e.DateTo = fixDate(e.DateTo)
         e.LabelShort = viewService.getShortName(e)
         e.LabelLong = viewService.getLongName(e)
+        e.Properties = e.Properties ?? []
 
         const matchRules = configService.getEntityConfiguration(e.TypeId)?.MatchRules
         if (matchRules != null) {
@@ -223,6 +224,8 @@ class QueryService {
         l.DateTo = fixDate(l.DateTo)
         l.LabelShort = viewService.getShortName(l)
         l.LabelLong = viewService.getLongName(l)
+        l.Properties = l.Properties ?? []
+
 
         if (idMap.has(l.FromEntityId)) {
           l.FromEntityId = idMap.get(l.FromEntityId)!

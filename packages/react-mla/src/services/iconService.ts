@@ -4,11 +4,11 @@
 
 import { freeze } from 'immer'
 import icons from '../icons.json'
-//import { toPng } from '../utils/canvas'
+import { toPng } from '../utils/canvas'
 import configService from './configurationService'
 //import viewService from './viewService'
 
-//const size = 100
+const size = 50
 class IconService {
   private readonly svgs = new Map<string, string>()
   private readonly pngs = new Map<string, string>()
@@ -36,17 +36,17 @@ class IconService {
     return this.getSVGInternal(icon)
   }
 
-  // public async getPNG (icon: string, color: string, icon2?: string, color2?: string, withSelectedStyle?: boolean): Promise<string> {
-  //   const key = icon + '-color-' + color + '-size-' + size + '-icon2-' + icon2 + '-color2-' + color2 + '-withSelectedStyle-' + withSelectedStyle
+  public async getPNG (icon: string, color: string, icon2?: string, color2?: string, withSelectedStyle?: boolean): Promise<string> {
+    const key = icon + '-color-' + color + '-size-' + size + '-icon2-' + icon2 + '-color2-' + color2 + '-withSelectedStyle-' + withSelectedStyle
 
-  //   if (this.pngs.has(key)) {
-  //     return this.pngs.get(key)!
-  //   }
+    if (this.pngs.has(key)) {
+      return this.pngs.get(key)!
+    }
 
-  //   const png = await toPng(this.getSVGInternal(icon), color, size, icon2 ? this.getSVGInternal(icon2) : undefined, color2, withSelectedStyle)
-  //   this.pngs.set(key, png)
-  //   return png
-  // }
+    const png = await toPng(this.getSVGInternal(icon), color, size, icon2 ? this.getSVGInternal(icon2) : undefined, color2, withSelectedStyle)
+    this.pngs.set(key, png)
+    return png
+  }
 
   private getSVGInternal (icon: string): string {
     if (!this.svgs.has(icon)) {

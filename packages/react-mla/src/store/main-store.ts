@@ -424,7 +424,6 @@ const useMainStore = create<MainState>((set, get) => ({
   selectedLinks: [],
   selectedIds: [],
   setSelected: (selectedIds: string[]) => {
-    console.log("select", selectedIds)
     useAppStore.getState().setSelectedGeoFeature(undefined)
     updateSelected(selectedIds);
   },

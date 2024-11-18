@@ -45,6 +45,8 @@ function Chart(props: Props) {
     }
 
     const settings = {
+      minCameraRatio: 0.3,
+      maxCameraRatio: 4.5,
       nodeProgramClasses: {
         image: NodeSvgProgram,
         border: NodeBorderProgram,
@@ -58,6 +60,11 @@ function Chart(props: Props) {
     } as Partial<Settings>
 
     const renderer = new Sigma(graph, sigmaContainer.current, settings);
+
+    // Ignore all doubleClicks for now
+    renderer.on("doubleClickNode", (e) => e.preventSigmaDefault())
+    renderer.on("doubleClickEdge", (e) => e.preventSigmaDefault())
+    renderer.on("doubleClickStage", (e) => e.preventSigmaDefault())
 
     init(renderer);
 
