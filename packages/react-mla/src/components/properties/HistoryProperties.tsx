@@ -8,7 +8,7 @@ import useMainStore from '../../store/main-store'
 import Accordion from '../common/Accordion'
 import { fixDate, toDateAndTimeString, toDateString, toTimeString } from '../../utils/date'
 import { produce } from 'immer'
-import { generateUUID, getId } from '../../utils/utils'
+import { getId, getInternalId } from '../../utils/utils'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
@@ -66,7 +66,7 @@ function HistoryProperties (props: Props) {
 
   useEffect(() => {
     let history = [] as IChartBase[] | undefined
-    let id = ''
+    let id = 0
     if (entity) {
       history = useMainStore.getState().getEntityHistory(getId(entity))
       id = entity.InternalId
@@ -130,7 +130,14 @@ function HistoryProperties (props: Props) {
   }
 
   function setHistory (original: IChartBase) {
-    dateChanged(original, formatDate(original.DateFrom, undefined, true), undefined)
+    if (original.DateFrom == null && original.DateTo == null) {
+      const copy = produce(original, draft => {
+        draft.DateFrom = DateTime.now()
+      })
+      dateChanged(copy, formatDate(copy.DateFrom, undefined, true), undefined)
+    } else {
+      dateChanged(original, formatDate(original.DateFrom, undefined, true), undefined)
+    }
   }
 
   function updateDates (original: IChartBase, dateFrom?: DateTime, dateTo?: DateTime): IChartBase {
@@ -164,7 +171,7 @@ function HistoryProperties (props: Props) {
     setCurrent(update)
   }
 
-  function historySelected (id: string) {
+  function historySelected (id: number) {
     const found = history.find(e => e.InternalId === id)
     if (found) {
       setDate(found.DateFrom ?? (found.DateTo != null ? found.DateTo : found.DateFrom!.minus({ day: 1 })))
@@ -183,7 +190,7 @@ function HistoryProperties (props: Props) {
       const copy = produce(current, draft => {
         draft.DateFrom = to
         draft.DateTo = undefined
-        draft.InternalId = generateUUID()
+        draft.InternalId = getInternalId()
       })
 
       if (entity) {
@@ -220,7 +227,7 @@ function HistoryProperties (props: Props) {
 
   const dateTimeClass = "m-w-full m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-p-1 disabled:m-opacity-50";
   return <>
-    <Accordion key={current.InternalId + isEvent} title={isEvent ? t('activity') : t('history')} expanded={(history.length > 1 || current.DateFrom != null || current.DateTo != null)}>
+    <Accordion key={current.InternalId} title={isEvent ? t('activity') : t('history')} expanded={(history.length > 1 || current.DateFrom != null || current.DateTo != null)}>
       {isEvent &&
         <div className={props.className}>
           <span className="m-mt-1 m-text-sm m-font-medium m-text-gray-900" title={t('activity date time')}>{t('happens')}</span>

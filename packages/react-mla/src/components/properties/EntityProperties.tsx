@@ -98,7 +98,7 @@ function EntityProperties (props: Props) {
     <div className="m-px-3 m-mt-3">
       <div>
         {configService.getProperties(entity).map(e => (
-          <Property key={entity.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
+          <Property key={e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType}
             value={e.property?.Value}
             config={e.propertyConfiguration}
             onChange={(newValue) => { entityChanged(entity, newValue, e.propertyConfiguration) }} />

@@ -7,17 +7,15 @@
 import { WritableDraft, produce } from 'immer'
 import type { IChartBase, IEntity, IHistory, ILink } from '../interfaces/data-models'
 import configService from '../services/configurationService'
-import { generateUUID, getId, isLinked, mergeProps } from '../utils/utils'
+import { getId, getInternalId, isLinked, mergeProps } from '../utils/utils'
 import useMainStore from './main-store'
 import viewService from '../services/viewService'
 import { fixDate } from '../utils/date'
 import i18n from "i18next";
 import forceLayout from 'graphology-layout-force'
 
-function updateProps(draft: WritableDraft<IChartBase>, ) {
-  if (draft.InternalId == null) {
-    draft.InternalId = generateUUID()
-  }
+function updateProps(draft: WritableDraft<IChartBase>) {
+  draft.InternalId = getInternalId()
   draft.DateFrom = fixDate(draft.DateFrom)
   draft.DateTo = fixDate(draft.DateTo)
   draft.LabelShort = viewService.getShortName(draft)
@@ -227,38 +225,38 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
     let max = state.maxDate
 
     const stateUpEntities = produce(state.entities, stateDraft => {
-      for (let entity of entities) {
-        entity = produce(entity, draft => {
+      for (const entity of entities) {
+        const update = produce(entity, draft => {
           draft.SourceSystemId = i18n.t("modified")
           updateProps(draft)
         })
         const existing = stateDraft[getId(entity)]
-        stateDraft[getId(entity)] = [entity, ...existing.filter(x => x.InternalId !== entity.InternalId)].sort((a, b) => sortByDate(a, b))
+        stateDraft[getId(entity)] = [update, ...existing.filter(x => x.InternalId !== entity.InternalId)].sort((a, b) => sortByDate(a, b))
 
-        if (entity.DateFrom != null && entity.DateFrom < min) {
+        if (update.DateFrom != null && update.DateFrom < min) {
           min = entity.DateFrom!.startOf("day")
         }
 
-        if (entity.DateTo != null && entity.DateTo > max) {
+        if (update.DateTo != null && update.DateTo > max) {
           max = entity.DateTo!.endOf("day")
         }
       }
     })
 
     const stateUpLinks = produce(state.links, stateDraft => {
-      for (let link of links) {
-        link = produce(link, draft => {
+      for (const link of links) {
+        const update = produce(link, draft => {
           draft.SourceSystemId = i18n.t("modified")
           updateProps(draft)
         })
         const existing = stateDraft[getId(link)]
-        stateDraft[getId(link)] = [link, ...existing.filter(x => x.InternalId !== link.InternalId)].sort((a, b) => sortByDate(a, b))
+        stateDraft[getId(link)] = [update, ...existing.filter(x => x.InternalId !== link.InternalId)].sort((a, b) => sortByDate(a, b))
 
-        if (link.DateFrom != null && link.DateFrom < min) {
+        if (update.DateFrom != null && update.DateFrom < min) {
           min = link.DateFrom!.startOf("day")
         }
 
-        if (link.DateTo != null && link.DateTo > max) {
+        if (update.DateTo != null && update.DateTo > max) {
           max = link.DateTo!.endOf("day")
         }
       }

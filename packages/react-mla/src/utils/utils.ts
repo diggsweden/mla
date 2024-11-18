@@ -27,8 +27,14 @@ function generateUUID (): string {
       d2 = Math.floor(d2 / 16)
     }
 
-    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+    const val = (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+    return val
   })
+}
+
+let internalId = 0;
+function getInternalId (): number {
+  return internalId++
 }
 
 function randomNumber (min: number, max: number): number {
@@ -154,8 +160,8 @@ function mergeContext (ctxa: string, ctxb: string): string {
 function findId (thing: IChartBase, config: IMatchRule[], things: IChartBase[]): string | undefined {
   for (const conf of config) {
     for (const test of things.filter(t => t.TypeId === thing.TypeId)) {
-      let a = thing.Properties.find(x => x.TypeId === conf.PropertyTypeId)?.Value ?? ''
-      let b = test.Properties.find(x => x.TypeId === conf.PropertyTypeId)?.Value ?? ''
+      let a = thing.Properties.find(x => x.TypeId === conf.PropertyTypeId)?.Value ?? 'NOT_FOUND_A'
+      let b = test.Properties.find(x => x.TypeId === conf.PropertyTypeId)?.Value ?? 'NOT_FOUND_B'
 
       if (conf.Regex != null) {
         const regex = new RegExp(conf.Regex)
@@ -294,6 +300,7 @@ export {
   generateUUID,
   getContextValue,
   getId,
+  getInternalId,
   hasDate,
   isLinked,
   isLinkedId,

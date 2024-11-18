@@ -75,7 +75,7 @@ export interface MainState {
   updateComputedLinks: () => void
   setEventFilter: (filter: Record<string, IEventFilter[] | undefined>) => void
 
-  getEntity: (entityId: string, internalId: string) => IEntity | undefined
+  getEntity: (entityId: string, internalId: number) => IEntity | undefined
   getCurrentEntity: (entityId: string, date?: DateTime) => IEntity | undefined
   getEntityHistory: (entityId: string) => IEntity[] | undefined
 
@@ -83,7 +83,7 @@ export interface MainState {
   updateEntity: (...entity: IEntity[]) => void
   removeEntity: (...entity: IEntity[]) => void
 
-  getLink: (linkId: string, internalId: string) => ILink | undefined
+  getLink: (linkId: string, internalId: number) => ILink | undefined
   getCurrentLink: (linkId: string, date?: DateTime) => ILink | undefined
   getLinkHistory: (linkId: string) => ILink[] | undefined
 
@@ -258,7 +258,7 @@ const useMainStore = create<MainState>((set, get) => ({
     }
 
   },
-  getEntity: (entityId: string, internalId: string): IEntity | undefined => {
+  getEntity: (entityId: string, internalId: number): IEntity | undefined => {
     const existing = get().entities[entityId]
     if (existing == null) {
       return undefined
@@ -301,7 +301,7 @@ const useMainStore = create<MainState>((set, get) => ({
   removeEntity: (...entities: IEntity[]) => {
     internalRemove(true, entities, [])
   },
-  getLink: (linkId: string, internalId: string): ILink | undefined => {
+  getLink: (linkId: string, internalId: number): ILink | undefined => {
     const existing = get().links[linkId]
     if (existing == null || existing.length === 0) {
       return undefined
