@@ -57,13 +57,6 @@ export default function GraphTools (props: Props) {
       const edgePath = edgePathFromNodePath(graph, nodePath);
       const result = [...nodePath, ...edgePath]
       setSelected(result)
-
-      nodePath.forEach(r => {
-        graph.setNodeAttribute(r, "highlighted", true)
-      })
-      edgePath.forEach(r => {
-        graph.setEdgeAttribute(r, "highlighted", true)
-      })
     } else {
       window.alert("TODO: Det finns ingen väg mellan noderna")
     }

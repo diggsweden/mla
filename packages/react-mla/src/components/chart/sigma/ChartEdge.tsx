@@ -64,7 +64,7 @@ function ChartEdge(props: Props) {
 
   useEffect(() => {
     if (created.current) {
-      // props.graph.setEdgeAttribute(created.current, "width", selected ? 8 : 4)
+      props.graph.setEdgeAttribute(created.current, "width", selected ? 8 : 4)
       props.graph.setEdgeAttribute(created.current, "color", selected ? "black" : undefined)
     }
   }, [from, link, props.graph, selected, to])

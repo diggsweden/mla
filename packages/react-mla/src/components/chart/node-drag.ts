@@ -35,15 +35,15 @@ export function useDragNodes(renderer: Sigma | undefined) {
                 y: graph.getNodeAttribute(draggedNode.current, "y")
             }
 
-            if (!selectedIds.includes(e.node)) {
-                setSelected([e.node])
-            }
-
             if (!renderer.getCustomBBox()) renderer.setCustomBBox(renderer.getBBox());
         }
 
         const move = (e: SigmaStageEventPayload) => {
             if (!draggedNode.current) return;
+
+            if (!selectedIds.includes(draggedNode.current)) {
+                setSelected([draggedNode.current])
+            }
 
             const event = e.event
             isDragging.current = true
@@ -117,3 +117,5 @@ export function useDragNodes(renderer: Sigma | undefined) {
 
     }, [getHistory, graph, renderer, selectedIds, setSelected, update])
 }
+
+export default useDragNodes

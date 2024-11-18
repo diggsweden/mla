@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import useMainStore from '../../../store/main-store'
-import viewService, { type IIcon } from '../../../services/viewService'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import viewService from '../../../services/viewService'
+import { useEffect, useMemo, useRef } from 'react'
 import useAppStore from '../../../store/app-store'
 import type { IEntity } from '../../../interfaces/data-models'
 import { getId, isSelected } from '../../../utils/utils'
@@ -20,22 +20,13 @@ function ChartNode (props: Props) {
 
   const selectedIds = useMainStore(state => state.selectedIds)
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
-  const [icon, setIcon] = useState(undefined as IIcon | undefined)
 
   const selected = useMemo(() => {
     return entity != null ? isSelected(entity, selectedIds) : false
   }, [entity, selectedIds])
 
-  const iconId = useRef('')
-  useEffect(() => {
-    const asyncUpdateIcon = async () => {
-      const newIcon = await viewService.getIconByRule(entity, viewConfig)
-      if (newIcon != null && newIcon?.id !== iconId.current) {
-        setIcon(newIcon)
-        iconId.current = newIcon.id
-      }
-    }
-    void asyncUpdateIcon()
+  const icon = useMemo(() => {
+    return viewService.getIconByRule(entity, viewConfig);
   }, [entity, viewConfig])
 
   const created = useRef(null as null | string)
@@ -83,10 +74,16 @@ function ChartNode (props: Props) {
       props.graph.setNodeAttribute(created.current, "type", icon ? "image" : undefined)
       props.graph.setNodeAttribute(created.current, "image", icon?.name)
       props.graph.setNodeAttribute(created.current, "foreColor", icon?.foreColor)
-      props.graph.setNodeAttribute(created.current, "backgroundColor", icon?.backgroundColor)
-      //props.graph.setNodeAttribute(created.current, "selected", selected)
     }
   }, [icon, props.graph, selected])
+
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setNodeAttribute(created.current, "selected", selected)
+      props.graph.setNodeAttribute(created.current, "backgroundColor", selected ? "#cbd5e1" : icon?.backgroundColor)
+
+    }
+  }, [icon?.backgroundColor, props.graph, selected])
 
   return null
 }

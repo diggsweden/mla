@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { RefObject, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 import useAppStore from '../../store/app-store'
 import Sigma from 'sigma'
@@ -10,22 +10,18 @@ import { SigmaEdgeEventPayload, SigmaNodeEventPayload, SigmaStageEventPayload } 
 import useMainStore from '../../store/main-store'
 
 const LEFT_CLICK = 0
-const RIGHT_CLICK = 2
 
 const CONTEXT_TIMEOUT = 300
 
-export function useMultiselect(containerElement: RefObject<HTMLElement>, renderer: Sigma | undefined) {
+function useMultiselect(renderer: Sigma | undefined) {
     const drag = useRef(false)
-    const pan = useRef(false)
     const canvas = useRef(null as null | HTMLCanvasElement)
     const time = useRef(0)
     const graphSelect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0 })
-    const panStart = useRef({ x: 0, y: 0 })
 
     const setSelected = useMainStore((state) => state.setSelected)
     const selectedIds = useMainStore((state) => state.selectedIds)
     const entities = useMainStore((state) => state.entities)
-    const showContextMenu = useAppStore(state => state.showContextMenu)
     const setGeo = useAppStore(state => state.setSelectedGeoFeature)
 
     useEffect(() => {
@@ -127,17 +123,7 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
 
         const down = (e: SigmaStageEventPayload) => {
             const click = e.event.original as MouseEvent;
-            
-            if (click.button == RIGHT_CLICK) {
-                const pos = renderer.viewportToFramedGraph(e.event)
-                time.current = Date.now()
-                pan.current = true
-                panStart.current = pos
-                e.preventSigmaDefault()
-                e.event.original.preventDefault()
-                e.event.original.stopImmediatePropagation()
-            }
-            else if (click.button == LEFT_CLICK) {
+            if (click.button == LEFT_CLICK) {
                 const pos = renderer.viewportToGraph(e.event)
                 Object.assign(graphSelect.current, {
                     startX: pos.x,
@@ -150,13 +136,6 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
         }
 
         const move = (e: SigmaStageEventPayload) => {
-            if (pan.current) {
-                const pos = renderer.viewportToFramedGraph(e.event)
-                const camera = renderer.getCamera()
-                const state = camera.getState()
-                const update = { x: state.x + panStart.current.x - pos.x, y: state.y + panStart.current.y - pos.y }
-                camera.setState(update)
-            }
             if (drag.current) {
                 const pos = renderer.viewportToGraph(e.event)
                 Object.assign(graphSelect.current, {
@@ -172,19 +151,6 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             }
         }
 
-        const up = (e: MouseEvent) => {
-            if (e.button === RIGHT_CLICK) {
-                e.preventDefault();
-                const diff = Date.now() - time.current
-                if (diff < CONTEXT_TIMEOUT) {
-                    window.setTimeout(() => {
-                        showContextMenu(e.pageX, e.pageY)
-                    })
-                }
-
-                pan.current = false;
-            }
-        }
 
         const upLeft = (e: SigmaStageEventPayload) => {
             const click = e.event.original as MouseEvent;
@@ -249,40 +215,20 @@ export function useMultiselect(containerElement: RefObject<HTMLElement>, rendere
             }
         }
 
-        const rightClickStage = (e: SigmaStageEventPayload) => {
-            e.preventSigmaDefault();
-            e.event.original.preventDefault();
-        }
-
-        const rightClickNode = (e: SigmaNodeEventPayload) => {
-            setSelected([e.node])
-            const click = e.event.original as MouseEvent;
-            showContextMenu(click.pageX, click.pageY)
-            e.preventSigmaDefault();
-            e.event.original.preventDefault();
-            e.event.original.stopPropagation();
-        }
-
-        renderer.getContainer().onmouseup = up;
         renderer.on("downStage", down)
         renderer.on("moveBody", move)
         renderer.on("upStage", upLeft)
         renderer.on("upNode", upLeftNode)
         renderer.on("upEdge", upLeftEdge)
-        renderer.on("rightClickNode", rightClickNode);
-        renderer.on("rightClickStage", rightClickStage);
 
         return () => {
-            renderer.getContainer().onmouseup = null;
             renderer.off("downStage", down)
             renderer.off("moveBody", move)
             renderer.off("upStage", upLeft)
             renderer.off("upNode", upLeftNode)
             renderer.off("upEdge", upLeftEdge)
-            renderer.off("rightClickNode", rightClickNode);
-            renderer.off("rightClickStage", rightClickStage);
         }
-    }, [containerElement, entities, renderer, selectedIds, setGeo, setSelected, showContextMenu])
+    }, [entities, renderer, selectedIds, setGeo, setSelected])
 }
 
 export default useMultiselect

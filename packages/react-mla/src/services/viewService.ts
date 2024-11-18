@@ -81,7 +81,7 @@ class ViewService {
     return propertyRules.find(x => this.getPropertyPlainValue(entity, x.PropertyTypeId) === x.Equals)
   }
 
-  public async getIconByRule (entity: IEntity, viewConfiguration: IViewConfiguration): Promise<IIcon | undefined> {
+  public getIconByRule (entity: IEntity, viewConfiguration: IViewConfiguration): IIcon | undefined {
     const view = viewService.getView(entity.TypeId, entity.GlobalType)
     const configurationRule = this.getRule(entity, viewConfiguration)
     const icon = configurationRule?.Icon ?? view.Icon

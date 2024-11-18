@@ -8,7 +8,7 @@ import useAppStore from "../../store/app-store";
 import { SigmaNodeEventPayload } from "sigma/types";
 import useMainStore from "../../store/main-store";
 
-export function useNodeHighlight(renderer: Sigma | undefined) {
+function useNodeHighlight(renderer: Sigma | undefined) {
     const [hoveredNode, setHoveredNode] = useState<string | null>(null);
     const disableHoverEffect = useAppStore(state => !state.hoverEffect)
     const graph = useMainStore((state) => state.graph)
@@ -67,3 +67,5 @@ export function useNodeHighlight(renderer: Sigma | undefined) {
         }
     }, [hoveredNode, disableHoverEffect, renderer]);
 }
+
+export default useNodeHighlight

@@ -2,21 +2,24 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import {  useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDrop } from 'react-dnd'
 import { drawDiscNodeHover, drawDiscNodeLabel } from './rendering/node-renderer';
 import { NodeSvgProgram } from "./rendering/svg-node-renderer/index";
 import { NodeBorderProgram } from "@sigma/node-border";
 
 import Sigma from "sigma";
-
-import useMainStore from '../../store/main-store'
-import useKeyDown from '../../effects/keydown'
+import { Settings } from "sigma/settings";
 
 import ContentRenderer from './sigma/ContentRenderer';
+
+import useMainStore from '../../store/main-store'
+
+import useRightMousePan from './right-mouse-pan';
+import useDragNodes from './node-drag';
+import useNodeHighlight from './node-highlight';
 import useMultiselect from './multiselect';
-import { useDragNodes } from './node-drag';
-import { useNodeHighlight } from './node-highlight';
+import useKeyDown from '../../effects/keydown'
 
 interface Props {
   className?: string
@@ -41,7 +44,7 @@ function Chart(props: Props) {
       return
     }
 
-    const renderer = new Sigma(graph, sigmaContainer.current, {
+    const settings = {
       nodeProgramClasses: {
         image: NodeSvgProgram,
         border: NodeBorderProgram,
@@ -52,7 +55,9 @@ function Chart(props: Props) {
       autoRescale: false,
       defaultDrawNodeLabel: drawDiscNodeLabel,
       defaultDrawNodeHover: drawDiscNodeHover
-    });
+    } as Partial<Settings>
+
+    const renderer = new Sigma(graph, sigmaContainer.current, settings);
 
     init(renderer);
 
@@ -62,7 +67,9 @@ function Chart(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useMultiselect(sigmaContainer, sigma)
+
+  useRightMousePan(sigmaContainer, sigma)
+  useMultiselect(sigma)
   useDragNodes(sigma)
   useNodeHighlight(sigma)
 
