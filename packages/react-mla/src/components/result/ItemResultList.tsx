@@ -19,6 +19,7 @@ import { toDateString } from '../../utils/date'
 import { internalAdd } from '../../store/internal-actions'
 import Button from '../common/Button'
 import { useTranslation } from 'react-i18next'
+import { fitViewportToNodes } from '@sigma/utils'
 
 interface ItemResultProps {
   result: IQueryResponse
@@ -37,7 +38,8 @@ const last = 'zzzzzzzzzzzz'
 
 function ItemResultList (props: ItemResultProps) {
   const { t } = useTranslation();
-  const network = useMainStore(state => state.network)
+  const sigma = useMainStore((state) => state.sigma)
+  const graph = useMainStore((state) => state.graph)
 
   const setTool = useAppStore((state) => state.setTool)
   const setEvents = useMainStore((state) => state.setEvent)
@@ -50,9 +52,13 @@ function ItemResultList (props: ItemResultProps) {
   function add (entities: IEntity[], links: ILink[]) {
     internalAdd(true, entities, links, true)
 
-    if (network != null) {
+    if (sigma && graph) {
       window.setTimeout(() => {
-        network.fit({ nodes: entities.map(e => getId(e)) })
+        fitViewportToNodes(
+          sigma,
+          entities.map(e => getId(e)),
+          { animate: true },
+        );
       }, 150)
     }
   }

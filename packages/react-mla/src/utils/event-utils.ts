@@ -8,7 +8,7 @@ import type { IBase, IEntity, IEvent, IEventLink, IProperty, ITimeSpan } from '.
 import configService from '../services/configurationService'
 import viewService from '../services/viewService'
 import { internalAdd } from '../store/internal-actions'
-import { generateUUID } from './utils'
+import { generateUUID, getInternalId } from './utils'
 import { t } from 'i18next'
 
 const get = (ent: IBase, property: string) => {
@@ -134,7 +134,7 @@ export function computeLinks (events: IEvent[], date: ITimeSpan | undefined): IE
     const link: IEventLink = {
       Id: key + generate.TypeId,
       TypeId: generate.TypeId,
-      InternalId: generateUUID(),
+      InternalId: getInternalId(),
       EventTypeId: config.TypeId,
       Events: group,
       LabelLong: '',
@@ -244,7 +244,7 @@ function findEntity (event: IEvent, target: IEventTarget, entities: IEntity[]): 
 function createEntity (event: IEvent, target: IEventTarget): IEntity | null {
   const ent: IEntity = {
     Id: generateUUID(),
-    InternalId: generateUUID(),
+    InternalId: getInternalId(),
     TypeId: target.TypeId,
     LabelLong: '',
     LabelShort: '',

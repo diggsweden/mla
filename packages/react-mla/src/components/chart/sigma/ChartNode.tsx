@@ -12,7 +12,8 @@ import Graph from 'graphology'
 
 interface Props {
   entity: IEntity
-  graph: Graph
+  graph: Graph,
+  size: number
 }
 
 function ChartNode (props: Props) {
@@ -38,7 +39,7 @@ function ChartNode (props: Props) {
       y: entity.PosY,
       fixed: true, 
       color: "white",
-      size: 15
+      size: props.size
     })
 
     return () => {
@@ -73,6 +74,7 @@ function ChartNode (props: Props) {
     if (created.current) {
       props.graph.setNodeAttribute(created.current, "image", icon?.name)
       props.graph.setNodeAttribute(created.current, "pictoColor", icon?.foreColor)
+      props.graph.setNodeAttribute(created.current, "borderColor", selected ? "#60a5fa" : icon?.foreColor)
     }
   }, [icon, props.graph, selected])
 

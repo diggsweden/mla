@@ -11,15 +11,21 @@ import useMainStore from '../../../store/main-store'
 import configService from '../../../services/configurationService'
 import UndoToolbox from '../toolbox/UndoToolbox'
 import { useTranslation } from 'react-i18next'
+import { fitViewportToNodes } from '@sigma/utils'
 
 function StartTabPanel () {
   const { t } = useTranslation();
   const config = configService.getConfiguration()
-  const network = useMainStore((state) => state.network)
+  const sigma = useMainStore((state) => state.sigma)
+  const graph = useMainStore((state) => state.graph)
 
   function fit () {
-    if (network) {
-      network.fit()
+    if (sigma && graph) {
+      fitViewportToNodes(
+        sigma,
+        graph.filterNodes(() => true),
+        { animate: true },
+      );
     }
   }
 

@@ -47,7 +47,7 @@ function Chart(props: Props) {
 
     const NodeBorderCustomProgram = createNodeBorderProgram({
       borders: [
-        { size: { value: 0.1 }, color: { attribute: "pictoColor" } },
+        { size: { value: 0.1 }, color: { attribute: "borderColor" } },
         { size: { fill: true }, color: { attribute: "color" } },
       ],
     });
@@ -56,14 +56,14 @@ function Chart(props: Props) {
       padding: 0.3,
       size: { mode: "force", value: 256 },
       drawingMode: "color",
-      colorAttribute: "pictoColor",
+      colorAttribute: "borderColor",
     });
   
     const NodeProgram = createNodeCompoundProgram([NodeBorderCustomProgram, NodePictogramCustomProgram]);
   
     const settings = {
-      minCameraRatio: 0.3,
-      maxCameraRatio: 4.5,
+      //minCameraRatio: 0.3,
+      //maxCameraRatio: 4.5,
       defaultNodeType: "pictogram",
       nodeProgramClasses: {
         pictogram: NodeProgram
@@ -90,7 +90,6 @@ function Chart(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
 
   useRightMousePan(sigmaContainer, sigma)
   useMultiselect(sigma)

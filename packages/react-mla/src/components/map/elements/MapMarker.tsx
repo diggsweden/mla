@@ -103,21 +103,9 @@ function MapMarker (props: Props) {
   }, [coordinates, marker])
 
   useEffect(() => {
-    function getIcon() {
-      if (!active) {
-        return icon?.unselected
-      }
-
-      if (selected) {
-        return icon?.selected
-      }
-
-      return icon?.unselected;
-    }
-
     if (marker && icon) {
       marker.setIcon(new Icon({
-        iconUrl: getIcon(),
+        iconUrl: icon.name,
         iconSize: [40, 40],
         iconAnchor: [20, 40]
       }))

@@ -8,6 +8,9 @@ import useMainStore from '../../../store/main-store'
 import { useMemo } from 'react'
 import { getId } from '../../../utils/utils'
 
+export const DEFAULT_NODE_SIZE = 15;
+export const DEFAULT_EDGE_SIZE = 3;
+
 function ContentRenderer () {
   const date = useMainStore(state => state.currentDate)
 
@@ -28,13 +31,13 @@ function ContentRenderer () {
 
   return (<>
     {nodes.map(s =>
-      <ChartEntity key={getId(s)} entity={s} graph={graph}></ChartEntity>
+      <ChartEntity key={getId(s)} entity={s} graph={graph} size={DEFAULT_NODE_SIZE}></ChartEntity>
     )}
     {edges.map(s =>
-      <ChartEdge key={getId(s)} link={s} graph={graph}></ChartEdge>
+      <ChartEdge key={getId(s)} link={s} graph={graph} size={DEFAULT_EDGE_SIZE}></ChartEdge>
     )}
     {computedLinks.map(s =>
-      <ChartEdge key={s.Id} link={s} graph={graph}></ChartEdge>
+      <ChartEdge key={s.Id} link={s} graph={graph} size={DEFAULT_EDGE_SIZE}></ChartEdge>
     )}
   </>
   )

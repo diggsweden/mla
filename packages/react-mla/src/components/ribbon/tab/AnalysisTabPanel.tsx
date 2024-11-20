@@ -13,6 +13,7 @@ import Modal from '../../common/Modal'
 import ActivityAnalysis from '../../modal/ActivityAnalysis'
 import PhaseCreator from '../../modal/PhaseCreator'
 import GraphToolbox from '../toolbox/GraphToolbox'
+import CommunityToolbox from '../toolbox/CommunityToolbox'
 import configService from '../../../services/configurationService'
 import { toDateString } from '../../../utils/date'
 import EventFilterTool from '../../tools/EventFilterTool'
@@ -85,6 +86,7 @@ function AnalysisTabPanel () {
   return (<>
     <div className="m-flex m-text-center m-h-full m-p-1">
       <GraphToolbox />
+      <CommunityToolbox />
 
       <RibbonMenuSection title={t('show as table')} >
         <RibbonMenuButton label={t('entities')} title={t('entities as table')} disabled={selectedEntities.length === 0} onClick={() => { setShowTableTool(true) }} iconName="apps" />

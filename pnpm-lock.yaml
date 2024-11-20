@@ -146,6 +146,12 @@ importers:
       '@react-sigma/core':
         specifier: ^4.0.3
         version: 4.0.3(graphology@0.25.4(graphology-types@0.24.7))(react@18.3.1)(sigma@3.0.0-beta.36(graphology-types@0.24.7))
+      '@sigma/export-image':
+        specifier: 3.0.0-beta.1
+        version: 3.0.0-beta.1(sigma@3.0.0-beta.36(graphology-types@0.24.7))
+      '@sigma/layer-webgl':
+        specifier: 3.0.0-beta.5
+        version: 3.0.0-beta.5(sigma@3.0.0-beta.36(graphology-types@0.24.7))
       '@sigma/node-border':
         specifier: 3.0.0-beta.7
         version: 3.0.0-beta.7(sigma@3.0.0-beta.36(graphology-types@0.24.7))
@@ -1137,6 +1143,16 @@ packages:
   '@rushstack/ts-command-line@4.23.0':
     resolution: {integrity: sha512-jYREBtsxduPV6ptNq8jOKp9+yx0ld1Tb/Tkdnlj8gTjazl1sF3DwX2VbluyYrNd0meWIL0bNeer7WDf5tKFjaQ==}
 
+  '@sigma/export-image@3.0.0-beta.1':
+    resolution: {integrity: sha512-ku2n6WFDCX6XZF9by8Nq1paljCKfNJ4CkLvnUJVnxE0vowlAatUXB7HAPrCw5tvoLdmrMRredDNJ15MmcKFWPA==}
+    peerDependencies:
+      sigma: '>=3.0.0-beta.10'
+
+  '@sigma/layer-webgl@3.0.0-beta.5':
+    resolution: {integrity: sha512-b6QtyffaBMMX2L7leYiVIgwLlRZV4oQUzWMGvzd/xNmrBfMWcuCjb1hwtMowgD4rDWw0kem2jUNLSNBpBoVV+A==}
+    peerDependencies:
+      sigma: '>=3.0.0-beta.24'
+
   '@sigma/node-border@3.0.0-beta.7':
     resolution: {integrity: sha512-M4ivn9H5BNMZudeQJ63Kfngu4Uwn0QM3qXZeWjDKp/X6c1Bsf44furMf2EmMbBmGYvYS5ummi03CQ33lh//DeQ==}
     peerDependencies:
@@ -2118,6 +2134,9 @@ packages:
   file-entry-cache@8.0.0:
     resolution: {integrity: sha512-XXTUwCvisa5oacNGRP9SfNtYBNAMi+RPwBFmblZEF7N7swHYQS6/Zfk7SRwx4D5j3CH211YNRco1DEMNVfZCnQ==}
     engines: {node: '>=16.0.0'}
+
+  file-saver@2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
 
   filename-reserved-regex@2.0.0:
     resolution: {integrity: sha512-lc1bnsSr4L4Bdif8Xb/qrtokGbq5zlsms/CYH8PP+WtCkGNF65DPiQY8vG3SakEdRn8Dlnm+gW/qWKKjS5sZzQ==}
@@ -4918,6 +4937,15 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
+  '@sigma/export-image@3.0.0-beta.1(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
+    dependencies:
+      file-saver: 2.0.5
+      sigma: 3.0.0-beta.36(graphology-types@0.24.7)
+
+  '@sigma/layer-webgl@3.0.0-beta.5(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
+    dependencies:
+      sigma: 3.0.0-beta.36(graphology-types@0.24.7)
+
   '@sigma/node-border@3.0.0-beta.7(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
     dependencies:
       sigma: 3.0.0-beta.36(graphology-types@0.24.7)
@@ -6159,6 +6187,8 @@ snapshots:
   file-entry-cache@8.0.0:
     dependencies:
       flat-cache: 4.0.1
+
+  file-saver@2.0.5: {}
 
   filename-reserved-regex@2.0.0: {}
 

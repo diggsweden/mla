@@ -16,7 +16,7 @@ import RibbonMenuButtonGroup from '../RibbonMenuButtonGroup'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuIconButton from '../RibbonMenuIconButton'
 import RibbonMenuSection from '../RibbonMenuSection'
-import { compareWildcard, generateUUID, getId } from '../../../utils/utils'
+import { compareWildcard, generateUUID, getId, getInternalId } from '../../../utils/utils'
 import Icon from '../../common/Icon'
 import { useTranslation } from 'react-i18next'
 
@@ -46,7 +46,7 @@ export default function CreateToolbox (props: Props) {
   function createEntity (type: IEntityConfiguration): IEntity {
     return {
       Id: generateUUID(),
-      InternalId: generateUUID(),
+      InternalId: getInternalId(),
       TypeId: type.TypeId,
       GlobalType: type.GlobalType,
       LabelLong: '',
@@ -60,7 +60,7 @@ export default function CreateToolbox (props: Props) {
   function createLink (from: IEntity, to: IEntity, type: ILinkConfiguration): ILink {
     return {
       Id: generateUUID(),
-      InternalId: generateUUID(),
+      InternalId: getInternalId(),
       TypeId: type.TypeId,
       GlobalType: type.GlobalType,
       LabelLong: '',

@@ -8,24 +8,24 @@ import useMainStore from '../../../store/main-store'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuSection from '../RibbonMenuSection'
 import RibbonMenuDivider from '../RibbonMenuDivider'
-import { blobToBase64, canvasToBlob, getContextValue, setContextValue } from '../../../utils/utils'
+import { blobToBase64, getContextValue, setContextValue } from '../../../utils/utils'
 import queryService from '../../../services/queryService'
 import Modal from '../../common/Modal'
 import configService from '../../../services/configurationService'
 import ImportToolbox from '../toolbox/ImportToolbox'
 import { useTranslation } from 'react-i18next'
+import { ToImageOptions, downloadAsImage, toBlob } from "@sigma/export-image";
 
 function ArchiveTabPanel () {
   const config = configService.getConfiguration()
   const { t } = useTranslation();
 
+  const sigma = useMainStore((state) => state.sigma)
   const save = useMainStore((state) => state.save)
   const open = useMainStore((state) => state.open)
   const setDirty = useMainStore((state) => state.setDirty)
   const context = useMainStore((state) => state.context)
   const setContext = useMainStore((state) => state.setContext)
-
-  const network = useMainStore((state) => state.network)
 
   const [showSave, setShowSave] = useState(false)
   const [showImageSave, setShowImageSave] = useState(false)
@@ -144,17 +144,12 @@ function ArchiveTabPanel () {
   }
 
   function saveImage () {
-    if (network) {
-      const canvas = (network as any).canvas.frame.canvas as HTMLCanvasElement
-      fillCanvasBackgroundWithColor(canvas, 'white')
-      const url = canvas.toDataURL('image/png')
-
-      const link = document.createElement('a')
-      link.download = t('default_image')
-      link.href = url
-
-      link.click()
-      link.remove()
+    if (sigma) {
+      downloadAsImage(sigma, {
+        format: "png",
+        fileName: "graph",
+        backgroundColor : "white"
+      });
     }
   }
 
@@ -163,15 +158,18 @@ function ArchiveTabPanel () {
       return
     }
 
-    if (network) {
+    if (sigma) {
       if (name && name.length > 0) {
         setLoading(true)
-
-        const canvas = (network as any).canvas.frame.canvas as HTMLCanvasElement
-        fillCanvasBackgroundWithColor(canvas, 'white')
+  
+        const opts: Partial<ToImageOptions> = {
+          format: "png",
+          fileName: name,
+          backgroundColor : "white", 
+        }
 
         const saveAction = async () => {
-          const imageBlob = await canvasToBlob(canvas)
+          const imageBlob = await toBlob(sigma, opts)
           const base64data = await blobToBase64(imageBlob)
 
           const result = await queryService.SaveImage(base64data, name)
@@ -188,17 +186,6 @@ function ArchiveTabPanel () {
       } else {
         showImageSaveAs()
       }
-    }
-  }
-
-  function fillCanvasBackgroundWithColor (canvas: HTMLCanvasElement, color: string) {
-    const context = canvas.getContext('2d')
-    if (context != null) {
-      context.save()
-      context.globalCompositeOperation = 'destination-over'
-      context.fillStyle = color
-      context.fillRect(0, 0, canvas.width, canvas.height)
-      context.restore()
     }
   }
 
