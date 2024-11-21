@@ -81,8 +81,8 @@ importers:
         specifier: 5.4.11
         version: 5.4.11(@types/node@20.17.6)(sass-embedded@1.81.0)
       vite-plugin-commonjs:
-        specifier: 0.10.3
-        version: 0.10.3
+        specifier: 0.10.4
+        version: 0.10.4
 
   packages/config-tailwind:
     devDependencies:
@@ -312,8 +312,8 @@ importers:
         specifier: 5.4.11
         version: 5.4.11(@types/node@20.17.6)(sass-embedded@1.81.0)
       vite-plugin-commonjs:
-        specifier: 0.10.3
-        version: 0.10.3
+        specifier: 0.10.4
+        version: 0.10.4
       vite-plugin-css-injected-by-js:
         specifier: 3.5.2
         version: 3.5.2(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.81.0))
@@ -3802,8 +3802,8 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
-  vite-plugin-commonjs@0.10.3:
-    resolution: {integrity: sha512-trtH4dfAqrbqwiUhSKcqrfjnlXnqLHdIbYuUy943y34JnDjIX8qlpExP0nFN+kE2s6/BS6r9d1cAHS0KtiF4yQ==}
+  vite-plugin-commonjs@0.10.4:
+    resolution: {integrity: sha512-eWQuvQKCcx0QYB5e5xfxBNjQKyrjEWZIR9UOkOV6JAgxVhtbZvCOF+FNC2ZijBJ3U3Px04ZMMyyMyFBVWIJ5+g==}
 
   vite-plugin-css-injected-by-js@3.5.2:
     resolution: {integrity: sha512-2MpU/Y+SCZyWUB6ua3HbJCrgnF0KACAsmzOQt1UvRVJCGF6S8xdA3ZUhWcWdM9ivG4I5az8PnQmwwrkC2CAQrQ==}
@@ -7768,7 +7768,7 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-commonjs@0.10.3:
+  vite-plugin-commonjs@0.10.4:
     dependencies:
       acorn: 8.14.0
       magic-string: 0.30.12
