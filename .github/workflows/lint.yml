@@ -29,7 +29,7 @@ jobs:
 
       - name: Run MegaLinter
         id: ml
-        uses: oxsecurity/megalinter@b38cdf1f0cbe056fad4112cb7cd99c2b574c9617 # v8.1.0
+        uses: oxsecurity/megalinter@d8c95fc6f2237031fb9e9322b0f97100168afa6e # v8.2.0
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
