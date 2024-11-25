@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 import { Attributes } from 'graphology-types';
 import { NodeDisplayData, PartialButFor } from 'sigma/types';
 import { Settings } from "sigma/settings"; 

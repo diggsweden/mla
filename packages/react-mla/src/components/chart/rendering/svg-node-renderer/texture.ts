@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 import { EventEmitter } from "events";
 import { Coordinates } from "sigma/types";
 import iconService from '../../../../services/iconService'

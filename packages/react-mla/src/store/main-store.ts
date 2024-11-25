@@ -129,7 +129,7 @@ const useMainStore = create<MainState>((set, get) => ({
   maxDate: DateTime.now().startOf("day").plus({ months: 6 }),
   minDate: DateTime.now().startOf("day").minus({ months: 6 }),
 
-  graph: new Graph({ multi: true, type: "undirected" }),
+  graph: new Graph({ multi: true, type: "mixed" }),
   sigma: undefined,
   initSigma: (sigma) => {
     set((state) => ({

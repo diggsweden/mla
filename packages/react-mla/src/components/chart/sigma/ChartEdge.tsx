@@ -41,10 +41,41 @@ function ChartEdge(props: Props) {
   const created = useRef(null as null | string)
   useEffect(() => {
     console.debug('[adding]', getId(link))
-    created.current = props.graph.addEdgeWithKey(getId(link), getId(from), getId(to), {
+    console.log('[adding]', getId(link))
+
+    //switch (link.Direction) {
+    //  case "TO":
+    //    created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(from), getId(to), {
+    //      size: props.size,
+    //      label: link.LabelChart,
+    //      drawLabel: true
+    //      type: "arrow"
+    //    });      
+    //    break;
+    //  case "FROM":
+    //    created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(to), getId(from), {
+    //      size: props.size,
+    //      label: link.LabelChart,
+    //      drawLabel: true,
+    //      type: "arrow"
+    //    });      
+    //    break;
+    //  case "NONE":
+    //  case "BOTH":
+    //    created.current = props.graph.addUndirectedEdgeWithKey(getId(link), getId(from), getId(to), {
+    //      size: props.size,
+    //      label: link.LabelChart,
+    //      drawLabel: true
+    //    });      
+    //
+    //  break;
+    //}
+
+    created.current = props.graph.addUndirectedEdgeWithKey(getId(link), getId(from), getId(to), {
       size: props.size,
       label: link.LabelChart,
-      drawLabel: true
+      drawLabel: true,
+      type: "arrow"
     });
 
     return () => {

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 // language=GLSL
 const VERTEX_SHADER_SOURCE = /*glsl*/ `
 attribute vec4 a_id;

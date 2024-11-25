@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 export default function getFragmentShader({ texturesCount }: { texturesCount: number }) {
     // language=GLSL
     const SHADER = /*glsl*/ `
