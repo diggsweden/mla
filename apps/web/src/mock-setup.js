@@ -10,6 +10,8 @@ import * as sokOrganisation from './SvarSokOrganisation.json'
 import * as sokKonton from './SvarSokKonton.json'
 import * as test from './Testdata.json'
 
+import { faker } from '@faker-js/faker/locale/en';
+
 import Graph from 'graphology';
 import { complete } from 'graphology-generators/classic';
 import { clusters } from 'graphology-generators/random';
@@ -54,8 +56,16 @@ function mapGraphToResult(graph) {
       PosY: graph.getNodeAttribute(n, "y"),
       Properties: [
         {
+          TypeId: "personE1",
+          Value: faker.phone.number('########-####')
+        },
+        {
           TypeId: "personE2",
-          Value: graph.getNodeAttribute(n, "label")
+          Value:faker.person.firstName()
+        },
+        {
+          TypeId: "personE3",
+          Value: faker.person.lastName()
         }
       ]
     })

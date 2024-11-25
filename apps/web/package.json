@@ -4,6 +4,7 @@
   "type": "module",
   "homepage": "https://diggsweden.github.io/mla",
   "dependencies": {
+    "@faker-js/faker": "^9.2.0",
     "@repo/tailwind-config": "workspace:^",
     "@repo/typescript-config": "workspace:^",
     "graphology": "^0.25.4",
