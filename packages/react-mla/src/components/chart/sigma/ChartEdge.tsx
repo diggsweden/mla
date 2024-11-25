@@ -51,13 +51,14 @@ function ChartEdge(props: Props) {
   useEffect(() => {
     console.debug('[adding]', getId(link))
 
+    console.log(link.Direction)
     switch (link.Direction) {
       case "TO":
         created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(from), getId(to), {
           size: props.size,
           label: link.LabelChart,
           drawLabel: true,
-          type: "arrow"
+          type: "straightWithArrow"
         });      
         break;
       case "FROM":
@@ -65,17 +66,16 @@ function ChartEdge(props: Props) {
           size: props.size,
           label: link.LabelChart,
           drawLabel: true,
-          type: "arrow"
+          type: "straightWithArrow"
         });      
         break;
-      case "NONE":
-      case "BOTH":
+      default:    
         created.current = props.graph.addUndirectedEdgeWithKey(getId(link), getId(from), getId(to), {
           size: props.size,
           label: link.LabelChart,
-          drawLabel: true
+          drawLabel: true,
+          type: "straight"
         });      
-    
       break;
     }
 
@@ -109,7 +109,7 @@ function ChartEdge(props: Props) {
   }, [from, link, props.graph, selected, to])
 
   useEffect(() => {
-    console.log('[update link]', getId(link))
+   console.log('[update link]', getId(link))
     // TODO: Only update the edges that exists between the nodes
 
     // Adapt types and curvature of parallel edges for rendering:
