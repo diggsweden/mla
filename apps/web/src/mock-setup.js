@@ -10,7 +10,7 @@ import * as sokOrganisation from './SvarSokOrganisation.json'
 import * as sokKonton from './SvarSokKonton.json'
 import * as test from './Testdata.json'
 
-import { faker } from '@faker-js/faker/locale/en';
+import { faker } from '@faker-js/faker/locale/sv';
 
 import Graph from 'graphology';
 import { complete } from 'graphology-generators/classic';
@@ -57,7 +57,7 @@ function mapGraphToResult(graph) {
       Properties: [
         {
           TypeId: "personE1",
-          Value: faker.phone.number('########-####')
+          Value: faker.phone.number('########-####').replace("+46", "19")
         },
         {
           TypeId: "personE2",
