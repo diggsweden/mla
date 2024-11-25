@@ -8,7 +8,7 @@ import { drawDiscNodeHover, drawDiscNodeLabel } from './rendering/node-renderer'
 import { createNodeSvgProgram } from "./rendering/svg-node-renderer/index";
 import { createNodeBorderProgram } from "@sigma/node-border";
 import { EdgeArrowProgram, EdgeLineProgram, createNodeCompoundProgram } from 'sigma/rendering';
-import EdgeCurveProgram, { EdgeCurvedArrowProgram, indexParallelEdgesIndex } from "@sigma/edge-curve";
+import EdgeCurveProgram, { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 
 import Sigma from "sigma";
 import { Settings } from "sigma/settings";
@@ -83,13 +83,6 @@ function Chart(props: Props) {
       defaultDrawNodeLabel: drawDiscNodeLabel,
       defaultDrawNodeHover: drawDiscNodeHover
     } as Partial<Settings>
-
-    // Use dedicated helper to identify parallel edges:
-    indexParallelEdgesIndex(graph, {
-      edgeIndexAttribute: "parallelIndex",
-      edgeMinIndexAttribute: "parallelMinIndex",
-      edgeMaxIndexAttribute: "parallelMaxIndex",
-    });
 
     const renderer = new Sigma(graph, sigmaContainer.current, settings);
 

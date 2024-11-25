@@ -5,13 +5,14 @@
 import ChartEntity from './ChartNode'
 import ChartEdge from './ChartEdge'
 import useMainStore from '../../../store/main-store'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { getId } from '../../../utils/utils'
 
 export const DEFAULT_NODE_SIZE = 15;
 export const DEFAULT_EDGE_SIZE = 3;
+import { DEFAULT_EDGE_CURVATURE, indexParallelEdgesIndex } from "@sigma/edge-curve";
 
-function ContentRenderer () {
+function ContentRenderer() {
   const date = useMainStore(state => state.currentDate)
 
   const entities = useMainStore((state) => state.entities)
@@ -24,6 +25,52 @@ function ContentRenderer () {
 
   const nodes = useMemo(() => Object.keys(entities).map(k => getEntity(k, date.DateFrom)!), [entities, date.DateFrom, getEntity])
   const edges = useMemo(() => Object.keys(links).map(k => getLink(k, date.DateFrom)!), [links, date.DateFrom, getLink])
+
+  const linkCount = useMemo(() => {
+    return Object.keys(links).length + computedLinks.length
+  }, [computedLinks.length, links])
+
+  useEffect(() => {
+    if (graph == undefined) {
+      return;
+    }
+
+    console.debug('[updating edge count]')
+
+    indexParallelEdgesIndex(graph, {
+      edgeIndexAttribute: "parallelIndex",
+      edgeMinIndexAttribute: "parallelMinIndex",
+      edgeMaxIndexAttribute: "parallelMaxIndex",
+    });
+
+    graph.forEachEdge(
+      (
+        edge,
+        {
+          parallelIndex,
+          parallelMinIndex,
+          parallelMaxIndex,
+        }:
+          | { parallelIndex: number; parallelMinIndex?: number; parallelMaxIndex: number }
+          | { parallelIndex?: null; parallelMinIndex?: null; parallelMaxIndex?: null },
+      ) => {
+        const showArrow = graph.isDirected(edge);
+        if (typeof parallelMinIndex === "number") {
+          graph.mergeEdgeAttributes(edge, {
+            type: parallelIndex ? (showArrow ? "curvedWithArrow" : "curved") : (showArrow ? "straightWithArrow" : "straight"),
+            curvature: getCurvature(parallelIndex, parallelMaxIndex),
+          });
+        } else if (typeof parallelIndex === "number") {
+          graph.mergeEdgeAttributes(edge, {
+            type: "curved",
+            curvature: getCurvature(parallelIndex, parallelMaxIndex),
+          });
+        } else {
+          graph.setEdgeAttribute(edge, "type", (showArrow ? "straightWithArrow" : "straight"));
+        }
+      },
+    );
+  }, [graph, linkCount])
 
   if (graph == undefined) {
     return;
@@ -41,6 +88,15 @@ function ContentRenderer () {
     )}
   </>
   )
+}
+
+function getCurvature(index: number, maxIndex: number): number {
+  if (maxIndex <= 0) throw new Error("Invalid maxIndex");
+  if (index < 0) return -getCurvature(-index, maxIndex);
+  
+  const amplitude = 3.5;
+  const maxCurvature = amplitude * (1 - Math.exp(-maxIndex / amplitude)) * DEFAULT_EDGE_CURVATURE;
+  return (maxCurvature * index) / maxIndex;
 }
 
 export default ContentRenderer

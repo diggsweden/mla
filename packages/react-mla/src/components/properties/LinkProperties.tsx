@@ -60,7 +60,6 @@ function LinkProperties (props: Props) {
         <select onChange={(e) => { linkDirectionChanged(link, e.target.value as Direction) }} value={link.Direction ?? 'NONE'} className="m-w-full m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-p-1">
           <option value="TO">{t('to')}</option>
           <option value="FROM">{t('from')}</option>
-          <option value="BOTH">{t('both')}</option>
           <option value="NONE">{t('none')}</option>
         </select>
       </div>

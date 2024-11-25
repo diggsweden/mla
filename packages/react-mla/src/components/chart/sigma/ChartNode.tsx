@@ -22,6 +22,12 @@ function ChartNode (props: Props) {
   const selectedIds = useMainStore(state => state.selectedIds)
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
 
+  const selectedView = useAppStore(state => state.thingViewConfiguration[entity.TypeId])
+
+  const view = useMemo(() => {
+    return { ...viewService.getDefaultView(entity.TypeId, entity.GlobalType), ...selectedView }
+  }, [entity, selectedView])
+
   const selected = useMemo(() => {
     return entity != null ? isSelected(entity, selectedIds) : false
   }, [entity, selectedIds])
@@ -50,7 +56,7 @@ function ChartNode (props: Props) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [props.graph])
 
   useEffect(() => {
     if (created.current) {
@@ -83,6 +89,12 @@ function ChartNode (props: Props) {
       props.graph.setNodeAttribute(created.current, "color", selected ? "#dbeafe" : icon?.backgroundColor)
     }
   }, [icon?.backgroundColor, props.graph, selected])
+
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setNodeAttribute(created.current, "hidden", !(view.Show ?? true))
+    }
+  }, [props.graph, view.Show])
 
   return null
 }

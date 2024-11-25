@@ -4,7 +4,7 @@
 
 import type { IChartBase, ILinked } from './base'
 
-type Direction = 'TO' | 'FROM' | 'BOTH' | 'NONE'
+type Direction = 'TO' | 'FROM' | 'NONE'
 type LinkDashStyle = 'LINE' | 'DASHED' | 'DOTTED'
 interface ILink extends IChartBase, ILinked {
   Direction: Direction
