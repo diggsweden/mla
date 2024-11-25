@@ -74,7 +74,7 @@ function Chart(props: Props) {
         straightWithArrow: EdgeArrowProgram,
         straight: EdgeLineProgram,
         curved: EdgeCurveProgram,
-        curvedWithArray: EdgeCurvedArrowProgram,
+        curvedWithArrow: EdgeCurvedArrowProgram,
       },      
       enableEdgeEvents: true,
       renderEdgeLabels: true,

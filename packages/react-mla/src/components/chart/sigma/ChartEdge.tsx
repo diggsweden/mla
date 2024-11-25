@@ -43,8 +43,6 @@ function ChartEdge(props: Props) {
   const created = useRef(null as null | string)
   useEffect(() => {
     console.debug('[adding]', getId(link))
-
-    console.log(link.Direction)
     switch (link.Direction) {
       case "TO":
         created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(from), getId(to), {
@@ -96,10 +94,10 @@ function ChartEdge(props: Props) {
 
   useEffect(() => {
     if (created.current) {
-      props.graph.setEdgeAttribute(created.current, "width", selected ? 8 : 4)
+      props.graph.setEdgeAttribute(created.current, "size", selected ? (props.size * 2) : props.size)
       props.graph.setEdgeAttribute(created.current, "color", selected ? "#60a5fa" : undefined)
     }
-  }, [from, link, props.graph, selected, to])
+  }, [from, link, props.graph, props.size, selected, to])
 
   return null
 }

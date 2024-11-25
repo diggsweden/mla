@@ -71,7 +71,7 @@ export default function CreateToolbox (props: Props) {
       FromEntityTypeId: from.TypeId,
       ToEntityId: to.Id,
       ToEntityTypeId: to.TypeId,
-      Direction: from.TypeId === to.TypeId ? 'BOTH' : 'TO',
+      Direction: from.TypeId === to.TypeId ? 'NONE' : 'TO',
       Properties: []
     }
   }
