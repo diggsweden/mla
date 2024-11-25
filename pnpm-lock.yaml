@@ -146,6 +146,9 @@ importers:
       '@react-sigma/core':
         specifier: ^4.0.3
         version: 4.0.3(graphology@0.25.4(graphology-types@0.24.7))(react@18.3.1)(sigma@3.0.0-beta.36(graphology-types@0.24.7))
+      '@sigma/edge-curve':
+        specifier: 3.0.0-beta.16
+        version: 3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.7))
       '@sigma/export-image':
         specifier: 3.0.0-beta.1
         version: 3.0.0-beta.1(sigma@3.0.0-beta.36(graphology-types@0.24.7))
@@ -1142,6 +1145,11 @@ packages:
 
   '@rushstack/ts-command-line@4.23.0':
     resolution: {integrity: sha512-jYREBtsxduPV6ptNq8jOKp9+yx0ld1Tb/Tkdnlj8gTjazl1sF3DwX2VbluyYrNd0meWIL0bNeer7WDf5tKFjaQ==}
+
+  '@sigma/edge-curve@3.0.0-beta.16':
+    resolution: {integrity: sha512-vFFosMG4P+78qMr0U9wWspSElfhuuZn1bWBMQV39QYuV/04+Mc1E2/gWy0vZfVNjtT4LZsMUjpXWv/8ku58g3w==}
+    peerDependencies:
+      sigma: '>=3.0.0-beta.10'
 
   '@sigma/export-image@3.0.0-beta.1':
     resolution: {integrity: sha512-ku2n6WFDCX6XZF9by8Nq1paljCKfNJ4CkLvnUJVnxE0vowlAatUXB7HAPrCw5tvoLdmrMRredDNJ15MmcKFWPA==}
@@ -4936,6 +4944,10 @@ snapshots:
       string-argv: 0.3.2
     transitivePeerDependencies:
       - '@types/node'
+
+  '@sigma/edge-curve@3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
+    dependencies:
+      sigma: 3.0.0-beta.36(graphology-types@0.24.7)
 
   '@sigma/export-image@3.0.0-beta.1(sigma@3.0.0-beta.36(graphology-types@0.24.7))':
     dependencies:

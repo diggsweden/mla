@@ -6,11 +6,20 @@ import { useEffect, useMemo, useRef } from 'react'
 import type { ILink } from '../../../interfaces/data-models'
 import { getId, isSelected } from '../../../utils/utils'
 import Graph from 'graphology'
+import { DEFAULT_EDGE_CURVATURE } from "@sigma/edge-curve";
 
 interface Props {
   link: ILink
   graph: Graph,
   size: number
+}
+
+function getCurvature(index: number, maxIndex: number): number {
+  if (maxIndex <= 0) throw new Error("Invalid maxIndex");
+  if (index < 0) return -getCurvature(-index, maxIndex);
+  const amplitude = 3.5;
+  const maxCurvature = amplitude * (1 - Math.exp(-maxIndex / amplitude)) * DEFAULT_EDGE_CURVATURE;
+  return (maxCurvature * index) / maxIndex;
 }
 
 function ChartEdge(props: Props) {
@@ -41,42 +50,40 @@ function ChartEdge(props: Props) {
   const created = useRef(null as null | string)
   useEffect(() => {
     console.debug('[adding]', getId(link))
-    console.log('[adding]', getId(link))
 
-    //switch (link.Direction) {
-    //  case "TO":
-    //    created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(from), getId(to), {
-    //      size: props.size,
-    //      label: link.LabelChart,
-    //      drawLabel: true
-    //      type: "arrow"
-    //    });      
-    //    break;
-    //  case "FROM":
-    //    created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(to), getId(from), {
-    //      size: props.size,
-    //      label: link.LabelChart,
-    //      drawLabel: true,
-    //      type: "arrow"
-    //    });      
-    //    break;
-    //  case "NONE":
-    //  case "BOTH":
-    //    created.current = props.graph.addUndirectedEdgeWithKey(getId(link), getId(from), getId(to), {
-    //      size: props.size,
-    //      label: link.LabelChart,
-    //      drawLabel: true
-    //    });      
-    //
-    //  break;
-    //}
+    switch (link.Direction) {
+      case "TO":
+        created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(from), getId(to), {
+          size: props.size,
+          label: link.LabelChart,
+          drawLabel: true,
+          type: "arrow"
+        });      
+        break;
+      case "FROM":
+        created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(to), getId(from), {
+          size: props.size,
+          label: link.LabelChart,
+          drawLabel: true,
+          type: "arrow"
+        });      
+        break;
+      case "NONE":
+      case "BOTH":
+        created.current = props.graph.addUndirectedEdgeWithKey(getId(link), getId(from), getId(to), {
+          size: props.size,
+          label: link.LabelChart,
+          drawLabel: true
+        });      
+    
+      break;
+    }
 
-    created.current = props.graph.addUndirectedEdgeWithKey(getId(link), getId(from), getId(to), {
-      size: props.size,
-      label: link.LabelChart,
-      drawLabel: true,
-      type: "arrow"
-    });
+    //created.current = props.graph.addEdgeWithKey(getId(link), getId(from), getId(to), {
+    //  size: props.size,
+    //  label: link.LabelChart,
+    //  drawLabel: true
+    //});
 
     return () => {
       if (created.current && props.graph.hasEdge(created.current)) {
@@ -100,6 +107,41 @@ function ChartEdge(props: Props) {
       props.graph.setEdgeAttribute(created.current, "color", selected ? "#60a5fa" : undefined)
     }
   }, [from, link, props.graph, selected, to])
+
+  useEffect(() => {
+    console.log('[update link]', getId(link))
+    // TODO: Only update the edges that exists between the nodes
+
+    // Adapt types and curvature of parallel edges for rendering:
+    props.graph.forEachEdge(
+      (
+        edge,
+        {
+          parallelIndex,
+          parallelMinIndex,
+          parallelMaxIndex,
+        }:
+          | { parallelIndex: number; parallelMinIndex?: number; parallelMaxIndex: number }
+          | { parallelIndex?: null; parallelMinIndex?: null; parallelMaxIndex?: null },
+      ) => {
+        console.log('test', getId(link))
+        const showArrow = props.graph.isDirected(edge);
+        if (typeof parallelMinIndex === "number") {
+          props.graph.mergeEdgeAttributes(edge, {
+            type: parallelIndex ? (showArrow ? "curvedWithArrow" : "curved") : (showArrow ? "straightWithArrow" : "straight"),
+            curvature: getCurvature(parallelIndex, parallelMaxIndex),
+          });
+        } else if (typeof parallelIndex === "number") {
+          props.graph.mergeEdgeAttributes(edge, {
+            type: "curved",
+            curvature: getCurvature(parallelIndex, parallelMaxIndex),
+          });
+        } else {
+          props.graph.setEdgeAttribute(edge, "type", (showArrow ? "straightWithArrow" : "straight"));
+        }
+      },
+    );
+  }, [link, props.graph])
 
   return null
 }

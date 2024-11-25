@@ -7,7 +7,8 @@ import { useDrop } from 'react-dnd'
 import { drawDiscNodeHover, drawDiscNodeLabel } from './rendering/node-renderer';
 import { createNodeSvgProgram } from "./rendering/svg-node-renderer/index";
 import { createNodeBorderProgram } from "@sigma/node-border";
-import { createNodeCompoundProgram } from 'sigma/rendering';
+import EdgeArrowProgram, { EdgeLineProgram, createNodeCompoundProgram } from 'sigma/rendering';
+import EdgeCurveProgram, { EdgeCurvedArrowProgram, indexParallelEdgesIndex } from "@sigma/edge-curve";
 
 import Sigma from "sigma";
 import { Settings } from "sigma/settings";
@@ -65,9 +66,16 @@ function Chart(props: Props) {
       //minCameraRatio: 0.3,
       //maxCameraRatio: 4.5,
       defaultNodeType: "pictogram",
+      defaultEdgeType: "straight",
       nodeProgramClasses: {
         pictogram: NodeProgram
       },
+      edgeProgramClasses: {
+        straightWithArrow: EdgeArrowProgram,
+        straight: EdgeLineProgram,
+        curved: EdgeCurveProgram,
+        curvedWithArray: EdgeCurvedArrowProgram,
+      },      
       enableEdgeEvents: true,
       renderEdgeLabels: true,
       autoCenter: false,
@@ -75,6 +83,13 @@ function Chart(props: Props) {
       defaultDrawNodeLabel: drawDiscNodeLabel,
       defaultDrawNodeHover: drawDiscNodeHover
     } as Partial<Settings>
+
+    // Use dedicated helper to identify parallel edges:
+    indexParallelEdgesIndex(graph, {
+      edgeIndexAttribute: "parallelIndex",
+      edgeMinIndexAttribute: "parallelMinIndex",
+      edgeMaxIndexAttribute: "parallelMaxIndex",
+    });
 
     const renderer = new Sigma(graph, sigmaContainer.current, settings);
 
