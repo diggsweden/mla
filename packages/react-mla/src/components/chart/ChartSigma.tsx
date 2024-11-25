@@ -7,7 +7,7 @@ import { useDrop } from 'react-dnd'
 import { drawDiscNodeHover, drawDiscNodeLabel } from './rendering/node-renderer';
 import { createNodeSvgProgram } from "./rendering/svg-node-renderer/index";
 import { createNodeBorderProgram } from "@sigma/node-border";
-import { EdgeArrowProgram, EdgeLineProgram, createNodeCompoundProgram } from 'sigma/rendering';
+import { EdgeArrowProgram, EdgeRectangleProgram, createNodeCompoundProgram } from 'sigma/rendering';
 import EdgeCurveProgram, { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 
 import Sigma from "sigma";
@@ -72,7 +72,7 @@ function Chart(props: Props) {
       },
       edgeProgramClasses: {
         straightWithArrow: EdgeArrowProgram,
-        straight: EdgeLineProgram,
+        straight: EdgeRectangleProgram,
         curved: EdgeCurveProgram,
         curvedWithArrow: EdgeCurvedArrowProgram,
       },      
