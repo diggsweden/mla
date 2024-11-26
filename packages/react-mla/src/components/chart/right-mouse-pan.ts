@@ -18,11 +18,12 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
     const panStart = useRef({ x: 0, y: 0 })
     const time = useRef(0)
     const showContextMenu = useAppStore(state => state.showContextMenu)
+    const drawingMode = useAppStore(state => state.drawingMode)
     const setSelected = useMainStore((state) => state.setSelected)
 
     useEffect(() => {
-        if (containerElement.current == null || renderer == null) return
-        
+        if (containerElement.current == null || renderer == null || drawingMode) return
+
         const down = (e: MouseEvent) => {
             if (e.button === RIGHT_CLICK) {
                 e.preventDefault();
@@ -36,7 +37,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
         }
 
         const up = (e: MouseEvent) => {
-            if (e.button === RIGHT_CLICK) {
+            if (e.button === RIGHT_CLICK && !drawingMode) {
                 pan.current = false;
                 e.preventDefault();
                 //e.stopPropagation();
@@ -53,10 +54,10 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
 
         containerElement.current.onmousedown = down
         containerElement.current.oncontextmenu = up
-    })
+    }, [containerElement, drawingMode, renderer, showContextMenu])
 
     useEffect(() => {
-        if (renderer == null) return
+        if (renderer == null || drawingMode) return
 
         const down = (e: SigmaStageEventPayload) => {
             const click = e.event.original as MouseEvent;
@@ -87,7 +88,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
             pan.current = false;
             const click = e.event.original as MouseEvent;
             const diff = Date.now() - time.current
-            
+
             if (click.button === RIGHT_CLICK) {
                 e.preventSigmaDefault();
                 click.preventDefault();
@@ -138,7 +139,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
             renderer.off("upNode", upNode)
             renderer.off("upEdge", upStage)
         }
-    }, [renderer, setSelected, showContextMenu])
+    }, [drawingMode, renderer, setSelected, showContextMenu])
 }
 
 export default useRightMousePan

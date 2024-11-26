@@ -30,6 +30,9 @@ interface AppState {
   currentViewConfiguration: IViewConfiguration
   thingViewConfiguration: Record<string, IBaseViewConfiguration>
 
+  drawingMode: boolean
+  setDrawingMode: (enabled: boolean) => void
+
   view: string
 
   selectedTab: Tab
@@ -90,6 +93,13 @@ const useAppStore = create<AppState>((set, get) => ({
   hideContextMenu: () => {
     set((state) => ({
       contextmenuPosition: undefined
+    }))
+  },
+
+  drawingMode: false,
+  setDrawingMode: (enabled: boolean) => {
+    set((state) => ({
+      drawingMode: enabled
     }))
   },
 

@@ -22,6 +22,7 @@ import useDragNodes from './node-drag';
 import useNodeHighlight from './node-highlight';
 import useMultiselect from './multiselect';
 import useKeyDown from '../../effects/keydown'
+import useFabricDrawing from './fabric-drawing';
 
 interface Props {
   className?: string
@@ -63,6 +64,8 @@ function Chart(props: Props) {
     const NodeProgram = createNodeCompoundProgram([NodeBorderCustomProgram, NodePictogramCustomProgram]);
   
     const settings = {
+      zoomToSizeRatioFunction: (x) => x,
+      autoRescale: false,
       //minCameraRatio: 0.3,
       //maxCameraRatio: 4.5,
       defaultNodeType: "pictogram",
@@ -79,7 +82,6 @@ function Chart(props: Props) {
       enableEdgeEvents: true,
       renderEdgeLabels: true,
       autoCenter: false,
-      autoRescale: false,
       defaultDrawNodeLabel: drawDiscNodeLabel,
       defaultDrawNodeHover: drawDiscNodeHover
     } as Partial<Settings>
@@ -103,6 +105,7 @@ function Chart(props: Props) {
   useMultiselect(sigma)
   useDragNodes(sigma)
   useNodeHighlight(sigma)
+  useFabricDrawing(sigma)
 
   const dropRef = useDrop(
     () => ({
