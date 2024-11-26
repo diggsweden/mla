@@ -14,7 +14,7 @@ import useSearchStore from './search-state'
 import { internalUpdateLabels } from './internal-actions'
 import useMainStore from './main-store'
 
-export type Tab = 'archive' | 'start' | 'search find' | 'analysis' | 'select' | 'look feel' | 'show' | 'map'
+export type Tab = 'archive' | 'start' | 'search find' | 'analysis' | 'select' | 'look feel' | 'show' | 'map' | 'draw'
 export type Tool = 'search' | 'explore' | 'import' | 'activity'
 
 interface AppState {
@@ -31,7 +31,6 @@ interface AppState {
   thingViewConfiguration: Record<string, IBaseViewConfiguration>
 
   drawingMode: boolean
-  setDrawingMode: (enabled: boolean) => void
 
   view: string
 
@@ -157,7 +156,8 @@ const useAppStore = create<AppState>((set, get) => ({
   selectedTab: 'start',
   setTab: (tab) => {
     set((state) => ({
-      selectedTab: tab
+      selectedTab: tab,
+      drawingMode: tab === 'draw'
     }))
   },
 

@@ -12,6 +12,7 @@ import useAppStore from './app-store'
 
 import Graph from "graphology";
 import Sigma from "sigma";
+import * as fabric from "fabric";
 
 import { internalAdd, internalRemove, internalUpdate, updateSelected } from './internal-actions'
 import { assignLinks, computeLinks, filterEvents } from '../utils/event-utils'
@@ -69,6 +70,9 @@ export interface MainState {
   graph: Graph
   sigma: Sigma | undefined
   initSigma: (sigma: Sigma) => void
+
+  fabric: fabric.Canvas | undefined
+  initFabric: (fabric: fabric.Canvas) => void
 
   setEvent: (...events: IEvent[]) => void
   removeEvent: (...events: IEvent[]) => void
@@ -134,6 +138,13 @@ const useMainStore = create<MainState>((set, get) => ({
   initSigma: (sigma) => {
     set((state) => ({
       sigma
+    }))
+  },
+
+  fabric: undefined,
+  initFabric: (fabric) => {
+    set((state) => ({
+      fabric
     }))
   },
 

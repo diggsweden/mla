@@ -21,6 +21,7 @@ function ArchiveTabPanel () {
   const { t } = useTranslation();
 
   const sigma = useMainStore((state) => state.sigma)
+  const fabric = useMainStore((state) => state.fabric)
   const save = useMainStore((state) => state.save)
   const open = useMainStore((state) => state.open)
   const setDirty = useMainStore((state) => state.setDirty)
@@ -144,11 +145,25 @@ function ArchiveTabPanel () {
   }
 
   function saveImage () {
-    if (sigma) {
+    if (sigma != null && fabric != null) {
       downloadAsImage(sigma, {
         format: "png",
         fileName: "graph",
-        backgroundColor : "white"
+        backgroundColor : "white",
+        withTempRenderer: (tempRenderer) => {
+          const fabricResult = tempRenderer.getCanvases()["fabric-result"] ?? tempRenderer.createCanvas("fabric-result", { beforeLayer: 'edgeLabels'})
+          const container = fabric.elements.container;
+  
+          fabricResult.style["width"] = `${container.clientWidth}px`;
+          fabricResult.style["height"] = `${container.clientHeight}px`;
+          fabricResult.setAttribute("width", `${container.clientWidth}px`)
+          fabricResult.setAttribute("height", `${container.clientHeight}px`)
+
+          fabricResult.style.zIndex = "-1"
+
+          const context = fabricResult.getContext('2d')!;
+          context!.drawImage(fabric.toCanvasElement(), 0, 0)
+        },
       });
     }
   }

@@ -7,10 +7,13 @@ import * as  fabric from 'fabric'
 
 import Sigma from 'sigma'
 import useAppStore from '../../store/app-store'
+import useMainStore from '../../store/main-store'
+import { CameraState } from 'sigma/types'
 
 // https://jsfiddle.net/gncabrera/hkee5L6d/5/
 
 function useFabricDrawing(renderer: Sigma | undefined) {
+    const init = useMainStore(state => state.initFabric)
     const canvas = useRef(null as null | fabric.Canvas)
     const drawingMode = useAppStore(state => state.drawingMode)
 
@@ -26,20 +29,25 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         canv.setAttribute("height", `${container.clientHeight}px`)
 
         const fab = new fabric.Canvas(canv);
+
         fab.elements.container.style.pointerEvents = "none"
+        fab.elements.container.style.zIndex = "-1"
+        // fab.elements.container.style.display = "none"
+
+        fab.setDimensions({width: container.clientWidth, height: container.clientHeight});
 
         const circle = new fabric.Circle({
             radius: 15,
             fill: 'green',
-            left: 100,
-            top: 100,
+            x: -7,
+            y: -7,
             selectable: false
         });
 
         const triangle = new fabric.Triangle({
             fill: 'green',
-            left: 200,
-            top: 200,
+            x: 200,
+            y: 200,
             selectable: false
         });
         fab.add(circle, triangle);
@@ -68,40 +76,50 @@ function useFabricDrawing(renderer: Sigma | undefined) {
             }
         });
 
-        const handleZoom = (e: any) => {
-            let xy = renderer.graphToViewport(e)
+        const handleZoom = (e: CameraState) => {
+            const xy = renderer.graphToViewport(e)
+            const center = { x: xy.x - container.clientWidth / 2, y: xy.y - container.clientHeight / 2 }
+            const topLeft = { x: -center.x - container.clientWidth / 2, y: -center.y - container.clientHeight / 2 }
+
             
             const zoom = 1 / e.ratio
-            
-            const zoomRatio = e.ratio * 4
-            xy = { x:  -xy.x + container.clientWidth / zoomRatio, y: -xy.y + container.clientHeight / zoomRatio}
-            fab.absolutePan(new fabric.Point(xy))
+
+            fab.absolutePan(new fabric.Point(topLeft))
             fab.setZoom(zoom);
-            console.log("zoom", e.ratio, zoom)
         }
 
         const cam = renderer.getCamera();
-        fab.setZoom(1 / cam.ratio)
-
         cam.on("updated", handleZoom)
+        handleZoom(cam.getState())
 
-        const resize = new ResizeObserver(() => {
-            fab.renderAll()
-        })
+        init(fab)
 
+        const handleResize = () => {
+            const scale = container.clientWidth / fab.getWidth();
+            const zoom  = fab.getZoom() * scale;
+
+            fab.setDimensions({width: container.clientWidth, height: container.clientHeight});
+            fab.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+
+            handleZoom(cam.getState())
+        }
+        const resize = new ResizeObserver(handleResize)
+        handleResize()
         resize.observe(container)
-
+        renderer.on("beforeRender", () => handleZoom(renderer.getCamera().getState()))
+        
         return () => {
             resize.unobserve(container)
             cam.off("updated", handleZoom)
             fab.destroy();
             canvas.current = null;
         }
-    }, [renderer])
+    }, [init, renderer])
 
     useEffect(() => {
         if (canvas.current != null) {
             canvas.current.elements.container.style.zIndex = drawingMode ? "1" : "-1"
+           // canvas.current.elements.container.style.display = drawingMode ? "block" : "none"
             canvas.current.elements.container.style.pointerEvents = drawingMode ? "" : "none"
         }
 

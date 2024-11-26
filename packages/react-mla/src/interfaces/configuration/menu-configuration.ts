@@ -6,6 +6,7 @@ interface IMenuConfiguration {
   Start?: IStartMenuConfiguration
   Archive?: IArchiveMenuConfiguration
   Search?: ISearchMenuConfiguration
+  Draw?: IDrawMenuConfiguration
 }
 
 interface IStartMenuConfiguration {
@@ -19,7 +20,12 @@ interface IArchiveMenuConfiguration {
   Show?: boolean
   Import?: boolean
 }
+
 interface ISearchMenuConfiguration {
+  Show?: boolean
+}
+
+interface IDrawMenuConfiguration {
   Show?: boolean
 }
 

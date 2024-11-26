@@ -61,14 +61,11 @@ function ChartNode (props: Props) {
   useEffect(() => {
     if (created.current) {
       props.graph.setNodeAttribute(created.current, "x", entity.PosX)
-    }
-  }, [icon, props.graph, entity.PosX])
-
-  useEffect(() => {
-    if (created.current) {
       props.graph.setNodeAttribute(created.current, "y", entity.PosY)
+
+      console.log("pos", entity.PosX, entity.PosY)
     }
-  }, [icon, props.graph, entity.PosY])
+  }, [icon, props.graph, entity.PosY, entity.PosX])
 
   useEffect(() => {
     if (created.current) {

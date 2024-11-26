@@ -16,8 +16,9 @@ import SearchTabPanel from './tab/SearchTabPanel'
 import configService from '../../services/configurationService'
 import useAppStore, { type Tab } from '../../store/app-store'
 import { useTranslation } from 'react-i18next'
+import DrawTabPanel from './tab/DrawTabPanel'
 
-const ALL_TABS = ['archive', 'start', 'search find', 'analysis', 'look feel', 'select', 'show', 'map'] as Tab[]
+const ALL_TABS = ['archive', 'start', 'search find', 'analysis', 'draw', 'look feel', 'select', 'show', 'map'] as Tab[]
 
 function RibbonMenu () {
   const { t } = useTranslation();
@@ -50,6 +51,8 @@ function RibbonMenu () {
         return <ToolsTabPanel />
       case 'map':
         return <MapTabPanel />
+      case 'draw':
+          return <DrawTabPanel />
       default:
         return null
     }
@@ -68,6 +71,10 @@ function RibbonMenu () {
       tabs = tabs.filter(t => t !== 'archive')
     }
 
+    if (configuration.Menu?.Draw?.Show === false) {
+      tabs = tabs.filter(t => t !== 'archive')
+    }
+
     if (configuration.MapConfiguration == null) {
       tabs = tabs.filter(t => t !== 'map')
     }
@@ -77,7 +84,7 @@ function RibbonMenu () {
     }
 
     return tabs
-  }, [configuration.Menu?.Archive?.Show, configuration.MapConfiguration, searchToolsAvailable, exploreToolsAvailable])
+  }, [configuration, searchToolsAvailable, exploreToolsAvailable])
 
   return <div className="m-flex m-flex-col m-select-none">
     <div className="m-w-full m-ml-2 m-leading-6">
