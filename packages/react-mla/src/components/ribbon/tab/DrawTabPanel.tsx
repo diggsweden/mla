@@ -7,21 +7,41 @@ import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuSection from '../RibbonMenuSection'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import { useTranslation } from 'react-i18next'
+import * as fabric from 'fabric'
 
 function DrawTabPanel () {
   const { t } = useTranslation();
 
-  const fabric = useMainStore((state) => state.fabric)
+  const canvas = useMainStore((state) => state.fabric)
 
-  console.log(fabric)
- 
+  function addText() {
+    if (canvas == null) return
+
+    document.body.style.setProperty('cursor', 'crosshair', 'important')
+    canvas.setCursor("crosshair")
+
+    const action = (e: any) => {
+      canvas.off("mouse:down", action)
+      document.body.style.removeProperty('cursor')
+      canvas.setCursor("default")
+
+      console.log(e)
+
+      const text = new fabric.Textbox("Text", {
+        x: e.scenePoint.x,
+        y: e.scenePoint.y
+      })
+
+      canvas.add(text)
+    }
+
+    canvas.on("mouse:down", action)
+  }
+
   return <div className="m-flex m-text-center m-h-full m-p-1">
-    <RibbonMenuSection title={t('diagram')} >
-      <RibbonMenuButton label={t('save')} onClick={() => {}} iconName="save" />
-    </RibbonMenuSection>
-    <RibbonMenuDivider />
-
-    <RibbonMenuSection title={t('share')} >
+    <RibbonMenuSection title={t('skapa')} >
+      <RibbonMenuButton label={t('text')} onClick={addText} iconName="format_shapes" />
+      <RibbonMenuButton label={t('rektangel')} onClick={() => {}} iconName="rectangle" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
   </div>

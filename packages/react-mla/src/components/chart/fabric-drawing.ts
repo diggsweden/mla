@@ -41,14 +41,12 @@ function useFabricDrawing(renderer: Sigma | undefined) {
             fill: 'green',
             x: -7,
             y: -7,
-            selectable: false
         });
 
         const triangle = new fabric.Triangle({
             fill: 'green',
             x: 200,
             y: 200,
-            selectable: false
         });
         fab.add(circle, triangle);
 

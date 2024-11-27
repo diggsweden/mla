@@ -151,7 +151,7 @@ function ArchiveTabPanel () {
         fileName: "graph",
         backgroundColor : "white",
         withTempRenderer: (tempRenderer) => {
-          const fabricResult = tempRenderer.getCanvases()["fabric-result"] ?? tempRenderer.createCanvas("fabric-result", { beforeLayer: 'edgeLabels'})
+          const fabricResult = tempRenderer.createCanvas("fabric-result", { beforeLayer: 'edgeLabels'})
           const container = fabric.elements.container;
   
           fabricResult.style["width"] = `${container.clientWidth}px`;
