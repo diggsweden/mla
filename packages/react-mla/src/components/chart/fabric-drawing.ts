@@ -36,43 +36,7 @@ function useFabricDrawing(renderer: Sigma | undefined) {
 
         fab.setDimensions({width: container.clientWidth, height: container.clientHeight});
 
-        const circle = new fabric.Circle({
-            radius: 15,
-            fill: 'green',
-            x: -7,
-            y: -7,
-        });
-
-        const triangle = new fabric.Triangle({
-            fill: 'green',
-            x: 200,
-            y: 200,
-        });
-        fab.add(circle, triangle);
-
         canvas.current = fab
-
-        fab.on('mouse:down', (e) => {
-            console.log(e);
-        })
-
-        fab.on('mouse:up', (e) => {
-            console.log(e);
-        })
-
-        fab.on('mouse:over', function (e: any) {
-            if (e.target) {
-                e.target.fill = "#7BDBFF";
-                fab.renderAll();
-            }
-        });
-
-        fab.on('mouse:out', function (e: any) {
-            if (e.target) {
-                e.target.fill = 'green';
-                fab.renderAll();
-            }
-        });
 
         const handleZoom = (e: CameraState) => {
             const xy = renderer.graphToViewport(e)
@@ -118,7 +82,7 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         if (canvas.current != null) {
             canvas.current.elements.container.style.zIndex = drawingMode ? "1" : "-1"
            // canvas.current.elements.container.style.display = drawingMode ? "block" : "none"
-            canvas.current.elements.container.style.pointerEvents = drawingMode ? "" : "none"
+            canvas.current.elements.container.style.pointerEvents = drawingMode ? "auto" : "none"
         }
 
     }, [drawingMode])
