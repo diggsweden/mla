@@ -46,7 +46,6 @@ function useFabricDrawing(renderer: Sigma | undefined) {
             const xy = renderer.graphToViewport(e)
             const center = { x: xy.x - container.clientWidth / 2, y: xy.y - container.clientHeight / 2 }
             const topLeft = { x: -center.x - container.clientWidth / 2, y: -center.y - container.clientHeight / 2 }
-
             
             const zoom = 1 / e.ratio
 

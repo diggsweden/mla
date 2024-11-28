@@ -485,6 +485,7 @@ const useMainStore = create<MainState>((set, get) => ({
       Events: Object.values(get().events),
       PhaseEvents: Object.values(get().phaseEvents),
       GeoFeatures: Object.values(get().geoFeatures),
+      Drawings: get().fabric?.toJSON(),
       context: get().context
     }
 
@@ -492,7 +493,14 @@ const useMainStore = create<MainState>((set, get) => ({
     return json
   },
   open: (json: string) => {
-    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], GeoFeatures: IGeoFeature[], context: string }
+    const parsed = JSON.parse(json) as { 
+      Entities: IEntity[], 
+      Links: ILink[], 
+      PhaseEvents: IPhaseEvent[], 
+      Events: IPhaseEvent[] | IEvent[], 
+      GeoFeatures: IGeoFeature[],
+      Drawings: any,
+      context: string }
 
     internalAdd(false, parsed.Entities, parsed.Links)
 
@@ -519,6 +527,10 @@ const useMainStore = create<MainState>((set, get) => ({
       parsed.GeoFeatures.forEach(f => {
         get().setGeoFeature(f)
       })
+    }
+
+    if (parsed.Drawings) {
+      get().fabric?.loadFromJSON(parsed.Drawings)
     }
 
     set((state) => ({

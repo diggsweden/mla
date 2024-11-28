@@ -114,9 +114,9 @@ function DrawTabPanel () {
     <RibbonMenuDivider />
     <RibbonMenuSection title={t('color')} >
       <RibbonMenuButtonGroup>
-        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('font color')} colors={ config.CustomIconColorPicklist } onColorSelected={() => { setForeColor() }}  icon="format_color_text"></RibbonMenuColorPickerButton>
-        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('line color')} colors={ config.CustomIconColorPicklist } onColorSelected={() => { setForeColor() }}  icon="border_color"></RibbonMenuColorPickerButton>
-        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('fill color')} colors={ config.CustomContourColorPicklist } onColorSelected={() => { setFillColor() }} icon="format_color_fill"></RibbonMenuColorPickerButton>
+        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('font color')} colors={ config.CustomIconColorPicklist } onColorSelected={setForeColor}  icon="format_color_text"></RibbonMenuColorPickerButton>
+        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('line color')} colors={ config.CustomIconColorPicklist } onColorSelected={setForeColor}  icon="border_color"></RibbonMenuColorPickerButton>
+        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('fill color')} colors={ config.CustomContourColorPicklist } onColorSelected={setFillColor} icon="format_color_fill"></RibbonMenuColorPickerButton>
       </RibbonMenuButtonGroup>
       </RibbonMenuSection>
     <RibbonMenuDivider />
