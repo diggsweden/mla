@@ -42,6 +42,7 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         const handleZoom = () => {
             const e = cam.getState()
             const xy = renderer.graphToViewport(e)
+
             const center = { x: xy.x - container.clientWidth / 2, y: xy.y - container.clientHeight / 2 }
             const topLeft = { x: -center.x - container.clientWidth / 2, y: -center.y - container.clientHeight / 2 }
             
@@ -51,15 +52,13 @@ function useFabricDrawing(renderer: Sigma | undefined) {
             canvas.current!.setZoom(zoom);
         }
 
-        handleZoom()
-
-
         const handleResize = () => {
-            const scale = container.clientWidth / canvas.current!.getWidth();
-            const zoom  = canvas.current!.getZoom() * scale;
+            const wscale = container.clientWidth / canvas.current!.getWidth();
+            const hscale = container.clientHeight / canvas.current!.getHeight();
+            const zoom  = canvas.current!.getZoom()
 
             canvas.current!.setDimensions({width: container.clientWidth, height: container.clientHeight});
-            canvas.current!.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+            canvas.current!.setViewportTransform([zoom * wscale, 0, 0, zoom * hscale, 0, 0]);
 
             handleZoom()
         }
@@ -68,6 +67,8 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         handleResize()
         resize.observe(container)
         renderer.on("beforeRender", handleZoom)
+
+        handleResize()
         
         init(canvas.current!)
 

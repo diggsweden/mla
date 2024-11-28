@@ -66,6 +66,7 @@ function Chart(props: Props) {
     const settings = {
       zoomToSizeRatioFunction: (x) => x,
       autoRescale: false,
+      itemSizesReference: "positions",
       //minCameraRatio: 0.3,
       //maxCameraRatio: 4.5,
       defaultNodeType: "pictogram",

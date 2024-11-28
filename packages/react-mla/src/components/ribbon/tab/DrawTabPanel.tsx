@@ -34,6 +34,7 @@ function DrawTabPanel () {
         canvas.off("selection:created", selectAction);
         canvas.off("selection:updated", selectAction);
         canvas.off("selection:cleared", clearSelection);
+        canvas.discardActiveObject()
       }
     }
   }, [canvas, setSelected, setSelectedEntities])
