@@ -8,9 +8,6 @@ import * as  fabric from 'fabric'
 import Sigma from 'sigma'
 import useAppStore from '../../store/app-store'
 import useMainStore from '../../store/main-store'
-import { CameraState } from 'sigma/types'
-
-// https://jsfiddle.net/gncabrera/hkee5L6d/5/
 
 function useFabricDrawing(renderer: Sigma | undefined) {
     const init = useMainStore(state => state.initFabric)
@@ -20,72 +17,71 @@ function useFabricDrawing(renderer: Sigma | undefined) {
     useEffect(() => {
         if (renderer == null) return
 
-        const canv = renderer.getCanvases()["fabric"] ?? renderer.createCanvas("fabric")
         const container = renderer.getContainer();
-
-        canv.style["width"] = `${container.clientWidth}px`;
-        canv.style["height"] = `${container.clientHeight}px`;
-        canv.setAttribute("width", `${container.clientWidth}px`)
-        canv.setAttribute("height", `${container.clientHeight}px`)
-
-        const fab = new fabric.Canvas(canv);
-        fab.elements.container.style.position = "absolute"
-        fab.elements.container.style.pointerEvents = "none"
-        fab.elements.container.style.zIndex = "-1"
-        // fab.elements.container.style.display = "none"
-
-        fab.setDimensions({width: container.clientWidth, height: container.clientHeight});
-
-        canvas.current = fab
-
-        fab.on('selection:updated', () => {
-          // Uppdatera statet
-        });
-
-        const handleZoom = (e: CameraState) => {
+        if (canvas.current == null) {
+            const canv = renderer.getCanvases()["fabric"] ?? renderer.createCanvas("fabric")
+            
+            canv.style["width"] = `${container.clientWidth}px`;
+            canv.style["height"] = `${container.clientHeight}px`;
+            canv.setAttribute("width", `${container.clientWidth}px`)
+            canv.setAttribute("height", `${container.clientHeight}px`)
+    
+            const fab = new fabric.Canvas(canv);
+            fab.elements.container.style.position = "absolute"
+            fab.elements.container.style.zIndex = "-1"
+    
+            // fab.elements.container.style.pointerEvents = "none"
+            // fab.elements.container.style.display = "none"
+    
+            fab.setDimensions({width: container.clientWidth, height: container.clientHeight});
+    
+            canvas.current = fab
+        }
+        
+        const cam = renderer.getCamera();
+        const handleZoom = () => {
+            const e = cam.getState()
             const xy = renderer.graphToViewport(e)
             const center = { x: xy.x - container.clientWidth / 2, y: xy.y - container.clientHeight / 2 }
             const topLeft = { x: -center.x - container.clientWidth / 2, y: -center.y - container.clientHeight / 2 }
             
             const zoom = 1 / e.ratio
 
-            fab.absolutePan(new fabric.Point(topLeft))
-            fab.setZoom(zoom);
+            canvas.current!.absolutePan(new fabric.Point(topLeft))
+            canvas.current!.setZoom(zoom);
         }
 
-        const cam = renderer.getCamera();
-        cam.on("updated", handleZoom)
-        handleZoom(cam.getState())
+        handleZoom()
 
-        init(fab)
 
         const handleResize = () => {
-            const scale = container.clientWidth / fab.getWidth();
-            const zoom  = fab.getZoom() * scale;
+            const scale = container.clientWidth / canvas.current!.getWidth();
+            const zoom  = canvas.current!.getZoom() * scale;
 
-            fab.setDimensions({width: container.clientWidth, height: container.clientHeight});
-            fab.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+            canvas.current!.setDimensions({width: container.clientWidth, height: container.clientHeight});
+            canvas.current!.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
 
-            handleZoom(cam.getState())
+            handleZoom()
         }
+
         const resize = new ResizeObserver(handleResize)
         handleResize()
         resize.observe(container)
-        renderer.on("beforeRender", () => handleZoom(renderer.getCamera().getState()))
+        renderer.on("beforeRender", handleZoom)
         
+        init(canvas.current!)
+
         return () => {
+            renderer.on("beforeRender", handleZoom)
             resize.unobserve(container)
-            cam.off("updated", handleZoom)
-            fab.destroy();
-            canvas.current = null;
         }
     }, [init, renderer])
 
     useEffect(() => {
         if (canvas.current != null) {
             canvas.current.elements.container.style.zIndex = drawingMode ? "1" : "-1"
-           // canvas.current.elements.container.style.display = drawingMode ? "block" : "none"
-            canvas.current.elements.container.style.pointerEvents = drawingMode ? "auto" : "none"
+             // canvas.current.elements.container.style.display = drawingMode ? "block" : "none"
+            //canvas.current.elements.container.style.pointerEvents = drawingMode ? "auto" : "none"
         }
 
     }, [drawingMode])

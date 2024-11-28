@@ -11,12 +11,32 @@ import { useTranslation } from 'react-i18next'
 import * as fabric from 'fabric'
 import RibbonMenuColorPickerButton from '../RibbonMenuColorPickerButton'
 import RibbonMenuButtonGroup from '../RibbonMenuButtonGroup'
+import { useEffect, useState } from 'react'
 
 function DrawTabPanel () {
   const { t } = useTranslation();
   const config = viewService.getTheme()
   const canvas = useMainStore((state) => state.fabric)
-  const selection = [] // useMainStore((state) => state.selectedIds)
+  const setSelectedEntities = useMainStore((state) => state.setSelected)
+  const [selected, setSelected] = useState([] as fabric.FabricObject[])
+
+  useEffect(() => {
+    if (canvas) {
+      setSelectedEntities([])
+      const selectAction = ({ selected }: { selected: fabric.FabricObject[]}) => setSelected(selected)
+      const clearSelection = () => setSelected([])
+
+      canvas.on("selection:created", selectAction);
+      canvas.on("selection:updated", selectAction);
+      canvas.on("selection:cleared", clearSelection);
+
+      return () => {
+        canvas.off("selection:created", selectAction);
+        canvas.off("selection:updated", selectAction);
+        canvas.off("selection:cleared", clearSelection);
+      }
+    }
+  }, [canvas, setSelected, setSelectedEntities])
 
   function addText() {
     if (canvas == null) return
@@ -53,8 +73,6 @@ function DrawTabPanel () {
       document.body.style.removeProperty('cursor')
       canvas.setCursor("default")
 
-      console.log(e)
-
       const rect = new fabric.Rect({
         absolutePositioned: true,
         left: e.scenePoint.x,
@@ -74,32 +92,32 @@ function DrawTabPanel () {
     canvas.on("mouse:down", action)
   }
 
-  function setForeColor () {
-    // updateEntity(
-    //   ...selectedEntities.map(e => produce(e, draft => {
-    //     draft.Color = color
-    //   }))
-    // )
-    // updateLink(
-    //   ...selectedLinks.map(e => produce(e, draft => {
-    //     draft.Color = color
-    //   }))
-    // )
+  function setFontColor(color?: string) {
+    selected.forEach(e => {
+      if (e.type === 'textbox') {
+        e.set('fill', color ?? 'black')
+      }
+    })
+
+    canvas?.renderAll()
   }
 
-  function setFillColor () {
-    // console.log(color)
-    // updateEntity(
-    //   ...selectedEntities.map(e => produce(e, draft => {
-    //     draft.MarkColor = color
-    //     draft.MarkIcon = color !== undefined ? 'outlined_circle' : undefined
-    //   }))
-    // )
-    // updateLink(
-    //   ...selectedLinks.map(e => produce(e, draft => {
-    //     draft.MarkColor = color
-    //   }))
-    // )
+  function setForeColor(color?: string) {
+    selected.forEach(e => {
+      e.set('stroke', color ?? 'black')
+    })
+
+    canvas?.renderAll()
+  }
+
+  function setFillColor (color?: string) {
+    selected.forEach(e => {
+      if (e.type !== 'textbox') {
+        e.set('fill', color ?? 'transparent')
+      }
+    })
+
+    canvas?.renderAll()
   }
 
   return <div className="m-flex m-text-center m-h-full m-p-1">
@@ -114,9 +132,9 @@ function DrawTabPanel () {
     <RibbonMenuDivider />
     <RibbonMenuSection title={t('color')} >
       <RibbonMenuButtonGroup>
-        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('font color')} colors={ config.CustomIconColorPicklist } onColorSelected={setForeColor}  icon="format_color_text"></RibbonMenuColorPickerButton>
-        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('line color')} colors={ config.CustomIconColorPicklist } onColorSelected={setForeColor}  icon="border_color"></RibbonMenuColorPickerButton>
-        <RibbonMenuColorPickerButton disabled={selection.length === 0} label={t('fill color')} colors={ config.CustomContourColorPicklist } onColorSelected={setFillColor} icon="format_color_fill"></RibbonMenuColorPickerButton>
+        <RibbonMenuColorPickerButton disabled={selected.length === 0} label={t('font color')} colors={ config.CustomIconColorPicklist } onColorSelected={setFontColor}  icon="format_color_text"></RibbonMenuColorPickerButton>
+        <RibbonMenuColorPickerButton disabled={selected.length === 0} label={t('line color')} colors={ config.CustomIconColorPicklist } onColorSelected={setForeColor}  icon="border_color"></RibbonMenuColorPickerButton>
+        <RibbonMenuColorPickerButton disabled={selected.length === 0} label={t('fill color')} colors={ config.CustomContourColorPicklist } onColorSelected={setFillColor} icon="format_color_fill"></RibbonMenuColorPickerButton>
       </RibbonMenuButtonGroup>
       </RibbonMenuSection>
     <RibbonMenuDivider />
