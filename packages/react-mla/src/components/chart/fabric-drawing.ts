@@ -29,7 +29,7 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         canv.setAttribute("height", `${container.clientHeight}px`)
 
         const fab = new fabric.Canvas(canv);
-
+        fab.elements.container.style.position = "absolute"
         fab.elements.container.style.pointerEvents = "none"
         fab.elements.container.style.zIndex = "-1"
         // fab.elements.container.style.display = "none"
@@ -37,6 +37,10 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         fab.setDimensions({width: container.clientWidth, height: container.clientHeight});
 
         canvas.current = fab
+
+        fab.on('selection:updated', () => {
+          // Uppdatera statet
+        });
 
         const handleZoom = (e: CameraState) => {
             const xy = renderer.graphToViewport(e)
