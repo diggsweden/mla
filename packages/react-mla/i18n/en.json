@@ -73,6 +73,7 @@
   "export csv": "Export as .csv",
   "fetch": "Fetch",
   "filename": "Filename",
+  "fill color": "Bakgrundfärg",
   "find link desc": "Finds the shortest path between 2 entities",
   "find link": "Find link",
   "font color": "Font color",

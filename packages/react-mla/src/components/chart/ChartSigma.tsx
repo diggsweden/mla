@@ -89,6 +89,9 @@ function Chart(props: Props) {
 
     const renderer = new Sigma(graph, sigmaContainer.current, settings);
 
+    renderer.setCustomBBox(renderer.getBBox())
+
+
     // Ignore all doubleClicks for now
     renderer.on("doubleClickNode", (e) => e.preventSigmaDefault())
     renderer.on("doubleClickEdge", (e) => e.preventSigmaDefault())
