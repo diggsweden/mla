@@ -102,8 +102,7 @@ function Chart(props: Props) {
     return () => {
       renderer.kill()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [graph, init])
 
   useRightMousePan(sigmaContainer, sigma)
   useMultiselect(sigma)

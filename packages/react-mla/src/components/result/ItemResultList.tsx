@@ -50,7 +50,10 @@ function ItemResultList (props: ItemResultProps) {
   const [showEvents, setShowEvents] = useState<IEvent[]>([])
 
   function add (entities: IEntity[], links: ILink[]) {
-    internalAdd(true, entities, links, true)
+    const distinctEntities = Object.values(Object.fromEntries(entities.map(x => [getId(x), x])));
+    const distinctLinks = Object.values(Object.fromEntries(links.map(x => [getId(x), x])));
+
+    internalAdd(true, distinctEntities, distinctLinks, true)
 
     if (sigma && graph) {
       window.setTimeout(() => {
@@ -141,6 +144,7 @@ function ItemResultList (props: ItemResultProps) {
 
       const addGroup = (groupname: string, entity: IEntity, parentEntity: IEntity | undefined, parentGroup: IEntityGroup | undefined, used: Record<string, boolean>) => {
         counter++;
+
         used[getId(entity)] = true
         if (res[groupname] === undefined) {
           res[groupname] = []
@@ -153,16 +157,20 @@ function ItemResultList (props: ItemResultProps) {
           res[groupname].push(group)
         }
 
-        for (const link of result.Links.filter(l => isLinked(entity, l))) {
+        
+        const linked = result.Links.filter(l => isLinked(entity, l))
+        for (const link of linked) {
           if (parentEntity && used[getId(link)] == null && isLinked(parentEntity, link)) {
             used[getId(link)] = true
             group.links.push(link)
           }
-          const linkedEntities = result.Entities.filter(e => isLinked(e, link) && getId(e) !== getId(entity))
+
+          const linkedEntities = result.Entities.filter(e => getId(e) !== getId(entity) && isLinked(e, link))
           for (const linkedEntity of linkedEntities) {
             if (used[getId(linkedEntity)] == null) {
-              used[getId(linkedEntity)] = true
               addGroup(groupname, linkedEntity, entity, group, used)
+            } else {
+              group.entities.push({ primary: linkedEntity, entities: [], links: [link] })
             }
           }
         }

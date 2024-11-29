@@ -77,8 +77,7 @@ function ChartEdge(props: Props) {
         created.current = null
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.graph, link.Direction])
+  }, [props.graph, link.Direction, link, props.size, from, to])
 
   useEffect(() => {
     if (created.current) {

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { type ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
 import Property from '../common/Property'
@@ -45,11 +45,6 @@ function LinkCreator (props: Props) {
     }
     props.validChanged(!Object.values(validMap.current).some(v => !v))
   }
-
-  useEffect(() => {
-    onChange(link)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   let first = -1
 

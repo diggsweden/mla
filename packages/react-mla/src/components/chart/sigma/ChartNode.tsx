@@ -56,7 +56,7 @@ function ChartNode (props: Props) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.graph])
+  }, [])
 
   useEffect(() => {
     if (created.current) {
