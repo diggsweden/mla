@@ -362,7 +362,7 @@ const useMainStore = create<MainState>((set, get) => ({
       let maxDate = state.maxDate
       const update = produce(state.events, eventsDraft => {
         events = assignLinks(events, Object.values(state.entities).flat())
-        events.forEach(e => {
+        for (const e of events) {
           const draft = produce(e, eDraft => {
             eDraft.Date = fixDate(e.Date)!
             if (e.Id == null || e.Id === '') {
@@ -379,7 +379,7 @@ const useMainStore = create<MainState>((set, get) => ({
           }
 
           eventsDraft[draft.Id] = draft
-        })
+        }
       })
 
       return ({
