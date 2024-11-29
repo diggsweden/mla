@@ -66,6 +66,7 @@ function Chart(props: Props) {
     const settings = {
       zoomToSizeRatioFunction: (x) => x,
       autoRescale: false,
+      autoCenter:false,
       itemSizesReference: "positions",
       //minCameraRatio: 0.3,
       //maxCameraRatio: 4.5,
@@ -82,7 +83,6 @@ function Chart(props: Props) {
       },      
       enableEdgeEvents: true,
       renderEdgeLabels: true,
-      autoCenter: false,
       defaultDrawNodeLabel: drawDiscNodeLabel,
       defaultDrawNodeHover: drawDiscNodeHover
     } as Partial<Settings>

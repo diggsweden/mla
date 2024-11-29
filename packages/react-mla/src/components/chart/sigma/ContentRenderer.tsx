@@ -8,8 +8,8 @@ import useMainStore from '../../../store/main-store'
 import { useEffect, useMemo } from 'react'
 import { getId } from '../../../utils/utils'
 
-export const DEFAULT_NODE_SIZE = 15;
-export const DEFAULT_EDGE_SIZE = 3;
+export const DEFAULT_NODE_SIZE = 25;
+export const DEFAULT_EDGE_SIZE = 5;
 import { DEFAULT_EDGE_CURVATURE, indexParallelEdgesIndex } from "@sigma/edge-curve";
 
 function ContentRenderer() {

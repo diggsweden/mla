@@ -53,7 +53,7 @@ function InternalResult (props: InternalProps) {
     switch (link.Direction) {
       case 'TO': return <Icon name='arrow_forward' className="m-text-primary m-relative m-h-5 m-w-5 m-ml-1 m-" />
       case 'FROM': return <Icon name='arrow_back' className="m-text-primary m-relative m-h-5 m-w-5 m- m-ml-1 m-" />
-      case 'BOTH': return <Icon name='sync_alt' className="m-text-primary m-relative m-h-5 m-w-5 m- m-ml-1 m-" />
+      //case 'BOTH': return <Icon name='sync_alt' className="m-text-primary m-relative m-h-5 m-w-5 m- m-ml-1 m-" />
       case 'NONE': return null
     }
   }
