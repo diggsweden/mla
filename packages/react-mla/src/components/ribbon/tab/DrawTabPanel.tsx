@@ -82,12 +82,43 @@ function DrawTabPanel () {
         height: 100,
         stroke: 'black',
         strokeWidth: 3,
+        strokeUniform: true,
         fill:'transparent'
       })
 
       console.log(rect)
 
       canvas.add(rect)
+    }
+
+    canvas.on("mouse:down", action)
+  }
+
+  function addCircle() {
+    if (canvas == null) return
+
+    document.body.style.setProperty('cursor', 'crosshair', 'important')
+    canvas.setCursor("crosshair")
+
+    const action = (e: any) => {
+      canvas.off("mouse:down", action)
+      document.body.style.removeProperty('cursor')
+      canvas.setCursor("default")
+
+      const circle = new fabric.Circle({
+        absolutePositioned: true,
+        left: e.scenePoint.x,
+        top: e.scenePoint.y,
+        radius: 65,
+        stroke: 'black',
+        strokeWidth: 3,
+        strokeUniform: true,
+        fill:'transparent'
+      })
+
+      console.log(circle)
+
+      canvas.add(circle)
     }
 
     canvas.on("mouse:down", action)
@@ -128,7 +159,7 @@ function DrawTabPanel () {
     <RibbonMenuDivider />
     <RibbonMenuSection title={t('shapes')} >
       <RibbonMenuButton label={t('rectangle')} onClick={addRectangle} iconName="rectangle" />
-      <RibbonMenuButton label={t('circle')} onClick={addRectangle} iconName="circle" />
+      <RibbonMenuButton label={t('circle')} onClick={addCircle} iconName="circle" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
     <RibbonMenuSection title={t('color')} >
