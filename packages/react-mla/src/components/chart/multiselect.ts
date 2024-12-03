@@ -66,7 +66,6 @@ function useMultiselect(renderer: Sigma | undefined) {
             const order = (a: number, b: number) => {
                 return b < a ? [b, a] : [a, b]
             }
-
             const [sX, eX] = order(rect.startX, rect.endX)
             const [sY, eY] = order(rect.startY, rect.endY)
 
@@ -185,7 +184,11 @@ function useMultiselect(renderer: Sigma | undefined) {
                     drawMultiselect()
                 } else {
                     if (e.event.original.ctrlKey) {
-                        setSelected([e.node, ...selectedIds])
+                        if (selectedIds.indexOf(e.node) >= 0){
+                            setSelected(selectedIds.filter(x=> x != e.node))
+                        }else{
+                            setSelected([e.node, ...selectedIds])
+                        }
                     } else {
                         setSelected([e.node])
                     }
