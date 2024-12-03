@@ -65,6 +65,7 @@ function Chart(props: Props) {
   
     const settings = {
       zoomToSizeRatioFunction: (x) => x,
+      allowInvalidContainer: true,
       autoRescale: false,
       autoCenter:false,
       itemSizesReference: "positions",
@@ -137,7 +138,7 @@ function Chart(props: Props) {
         {props.children}
       </div>
       <div className="m-h-full m-w-full" ref={dropRef[1]} >
-        <div className="m-h-full m-w-full m-outline-none" id="m-chart" ref={sigmaContainer}>
+        <div className="m-h-full m-w-full m-outline-none" id="m-chart" tabIndex={1} ref={sigmaContainer}>
         </div>
         <ContentRenderer />
       </div>
