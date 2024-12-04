@@ -5,18 +5,17 @@
 import { RefObject, useEffect, useRef } from 'react'
 
 import Sigma from 'sigma'
-import { SigmaEdgeEventPayload, SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
+import { SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
 import useAppStore from '../../store/app-store'
 import useMainStore from '../../store/main-store'
 
 const RIGHT_CLICK = 2
 
-const CONTEXT_TIMEOUT = 300
-
 function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Sigma | undefined) {
     const pan = useRef(false)
+    const selecteNode = useRef<null | string>(null)
     const panStart = useRef({ x: 0, y: 0 })
-    const time = useRef(0)
+    const rightMouseButtonIsDown = useRef(false)
     const showContextMenu = useAppStore(state => state.showContextMenu)
     const drawingMode = useAppStore(state => state.drawingMode)
     const setSelected = useMainStore((state) => state.setSelected)
@@ -24,56 +23,57 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
     useEffect(() => {
         if (containerElement.current == null || renderer == null || drawingMode) return
 
-        const down = (e: MouseEvent) => {
-            if (e.button === RIGHT_CLICK) {
-                e.preventDefault();
-                //e.stopPropagation();
-                time.current = Date.now()
-                const pos = renderer.viewportToFramedGraph(e)
-                time.current = Date.now()
-                pan.current = true
-                panStart.current = pos
-            }
-        }
-
-        const up = (e: MouseEvent) => {
-            if (e.button === RIGHT_CLICK && !drawingMode) {
-                pan.current = false;
-                e.preventDefault();
-                //e.stopPropagation();
-
-                const diff = Date.now() - time.current
-
-                if (diff < CONTEXT_TIMEOUT) {
-                    window.setTimeout(() => {
-                        showContextMenu(e.pageX, e.pageY)
-                    })
+        const oncontextmenu = (e: MouseEvent) => {
+            if (!pan.current) {
+                showContextMenu(e.pageX, e.pageY)
+                if (selecteNode.current) {
+                    const selectedIds = useMainStore.getState().selectedIds
+                    if (!selectedIds.includes(selecteNode.current)){
+                        setSelected([selecteNode.current])
+                    }
                 }
             }
+
+            e.preventDefault();
+
+            selecteNode.current = null
+            pan.current = false
+            rightMouseButtonIsDown.current = false
         }
 
-        containerElement.current.onmousedown = down
-        containerElement.current.oncontextmenu = up
-    }, [containerElement, drawingMode, renderer, showContextMenu])
+        containerElement.current.oncontextmenu = oncontextmenu
+
+    }, [containerElement, drawingMode, renderer, setSelected, showContextMenu])
 
     useEffect(() => {
         if (renderer == null || drawingMode) return
 
-        const down = (e: SigmaStageEventPayload) => {
+        const downStage = (e: SigmaStageEventPayload) => {
             const click = e.event.original as MouseEvent;
+            if (click.button != RIGHT_CLICK) return;
 
-            if (click.button == RIGHT_CLICK) {
-                const pos = renderer.viewportToFramedGraph(e.event)
-                time.current = Date.now()
-                pan.current = true
-                panStart.current = pos
-                e.preventSigmaDefault()
-                e.event.original.preventDefault()
-                e.event.original.stopImmediatePropagation()
-            }
+            panStart.current = renderer.viewportToFramedGraph(e.event)
+            rightMouseButtonIsDown.current = true
+
+            setSelected([])
         }
 
-        const move = (e: SigmaStageEventPayload) => {
+        const downNode = (e: SigmaNodeEventPayload) => {
+            console.log("downnode")
+            const click = e.event.original as MouseEvent;
+            if (click.button != RIGHT_CLICK) return;
+
+            panStart.current = renderer.viewportToFramedGraph(e.event)
+            rightMouseButtonIsDown.current = true;
+
+            selecteNode.current = e.node
+        }
+
+        const moveBody = (e: SigmaStageEventPayload) => {
+            if (rightMouseButtonIsDown.current && !pan.current) {
+                pan.current = true
+            }
+
             if (pan.current) {
                 const pos = renderer.viewportToFramedGraph(e.event)
                 const camera = renderer.getCamera()
@@ -83,63 +83,16 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
             }
         }
 
-
-        const upStage = (e: SigmaStageEventPayload | SigmaEdgeEventPayload) => {
-            pan.current = false;
-            const click = e.event.original as MouseEvent;
-            const diff = Date.now() - time.current
-
-            if (click.button === RIGHT_CLICK) {
-                e.preventSigmaDefault();
-                click.preventDefault();
-                click.stopPropagation();
-
-                if (diff < CONTEXT_TIMEOUT) {
-                    showContextMenu(click.pageX, click.pageY)
-                }
-            }
-        }
-
-
-        const upNode = (e: SigmaNodeEventPayload) => {
-            pan.current = false;
-            const click = e.event.original as MouseEvent;
-            const diff = Date.now() - time.current
-
-            if (click.button === RIGHT_CLICK) {
-                e.preventSigmaDefault();
-                click.preventDefault();
-                click.stopPropagation();
-
-                if (diff < CONTEXT_TIMEOUT) {
-                    const selectedIds = useMainStore.getState().selectedIds
-                    if (selectedIds.length > 0) {
-                        setSelected([...selectedIds, e.node])
-
-                    } else {
-                        setSelected([e.node])
-                    }
-
-                    const click = e.event.original as MouseEvent;
-                    showContextMenu(click.pageX, click.pageY)
-                }
-            }
-        }
-
-        renderer.on("downStage", down)
-        renderer.on("moveBody", move)
-        renderer.on("upStage", upStage)
-        renderer.on("upNode", upNode)
-        renderer.on("upEdge", upStage)
+        renderer.on("downStage", downStage)
+        renderer.on("downNode", downNode)
+        renderer.on("moveBody", moveBody)
 
         return () => {
-            renderer.off("downStage", down)
-            renderer.off("moveBody", move)
-            renderer.off("upStage", upStage)
-            renderer.off("upNode", upNode)
-            renderer.off("upEdge", upStage)
+            renderer.off("downStage", downStage)
+            renderer.off("downNode", downNode)
+            renderer.off("moveBody", moveBody)
         }
-    }, [drawingMode, renderer, setSelected, showContextMenu])
+    }, [drawingMode, renderer, setSelected])
 }
 
 export default useRightMousePan

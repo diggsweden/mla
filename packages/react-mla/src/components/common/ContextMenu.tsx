@@ -94,12 +94,14 @@ export default function ContextMenu (props: Props) {
         </>}
         {availableTools.length > 0 && <>
           <div className="m-flex m-py-1 m-px-2 m-rounded m-cursor-default">
-            <span className="m-w-3 m-mr-2"><Icon name="content_paste_search" /></span>
-            <div>{t('fetch')}</div>
+            <div className='m-font-semibold'>{t('fetch')}</div>
           </div>
           {availableTools.map(e => (
-            <button key={e.Id} className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { explore(e.Id); hideContextMenu() }}>
-              <div>{e.Name}</div>
+            <button key={e.Id} className="m-flex m-items-center m-flex-nowrap enabled:hover:m-bg-blue-100 enabled:hover:m-border-blue-400 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { explore(e.Id); hideContextMenu() }}>
+              <div className="m-flex m-justify-center m-items-center">
+                <span className="m-h-4 m-w-4 m-max-h-4 m-max-w-4 m-leading-4"><Icon name={e.Icon} className="m-text-primary m-flex m-justify-center m-items-center m-h-4 m-w-4 m-" /></span>
+              </div>
+              <div className="m-ml-1 m-whitespace-nowrap">{e.Name}</div>
             </button>
           ))}
           <hr className="m-my-3 m-border-gray-300" />
@@ -112,17 +114,26 @@ export default function ContextMenu (props: Props) {
           <hr className="m-my-3 m-border-gray-300" />
         </>
         )}
-        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer disabled:m-opacity-50" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
-          <span className="m-w-3 m-mr-2"><Icon name="content_copy" /></span>
-          <div>{t('copy')}</div>
+        <div className="m-flex m-py-1 m-px-2 m-rounded m-cursor-default">
+          <div className='m-font-semibold'>{t('edit')}</div>
+        </div>
+        <button className="m-flex m-items-center m-flex-nowrap enabled:hover:m-bg-blue-100 enabled:hover:m-border-blue-400 m-py-1 m-px-2 m-rounded m-cursor-pointer disabled:m-opacity-50 disabled:m-cursor-default" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
+          <div className="m-flex m-justify-center m-items-center">
+            <span className="m-h-4 m-w-4 m-max-h-4 m-max-w-4 m-leading-4"><Icon name="content_copy" className="m-text-primary m-flex m-justify-center m-items-center m-h-4 m-w-4 m-" /></span>
+          </div>
+          <div className="m-ml-1 m-whitespace-nowrap">{t('copy')}</div>
         </button>
-        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { if (props.paste != null) { props.paste(); hideContextMenu() } }}>
-          <span className="m-w-3 m-mr-2"><Icon name="content_paste" /></span>
-          <div>{t('paste')}</div>
+        <button className="m-flex m-items-center m-flex-nowrap enabled:hover:m-bg-blue-100 enabled:hover:m-border-blue-400 m-py-1 m-px-2 m-rounded m-cursor-pointer disabled:m-opacity-50 disabled:m-cursor-default" onClick={() => { if (props.paste != null) { props.paste(); hideContextMenu() } }}>
+          <div className="m-flex m-justify-center m-items-center">
+            <span className="m-h-4 m-w-4 m-max-h-4 m-max-w-4 m-leading-4"><Icon name="content_paste" className="m-text-primary m-flex m-justify-center m-items-center m-h-4 m-w-4 m-" /></span>
+          </div>
+          <div className="m-ml-1 m-whitespace-nowrap">{t('paste')}</div>
         </button>
-        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded disabled:m-opacity-50 m-cursor-pointer" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
-          <span className="m-w-3 m-mr-2"><Icon name="delete_forever" /></span>
-          <div>{t('delete')}</div>
+        <button className="m-flex m-items-center m-flex-nowrap enabled:hover:m-bg-blue-100 enabled:hover:m-border-blue-400 m-py-1 m-px-2 m-rounded m-cursor-pointer disabled:m-opacity-50 disabled:m-cursor-default" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
+          <div className="m-flex m-justify-center m-items-center">
+            <span className="m-h-4 m-w-4 m-max-h-4 m-max-w-4 m-leading-4"><Icon name="delete_forever" className="m-text-primary m-flex m-justify-center m-items-center m-h-4 m-w-4 m-" /></span>
+          </div>
+          <div className="m-ml-1 m-whitespace-nowrap">{t('delete')}</div>
         </button>
       </>
     </Popover>
