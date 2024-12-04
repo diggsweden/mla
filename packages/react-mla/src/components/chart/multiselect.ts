@@ -3,18 +3,22 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { useEffect, useRef } from 'react'
-
 import useAppStore from '../../store/app-store'
 import Sigma from 'sigma'
 import { SigmaEdgeEventPayload, SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
 import useMainStore from '../../store/main-store'
 
-const LEFT_CLICK = 0
+ enum Mouse {
+    LeftButton = 0,
+    Right = 1,
+ }
 
 const CONTEXT_TIMEOUT = 300
 
 function useMultiselect(renderer: Sigma | undefined) {
-    const drag = useRef(false)
+    const leftMouseButtonIsDown = useRef(false)
+    const nodesMoved = useRef(false)
+    const multiselectBox = useRef(false)
     const canvas = useRef(null as null | HTMLCanvasElement)
     const time = useRef(0)
     const graphSelect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0 })
@@ -61,7 +65,7 @@ function useMultiselect(renderer: Sigma | undefined) {
             canvas.current = canv
         }
 
-        const selectInGraph = (ctrlKey: boolean) => {
+        const selectInGraph = (addToAlreadySelected: boolean) => {
             const rect = graphSelect.current
             const order = (a: number, b: number) => {
                 return b < a ? [b, a] : [a, b]
@@ -69,15 +73,15 @@ function useMultiselect(renderer: Sigma | undefined) {
             const [sX, eX] = order(rect.startX, rect.endX)
             const [sY, eY] = order(rect.startY, rect.endY)
 
-            const result = ctrlKey ? [...selectedIds]  : []
+            const result = addToAlreadySelected ? [...selectedIds]  : []
             for (const entityId of Object.keys(entities)) {
                 const entity = entities[entityId][0]
-        
+
                 const t = {
                   x: entity.PosX ?? 0,
                   y: entity.PosY ?? 0
                 }
-        
+
                 if (sX <= t.x && t.x <= eX && sY <= t.y && t.y <= eY) {
                   if (!result.includes(entityId)) {
                       result.push(entityId)
@@ -88,7 +92,30 @@ function useMultiselect(renderer: Sigma | undefined) {
             setSelected(result)
         }
 
-        const drawMultiselect = () => {
+        const selectInMultiSelectBox = (addToAlreadySelected : boolean) =>{
+            multiselectBox.current = false;
+
+            const diff = Date.now() - time.current
+            if (diff > CONTEXT_TIMEOUT) {
+                selectInGraph(addToAlreadySelected)
+            }
+
+            drawMultiSelectBox()
+        }
+
+        const select = (toggle: boolean, id: string) => {
+            if (toggle) {
+                if (selectedIds.indexOf(id) >= 0){
+                    setSelected(selectedIds.filter(x=> x != id))
+                } else {
+                    setSelected([id, ...selectedIds])
+                }
+            } else {
+                setSelected([id])
+            }
+        }
+
+        const drawMultiSelectBox = () => {
             if (renderer == null || canvas.current == null) {
                 return
             }
@@ -102,7 +129,7 @@ function useMultiselect(renderer: Sigma | undefined) {
 
             if (canvas.current) {
                 const ctx = canvas.current.getContext("2d")!;
-                if (drag.current == false) {
+                if (multiselectBox.current == false) {
                     ctx.clearRect(0, 0, container.clientWidth, container.clientHeight)
                     return
                 }
@@ -120,22 +147,8 @@ function useMultiselect(renderer: Sigma | undefined) {
             }
         }
 
-        const down = (e: SigmaStageEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button == LEFT_CLICK) {
-                const pos = renderer.viewportToGraph(e.event)
-                Object.assign(graphSelect.current, {
-                    startX: pos.x,
-                    startY: pos.y,
-                    endX: pos.x,
-                    endY: pos.y
-                })
-                drag.current = true
-            }
-        }
-
-        const move = (e: SigmaStageEventPayload) => {
-            if (drag.current) {
+        const moveBody = (e: SigmaStageEventPayload) => {
+            if (multiselectBox.current) {
                 const pos = renderer.viewportToGraph(e.event)
                 Object.assign(graphSelect.current, {
                     endX: pos.x,
@@ -146,23 +159,33 @@ function useMultiselect(renderer: Sigma | undefined) {
                 e.event.original.preventDefault();
                 e.event.original.stopPropagation();
 
-                drawMultiselect();
+                drawMultiSelectBox();
+            }
+
+            if (leftMouseButtonIsDown.current && !nodesMoved.current) {
+                nodesMoved.current = true;
             }
         }
 
-
-        const upLeft = (e: SigmaStageEventPayload) => {
+        const downStage = (e: SigmaStageEventPayload) => {
             const click = e.event.original as MouseEvent;
-            if (click.button === LEFT_CLICK) {
-                if (drag.current) {
-                    drag.current = false;
+            if (click.button == Mouse.LeftButton) {
+                const pos = renderer.viewportToGraph(e.event)
+                Object.assign(graphSelect.current, {
+                    startX: pos.x,
+                    startY: pos.y,
+                    endX: pos.x,
+                    endY: pos.y
+                })
+                multiselectBox.current = true
+            }
+        }
 
-                    const diff = Date.now() - time.current
-                    if (diff > CONTEXT_TIMEOUT) {
-                        selectInGraph(click.ctrlKey)
-                    }
-    
-                    drawMultiselect()
+        const upStage = (e: SigmaStageEventPayload) => {
+            const click = e.event.original as MouseEvent;
+            if (click.button === Mouse.LeftButton) {
+                if (multiselectBox.current) {
+                    selectInMultiSelectBox(click.ctrlKey)
                 } else {
                     setSelected([])
                 }
@@ -170,66 +193,68 @@ function useMultiselect(renderer: Sigma | undefined) {
 
         }
 
-        const upLeftNode = (e: SigmaNodeEventPayload) => {
+        const downNode = (e: SigmaNodeEventPayload) => {
             const click = e.event.original as MouseEvent;
-            if (click.button === LEFT_CLICK) {
-                if (drag.current) {
-                    drag.current = false;
-
-                    const diff = Date.now() - time.current
-                    if (diff > CONTEXT_TIMEOUT) {
-                        selectInGraph(click.ctrlKey)
-                    }
-    
-                    drawMultiselect()
-                } else {
-                    if (e.event.original.ctrlKey) {
-                        if (selectedIds.indexOf(e.node) >= 0){
-                            setSelected(selectedIds.filter(x=> x != e.node))
-                        }else{
-                            setSelected([e.node, ...selectedIds])
-                        }
-                    } else {
-                        setSelected([e.node])
-                    }
-                }
+            if (click.button === Mouse.LeftButton) {
+                leftMouseButtonIsDown.current = true;
             }
         }
 
-        const upLeftEdge = (e: SigmaEdgeEventPayload) => {
+        const upNode = (e: SigmaNodeEventPayload) => {
             const click = e.event.original as MouseEvent;
-            if (click.button === LEFT_CLICK) {
-                if (drag.current) {
-                    drag.current = false;
-
-                    const diff = Date.now() - time.current
-                    if (diff > CONTEXT_TIMEOUT) {
-                        selectInGraph(click.ctrlKey)
-                    }
-    
-                    drawMultiselect()
+            if (click.button === Mouse.LeftButton) {
+                if (multiselectBox.current) {
+                    selectInMultiSelectBox(click.ctrlKey)
                 } else {
-                    if (e.event.original.ctrlKey) {
-                        setSelected([e.edge, ...selectedIds])
-                    } else {
-                        setSelected([e.edge])
+                    if (!nodesMoved.current){
+                        select(e.event.original.ctrlKey, e.node)
                     }
                 }
+
+                nodesMoved.current = false;
+                leftMouseButtonIsDown.current = false
             }
         }
 
-        renderer.on("downStage", down)
-        renderer.on("moveBody", move)
-        renderer.on("upStage", upLeft)
-        renderer.on("upNode", upLeftNode)
-        renderer.on("upEdge", upLeftEdge)
+        const downEdge = (e: SigmaEdgeEventPayload) => {
+            const click = e.event.original as MouseEvent;
+            if (click.button === Mouse.LeftButton) {
+                leftMouseButtonIsDown.current = true;
+            }
+        }
+
+        const upEdge = (e: SigmaEdgeEventPayload) => {
+            const click = e.event.original as MouseEvent;
+            if (click.button === Mouse.LeftButton) {
+                if (multiselectBox.current) {
+                    selectInMultiSelectBox(click.ctrlKey)
+                } else {
+                    if (!nodesMoved.current){
+                        select(e.event.original.ctrlKey, e.edge)
+                    }
+                }
+
+                nodesMoved.current = false;
+                leftMouseButtonIsDown.current = false
+            }
+        }
+
+        renderer.on("upStage", upStage)
+        renderer.on("downStage", downStage)
+        renderer.on("upNode", upNode)
+        renderer.on("downNode", downNode)
+        renderer.on("downEdge", downEdge)
+        renderer.on("upEdge", upEdge)
+        renderer.on("moveBody", moveBody)
 
         return () => {
-            renderer.off("downStage", down)
-            renderer.off("moveBody", move)
-            renderer.off("upStage", upLeft)
-            renderer.off("upNode", upLeftNode)
-            renderer.off("upEdge", upLeftEdge)
+            renderer.off("upStage", upStage)
+            renderer.off("downStage", downStage)
+            renderer.off("upNode", upNode)
+            renderer.off("downNode", downNode)
+            renderer.off("downEdge", downEdge)
+            renderer.off("upEdge", upEdge)
+            renderer.off("moveBody", moveBody)
         }
     }, [entities, renderer, selectedIds, setGeo, setSelected])
 }
