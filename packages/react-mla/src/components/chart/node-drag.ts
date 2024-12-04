@@ -59,11 +59,17 @@ export function useDragNodes(renderer: Sigma | undefined) {
                 y: pos.y
             }
 
-            const nodes = selectedIds.filter(n => graph.hasNode(n))
-            for (const n of nodes) {
-                graph.updateNodeAttribute(n, "x", (x) => x - diff.x)
-                graph.updateNodeAttribute(n, "y", (y) => y - diff.y)
-            }
+            graph.updateEachNodeAttributes((node, attr) => {
+                if (selectedIds.includes(node)) {
+                    return {
+                        ...attr,
+                        x: attr.x - diff.x,
+                        y: attr.y - diff.y
+                    }
+                } else {
+                    return attr
+                }
+            });
 
             event.preventSigmaDefault()
             event.original.preventDefault()
@@ -78,7 +84,7 @@ export function useDragNodes(renderer: Sigma | undefined) {
                     graph.setNodeAttribute(n, "fixed", true)
                     const x = graph.getNodeAttribute(n, "x")
                     const y = graph.getNodeAttribute(n, "y")
-    
+
                     getHistory(n)?.filter(e => e.PosX !== x || e.PosY !== y).forEach(e => {
                         positionUpdate.push(produce(e, draft => {
                             draft.PosX = x
@@ -102,7 +108,7 @@ export function useDragNodes(renderer: Sigma | undefined) {
             isDragging.current = false;
             draggedNode.current = null;
         }
-        
+
         renderer.on("downNode", down)
         renderer.on("moveBody", move)
         renderer.on("upNode", upNode);

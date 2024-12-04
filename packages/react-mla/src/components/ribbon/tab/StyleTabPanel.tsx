@@ -37,7 +37,6 @@ function StyleTabPanel () {
   }
 
   function setContourColor (color: string | undefined) {
-    console.log(color)
     updateEntity(
       ...selectedEntities.map(e => produce(e, draft => {
         draft.MarkColor = color

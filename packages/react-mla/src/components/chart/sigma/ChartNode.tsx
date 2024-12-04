@@ -62,8 +62,6 @@ function ChartNode (props: Props) {
     if (created.current) {
       props.graph.setNodeAttribute(created.current, "x", entity.PosX)
       props.graph.setNodeAttribute(created.current, "y", entity.PosY)
-
-      console.log("pos", entity.PosX, entity.PosY)
     }
   }, [icon, props.graph, entity.PosY, entity.PosX])
 

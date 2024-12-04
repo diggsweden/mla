@@ -71,9 +71,6 @@ function LayoutTabPanel() {
       cancelAnimation.current();
     }
 
-    const details = louvain.detailed(graph);
-    console.log(details);
-
     // To directly assign communities as a node attribute
     louvain.assign(graph);
 
@@ -103,7 +100,6 @@ function LayoutTabPanel() {
       } else {
         setLayout('fa2')
         const sensibleSettings = forceAtlas2.inferSettings(graph);
-        console.log(sensibleSettings)
         const fa2Layout = new FA2Layout(graph, {
           settings: {
             ...sensibleSettings,
