@@ -59,7 +59,6 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
         }
 
         const downNode = (e: SigmaNodeEventPayload) => {
-            console.log("downnode")
             const click = e.event.original as MouseEvent;
             if (click.button != RIGHT_CLICK) return;
 

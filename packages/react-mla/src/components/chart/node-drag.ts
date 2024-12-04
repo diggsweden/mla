@@ -9,6 +9,8 @@ import { SigmaNodeEventPayload, SigmaStageEventPayload } from "sigma/types";
 import { IEntity } from "../../interfaces/data-models";
 import { produce } from "immer";
 
+const LEFT_CLICK = 0
+
 export function useDragNodes(renderer: Sigma | undefined) {
     const draggedNode = useRef(null as string | null)
     const isDragging = useRef(false);
@@ -23,32 +25,36 @@ export function useDragNodes(renderer: Sigma | undefined) {
     useEffect(() => {
         if (renderer == null) return
 
-        const down = (e: SigmaNodeEventPayload) => {
+        const downNode = (e: SigmaNodeEventPayload) => {
+            console.debug("node-drag: downNode")
             const click = e.event.original as MouseEvent
-            if (click.button != 0) {
-                return;
+            if (click.button != LEFT_CLICK || click.ctrlKey) return
+
+            if (!selectedIds.includes(e.node)) {
+                setSelected([e.node])
             }
+
             draggedNode.current = e.node;
-            graph.setNodeAttribute(draggedNode.current, "fixed", false);
+            graph.setNodeAttribute(e.node, "fixed", false)
+
+            const pos = renderer.viewportToGraph(e.event);
             dragStart.current = {
-                x: graph.getNodeAttribute(draggedNode.current, "x"),
-                y: graph.getNodeAttribute(draggedNode.current, "y")
+                x: pos.x,
+                y: pos.y
             }
 
             if (!renderer.getCustomBBox()) renderer.setCustomBBox(renderer.getBBox());
         }
 
-        const move = (e: SigmaStageEventPayload) => {
+        const moveBody = (e: SigmaStageEventPayload) => {
+            console.debug("node-drag: moveBody")
             if (!draggedNode.current) return;
-
-            if (!selectedIds.includes(draggedNode.current)) {
-                setSelected([draggedNode.current])
-            }
 
             const event = e.event
             isDragging.current = true
 
             const pos = renderer.viewportToGraph(event);
+
             const diff = {
                 x: dragStart.current.x - pos.x,
                 y: dragStart.current.y - pos.y,
@@ -56,7 +62,7 @@ export function useDragNodes(renderer: Sigma | undefined) {
 
             dragStart.current = {
                 x: pos.x,
-                y: pos.y
+                y: pos.y,
             }
 
             graph.updateEachNodeAttributes((node, attr) => {
@@ -77,6 +83,7 @@ export function useDragNodes(renderer: Sigma | undefined) {
         }
 
         const upNode = () => {
+            console.debug("node-drag: upNode")
             if (isDragging.current) {
                 const positionUpdate = [] as IEntity[]
                 const nodes = selectedIds.filter(n => graph.hasNode(n))
@@ -101,6 +108,7 @@ export function useDragNodes(renderer: Sigma | undefined) {
         }
 
         const upStage = () => {
+            console.debug("node-drag: upStage")
             if (draggedNode.current && isDragging.current) {
                 graph.removeNodeAttribute(draggedNode.current, "dragging");
             }
@@ -109,16 +117,16 @@ export function useDragNodes(renderer: Sigma | undefined) {
             draggedNode.current = null;
         }
 
-        renderer.on("downNode", down)
-        renderer.on("moveBody", move)
-        renderer.on("upNode", upNode);
         renderer.on("upStage", upStage);
+        renderer.on("downNode", downNode)
+        renderer.on("upNode", upNode);
+        renderer.on("moveBody", moveBody)
 
         return () => {
-            renderer.off("downNode", down)
-            renderer.off("moveBody", move)
-            renderer.off("upNode", upNode);
             renderer.off("upStage", upStage);
+            renderer.off("downNode", downNode)
+            renderer.off("upNode", upNode);
+            renderer.off("moveBody", moveBody)
         }
 
     }, [getHistory, graph, renderer, selectedIds, setSelected, update])
