@@ -16,18 +16,20 @@ import configService from '../../services/configurationService'
 
 import ContextMenu from "./ContextMenu"
 import { useTranslation } from 'react-i18next'
+import useAppStore from '../../store/app-store'
 
 interface Props {
   className?: string
   children: React.ReactNode
 }
 
-function AppShortcuts (props: Props) {
+function AppShortcuts(props: Props) {
   const { t } = useTranslation()
   const workflow = useWorkflowStore((state) => state.workflow)
   const showWorkflow = useWorkflowStore((state) => state.showDialog)
   const setShowWorkflow = useWorkflowStore((state) => state.setShowDialog)
 
+  const fabric = useMainStore(state => state.fabric)
   const selectedEntities = useMainStore((state) => state.selectedEntities)
   const selectedLinks = useMainStore((state) => state.selectedLinks)
 
@@ -37,29 +39,36 @@ function AppShortcuts (props: Props) {
   const undo = useMainStore((state) => state.undo)
   const redo = useMainStore((state) => state.redo)
 
+  const drawingMode = useAppStore(state => state.drawingMode)
+
   const [showDelete, setDelete] = useState(false)
   const dirty = useMainStore((state) => state.dirty)
 
   useEffect(() => {
     window.onbeforeunload = dirty ? () => true : null;
     return () => {
-        window.onbeforeunload = null;
+      window.onbeforeunload = null;
     }
   }, [dirty])
 
-  function onDelete () {
-    if (selectedEntities.length > 0 || selectedLinks.length > 0) {
-      setDelete(true)
+  function onDelete() {
+    if (drawingMode && fabric) {
+      fabric.remove(...fabric.getActiveObjects());
+      fabric.discardActiveObject();
+    } else {
+      if (selectedEntities.length > 0 || selectedLinks.length > 0) {
+        setDelete(true)
+      }
     }
   }
 
-  function performDelete () {
+  function performDelete() {
     internalRemove(true, selectedEntities, selectedLinks)
 
     setDelete(false)
   }
 
-  function copy () {
+  function copy() {
     const selected: IQueryResponse = {
       Entities: selectedEntities,
       Links: selectedLinks,
@@ -74,7 +83,7 @@ function AppShortcuts (props: Props) {
     void navigator.clipboard.write(data)
   }
 
-  function paste () {
+  function paste() {
     void navigator.clipboard
       .readText()
       .then((jsonData) => {

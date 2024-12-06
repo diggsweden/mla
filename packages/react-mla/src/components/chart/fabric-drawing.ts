@@ -20,24 +20,21 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         const container = renderer.getContainer();
         if (canvas.current == null) {
             const canv = renderer.getCanvases()["fabric"] ?? renderer.createCanvas("fabric")
-            
+
             canv.style["width"] = `${container.clientWidth}px`;
             canv.style["height"] = `${container.clientHeight}px`;
             canv.setAttribute("width", `${container.clientWidth}px`)
             canv.setAttribute("height", `${container.clientHeight}px`)
-    
+
             const fab = new fabric.Canvas(canv);
             fab.elements.container.style.position = "absolute"
             fab.elements.container.style.zIndex = "-1"
-    
-            // fab.elements.container.style.pointerEvents = "none"
-            // fab.elements.container.style.display = "none"
-    
-            fab.setDimensions({width: container.clientWidth, height: container.clientHeight});
-    
+
+            fab.setDimensions({ width: container.clientWidth, height: container.clientHeight });
+
             canvas.current = fab
         }
-        
+
         const cam = renderer.getCamera();
         const handleZoom = () => {
             const e = cam.getState()
@@ -45,7 +42,7 @@ function useFabricDrawing(renderer: Sigma | undefined) {
 
             const center = { x: xy.x - container.clientWidth / 2, y: xy.y - container.clientHeight / 2 }
             const topLeft = { x: -center.x - container.clientWidth / 2, y: -center.y - container.clientHeight / 2 }
-            
+
             const zoom = 1 / e.ratio
 
             canvas.current!.absolutePan(new fabric.Point(topLeft))
@@ -55,9 +52,9 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         const handleResize = () => {
             const wscale = container.clientWidth / canvas.current!.getWidth();
             const hscale = container.clientHeight / canvas.current!.getHeight();
-            const zoom  = canvas.current!.getZoom()
+            const zoom = canvas.current!.getZoom()
 
-            canvas.current!.setDimensions({width: container.clientWidth, height: container.clientHeight});
+            canvas.current!.setDimensions({ width: container.clientWidth, height: container.clientHeight });
             canvas.current!.setViewportTransform([zoom * wscale, 0, 0, zoom * hscale, 0, 0]);
 
             handleZoom()
@@ -69,7 +66,7 @@ function useFabricDrawing(renderer: Sigma | undefined) {
         renderer.on("beforeRender", handleZoom)
 
         handleResize()
-        
+
         init(canvas.current!)
 
         return () => {
@@ -81,8 +78,6 @@ function useFabricDrawing(renderer: Sigma | undefined) {
     useEffect(() => {
         if (canvas.current != null) {
             canvas.current.elements.container.style.zIndex = drawingMode ? "1" : "-1"
-             // canvas.current.elements.container.style.display = drawingMode ? "block" : "none"
-            //canvas.current.elements.container.style.pointerEvents = drawingMode ? "auto" : "none"
         }
 
     }, [drawingMode])

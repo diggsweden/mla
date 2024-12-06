@@ -124,7 +124,6 @@ function useFabricEditing(canvas: fabric.Canvas | undefined, shapeType: SHAPE_TY
 
         // Triangle
         const handleMouseDownTriangle = (event: any) => {
-            if (canvas == null) return
             const id = generateUUID()
             const pointer = event.scenePoint
             startPos.current = { x: pointer.x, y: pointer.y }
@@ -162,7 +161,6 @@ function useFabricEditing(canvas: fabric.Canvas | undefined, shapeType: SHAPE_TY
 
         // Text
         const handleMouseDownText = (event: any) => {
-            if (canvas == null) return
             const id = generateUUID()
             const pointer = event.scenePoint
             const newText = new fabric.Textbox('Text', {

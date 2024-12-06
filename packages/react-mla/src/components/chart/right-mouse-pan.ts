@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
-//
+
 // SPDX-License-Identifier: EUPL-1.2
 
 import { RefObject, useEffect, useRef } from 'react'
@@ -12,86 +12,97 @@ import useMainStore from '../../store/main-store'
 const RIGHT_CLICK = 2
 
 function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Sigma | undefined) {
-    const pan = useRef(false)
-    const selecteNode = useRef<null | string>(null)
-    const panStart = useRef({ x: 0, y: 0 })
-    const rightMouseButtonIsDown = useRef(false)
-    const showContextMenu = useAppStore(state => state.showContextMenu)
-    const drawingMode = useAppStore(state => state.drawingMode)
-    const setSelected = useMainStore((state) => state.setSelected)
+  const pan = useRef(false)
+  const selecteNode = useRef<null | string>(null)
+  const panStart = useRef({ x: 0, y: 0 })
+  const rightMouseButtonIsDown = useRef(false)
+  const showContextMenu = useAppStore(state => state.showContextMenu)
+  const drawingMode = useAppStore(state => state.drawingMode)
+  const setSelected = useMainStore((state) => state.setSelected)
 
-    useEffect(() => {
-        if (containerElement.current == null || renderer == null || drawingMode) return
+  useEffect(() => {
+    if (containerElement.current == null || renderer == null) return
 
-        const oncontextmenu = (e: MouseEvent) => {
-            if (!pan.current) {
-                showContextMenu(e.pageX, e.pageY)
-                if (selecteNode.current) {
-                    const selectedIds = useMainStore.getState().selectedIds
-                    if (!selectedIds.includes(selecteNode.current)){
-                        setSelected([selecteNode.current])
-                    }
-                }
+    const container = containerElement.current
+
+    if (!drawingMode) {
+      const oncontextmenu = (e: MouseEvent) => {
+        if (!pan.current) {
+          showContextMenu(e.pageX, e.pageY)
+          if (selecteNode.current) {
+            const selectedIds = useMainStore.getState().selectedIds
+            if (!selectedIds.includes(selecteNode.current)) {
+              setSelected([selecteNode.current])
             }
-
-            e.preventDefault();
-
-            selecteNode.current = null
-            pan.current = false
-            rightMouseButtonIsDown.current = false
+          }
         }
 
-        containerElement.current.oncontextmenu = oncontextmenu
+        e.preventDefault();
 
-    }, [containerElement, drawingMode, renderer, setSelected, showContextMenu])
+        selecteNode.current = null
+        pan.current = false
+        rightMouseButtonIsDown.current = false
+      }
 
-    useEffect(() => {
-        if (renderer == null || drawingMode) return
+      container.oncontextmenu = oncontextmenu
 
-        const downStage = (e: SigmaStageEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button != RIGHT_CLICK) return;
+    } else {
+      container.oncontextmenu = (e) => { e.preventDefault() }
+    }
 
-            panStart.current = renderer.viewportToFramedGraph(e.event)
-            rightMouseButtonIsDown.current = true
+    return () => {
+      container.oncontextmenu = null
+    }
 
-            setSelected([])
-        }
+  }, [containerElement, drawingMode, renderer, setSelected, showContextMenu])
 
-        const downNode = (e: SigmaNodeEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button != RIGHT_CLICK) return;
+  useEffect(() => {
+    if (renderer == null || drawingMode) return
 
-            panStart.current = renderer.viewportToFramedGraph(e.event)
-            rightMouseButtonIsDown.current = true;
+    const downStage = (e: SigmaStageEventPayload) => {
+      const click = e.event.original as MouseEvent;
+      if (click.button != RIGHT_CLICK) return;
 
-            selecteNode.current = e.node
-        }
+      panStart.current = renderer.viewportToFramedGraph(e.event)
+      rightMouseButtonIsDown.current = true
 
-        const moveBody = (e: SigmaStageEventPayload) => {
-            if (rightMouseButtonIsDown.current && !pan.current) {
-                pan.current = true
-            }
+      setSelected([])
+    }
 
-            if (pan.current) {
-                const pos = renderer.viewportToFramedGraph(e.event)
-                const camera = renderer.getCamera()
-                const state = camera.getState()
-                const update = { x: state.x + panStart.current.x - pos.x, y: state.y + panStart.current.y - pos.y }
-                camera.setState(update)
-            }
-        }
+    const downNode = (e: SigmaNodeEventPayload) => {
+      const click = e.event.original as MouseEvent;
+      if (click.button != RIGHT_CLICK) return;
 
-        renderer.on("downStage", downStage)
-        renderer.on("downNode", downNode)
-        renderer.on("moveBody", moveBody)
+      panStart.current = renderer.viewportToFramedGraph(e.event)
+      rightMouseButtonIsDown.current = true;
 
-        return () => {
-            renderer.off("downStage", downStage)
-            renderer.off("downNode", downNode)
-            renderer.off("moveBody", moveBody)
-        }
-    }, [drawingMode, renderer, setSelected])
+      selecteNode.current = e.node
+    }
+
+    const moveBody = (e: SigmaStageEventPayload) => {
+      if (rightMouseButtonIsDown.current && !pan.current) {
+        pan.current = true
+      }
+
+      if (pan.current) {
+        const pos = renderer.viewportToFramedGraph(e.event)
+        const camera = renderer.getCamera()
+        const state = camera.getState()
+        const update = { x: state.x + panStart.current.x - pos.x, y: state.y + panStart.current.y - pos.y }
+        camera.setState(update)
+      }
+    }
+
+    renderer.on("downStage", downStage)
+    renderer.on("downNode", downNode)
+    renderer.on("moveBody", moveBody)
+
+    return () => {
+      renderer.off("downStage", downStage)
+      renderer.off("downNode", downNode)
+      renderer.off("moveBody", moveBody)
+    }
+  }, [drawingMode, renderer, setSelected])
 }
 
 export default useRightMousePan
