@@ -69,8 +69,6 @@ function Chart(props: Props) {
       autoRescale: false,
       autoCenter:false,
       itemSizesReference: "positions",
-      //minCameraRatio: 0.3,
-      //maxCameraRatio: 4.5,
       defaultNodeType: "pictogram",
       defaultEdgeType: "straight",
       nodeProgramClasses: {
