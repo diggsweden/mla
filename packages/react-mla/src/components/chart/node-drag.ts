@@ -26,7 +26,6 @@ export function useDragNodes(renderer: Sigma | undefined) {
         if (renderer == null) return
 
         const downNode = (e: SigmaNodeEventPayload) => {
-            console.debug("node-drag: downNode")
             const click = e.event.original as MouseEvent
             if (click.button != LEFT_CLICK || click.ctrlKey) return
 
@@ -47,7 +46,6 @@ export function useDragNodes(renderer: Sigma | undefined) {
         }
 
         const moveBody = (e: SigmaStageEventPayload) => {
-            console.debug("node-drag: moveBody")
             if (!draggedNode.current) return;
 
             const event = e.event
@@ -83,7 +81,6 @@ export function useDragNodes(renderer: Sigma | undefined) {
         }
 
         const upNode = () => {
-            console.debug("node-drag: upNode")
             if (isDragging.current) {
                 const positionUpdate = [] as IEntity[]
                 const nodes = selectedIds.filter(n => graph.hasNode(n))
@@ -108,7 +105,6 @@ export function useDragNodes(renderer: Sigma | undefined) {
         }
 
         const upStage = () => {
-            console.debug("node-drag: upStage")
             if (draggedNode.current && isDragging.current) {
                 graph.removeNodeAttribute(draggedNode.current, "dragging");
             }

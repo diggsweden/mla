@@ -104,6 +104,9 @@ export default function createNodeSvgProgram<
    * the texture.
    */
   const textureManager = new TextureManager(textureManagerOptions);
+  if (textureManagerOptions.createCallback) {
+    textureManagerOptions.createCallback(textureManager);
+  }
 
   return class NodeSvgProgram extends NodeProgram<(typeof UNIFORMS)[number], N, E, G> {
     static readonly ANGLE_1 = 0;

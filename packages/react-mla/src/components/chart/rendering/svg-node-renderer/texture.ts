@@ -40,6 +40,8 @@ export type TextureManagerOptions = {
   // Minimal time (in ms) between two consecutive textures generations.
   // If null, then no timeout will be used (for debug purpose only!).
   debounceTimeout: number | null;
+  // Callback function to get the underlying texture manager
+  createCallback: ((manager: TextureManager) => void) | null
 };
 
 export const DEFAULT_TEXTURE_MANAGER_OPTIONS: TextureManagerOptions = {
@@ -48,6 +50,7 @@ export const DEFAULT_TEXTURE_MANAGER_OPTIONS: TextureManagerOptions = {
   correctCentering: false,
   maxTextureSize: 4096,
   debounceTimeout: 500,
+  createCallback: null
 };
 
 // This margin helps to avoid images collisions in the texture:

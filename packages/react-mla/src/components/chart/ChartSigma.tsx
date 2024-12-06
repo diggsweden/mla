@@ -23,10 +23,22 @@ import useNodeHighlight from './node-highlight';
 import useMultiselect from './multiselect';
 import useKeyDown from '../../effects/keydown'
 import useFabricDrawing from './fabric-drawing';
+import configService from '../../services/configurationService';
+import { TextureManager } from './rendering/svg-node-renderer/texture';
 
 interface Props {
   className?: string
   children?: React.ReactNode
+}
+
+const preloadImages = (manager: TextureManager) => {
+  configService.getConfiguration().Display.forEach(c => {
+    c.Show.forEach(s => {
+      if (s.Icon) {
+        manager.registerImage(s.Icon)
+      }
+    })
+  })
 }
 
 function Chart(props: Props) {
@@ -59,8 +71,9 @@ function Chart(props: Props) {
       size: { mode: "force", value: 256 },
       drawingMode: "color",
       colorAttribute: "borderColor",
+      createCallback: preloadImages
     });
-  
+
     const NodeProgram = createNodeCompoundProgram([NodeBorderCustomProgram, NodePictogramCustomProgram]);
   
     const settings = {
