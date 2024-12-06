@@ -42,8 +42,6 @@ export function useDragNodes(renderer: Sigma | undefined) {
                 x: pos.x,
                 y: pos.y
             }
-
-            if (!renderer.getCustomBBox()) renderer.setCustomBBox(renderer.getBBox());
         }
 
         const moveBody = (e: SigmaStageEventPayload) => {
