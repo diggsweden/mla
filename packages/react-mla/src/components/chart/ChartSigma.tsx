@@ -82,8 +82,6 @@ function Chart(props: Props) {
       autoRescale: false,
       autoCenter:false,
       itemSizesReference: "positions",
-      //minCameraRatio: 0.3,
-      //maxCameraRatio: 4.5,
       defaultNodeType: "pictogram",
       defaultEdgeType: "straight",
       nodeProgramClasses: {
@@ -103,8 +101,12 @@ function Chart(props: Props) {
 
     const renderer = new Sigma(graph, sigmaContainer.current, settings);
 
-    renderer.setCustomBBox(renderer.getBBox())
-
+    // Create a custom bbox that moves the coordinate [0,0] from the center of the screen to the upper left corner
+    const bbox = renderer.getBBox();
+    renderer.setCustomBBox({
+      x: [0, bbox.x[1] - bbox.x[0]],
+      y: [0, bbox.y[1] - bbox.y[0]],
+    });
 
     // Ignore all doubleClicks for now
     renderer.on("doubleClickNode", (e) => e.preventSigmaDefault())

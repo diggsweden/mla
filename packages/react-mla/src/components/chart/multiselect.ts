@@ -15,7 +15,7 @@ function useMultiselect(renderer: Sigma | undefined) {
     const nodesMoved = useRef(false)
     const multiselectBox = useRef(false)
     const canvas = useRef(null as null | HTMLCanvasElement)
-    const graphSelect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0 })
+    const graphSelect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0, clientOffsetX: 0, clientOffsetY: 0 })
 
     const setSelected = useMainStore((state) => state.setSelected)
     const selectedIds = useMainStore((state) => state.selectedIds)
@@ -60,12 +60,15 @@ function useMultiselect(renderer: Sigma | undefined) {
         }
 
         const selectInGraph = (addToAlreadySelected: boolean) => {
-            const rect = graphSelect.current
+            const rect = graphSelect.current    
+            const start = renderer.viewportToGraph({x : rect.startX, y: rect.startY})
+            const end = renderer.viewportToGraph({x : rect.endX, y: rect.endY})
+
             const order = (a: number, b: number) => {
                 return b < a ? [b, a] : [a, b]
             }
-            const [sX, eX] = order(rect.startX, rect.endX)
-            const [sY, eY] = order(rect.startY, rect.endY)
+            const [sX, eX] = order(start.x, end.x)
+            const [sY, eY] = order(start.y, end.y)
 
             const result = addToAlreadySelected ? [...selectedIds]  : []
             for (const entityId of Object.keys(entities)) {
@@ -110,38 +113,32 @@ function useMultiselect(renderer: Sigma | undefined) {
             }
 
             const container = renderer.getContainer();
-
             canvas.current.style["width"] = `${container.clientWidth}px`;
             canvas.current.style["height"] = `${container.clientHeight}px`;
             canvas.current.setAttribute("width", `${container.clientWidth}px`)
             canvas.current.setAttribute("height", `${container.clientHeight}px`)
 
-            if (canvas.current) {
-                const ctx = canvas.current.getContext("2d")!;
-                if (multiselectBox.current == false) {
-                    ctx.clearRect(0, 0, container.clientWidth, container.clientHeight)
-                    return
-                }
-
-                const rect = graphSelect.current
-                const start = renderer.graphToViewport({ x: rect.startX, y: rect.startY })
-                const end = renderer.graphToViewport({ x: rect.endX, y: rect.endY })
-
-                ctx.setLineDash([5])
-                ctx.strokeStyle = 'rgba(78, 146, 237, 0.75)'
-                ctx.strokeRect(start.x, start.y, end.x - start.x, -start.y + end.y)
-                ctx.setLineDash([])
-                ctx.fillStyle = 'rgba(151, 194, 252, 0.45)'
-                ctx.fillRect(start.x, start.y, end.x - start.x, -start.y + end.y)
+            const ctx = canvas.current.getContext("2d")!;
+            if (multiselectBox.current == false) {
+                 ctx.clearRect(0, 0, container.clientWidth, container.clientHeight)
+                 return
             }
+
+            const rect = graphSelect.current
+
+            ctx.setLineDash([5])
+            ctx.strokeStyle = 'rgba(78, 146, 237, 0.75)'
+            ctx.strokeRect(rect.startX + rect.clientOffsetX, rect.startY, rect.endX + rect.clientOffsetX - rect.startX, rect.endY - rect.startY)
+            ctx.setLineDash([])
+            ctx.fillStyle = 'rgba(151, 194, 252, 0.45)'
+            ctx.fillRect(rect.startX + rect.clientOffsetX, rect.startY, rect.endX + rect.clientOffsetX - rect.startX, rect.endY - rect.startY)
         }
 
         const moveBody = (e: SigmaStageEventPayload) => {
             if (multiselectBox.current) {
-                const pos = renderer.viewportToGraph(e.event)
                 Object.assign(graphSelect.current, {
-                    endX: pos.x,
-                    endY: pos.y
+                    endX: e.event.x,
+                    endY: e.event.y
                 })
 
                 e.preventSigmaDefault();
@@ -160,13 +157,20 @@ function useMultiselect(renderer: Sigma | undefined) {
             const click = e.event.original as MouseEvent;
             if (click.button != LEFT_CLICK) return;
 
-            const pos = renderer.viewportToGraph(e.event)
+            // Add offset to the coordinates so that a client click in the upper left corner of the sigma container i [0,0]
+            const offset = renderer.getContainer().getBoundingClientRect();
+            const x = click.clientX - offset.x
+            const y = click.clientY - offset.y
+
             Object.assign(graphSelect.current, {
-                startX: pos.x,
-                startY: pos.y,
-                endX: pos.x,
-                endY: pos.y
+                startX: x,
+                startY: y,
+                endX: x,
+                endY: y,
+                clientOffsetX: offset.x,
+                clientOffsetY: offset.y
             })
+
             multiselectBox.current = true
         }
 
