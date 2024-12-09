@@ -22,8 +22,12 @@ function ChartNode(props: Props) {
 
   const selectedIds = useMainStore(state => state.selectedIds)
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
-
   const selectedView = useAppStore(state => state.thingViewConfiguration[entity.TypeId])
+
+  const id = useMemo(() => {
+    return getId(entity)
+  }, [entity])
+
 
   const view = useMemo(() => {
     return { ...viewService.getDefaultView(entity.TypeId, entity.GlobalType), ...selectedView }
@@ -40,7 +44,7 @@ function ChartNode(props: Props) {
   const created = useRef(null as null | string)
   useEffect(() => {
     console.debug('[adding]', getId(entity))
-    created.current = props.graph.addNode(getId(entity), {
+    created.current = props.graph.addNode(id, {
       label: entity.LabelChart,
       x: entity.PosX,
       y: entity.PosY,
@@ -56,8 +60,8 @@ function ChartNode(props: Props) {
         created.current = null
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, props.graph])
 
   useEffect(() => {
     if (created.current) {
@@ -91,6 +95,12 @@ function ChartNode(props: Props) {
       props.graph.setNodeAttribute(created.current, "hidden", !(view.Show ?? true))
     }
   }, [props.graph, view.Show])
+
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setNodeAttribute(created.current, "size", entity.Size ?? DEFAULT_NODE_SIZE)
+    }
+  }, [props.graph, entity.Size])
 
   return null
 }

@@ -24,29 +24,32 @@ function ChartEdge(props: Props) {
   const selectedIds = useMainStore(state => state.selectedIds)
   const selectedView = useAppStore(state => state.thingViewConfiguration[link.TypeId])
 
-  const from = useMemo(() => getEntity(link.FromEntityId + link.FromEntityTypeId, date.DateFrom)!, [getEntity, link, date])
-  const to = useMemo(() => getEntity(link.ToEntityId + link.ToEntityTypeId, date.DateFrom)!, [getEntity, link, date])
+  const id = useMemo(() => {
+    return getId(link)
+  }, [link])
+  const fromId = useMemo(() => getId(getEntity(link.FromEntityId + link.FromEntityTypeId, date.DateFrom)!), [getEntity, link, date])
+  const toId = useMemo(() => getId(getEntity(link.ToEntityId + link.ToEntityTypeId, date.DateFrom)!), [getEntity, link, date])
 
   const view = useMemo(() => {
     return { ...viewService.getDefaultView(link.TypeId, link.GlobalType), ...selectedView }
   }, [link, selectedView])
 
   const selected = useMemo(() => {
-    if (link != null && from != null && to != null) {
+    if (link != null && fromId != null && toId != null) {
       return isSelected(link, selectedIds)
       //return isSelected(link, selectedIds) || ((view.Show ?? true) && isSelected(from, selectedIds)) || ((view.Show ?? true) && isSelected(to, selectedIds))
     }
 
     return false
-  }, [from, link, selectedIds, to])
+  }, [fromId, link, selectedIds, toId])
 
 
   const created = useRef(null as null | string)
   useEffect(() => {
-    console.debug('[adding]', getId(link))
+    console.debug('[adding]', id)
     switch (link.Direction) {
       case "TO":
-        created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(from), getId(to), {
+        created.current = props.graph.addDirectedEdgeWithKey(id, fromId, toId, {
           label: link.LabelChart,
           drawLabel: true,
           type: "straightWithArrow",
@@ -54,7 +57,7 @@ function ChartEdge(props: Props) {
         });
         break;
       case "FROM":
-        created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(to), getId(from), {
+        created.current = props.graph.addDirectedEdgeWithKey(id, toId, fromId, {
           label: link.LabelChart,
           drawLabel: true,
           type: "straightWithArrow",
@@ -62,7 +65,7 @@ function ChartEdge(props: Props) {
         });
         break;
       default:
-        created.current = props.graph.addUndirectedEdgeWithKey(getId(link), getId(from), getId(to), {
+        created.current = props.graph.addUndirectedEdgeWithKey(id, fromId, toId, {
           label: link.LabelChart,
           drawLabel: true,
           type: "straight",
@@ -78,7 +81,8 @@ function ChartEdge(props: Props) {
         created.current = null
       }
     }
-  }, [props.graph, link.Direction, link, from, to])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, link.Direction, fromId, props.graph, toId])
 
   useEffect(() => {
     if (created.current) {
@@ -90,13 +94,19 @@ function ChartEdge(props: Props) {
     if (created.current) {
       props.graph.setEdgeAttribute(created.current, "label", link.LabelChart)
     }
-  }, [from, link, props.graph, to])
+  }, [link.LabelChart, props.graph])
 
   useEffect(() => {
     if (created.current) {
       props.graph.setEdgeAttribute(created.current, "color", selected ? "#60a5fa" : undefined)
     }
-  }, [from, link, props.graph, selected, to])
+  }, [props.graph, selected])
+
+  useEffect(() => {
+    if (created.current) {
+      props.graph.setEdgeAttribute(created.current, "size", link.Size ?? DEFAULT_EDGE_SIZE)
+    }
+  }, [link.Size, props.graph])
 
   return null
 }
