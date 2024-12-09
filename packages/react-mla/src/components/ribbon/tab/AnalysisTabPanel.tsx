@@ -21,10 +21,11 @@ import type { IEventFilter } from '../../../interfaces/configuration/event-opera
 import TableTool from '../../tools/TableTool'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
+import SnaToolbox from '../toolbox/SnaToolbox'
 
 type IntervalType = 'day' | 'week' | 'month' | 'custom'
 
-function AnalysisTabPanel () {
+function AnalysisTabPanel() {
   const { t } = useTranslation();
   const config = configService.getConfiguration()
   const history = useAppStore((state) => state.historyMode)
@@ -49,11 +50,11 @@ function AnalysisTabPanel () {
   const setEvent = useMainStore((state) => state.setPhaseEvent)
   const [updateEvent, setUpdateEvent] = useState(undefined as undefined | IPhaseEvent)
 
-  function toggleHistory () {
+  function toggleHistory() {
     setHistory(!history)
   }
 
-  function addEvent () {
+  function addEvent() {
     if (updateEvent) {
       setEvent(updateEvent)
     }
@@ -61,24 +62,24 @@ function AnalysisTabPanel () {
     setShowModal(false)
   }
 
-  function dateChanged (e: ChangeEvent<HTMLInputElement>) {
+  function dateChanged(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.valueAsDate != null) {
       setDate(DateTime.fromJSDate(e.target.valueAsDate))
     }
   }
 
-  function dateToChanged (e: ChangeEvent<HTMLInputElement>) {
+  function dateToChanged(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.valueAsDate != null) {
       setTimespan({ DateFrom: date.DateFrom, DateTo: DateTime.fromJSDate(e.target.valueAsDate) })
     }
   }
 
   const updatedFilter = useRef<Record<string, IEventFilter[] | undefined>>({})
-  function filterChanged (e: Record<string, IEventFilter[] | undefined>) {
+  function filterChanged(e: Record<string, IEventFilter[] | undefined>) {
     updatedFilter.current = e
   }
 
-  function saveFilter () {
+  function saveFilter() {
     setFilter(updatedFilter.current)
   }
 
@@ -86,7 +87,8 @@ function AnalysisTabPanel () {
   return (<>
     <div className="m-flex m-text-center m-h-full m-p-1">
       <GraphToolbox />
-      <CommunityToolbox />
+      <SnaToolbox show={config.Menu?.Analysis?.SnaPreview} />
+      <CommunityToolbox show={config.Menu?.Analysis?.CommunityPreview} />
 
       <RibbonMenuSection title={t('show as table')} >
         <RibbonMenuButton label={t('entities')} title={t('entities as table')} disabled={selectedEntities.length === 0} onClick={() => { setShowTableTool(true) }} iconName="apps" />
@@ -142,11 +144,11 @@ function AnalysisTabPanel () {
         </Modal>
       }
     </div>
-    { showTableTool &&
+    {showTableTool &&
       <Modal mode={'ok'} wide={true} show={showTableTool} title={t('table data')} onNegative={() => { setShowTableTool(false) }} onPositive={() => { setShowTableTool(false) }}>
         <TableTool items={[...selectedEntities, ...selectedLinks]} />
       </Modal>
     }
-  </>)      
-  }
+  </>)
+}
 export default AnalysisTabPanel

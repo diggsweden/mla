@@ -14,6 +14,7 @@ interface IChartBase extends IBase, IHistory {
   SourceSystemId: string
   MarkColor?: string
   Color?: string
+  Size?: number
 }
 
 interface ILinked {

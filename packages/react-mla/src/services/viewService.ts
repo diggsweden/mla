@@ -15,7 +15,7 @@ import * as global from '../global.json'
 
 export interface IIcon {
   id: string
-  name:string,
+  name: string,
   foreColor: string,
   backgroundColor: string
 }
@@ -28,7 +28,7 @@ class ViewService {
 
   private theme = defaultTheme
 
-  public init (): void {
+  public init(): void {
     const config = configService.getConfiguration()
     this.configurations = config.Display
     this.theme = { ...this.theme, ...config.Theme }
@@ -66,7 +66,7 @@ class ViewService {
     useAppStore.getState().setView('default')
   }
 
-  public getRule (entity: IChartBase, viewConfiguration: IViewConfiguration): IRuleConfiguration | undefined {
+  public getRule(entity: IChartBase, viewConfiguration: IViewConfiguration): IRuleConfiguration | undefined {
     const entityRules = viewConfiguration.Rules?.filter(e => e.TypeId === entity.TypeId)
     if (entityRules == null) {
       return
@@ -81,7 +81,7 @@ class ViewService {
     return propertyRules.find(x => this.getPropertyPlainValue(entity, x.PropertyTypeId) === x.Equals)
   }
 
-  public getIconByRule (entity: IEntity, viewConfiguration: IViewConfiguration): IIcon | undefined {
+  public getIconByRule(entity: IEntity, viewConfiguration: IViewConfiguration): IIcon | undefined {
     const view = viewService.getView(entity.TypeId, entity.GlobalType)
     const configurationRule = this.getRule(entity, viewConfiguration)
     const icon = configurationRule?.Icon ?? view.Icon
@@ -96,20 +96,20 @@ class ViewService {
       }
   }
 
-  public getConfiguration (): IViewConfiguration[] {
+  public getConfiguration(): IViewConfiguration[] {
     return this.configurations
   }
 
-  public getTheme (): IThemeConfiguration {
+  public getTheme(): IThemeConfiguration {
     return this.theme
   }
 
-  public getDefaultView (TypeId: string, GlobalType?: string): IBaseViewConfiguration {
+  public getDefaultView(TypeId: string, GlobalType?: string): IBaseViewConfiguration {
     const defaultView = (
       this.defaultViewConfiguration[TypeId] ??
-      global.Entities.find(x => x.GlobalType == GlobalType) ?? 
+      global.Entities.find(x => x.GlobalType == GlobalType) ??
       global.Links.find(x => x.GlobalType == GlobalType)
-     ) as IBaseViewConfiguration
+    ) as IBaseViewConfiguration
 
 
     if (defaultView == null) {
@@ -119,25 +119,25 @@ class ViewService {
     return defaultView
   }
 
-  public getView (TypeId: string, GlobalType? :string): IBaseViewConfiguration {
+  public getView(TypeId: string, GlobalType?: string): IBaseViewConfiguration {
     const selectedView = useAppStore.getState().thingViewConfiguration[TypeId]
 
     return { ...this.getDefaultView(TypeId, GlobalType), ...selectedView }
   }
 
-  public getLongName (thing: IChartBase): string {
+  public getLongName(thing: IChartBase): string {
     return this.getLabel(thing, 'long')
   }
 
-  public getShortName (thing: IChartBase): string {
+  public getShortName(thing: IChartBase): string {
     return this.getLabel(thing, 'short')
   }
 
-  public getChartName (thing: IChartBase): string {
+  public getChartName(thing: IChartBase): string {
     return this.getLabel(thing, 'chart')
   }
 
-  public getAttributes (thing: IChartBase): Array<{ text: string, color: string }> {
+  public getAttributes(thing: IChartBase): Array<{ text: string, color: string }> {
     const result = [] as Array<{ text: string, color: string }>
     const config = configService.getEntityConfiguration(thing.TypeId, thing.GlobalType) ?? configService.getLinkConfiguration(thing.TypeId, thing.GlobalType)
     if (config == null) {
@@ -164,7 +164,7 @@ class ViewService {
     return result
   }
 
-  private getLabel (thing: IChartBase, labelType: LabelType) {
+  private getLabel(thing: IChartBase, labelType: LabelType) {
     const props = this.getView(thing.TypeId, thing.GlobalType)
     const config = configService.getProperties(thing)
 
@@ -172,7 +172,7 @@ class ViewService {
       throw new Error('View for ' + thing.TypeId + ' view is not mapped')
     }
 
-    function getTemplate () {
+    function getTemplate() {
       switch (labelType) {
         case 'short': return props.LabelShort
         case 'long': return props.LabelLong ?? props.LabelShort
@@ -203,7 +203,7 @@ class ViewService {
             value = toDateAndTimeString(thing.DateTo) ?? ''
             break
           default:
-            propertyAndConfiguration = config.find(e => 
+            propertyAndConfiguration = config.find(e =>
               e.propertyConfiguration.TypeId === propertyTypeId || e.propertyConfiguration.GlobalType === propertyTypeId
             )
             if (propertyAndConfiguration) {
@@ -234,7 +234,7 @@ class ViewService {
     return result.trim();
   }
 
-  public getPropertyPlainValue (thing: IBase, propTypeId: string): string | boolean | number | undefined {
+  public getPropertyPlainValue(thing: IBase, propTypeId: string): string | boolean | number | undefined {
     const prop = thing.Properties.find(p => p.TypeId === propTypeId);
     if (prop) {
       return prop?.Value
@@ -243,7 +243,7 @@ class ViewService {
     return undefined
   }
 
-  public getPropertyValue (thing: IBase, propTypeId: string): string | undefined {
+  public getPropertyValue(thing: IBase, propTypeId: string): string | undefined {
     const config = configService.getProperties(thing)
     const propertyConfig = config.find(x => x.propertyConfiguration?.TypeId === propTypeId)
     if (propertyConfig == null) {
@@ -254,7 +254,7 @@ class ViewService {
     return value?.toString()
   }
 
-  private getValue (conf: PropertyAndConfiguration): string | undefined {
+  private getValue(conf: PropertyAndConfiguration): string | undefined {
     if (conf?.propertyConfiguration.FieldType === 'Select') {
       return conf.propertyConfiguration.FieldOptions?.find(opt => opt.Value === (conf.property?.Value ?? '0'))?.Name ?? ''
     }

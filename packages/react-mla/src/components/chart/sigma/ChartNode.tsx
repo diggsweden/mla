@@ -12,11 +12,12 @@ import Graph from 'graphology'
 
 interface Props {
   entity: IEntity
-  graph: Graph,
-  size: number
+  graph: Graph
 }
 
-function ChartNode (props: Props) {
+export const DEFAULT_NODE_SIZE = 25;
+
+function ChartNode(props: Props) {
   const entity = props.entity
 
   const selectedIds = useMainStore(state => state.selectedIds)
@@ -39,13 +40,13 @@ function ChartNode (props: Props) {
   const created = useRef(null as null | string)
   useEffect(() => {
     console.debug('[adding]', getId(entity))
-    created.current = props.graph.addNode(getId(entity), { 
+    created.current = props.graph.addNode(getId(entity), {
       label: entity.LabelChart,
       x: entity.PosX,
       y: entity.PosY,
-      fixed: true, 
+      fixed: true,
       color: "white",
-      size: props.size
+      size: entity.Size ?? DEFAULT_NODE_SIZE
     })
 
     return () => {

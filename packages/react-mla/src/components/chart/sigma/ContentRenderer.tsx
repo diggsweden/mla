@@ -8,8 +8,6 @@ import useMainStore from '../../../store/main-store'
 import { useEffect, useMemo } from 'react'
 import { getId } from '../../../utils/utils'
 
-export const DEFAULT_NODE_SIZE = 25;
-export const DEFAULT_EDGE_SIZE = 5;
 import { DEFAULT_EDGE_CURVATURE, indexParallelEdgesIndex } from "@sigma/edge-curve";
 
 function ContentRenderer() {
@@ -78,13 +76,13 @@ function ContentRenderer() {
 
   return (<>
     {nodes.map(s =>
-      <ChartEntity key={getId(s)} entity={s} graph={graph} size={DEFAULT_NODE_SIZE}></ChartEntity>
+      <ChartEntity key={getId(s)} entity={s} graph={graph}></ChartEntity>
     )}
     {edges.map(s =>
-      <ChartEdge key={getId(s)} link={s} graph={graph} size={DEFAULT_EDGE_SIZE}></ChartEdge>
+      <ChartEdge key={getId(s)} link={s} graph={graph}></ChartEdge>
     )}
     {computedLinks.map(s =>
-      <ChartEdge key={s.Id} link={s} graph={graph} size={DEFAULT_EDGE_SIZE}></ChartEdge>
+      <ChartEdge key={s.Id} link={s} graph={graph}></ChartEdge>
     )}
   </>
   )
@@ -93,7 +91,7 @@ function ContentRenderer() {
 function getCurvature(index: number, maxIndex: number): number {
   if (maxIndex <= 0) throw new Error("Invalid maxIndex");
   if (index < 0) return -getCurvature(-index, maxIndex);
-  
+
   const amplitude = 3.5;
   const maxCurvature = amplitude * (1 - Math.exp(-maxIndex / amplitude)) * DEFAULT_EDGE_CURVATURE;
   return (maxCurvature * index) / maxIndex;

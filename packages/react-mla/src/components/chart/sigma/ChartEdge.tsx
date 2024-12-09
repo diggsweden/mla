@@ -11,9 +11,10 @@ import useAppStore from '../../../store/app-store'
 
 interface Props {
   link: ILink
-  graph: Graph,
-  size: number
+  graph: Graph
 }
+
+export const DEFAULT_EDGE_SIZE = 5;
 
 function ChartEdge(props: Props) {
   const link = props.link
@@ -39,35 +40,35 @@ function ChartEdge(props: Props) {
     return false
   }, [from, link, selectedIds, to])
 
-  
+
   const created = useRef(null as null | string)
   useEffect(() => {
     console.debug('[adding]', getId(link))
     switch (link.Direction) {
       case "TO":
         created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(from), getId(to), {
-          size: props.size,
           label: link.LabelChart,
           drawLabel: true,
-          type: "straightWithArrow"
-        });      
+          type: "straightWithArrow",
+          size: link.Size ?? DEFAULT_EDGE_SIZE
+        });
         break;
       case "FROM":
         created.current = props.graph.addDirectedEdgeWithKey(getId(link), getId(to), getId(from), {
-          size: props.size,
           label: link.LabelChart,
           drawLabel: true,
-          type: "straightWithArrow"
-        });      
+          type: "straightWithArrow",
+          size: link.Size ?? DEFAULT_EDGE_SIZE
+        });
         break;
-      default:    
+      default:
         created.current = props.graph.addUndirectedEdgeWithKey(getId(link), getId(from), getId(to), {
-          size: props.size,
           label: link.LabelChart,
           drawLabel: true,
-          type: "straight"
-        });      
-      break;
+          type: "straight",
+          size: link.Size ?? DEFAULT_EDGE_SIZE
+        });
+        break;
     }
 
     return () => {
@@ -77,7 +78,7 @@ function ChartEdge(props: Props) {
         created.current = null
       }
     }
-  }, [props.graph, link.Direction, link, props.size, from, to])
+  }, [props.graph, link.Direction, link, from, to])
 
   useEffect(() => {
     if (created.current) {
@@ -93,10 +94,9 @@ function ChartEdge(props: Props) {
 
   useEffect(() => {
     if (created.current) {
-      props.graph.setEdgeAttribute(created.current, "size", selected ? (props.size + 1) : props.size)
       props.graph.setEdgeAttribute(created.current, "color", selected ? "#60a5fa" : undefined)
     }
-  }, [from, link, props.graph, props.size, selected, to])
+  }, [from, link, props.graph, selected, to])
 
   return null
 }

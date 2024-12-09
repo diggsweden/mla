@@ -3,10 +3,16 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 interface IMenuConfiguration {
-  Start?: IStartMenuConfiguration
   Archive?: IArchiveMenuConfiguration
+  Start?: IStartMenuConfiguration
   Search?: ISearchMenuConfiguration
+  Analysis?: IAnalysisMenuConfiguration
   Draw?: IDrawMenuConfiguration
+}
+
+interface IArchiveMenuConfiguration {
+  Show?: boolean
+  Import?: boolean
 }
 
 interface IStartMenuConfiguration {
@@ -16,13 +22,13 @@ interface IStartMenuConfiguration {
   ViewAll?: boolean
 }
 
-interface IArchiveMenuConfiguration {
-  Show?: boolean
-  Import?: boolean
-}
-
 interface ISearchMenuConfiguration {
   Show?: boolean
+}
+
+interface IAnalysisMenuConfiguration {
+  SnaPreview?: boolean
+  CommunityPreview?: boolean
 }
 
 interface IDrawMenuConfiguration {
