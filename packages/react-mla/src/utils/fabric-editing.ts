@@ -91,7 +91,7 @@ function useFabricEditing(canvas: fabric.Canvas | undefined, shapeType: SHAPE_TY
         const handleMouseDownEllipse = (event: any) => {
             const id = generateUUID()
             const pointer = event.scenePoint
-            const newEllipsis = new fabric.Ellipse({
+            const newEllipse = new fabric.Ellipse({
                 absolutePositioned: true,
                 left: pointer.x,
                 top: pointer.y,
@@ -108,8 +108,8 @@ function useFabricEditing(canvas: fabric.Canvas | undefined, shapeType: SHAPE_TY
                 id,
             })
 
-            canvas.add(newEllipsis)
-            shape.current = newEllipsis
+            canvas.add(newEllipse)
+            shape.current = newEllipse
         }
 
         const handleMouseMoveEllipse = (event: any) => {

@@ -56,11 +56,10 @@ function DrawTabPanel() {
     canvas.selection = false;
     setSelected([]);
     setShapeType(type)
-    canvas.defaultCursor = 'crosshair'; // Change cursor to crosshair
-    lockObjects(); // Lock objects on canvas
+    canvas.defaultCursor = 'crosshair';
+    lockObjects();
   }
 
-  // Function to lock (disable interaction) all objects on canvas
   const lockObjects = () => {
     canvas?.getObjects().forEach((obj) => {
       obj.selectable = false;
@@ -70,7 +69,6 @@ function DrawTabPanel() {
   };
 
   
-  // Function to unlock (enable interaction) all objects on canvas
   const unlockObjects = () => {
     canvas?.getObjects().forEach((obj) => {
         obj.selectable = true
