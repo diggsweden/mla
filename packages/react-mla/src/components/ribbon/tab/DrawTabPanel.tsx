@@ -11,36 +11,69 @@ import { useTranslation } from 'react-i18next'
 import * as fabric from 'fabric'
 import RibbonMenuColorPickerButton from '../RibbonMenuColorPickerButton'
 import RibbonMenuButtonGroup from '../RibbonMenuButtonGroup'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useFabricEditing, { SHAPE_TYPE } from '../../../utils/fabric-editing'
+
+const RIGHT_CLICK = 2
 
 function DrawTabPanel() {
   const { t } = useTranslation();
   const config = viewService.getTheme()
   const canvas = useMainStore((state) => state.fabric)
+  const sigma = useMainStore((state) => state.sigma)
   const setSelectedEntities = useMainStore((state) => state.setSelected)
 
   const [selected, setSelected] = useState([] as fabric.FabricObject[])
   const [shapeType, setShapeType] = useState(null as SHAPE_TYPE | null)
+  
+  const panStart = useRef({ x: 0, y: 0 })
+  const pan = useRef(false)
 
   useEffect(() => {
-    if (canvas) {
+    if (canvas != null && sigma != null) {
       setSelectedEntities([])
       const selectAction = ({ selected }: { selected: fabric.FabricObject[] }) => setSelected(selected)
       const clearSelection = () => setSelected([])
+      const startPan = (e: fabric.TPointerEventInfo<MouseEvent>) => {
+        if (e.e.button == RIGHT_CLICK && shapeType == null) {
+          pan.current = true
+          panStart.current = sigma.viewportToFramedGraph(e.viewportPoint)
+          canvas.defaultCursor = 'grab'
+        }
+      }
+      const panMove = (e: fabric.TPointerEventInfo<MouseEvent>) => {
+        if (pan.current) {
+          const pos = sigma.viewportToFramedGraph(e.viewportPoint)
+          const camera = sigma.getCamera()
+          const state = camera.getState()
+          const update = { x: state.x + panStart.current.x - pos.x, y: state.y + panStart.current.y - pos.y }
+          camera.setState(update)
+        }
+      }
+      const stopPan = () => {
+        pan.current = false
+        canvas.defaultCursor = 'default'
+      }
 
       canvas.on("selection:created", selectAction);
       canvas.on("selection:updated", selectAction);
       canvas.on("selection:cleared", clearSelection);
+      canvas.on("mouse:down:before", startPan)
+      canvas.on("mouse:move", panMove)
+      canvas.on("mouse:up:before", stopPan)
 
       return () => {
         canvas.off("selection:created", selectAction);
         canvas.off("selection:updated", selectAction);
         canvas.off("selection:cleared", clearSelection);
+        canvas.off("mouse:down:before", startPan)
+        canvas.off("mouse:move", panMove)
+        canvas.off("mouse:up:before", stopPan)
+
         canvas.discardActiveObject()
       }
     }
-  }, [canvas, setSelected, setSelectedEntities])
+  }, [canvas, sigma, setSelected, setSelectedEntities, shapeType])
 
   useFabricEditing(canvas, shapeType, () => {
     unlockObjects()

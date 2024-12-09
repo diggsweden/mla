@@ -25,6 +25,11 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
 
     const container = containerElement.current
 
+    const resetMouse = () => {
+      containerElement.current!.style.cursor = ""
+
+    }
+
     if (!drawingMode) {
       const oncontextmenu = (e: MouseEvent) => {
         if (!pan.current) {
@@ -45,6 +50,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
       }
 
       container.oncontextmenu = oncontextmenu
+      container.onmouseup = resetMouse
 
     } else {
       container.oncontextmenu = (e) => { e.preventDefault() }
@@ -52,6 +58,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
 
     return () => {
       container.oncontextmenu = null
+      container.onmouseup = null
     }
 
   }, [containerElement, drawingMode, renderer, setSelected, showContextMenu])
@@ -65,6 +72,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
 
       panStart.current = renderer.viewportToFramedGraph(e.event)
       rightMouseButtonIsDown.current = true
+      containerElement.current!.style.cursor = "grab"
 
       setSelected([])
     }
@@ -75,6 +83,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
 
       panStart.current = renderer.viewportToFramedGraph(e.event)
       rightMouseButtonIsDown.current = true;
+      containerElement.current!.style.cursor = "grab"
 
       selecteNode.current = e.node
     }
@@ -102,7 +111,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
       renderer.off("downNode", downNode)
       renderer.off("moveBody", moveBody)
     }
-  }, [drawingMode, renderer, setSelected])
+  }, [containerElement, drawingMode, renderer, setSelected])
 }
 
 export default useRightMousePan
