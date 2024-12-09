@@ -14,7 +14,8 @@ import Modal from '../../common/Modal'
 import configService from '../../../services/configurationService'
 import ImportToolbox from '../toolbox/ImportToolbox'
 import { useTranslation } from 'react-i18next'
-import { ToImageOptions, downloadAsImage, toBlob } from "@sigma/export-image";
+
+const MIME_TYPE = "image/png";
 
 function ArchiveTabPanel () {
   const config = configService.getConfiguration()
@@ -145,27 +146,16 @@ function ArchiveTabPanel () {
   }
 
   function saveImage () {
-    if (sigma != null && fabric != null) {
-      downloadAsImage(sigma, {
-        format: "png",
-        fileName: "graph",
-        backgroundColor : "white",
-        withTempRenderer: (tempRenderer) => {
-          const fabricResult = tempRenderer.createCanvas("fabric-result", { beforeLayer: 'edgeLabels'})
-          const container = fabric.elements.container;
+      const imgURL = createDataUrl()
   
-          fabricResult.style["width"] = `${container.clientWidth}px`;
-          fabricResult.style["height"] = `${container.clientHeight}px`;
-          fabricResult.setAttribute("width", `${container.clientWidth}px`)
-          fabricResult.setAttribute("height", `${container.clientHeight}px`)
-
-          fabricResult.style.zIndex = "-1"
-
-          const context = fabricResult.getContext('2d')!;
-          context!.drawImage(fabric.toCanvasElement(), 0, 0)
-        },
-      });
-    }
+      const dlLink = document.createElement('a');
+      dlLink.download = "graph";
+      dlLink.href = imgURL;
+      dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+  
+      document.body.appendChild(dlLink);
+      dlLink.click();
+      document.body.removeChild(dlLink);
   }
 
   function saveImageRemote (name?: string) {
@@ -176,15 +166,10 @@ function ArchiveTabPanel () {
     if (sigma) {
       if (name && name.length > 0) {
         setLoading(true)
-  
-        const opts: Partial<ToImageOptions> = {
-          format: "png",
-          fileName: name,
-          backgroundColor : "white", 
-        }
 
         const saveAction = async () => {
-          const imageBlob = await toBlob(sigma, opts)
+          const imageUrl = createDataUrl();
+          const imageBlob = await (await fetch(imageUrl)).blob(); 
           const base64data = await blobToBase64(imageBlob)
 
           const result = await queryService.SaveImage(base64data, name)
@@ -202,6 +187,50 @@ function ArchiveTabPanel () {
         showImageSaveAs()
       }
     }
+  }
+
+  function createDataUrl(): string {
+    if (sigma != null && fabric != null) {
+      const canv = document.createElement("canvas") as HTMLCanvasElement
+      canv.width = sigma.getContainer().clientWidth
+      canv.height = sigma.getContainer().clientHeight
+
+      const ctx = canv.getContext('2d')!;
+
+      sigma.refresh();
+      const sigmaCanvas = sigma.getCanvases();
+      const layers = [
+        fabric.toCanvasElement(), 
+        sigmaCanvas["edges"], 
+        sigmaCanvas["edgeLabels"], 
+        sigmaCanvas["nodes"],
+        sigmaCanvas["labels"], 
+        sigmaCanvas["hovers"],
+        sigmaCanvas["hoverNodes"],
+      ]
+
+      // Draw the background first:
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canv.width, canv.height);
+
+      layers.forEach(l => {
+        ctx.drawImage(
+          l,
+          0,
+          0,
+          canv.width,
+          canv.height,
+          0,
+          0,
+          canv.width,
+          canv.height,
+        ) 
+      })
+
+      return canv.toDataURL(MIME_TYPE);
+    }
+
+    return ""
   }
 
   function fileChange (event: ChangeEvent<HTMLInputElement>) {

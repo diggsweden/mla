@@ -146,27 +146,24 @@ importers:
       '@geoman-io/leaflet-geoman-free':
         specifier: ^2.17.0
         version: 2.17.0(leaflet@1.9.4)
-      '@react-sigma/core':
-        specifier: ^4.0.3
-        version: 4.0.3(graphology@0.25.4(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.0-beta.36(graphology-types@0.24.8))
       '@sigma/edge-curve':
         specifier: 3.0.0-beta.16
-        version: 3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.8))
+        version: 3.0.0-beta.16(sigma@3.0.0-beta.39(graphology-types@0.24.8))
       '@sigma/export-image':
         specifier: 3.0.0-beta.1
-        version: 3.0.0-beta.1(sigma@3.0.0-beta.36(graphology-types@0.24.8))
+        version: 3.0.0-beta.1(sigma@3.0.0-beta.39(graphology-types@0.24.8))
       '@sigma/layer-webgl':
         specifier: 3.0.0-beta.5
-        version: 3.0.0-beta.5(sigma@3.0.0-beta.36(graphology-types@0.24.8))
+        version: 3.0.0-beta.5(sigma@3.0.0-beta.39(graphology-types@0.24.8))
       '@sigma/node-border':
         specifier: 3.0.0-beta.7
-        version: 3.0.0-beta.7(sigma@3.0.0-beta.36(graphology-types@0.24.8))
+        version: 3.0.0-beta.7(sigma@3.0.0-beta.39(graphology-types@0.24.8))
       '@sigma/node-image':
         specifier: 3.0.0-beta.16
-        version: 3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.8))
+        version: 3.0.0-beta.16(sigma@3.0.0-beta.39(graphology-types@0.24.8))
       '@sigma/utils':
         specifier: 3.0.0-beta.6
-        version: 3.0.0-beta.6(sigma@3.0.0-beta.36(graphology-types@0.24.8))
+        version: 3.0.0-beta.6(sigma@3.0.0-beta.39(graphology-types@0.24.8))
       events:
         specifier: ^3.3.0
         version: 3.3.0
@@ -234,8 +231,8 @@ importers:
         specifier: ^15.1.3
         version: 15.1.3(i18next@23.16.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sigma:
-        specifier: 3.0.0-beta.36
-        version: 3.0.0-beta.36(graphology-types@0.24.8)
+        specifier: 3.0.0-beta.39
+        version: 3.0.0-beta.39(graphology-types@0.24.8)
       tailwindcss:
         specifier: 3.4.14
         version: 3.4.14
@@ -1011,13 +1008,6 @@ packages:
 
   '@react-dnd/shallowequal@4.0.2':
     resolution: {integrity: sha512-/RVXdLvJxLg4QKvMoM5WlwNR9ViO9z8B/qPcc+C0Sa/teJY7QG7kJ441DwzOjMYEY7GmU4dj5EcGHIkKZiQZCA==}
-
-  '@react-sigma/core@4.0.3':
-    resolution: {integrity: sha512-/y/U1GH18xjGYMWNYXXqHGJ+8tHf+e4z1i0gNSm9iuhch8sGFJooO3VfyPJlBox42Wl4/gCapQhOHAfVW0pRtw==}
-    peerDependencies:
-      graphology: ^0.25.4
-      react: ^18.0.0
-      sigma: ^3.0.0-beta.24
 
   '@rollup/pluginutils@5.1.3':
     resolution: {integrity: sha512-Pnsb6f32CD2W3uCaLZIzDmeFyQ2b8UWMFI7xtwUezpcGBDVDW6y9XgAWIlARiGAo6eNF5FK5aQTr0LFyNyqq5A==}
@@ -3854,8 +3844,8 @@ packages:
   siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
 
-  sigma@3.0.0-beta.36:
-    resolution: {integrity: sha512-Ir60NbnZT2bMhU+1OxCVpMOSGxVqjbY6Gh5J6vqFNHDyp4BdG2lam9H/uZtTpWA9lQPMQmnKfya6EzicS0Q+dA==}
+  sigma@3.0.0-beta.39:
+    resolution: {integrity: sha512-HmTx+HWqNC+CX5SkRAlikKiXMlJdKWWQun+OlnYnz4ApcOalvapLXyNCaJFZuVOFheOaMIwlt2iZd0Fk014eSQ==}
 
   signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
@@ -5130,12 +5120,6 @@ snapshots:
 
   '@react-dnd/shallowequal@4.0.2': {}
 
-  '@react-sigma/core@4.0.3(graphology@0.25.4(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.0-beta.36(graphology-types@0.24.8))':
-    dependencies:
-      graphology: 0.25.4(graphology-types@0.24.8)
-      react: 18.3.1
-      sigma: 3.0.0-beta.36(graphology-types@0.24.8)
-
   '@rollup/pluginutils@5.1.3(rollup@4.28.1)':
     dependencies:
       '@types/estree': 1.0.6
@@ -5235,30 +5219,30 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@sigma/edge-curve@3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.8))':
+  '@sigma/edge-curve@3.0.0-beta.16(sigma@3.0.0-beta.39(graphology-types@0.24.8))':
     dependencies:
-      sigma: 3.0.0-beta.36(graphology-types@0.24.8)
+      sigma: 3.0.0-beta.39(graphology-types@0.24.8)
 
-  '@sigma/export-image@3.0.0-beta.1(sigma@3.0.0-beta.36(graphology-types@0.24.8))':
+  '@sigma/export-image@3.0.0-beta.1(sigma@3.0.0-beta.39(graphology-types@0.24.8))':
     dependencies:
       file-saver: 2.0.5
-      sigma: 3.0.0-beta.36(graphology-types@0.24.8)
+      sigma: 3.0.0-beta.39(graphology-types@0.24.8)
 
-  '@sigma/layer-webgl@3.0.0-beta.5(sigma@3.0.0-beta.36(graphology-types@0.24.8))':
+  '@sigma/layer-webgl@3.0.0-beta.5(sigma@3.0.0-beta.39(graphology-types@0.24.8))':
     dependencies:
-      sigma: 3.0.0-beta.36(graphology-types@0.24.8)
+      sigma: 3.0.0-beta.39(graphology-types@0.24.8)
 
-  '@sigma/node-border@3.0.0-beta.7(sigma@3.0.0-beta.36(graphology-types@0.24.8))':
+  '@sigma/node-border@3.0.0-beta.7(sigma@3.0.0-beta.39(graphology-types@0.24.8))':
     dependencies:
-      sigma: 3.0.0-beta.36(graphology-types@0.24.8)
+      sigma: 3.0.0-beta.39(graphology-types@0.24.8)
 
-  '@sigma/node-image@3.0.0-beta.16(sigma@3.0.0-beta.36(graphology-types@0.24.8))':
+  '@sigma/node-image@3.0.0-beta.16(sigma@3.0.0-beta.39(graphology-types@0.24.8))':
     dependencies:
-      sigma: 3.0.0-beta.36(graphology-types@0.24.8)
+      sigma: 3.0.0-beta.39(graphology-types@0.24.8)
 
-  '@sigma/utils@3.0.0-beta.6(sigma@3.0.0-beta.36(graphology-types@0.24.8))':
+  '@sigma/utils@3.0.0-beta.6(sigma@3.0.0-beta.39(graphology-types@0.24.8))':
     dependencies:
-      sigma: 3.0.0-beta.36(graphology-types@0.24.8)
+      sigma: 3.0.0-beta.39(graphology-types@0.24.8)
 
   '@testing-library/dom@10.4.0':
     dependencies:
@@ -8254,7 +8238,7 @@ snapshots:
 
   siginfo@2.0.0: {}
 
-  sigma@3.0.0-beta.36(graphology-types@0.24.8):
+  sigma@3.0.0-beta.39(graphology-types@0.24.8):
     dependencies:
       events: 3.3.0
       graphology-utils: 2.5.2(graphology-types@0.24.8)

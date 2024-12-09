@@ -22,9 +22,10 @@ import useDragNodes from './node-drag';
 import useNodeHighlight from './node-highlight';
 import useMultiselect from './multiselect';
 import useKeyDown from '../../effects/keydown'
-import useFabricDrawing from './fabric-drawing';
 import configService from '../../services/configurationService';
 import { TextureManager } from './rendering/svg-node-renderer/texture';
+import bindFabricLayer from './fabric-drawing';
+import useAppStore from '../../store/app-store';
 
 interface Props {
   className?: string
@@ -47,7 +48,11 @@ function Chart(props: Props) {
   const graph = useMainStore((state) => state.graph)
   const sigma = useMainStore((state) => state.sigma)
 
+  const fabric = useMainStore((state) => state.fabric)
+  const drawingMode = useAppStore((state) => state.drawingMode)
+
   const init = useMainStore((state) => state.initSigma)
+  const initFabric = useMainStore((state) => state.initFabric)
 
   const entities = useMainStore((state) => state.entities)
   const links = useMainStore((state) => state.links)
@@ -115,16 +120,25 @@ function Chart(props: Props) {
 
     init(renderer);
 
+    const fabric = bindFabricLayer(renderer)
+    initFabric(fabric.fabric)
+
     return () => {
       renderer.kill()
     }
-  }, [graph, init])
+  }, [graph, init, initFabric])
+
+  useEffect(() => {
+    if (fabric != null) {
+        fabric.elements.container.style.zIndex = drawingMode ? "1" : "-1"
+    }
+
+}, [drawingMode, fabric])
 
   useRightMousePan(sigmaContainer, sigma)
   useMultiselect(sigma)
   useDragNodes(sigma)
   useNodeHighlight(sigma)
-  useFabricDrawing(sigma)
 
   const dropRef = useDrop(
     () => ({
