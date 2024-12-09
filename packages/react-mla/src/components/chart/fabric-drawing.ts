@@ -27,6 +27,10 @@ function useFabricDrawing(renderer: Sigma | undefined) {
             canv.setAttribute("height", `${container.clientHeight}px`)
 
             const fab = new fabric.Canvas(canv);
+            fab.selectionKey = 'ctrlKey'
+            fab.selectionColor = 'rgba(151, 194, 252, 0.45)'
+            fab.selectionBorderColor = 'rgba(78, 146, 237, 0.75)'
+            fab.selectionDashArray = [5, 5]
             fab.elements.container.style.position = "absolute"
             fab.elements.container.style.zIndex = "-1"
 
