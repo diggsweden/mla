@@ -2,7 +2,7 @@
 
 // SPDX-License-Identifier: EUPL-1.2
 
-import { RefObject, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 import Sigma from 'sigma'
 import { SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
@@ -11,7 +11,7 @@ import useMainStore from '../../store/main-store'
 
 const RIGHT_CLICK = 2
 
-function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Sigma | undefined) {
+function useRightMousePan(renderer: Sigma | undefined) {
   const pan = useRef(false)
   const selecteNode = useRef<null | string>(null)
   const panStart = useRef({ x: 0, y: 0 })
@@ -21,12 +21,12 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
   const setSelected = useMainStore((state) => state.setSelected)
 
   useEffect(() => {
-    if (containerElement.current == null || renderer == null) return
+    if (renderer == null) return
 
-    const container = containerElement.current
+    const container = renderer.getContainer()
 
     const resetMouse = () => {
-      containerElement.current!.style.cursor = ""
+      container.style.cursor = ""
 
     }
 
@@ -61,10 +61,12 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
       container.onmouseup = null
     }
 
-  }, [containerElement, drawingMode, renderer, setSelected, showContextMenu])
+  }, [drawingMode, renderer, setSelected, showContextMenu])
 
   useEffect(() => {
     if (renderer == null || drawingMode) return
+
+    const container = renderer.getContainer()
 
     const downStage = (e: SigmaStageEventPayload) => {
       const click = e.event.original as MouseEvent;
@@ -72,7 +74,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
 
       panStart.current = renderer.viewportToFramedGraph(e.event)
       rightMouseButtonIsDown.current = true
-      containerElement.current!.style.cursor = "grab"
+      container.style.cursor = "grab"
 
       setSelected([])
     }
@@ -83,7 +85,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
 
       panStart.current = renderer.viewportToFramedGraph(e.event)
       rightMouseButtonIsDown.current = true;
-      containerElement.current!.style.cursor = "grab"
+      container.style.cursor = "grab"
 
       selecteNode.current = e.node
     }
@@ -111,7 +113,7 @@ function useRightMousePan(containerElement: RefObject<HTMLElement>, renderer: Si
       renderer.off("downNode", downNode)
       renderer.off("moveBody", moveBody)
     }
-  }, [containerElement, drawingMode, renderer, setSelected])
+  }, [drawingMode, renderer, setSelected])
 }
 
 export default useRightMousePan

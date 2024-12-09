@@ -69,10 +69,8 @@ export interface MainState {
 
   graph: Graph
   sigma: Sigma | undefined
-  initSigma: (sigma: Sigma) => void
-
   fabric: fabric.Canvas | undefined
-  initFabric: (fabric: fabric.Canvas) => void
+  init: (sigma: Sigma, fabric: fabric.Canvas) => void
 
   setEvent: (...events: IEvent[]) => void
   removeEvent: (...events: IEvent[]) => void
@@ -135,15 +133,10 @@ const useMainStore = create<MainState>((set, get) => ({
 
   graph: new Graph({ multi: true, type: "mixed" }),
   sigma: undefined,
-  initSigma: (sigma) => {
-    set((state) => ({
-      sigma
-    }))
-  },
-
   fabric: undefined,
-  initFabric: (fabric) => {
+  init: (sigma, fabric) => {
     set((state) => ({
+      sigma,
       fabric
     }))
   },

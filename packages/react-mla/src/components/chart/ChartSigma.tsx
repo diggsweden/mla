@@ -51,8 +51,7 @@ function Chart(props: Props) {
   const fabric = useMainStore((state) => state.fabric)
   const drawingMode = useAppStore((state) => state.drawingMode)
 
-  const init = useMainStore((state) => state.initSigma)
-  const initFabric = useMainStore((state) => state.initFabric)
+  const init = useMainStore((state) => state.init)
 
   const entities = useMainStore((state) => state.entities)
   const links = useMainStore((state) => state.links)
@@ -124,15 +123,13 @@ function Chart(props: Props) {
     renderer.on("doubleClickEdge", (e) => e.preventSigmaDefault())
     renderer.on("doubleClickStage", (e) => e.preventSigmaDefault())
 
-    init(renderer);
-
     const fabric = bindFabricLayer(renderer)
-    initFabric(fabric.fabric)
+    init(renderer, fabric.fabric)
 
     return () => {
       renderer.kill()
     }
-  }, [graph, init, initFabric])
+  }, [graph, init])
 
   useEffect(() => {
     if (fabric != null) {
@@ -141,7 +138,7 @@ function Chart(props: Props) {
 
   }, [drawingMode, fabric])
 
-  useRightMousePan(sigmaContainer, sigma)
+  useRightMousePan(sigma)
   useMultiselect(sigma)
   useDragNodes(sigma)
   useNodeHighlight(sigma)
