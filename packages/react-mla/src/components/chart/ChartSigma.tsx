@@ -70,7 +70,7 @@ function Chart(props: Props) {
         { size: { fill: true }, color: { attribute: "color" } },
       ],
     });
-  
+
     const NodePictogramCustomProgram = createNodeSvgProgram({
       padding: 0.3,
       size: { mode: "force", value: 256 },
@@ -80,12 +80,12 @@ function Chart(props: Props) {
     });
 
     const NodeProgram = createNodeCompoundProgram([NodeBorderCustomProgram, NodePictogramCustomProgram]);
-  
+
     const settings = {
       zoomToSizeRatioFunction: (x) => x,
       allowInvalidContainer: true,
       autoRescale: false,
-      autoCenter:false,
+      autoCenter: false,
       itemSizesReference: "positions",
       defaultNodeType: "pictogram",
       defaultEdgeType: "straight",
@@ -97,7 +97,7 @@ function Chart(props: Props) {
         straight: EdgeRectangleProgram,
         curved: EdgeCurveProgram,
         curvedWithArrow: EdgeCurvedArrowProgram,
-      },      
+      },
       enableEdgeEvents: true,
       renderEdgeLabels: true,
       defaultDrawNodeLabel: drawDiscNodeLabel,
@@ -106,12 +106,18 @@ function Chart(props: Props) {
 
     const renderer = new Sigma(graph, sigmaContainer.current, settings);
 
-    // Create a custom bbox that moves the coordinate [0,0] from the center of the screen to the upper left corner
-    const bbox = renderer.getBBox();
-    renderer.setCustomBBox({
-      x: [0, bbox.x[1] - bbox.x[0]],
-      y: [0, bbox.y[1] - bbox.y[0]],
-    });
+    const setBBox = () => {
+      renderer.setCustomBBox({
+        x: [0, renderer.getContainer().clientWidth],
+        y: [0, renderer.getContainer().clientHeight],
+      });
+    }
+
+    // Create a custom bbox because the option "autoCenter" is not currently working in sigma
+    setBBox();
+
+    // Since we are using a custom bbox, we need to set it if we change the window size
+    renderer.on("resize", setBBox);
 
     // Ignore all doubleClicks for now
     renderer.on("doubleClickNode", (e) => e.preventSigmaDefault())
@@ -130,10 +136,10 @@ function Chart(props: Props) {
 
   useEffect(() => {
     if (fabric != null) {
-        fabric.elements.container.style.zIndex = drawingMode ? "1" : "-1"
+      fabric.elements.container.style.zIndex = drawingMode ? "1" : "-1"
     }
 
-}, [drawingMode, fabric])
+  }, [drawingMode, fabric])
 
   useRightMousePan(sigmaContainer, sigma)
   useMultiselect(sigma)
