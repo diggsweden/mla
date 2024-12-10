@@ -48,19 +48,30 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
     const stateUpEntities = produce(state.entities, stateDraft => {
       let positions = {} as {[key: string]: {x: number; y: number}}
       if (entities.some(e => e.PosX == null || e.PosY == null)) {
-        const getRandomPosition = () => {
-          return Math.floor(Math.random() * 10) -5;
-        }
         const test = state.graph!.copy()
-        entities.filter(e => !test.hasNode(getId(e))).forEach(e => test.addNode(getId(e), { x: e.PosX ?? getRandomPosition(), y: e.PosY ?? getRandomPosition(), fixed: false}))
+        let i = 0;
+        entities.filter(e => !test.hasNode(getId(e))).forEach(e => {
+          i++
+          const angle = (i * 2 * Math.PI) / test.order;
+          const size = Math.max(state.sigma!.getGraphDimensions().width, state.sigma!.getGraphDimensions().height)
+          return test.addNode(getId(e), { x: e.PosX ?? size * Math.cos(angle), y: e.PosY ?? size * Math.sin(angle), fixed: false })
+        })
         links.forEach(e => test.updateEdgeWithKey(e.Id, e.FromEntityId + e.FromEntityTypeId, e.ToEntityId + e.ToEntityTypeId))
+
+        console.log("before", test.getNodeAttributes(getId(entities[0])))
+
         positions = forceLayout(test, {
-          maxIterations: 50,
-          settings: {
-            gravity: 10
-          },
+          maxIterations: 500,
           isNodeFixed: (_, attr) => attr.fixed
         });
+
+        forceLayout.assign(test, {
+          maxIterations: 500,
+          isNodeFixed: (_, attr) => attr.fixed
+        })
+
+        console.log("after", test.getNodeAttributes(getId(entities[0])))
+        console.log(positions)
       }
 
       for (let entity of entities) {
@@ -77,6 +88,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
         entity = produce(entity, draft => {
           updateProps(draft)
 
+          // Assign positions
           if (draft.PosX == null || draft.PosY == null && positions[getId(draft)] != null) {
             draft.PosX = positions[getId(draft)].x
             draft.PosY = positions[getId(draft)].y
@@ -109,11 +121,13 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           update = [entity]
         } else {
           const found = existing.find(x => x.InternalId === entity.InternalId || (x.DateFrom === entity.DateFrom && x.DateTo === entity.DateTo))
-          if (found !== undefined) {
+          if (found) {
             console.warn('There is already an entity with this id and date date, overwriting')
             const updateEntity = produce(entity, draft => {
               draft.InternalId = found.InternalId
               draft.Properties = mergeProps(found.Properties, entity.Properties)
+              draft.PosX = found.PosX
+              draft.PosY = found.PosY
               updateProps(draft)
             })
             update = [updateEntity, ...existing.filter(x => x.InternalId !== updateEntity.InternalId)]

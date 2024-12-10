@@ -83,11 +83,14 @@ function Chart(props: Props) {
     const settings = {
       zoomToSizeRatioFunction: (x) => x,
       allowInvalidContainer: true,
-      autoRescale: false,
+      autoRescale: true,
       autoCenter: false,
       itemSizesReference: "positions",
       defaultNodeType: "pictogram",
       defaultEdgeType: "straight",
+      stagePadding: 75,
+      minCameraRatio: 0.25,
+      maxCameraRatio: 5,
       nodeProgramClasses: {
         pictogram: NodeProgram
       },

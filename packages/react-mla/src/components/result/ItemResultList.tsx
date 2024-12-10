@@ -169,7 +169,7 @@ function ItemResultList (props: ItemResultProps) {
           for (const linkedEntity of linkedEntities) {
             if (used[getId(linkedEntity)] == null) {
               addGroup(groupname, linkedEntity, entity, group, used)
-            } else {
+            } else if (group.primary !== linkedEntity && getId(linkedEntity) !== groupname) {
               group.entities.push({ primary: linkedEntity, entities: [], links: [link] })
             }
           }

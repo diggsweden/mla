@@ -20,7 +20,6 @@ import AppShortcuts from './components/common/AppShortcuts'
 import Footer from './components/common/Footer'
 import Map from './components/map/Map'
 import i18n from "i18next";
-import CalculateWorker from './worker/calculateWorker?worker';
 
 import './App.scss'
 
@@ -29,16 +28,6 @@ export default function App () {
   const map = useAppStore((state) => state.showMap)
   const context = useMainStore((state) => state.context)
   const title = useMemo(() => getContextValue(context, 'title') ?? i18n.t('name'), [context])
-
-  const worker = new CalculateWorker();
-  worker.onmessage = (event: any) => {
-    const { result } = event.data;
-    console.log("from worker", result);
-    worker.terminate(); // Clean up the worker after it finishes
-  };
-
-  // Send data to the worker
-  worker.postMessage({ numbers: [1, 2, 3, 4, 5] });
 
   return (
     <AppShortcuts className="m-h-full m-w-full m-max-h-full m-max-w-full m-text-base m-flex m-flex-col">
