@@ -32,13 +32,13 @@ export default function bindFabricLayer(
     fab.selectionDashArray = [5, 5]
 
     const cam = sigma.getCamera()
-    const container = sigma.getContainer()
     const handleZoom = () => {
         const e = cam.getState()
         const xy = sigma.graphToViewport(e)
+        const viewport = sigma.getDimensions()
 
-        const center = { x: xy.x - container.clientWidth / 2, y: xy.y - container.clientHeight / 2 }
-        const topLeft = { x: -center.x - container.clientWidth / 2, y: -center.y - container.clientHeight / 2 }
+        const center = { x: xy.x - viewport.width / 2, y: xy.y - viewport.height / 2 }
+        const topLeft = { x: -center.x - viewport.width / 2, y: -center.y - viewport.height / 2 }
 
         const zoom = 1 / e.ratio
 
@@ -47,11 +47,12 @@ export default function bindFabricLayer(
     }
 
     const handleResize = () => {
-        const wscale = container.clientWidth / fab.getWidth();
-        const hscale = container.clientHeight / fab.getHeight();
+        const viewport = sigma.getDimensions()
+        const wscale = viewport.width / fab.getWidth();
+        const hscale = viewport.height / fab.getHeight();
         const zoom = fab.getZoom()
 
-        fab.setDimensions({ width: container.clientWidth, height: container.clientHeight });
+        fab.setDimensions({ width: viewport.width, height:viewport.height });
         fab.setViewportTransform([zoom * wscale, 0, 0, zoom * hscale, 0, 0]);
 
         handleZoom()
