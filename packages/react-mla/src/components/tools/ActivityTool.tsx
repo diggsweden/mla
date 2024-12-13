@@ -32,7 +32,7 @@ interface History {
   event?: IPhaseEvent
 }
 
-function ActivityTool (props: Props) {
+function ActivityTool(props: Props) {
   const { t } = useTranslation();
   const ref = createRef<HTMLDivElement>()
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
@@ -53,7 +53,7 @@ function ActivityTool (props: Props) {
 
   const [showAll, setShowAll] = useState(false)
 
-  function selected (item: History) {
+  function selected(item: History) {
     if (item.item != null) {
       setSelected([getId(item.item)])
       setDate(item.date)
@@ -71,7 +71,7 @@ function ActivityTool (props: Props) {
       }
     }
 
-    setTimespan( {DateFrom: start, DateTo: end} );
+    setTimespan({ DateFrom: start, DateTo: end });
   }
 
   const getColor = useCallback((e: IChartBase) => {
@@ -168,7 +168,7 @@ function ActivityTool (props: Props) {
                 item: ent,
                 date: ent.DateFrom,
                 rubrik: ent.LabelShort,
-                text:  t('is added') + '\n' + ent.LabelLong,
+                text: t('is added') + '\n' + ent.LabelLong,
                 color: getColor(ent),
                 separator: false
               })
@@ -177,7 +177,7 @@ function ActivityTool (props: Props) {
                 item: ent,
                 date: ent.DateTo,
                 rubrik: ent.LabelShort,
-                text:  t('is removed') + '\n' + ent.LabelLong,
+                text: t('is removed') + '\n' + ent.LabelLong,
                 color: getColor(ent),
                 separator: false
               })
@@ -208,7 +208,7 @@ function ActivityTool (props: Props) {
 
   // Add the current date to the correct relative position
   const historyView = useMemo(() => {
-    const middleDate  = getDateBetween(currentDate).startOf("day")
+    const middleDate = getDateBetween(currentDate).startOf("day")
     const separator: History = { date: middleDate, color: '', rubrik: '', text: '', separator: true }
     let found = -1
 
@@ -232,9 +232,9 @@ function ActivityTool (props: Props) {
 
   return (
     <div className={props.className}>
-      { type &&
+      {type &&
         <div className="m-w-full m-mb-3">
-          <Toggle title={t('show all')} value={showAll} onChange={() => { setShowAll(!showAll) }} className=''/>
+          <Toggle title={t('show all')} value={showAll} onChange={() => { setShowAll(!showAll) }} className='' />
         </div>
       }
       <div className="m-h-full m-w-full m-border-l m-border-gray-300 m-">
@@ -254,14 +254,14 @@ function ActivityTool (props: Props) {
                         setEditevent({ ...m.event })
                       }
                     }}>
-                      <Icon name="edit" className="m-h-4"/>
+                      <Icon name="edit" className="m-h-4" />
                     </span>
                   </div>
                 </div>
               </div>
             } else if (m.separator) {
               return <div key={i} ref={ref} className='m-cursor-default m-ml-4 m-mb-3 m-font-semibold m-text-center m-relative before:m-block before:m-absolute before:m-h-1 before:m-bg-primary before:m-left-0 before:m-w-16 before:m-top-1/2 after:m-block after:m-absolute after:m-h-1 after:m-bg-primary after:m-right-0 after:m-w-16 after:m-top-1/2'>
-                <div>{ toDateString(m.date) }</div>
+                <div>{toDateString(m.date)}</div>
               </div>
             } else {
               return <div className="m-w-full m-flex m-pb-3 m-cursor-pointer m-" key={i} onClick={() => { selected(m) }}>
@@ -273,7 +273,7 @@ function ActivityTool (props: Props) {
                   </div>
                 </div>
                 <div className='m-border m-bg-white m-w-full m-p-2 m-ms-1'>
-                  <div className="m-text-primary m-text-sm m-font-bold">{ toDateAndTimeString(m.date) } - {m.rubrik}</div>
+                  <div className="m-text-primary m-text-sm m-font-bold">{toDateAndTimeString(m.date)} - {m.rubrik}</div>
                   <div className="m-text-sm">{m.text}</div>
                 </div>
               </div>

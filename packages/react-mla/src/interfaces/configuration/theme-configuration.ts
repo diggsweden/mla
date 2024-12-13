@@ -6,6 +6,7 @@ interface IThemeConfiguration {
   Primary: string
   Secondary: string
   Icon: string
+  IconBorder?: boolean,
   CustomIconColorPicklist?: IColor[]
   CustomContourColorPicklist?: IColor[]
 }

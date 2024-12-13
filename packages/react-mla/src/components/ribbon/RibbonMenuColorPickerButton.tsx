@@ -19,13 +19,18 @@ interface RibbonMenuColorPickerButtonProps {
   onColorSelected: (color?: string) => void
 }
 
-function RibbonMenuColorPickerButton (props: RibbonMenuColorPickerButtonProps) {
+function RibbonMenuColorPickerButton(props: RibbonMenuColorPickerButtonProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false)
   const ctxDropDownMenu = useRef<HTMLDivElement>(null)
 
   const handleOpen = () => {
     setOpen(!open)
+  }
+
+  const handleColorSelected = (color?: string) => {
+    props.onColorSelected(color)
+    setOpen(false)
   }
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -55,27 +60,27 @@ function RibbonMenuColorPickerButton (props: RibbonMenuColorPickerButtonProps) {
             <div>
               <div className="m-bg-gray-200 m-py-1 m-px-2 m-text-sm m-font-semibold m-border-none">{t('theme colors')}</div>
               <div className="m-grid m-grid-cols-6 m-gap-1 m-p-1">
-                { props.colors.map(c => (
-                  <div key={c.Name} title={c.Name} onClick={() => { props.onColorSelected(c.Color) } } className={colorClass} style={ { backgroundColor: c.Color } }></div>
+                {props.colors.map(c => (
+                  <div key={c.Name} title={c.Name} onClick={() => { handleColorSelected(c.Color) }} className={colorClass} style={{ backgroundColor: c.Color }}></div>
                 ))}
               </div>
             </div>
           }
           <div className="m-bg-gray-200 m-py-1 m-px-2 m-text-sm m-font-semibold">{('default colors')}</div>
           <div className="m-flex m-gap-1 m-p-1">
-            <div key={'blue'} title={t('blue')} onClick={() => { props.onColorSelected('#4169E1') } } className={colorClass} style={ { backgroundColor: '#4169E1' } }></div>
-            <div key={'green'} title={t('green')} onClick={() => { props.onColorSelected('#008000') } } className={colorClass} style={ { backgroundColor: '#008000' } }></div>
-            <div key={'red'} title={t('red')} onClick={() => { props.onColorSelected('#FF4040') } } className={colorClass} style={ { backgroundColor: '#FF4040' } }></div>
-            <div key={'yellow'} title={t('yellow')} onClick={() => { props.onColorSelected('#FFD700') } } className={colorClass} style={ { backgroundColor: '#FFD700' } }></div>
-            <div key={'purple'} title={t('purple')} onClick={() => { props.onColorSelected('#800080') } } className={colorClass} style={ { backgroundColor: '#800080' } }></div>
-            <div key={'organge'} title={t('organge')} onClick={() => { props.onColorSelected('#FFA500') } } className={colorClass} style={ { backgroundColor: '#FFA500' } }></div>
+            <div key={'blue'} title={t('blue')} onClick={() => { handleColorSelected('#4169E1') }} className={colorClass} style={{ backgroundColor: '#4169E1' }}></div>
+            <div key={'green'} title={t('green')} onClick={() => { handleColorSelected('#008000') }} className={colorClass} style={{ backgroundColor: '#008000' }}></div>
+            <div key={'red'} title={t('red')} onClick={() => { handleColorSelected('#FF4040') }} className={colorClass} style={{ backgroundColor: '#FF4040' }}></div>
+            <div key={'yellow'} title={t('yellow')} onClick={() => { handleColorSelected('#FFD700') }} className={colorClass} style={{ backgroundColor: '#FFD700' }}></div>
+            <div key={'purple'} title={t('purple')} onClick={() => { handleColorSelected('#800080') }} className={colorClass} style={{ backgroundColor: '#800080' }}></div>
+            <div key={'organge'} title={t('organge')} onClick={() => { handleColorSelected('#FFA500') }} className={colorClass} style={{ backgroundColor: '#FFA500' }}></div>
           </div>
-          <div className="m-flex m-text-sm m-text-left m-border-none hover:m-bg-blue-100 m-text-gray-700 m-p-1 m-whitespace-nowrap" onClick={() => { props.onColorSelected(undefined) } } >
+          <div className="m-flex m-text-sm m-text-left m-border-none hover:m-bg-blue-100 m-text-gray-700 m-p-1 m-whitespace-nowrap" onClick={() => { handleColorSelected(undefined) }} >
             <div className="m-w-4 m-h-4 m-border m-bg-gray-100 m-border-gray-400 m-mr-2"></div>
             {t('reset color')}
           </div>
         </div>
-        )
+      )
       : null}
   </div>
 }

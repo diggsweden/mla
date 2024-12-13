@@ -16,7 +16,8 @@ import * as global from '../global.json'
 export interface IIcon {
   id: string
   name: string,
-  foreColor: string,
+  iconColor: string,
+  borderColor?: string,
   backgroundColor: string
 }
 
@@ -85,14 +86,15 @@ class ViewService {
     const view = viewService.getView(entity.TypeId, entity.GlobalType)
     const configurationRule = this.getRule(entity, viewConfiguration)
     const icon = configurationRule?.Icon ?? view.Icon
-    const shadeColor = entity.Color ?? configurationRule?.Color ?? view.Color
+    const iconColor = entity.Color ?? configurationRule?.Color ?? view.Color
     return icon === undefined
       ? undefined
       : {
-        id: `${icon}${shadeColor}${entity.MarkIcon}${entity.MarkColor}`,
+        id: `${icon}${iconColor}${entity.BorderColor}`,
         name: icon,
-        foreColor: shadeColor,
-        backgroundColor: 'white'
+        iconColor: iconColor,
+        borderColor: entity.BorderColor,
+        backgroundColor: entity.BackgroundColor ?? 'white'
       }
   }
 

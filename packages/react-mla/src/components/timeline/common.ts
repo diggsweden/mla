@@ -11,7 +11,7 @@ import { IViewConfiguration } from "../../interfaces/configuration/view-configur
 
 export const pixelsPerMonth = 96
 
-export function calculatePixelOffset(date: DateTime, startOffset: DateTime) : number {
+export function calculatePixelOffset(date: DateTime, startOffset: DateTime): number {
   const months = Math.floor(date.startOf("month").diff(startOffset, "months").months)
   const monthsPixels = pixelsPerMonth * (months)
   const datePixels = (pixelsPerMonth / date.daysInMonth!) * date.day
@@ -21,49 +21,49 @@ export function calculatePixelOffset(date: DateTime, startOffset: DateTime) : nu
 
 export function createHistoryDots(things: IChartBase[][], startOffset: DateTime, viewConfig: IViewConfiguration) {
   const history = [] as HistoryDot[]
-    for (const list of things) {
-      const ent = list[0]
-      const view = viewService.getView(ent.TypeId)
-      if (view.Show === false) {
-        continue
-      }
-
-      const evs = list.filter(x => x.DateFrom != null || x.DateTo != null);
-      for (const ent of evs) {
-        const isActivity = isSameDay(ent.DateFrom, ent.DateTo)
-        if (ent.DateFrom) {
-          let date = ent.DateFrom
-          if (isActivity) {
-            date = getDateBetween(ent)
-          }
-
-          history.push({
-            date: date,
-            rubrik: ent.LabelShort,
-            text: ent.LabelLong,
-            id: getId(ent),
-            color: getColor(ent, viewConfig),
-            offset: calculatePixelOffset(date, startOffset)
-          })
-        }
-
-        if (ent.DateTo && !isActivity) {
-          const date = ent.DateTo.plus( { day: 1})
-
-          history.push({
-            date,
-            rubrik: ent.LabelShort,
-            text: ent.LabelLong,
-            id: getId(ent),
-            color: getColor(ent, viewConfig),
-            offset: calculatePixelOffset(date, startOffset)
-          })
-        }
-      }
+  for (const list of things) {
+    const ent = list[0]
+    const view = viewService.getView(ent.TypeId)
+    if (view.Show === false) {
+      continue
     }
 
-    history.sort((a, b) => a.date.diff(b.date).milliseconds)
-    return history
+    const evs = list.filter(x => x.DateFrom != null || x.DateTo != null);
+    for (const ent of evs) {
+      const isActivity = isSameDay(ent.DateFrom, ent.DateTo)
+      if (ent.DateFrom) {
+        let date = ent.DateFrom
+        if (isActivity) {
+          date = getDateBetween(ent)
+        }
+
+        history.push({
+          date: date,
+          rubrik: ent.LabelShort,
+          text: ent.LabelLong,
+          id: getId(ent),
+          color: getColor(ent, viewConfig),
+          offset: calculatePixelOffset(date, startOffset)
+        })
+      }
+
+      if (ent.DateTo && !isActivity) {
+        const date = ent.DateTo.plus({ day: 1 })
+
+        history.push({
+          date,
+          rubrik: ent.LabelShort,
+          text: ent.LabelLong,
+          id: getId(ent),
+          color: getColor(ent, viewConfig),
+          offset: calculatePixelOffset(date, startOffset)
+        })
+      }
+    }
+  }
+
+  history.sort((a, b) => a.date.diff(b.date).milliseconds)
+  return history
 }
 
 export interface HistoryDot {

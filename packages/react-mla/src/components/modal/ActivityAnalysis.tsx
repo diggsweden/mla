@@ -67,15 +67,15 @@ interface Attribute {
   Show: boolean
 }
 
-function within (period: TimePeriod, thing: IChartBase): boolean {
+function within(period: TimePeriod, thing: IChartBase): boolean {
   const interval = Interval.fromDateTimes(period.From, period.To)
 
   return interval.contains(thing.DateFrom!) && interval.contains(thing.DateTo!)
 }
 
-function ActivityAnalysis (props: Props) {
+function ActivityAnalysis(props: Props) {
   const { t } = useTranslation();
-  
+
   const entities = useMainStore((state) => state.entities)
   const links = useMainStore((state) => state.links)
   const events = useMainStore((state) => state.phaseEvents)
@@ -93,7 +93,7 @@ function ActivityAnalysis (props: Props) {
   const [attributes, setAttributes] = useState([] as Attribute[])
   const [showSettings, setShowSettings] = useState(undefined as undefined | { x: number, y: number })
 
-  function filterUniqueLinks (value: Link, index: number, array: Link[]) {
+  function filterUniqueLinks(value: Link, index: number, array: Link[]) {
     return (
       array.findIndex(
         (obj) => obj.Id === value.Id
@@ -101,7 +101,7 @@ function ActivityAnalysis (props: Props) {
     )
   }
 
-  function getColor (e: IEntity, v: IViewConfiguration): string | undefined {
+  function getColor(e: IEntity, v: IViewConfiguration): string | undefined {
     if (e.Color) {
       return e.Color
     }
@@ -133,7 +133,7 @@ function ActivityAnalysis (props: Props) {
     const desc = Object.values(entities).filter(e => e[0].TypeId === config.EntityTypeId).flat()
     const inter: Intervall = { Start: {}, End: {} }
 
-    function mapLink (link: ILink): Link[] {
+    function mapLink(link: ILink): Link[] {
       const result = [] as Link[]
 
       let propValue = undefined as string | undefined
@@ -276,24 +276,24 @@ function ActivityAnalysis (props: Props) {
     </div>
   }
 
-  function show (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function show(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     setShowSettings({ x: e.clientX, y: e.clientY })
   }
 
-  function toggleAttribute (attr: Attribute) {
+  function toggleAttribute(attr: Attribute) {
     const idx = attributes.findIndex(a => a === attr)
     const update = [...attributes]
     update.splice(idx, 1, { Name: attr.Name, Show: !attr.Show })
     setAttributes(update)
   }
 
-  function shouldShowAttribute (...attrs: string[]): boolean {
+  function shouldShowAttribute(...attrs: string[]): boolean {
     return attrs.some(a => {
       return attributes.some(at => at.Name === a && at.Show)
     })
   }
 
-  function dots (count: number, color: string): ReactElement[] {
+  function dots(count: number, color: string): ReactElement[] {
     const result = [] as ReactElement[]
     for (let i = 0; i < Math.min(10, count); i++) {
       result.push(<svg key={i} className={`m-h-3 m-w-3 m-mt-1 m-inline m-z-10 ${i > 0 ? ' m-ml-1' : ''}`}>
@@ -305,7 +305,7 @@ function ActivityAnalysis (props: Props) {
     return result
   }
 
-  function dot (color?: string) {
+  function dot(color?: string) {
     if (color) {
       return <svg className="m-w-3 m-h-3 m-mr-1 m-inline"><circle cx="4" cy="4" r="4" fill={color} /></svg>
     }
@@ -430,7 +430,7 @@ function ActivityAnalysis (props: Props) {
         </div>
 
       }
-      <Popover backgroundClass='bg-gray-400/20' show={showSettings !== undefined} hide={() => { setShowSettings(undefined) } } x={showSettings?.x ?? 0} y={showSettings?.y ?? 0}>
+      <Popover backgroundClass='bg-gray-400/20' show={showSettings !== undefined} hide={() => { setShowSettings(undefined) }} x={showSettings?.x ?? 0} y={showSettings?.y ?? 0}>
         <Toggle title={t('show as date diff')} value={dateDiff} onChange={() => { setDateDiff(!dateDiff) }} className="m-mx-3 m-my-2" />
         {attributes.map((a) => (
           <Toggle key={a.Name} title={a.Name + ':'} value={a.Show} onChange={() => { toggleAttribute(a) }} className="m-mx-3 m-mb-2" />
@@ -440,7 +440,7 @@ function ActivityAnalysis (props: Props) {
   )
 }
 
-function daysBetween (date1: DateTime, date2: DateTime): number {
+function daysBetween(date1: DateTime, date2: DateTime): number {
   return Math.floor(date2.diff(date1, "days").days)
 }
 

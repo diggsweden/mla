@@ -4,6 +4,7 @@
 
 import useMainStore from '../../../store/main-store'
 import viewService from '../../../services/viewService'
+import configService from '../../../services/configurationService';
 import { useEffect, useMemo, useRef } from 'react'
 import useAppStore from '../../../store/app-store'
 import type { IEntity } from '../../../interfaces/data-models'
@@ -23,6 +24,7 @@ function ChartNode(props: Props) {
   const selectedIds = useMainStore(state => state.selectedIds)
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
   const selectedView = useAppStore(state => state.thingViewConfiguration[entity.TypeId])
+  const showIconBorder = configService.getConfiguration().Theme?.IconBorder == true;
 
   const id = useMemo(() => {
     return getId(entity)
@@ -49,7 +51,6 @@ function ChartNode(props: Props) {
       x: entity.PosX,
       y: entity.PosY,
       fixed: true,
-      color: "white",
       size: entity.Size ?? DEFAULT_NODE_SIZE
     })
 
@@ -60,7 +61,7 @@ function ChartNode(props: Props) {
         created.current = null
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, props.graph])
 
   useEffect(() => {
@@ -78,17 +79,15 @@ function ChartNode(props: Props) {
 
   useEffect(() => {
     if (created.current) {
+      const borderColor = icon?.borderColor ? icon?.borderColor : (selected ? "#60a5fa" : (showIconBorder ? icon?.iconColor : "#FFFFFF"))
       props.graph.setNodeAttribute(created.current, "image", icon?.name)
-      props.graph.setNodeAttribute(created.current, "pictoColor", icon?.foreColor)
-      props.graph.setNodeAttribute(created.current, "borderColor", selected ? "#60a5fa" : icon?.foreColor)
-    }
-  }, [icon, props.graph, selected])
+      props.graph.setNodeAttribute(created.current, "iconColor", icon?.iconColor)
+      props.graph.setNodeAttribute(created.current, "borderColor", borderColor)
 
-  useEffect(() => {
-    if (created.current) {
+      console.log(icon?.backgroundColor)
       props.graph.setNodeAttribute(created.current, "color", selected ? "#dbeafe" : icon?.backgroundColor)
     }
-  }, [icon?.backgroundColor, props.graph, selected])
+  }, [icon, props.graph, showIconBorder, selected])
 
   useEffect(() => {
     if (created.current) {

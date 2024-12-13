@@ -8,7 +8,6 @@ interface IEntity extends IChartBase {
   PosX?: number
   PosY?: number
   Coordinates?: { lat: number, lng: number }
-  MarkIcon?: string
   ShowOnMap?: boolean
 }
 

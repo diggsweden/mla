@@ -81,7 +81,7 @@ function ChartEdge(props: Props) {
         created.current = null
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, link.Direction, fromId, props.graph, toId])
 
   useEffect(() => {
@@ -98,9 +98,9 @@ function ChartEdge(props: Props) {
 
   useEffect(() => {
     if (created.current) {
-      props.graph.setEdgeAttribute(created.current, "color", selected ? "#60a5fa" : undefined)
+      props.graph.setEdgeAttribute(created.current, "color", selected ? "#60a5fa" : link.Color)
     }
-  }, [props.graph, selected])
+  }, [link.Color, props.graph, selected])
 
   useEffect(() => {
     if (created.current) {

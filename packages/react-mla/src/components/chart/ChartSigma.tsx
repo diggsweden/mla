@@ -74,7 +74,7 @@ function Chart(props: Props) {
       padding: 0.3,
       size: { mode: "force", value: 256 },
       drawingMode: "color",
-      colorAttribute: "borderColor",
+      colorAttribute: "iconColor",
       createCallback: preloadImages
     });
 

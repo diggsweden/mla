@@ -46,7 +46,8 @@
                 "Name": "Färg 5",
                 "Color": "#339900"
             }
-        ]
+        ],
+        "IconBorder": true
     },
     "Menu": {
         "Start": {},
@@ -209,13 +210,23 @@
             {
                 "Url": "http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}",
                 "MaxZoom": 20,
-                "SubDomains":["mt0","mt1","mt2","mt3"],
+                "SubDomains": [
+                    "mt0",
+                    "mt1",
+                    "mt2",
+                    "mt3"
+                ],
                 "Name": "Gooogle Satellite"
             },
             {
                 "Url": "http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}",
                 "MaxZoom": 20,
-                "SubDomains":["mt0","mt1","mt2","mt3"],
+                "SubDomains": [
+                    "mt0",
+                    "mt1",
+                    "mt2",
+                    "mt3"
+                ],
                 "Name": "Gooogle Streets"
             }
         ]
