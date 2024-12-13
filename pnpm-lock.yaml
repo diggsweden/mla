@@ -106,7 +106,7 @@ importers:
     dependencies:
       '@geoman-io/leaflet-geoman-free':
         specifier: ^2.17.0
-        version: 2.17.0(leaflet@1.9.4)
+        version: 2.18.0(leaflet@1.9.4)
       glob:
         specifier: ^11.0.0
         version: 11.0.0
@@ -740,8 +740,8 @@ packages:
     resolution: {integrity: sha512-zSkKow6H5Kdm0ZUQUB2kV5JIXqoG0+uH5YADhaEHswm664N9Db8dXSi0nMJpacpMf+MyyglF1vnZohpEg5yUtg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@geoman-io/leaflet-geoman-free@2.17.0':
-    resolution: {integrity: sha512-vAY9tKB2I/Ui8d3QUBuebWnunI2sGjsfAUTXMMcf5UpISvPz67io4hpbKXid9GNsW6P4LGv1+ZzrmkpM78GzHA==}
+  '@geoman-io/leaflet-geoman-free@2.18.0':
+    resolution: {integrity: sha512-cM3cSCDSvcD4No0zjIHT/Kz1F/0ILqTp02msjRvOGwjZ9gOfDVup/TMIV604f5y5kOGq/JmoDvkN0I86swflaA==}
     peerDependencies:
       leaflet: ^1.2.0
 
@@ -3478,8 +3478,8 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
-  splaytree-ts@1.0.1:
-    resolution: {integrity: sha512-B+VzCm33/KEchi/fzT6/3NRHm8k5+Kf37SBQO3meHHS/tK2xBnIm4ZvusQ1wUpHgKMCCqEWgXnwFXAa1nD289g==}
+  splaytree-ts@1.0.2:
+    resolution: {integrity: sha512-0kGecIZNIReCSiznK3uheYB8sbstLjCZLiwcQwbmLhgHJj2gz6OnSPkVzJQCMnmEz1BQ4gPK59ylhBoEWOhGNA==}
 
   split2@4.2.0:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
@@ -4440,7 +4440,7 @@ snapshots:
     dependencies:
       levn: 0.4.1
 
-  '@geoman-io/leaflet-geoman-free@2.17.0(leaflet@1.9.4)':
+  '@geoman-io/leaflet-geoman-free@2.18.0(leaflet@1.9.4)':
     dependencies:
       '@turf/boolean-contains': 6.5.0
       '@turf/kinks': 6.5.0
@@ -7032,7 +7032,7 @@ snapshots:
   polyclip-ts@0.16.7:
     dependencies:
       bignumber.js: 9.1.2
-      splaytree-ts: 1.0.1
+      splaytree-ts: 1.0.2
 
   possible-typed-array-names@1.0.0: {}
 
@@ -7431,7 +7431,7 @@ snapshots:
 
   source-map@0.6.1: {}
 
-  splaytree-ts@1.0.1: {}
+  splaytree-ts@1.0.2: {}
 
   split2@4.2.0: {}
 
