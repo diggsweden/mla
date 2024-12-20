@@ -65,7 +65,7 @@
     "@types/luxon": "3.4.2",
     "@types/node": "20.17.10",
     "@types/offscreencanvas": "2019.7.3",
-    "@types/react": "18.3.17",
+    "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "@types/wicg-file-system-access": "2023.10.5",
     "@typescript-eslint/eslint-plugin": "8.18.1",
