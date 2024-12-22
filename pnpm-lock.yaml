@@ -114,8 +114,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.2
       i18next:
-        specifier: ^23.15.1
-        version: 23.16.8
+        specifier: ^24.0.0
+        version: 24.1.0(typescript@5.5.4)
       immer:
         specifier: ^10.1.1
         version: 10.1.1
@@ -139,7 +139,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       react-i18next:
         specifier: ^15.0.1
-        version: 15.2.0(i18next@23.16.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 15.2.0(i18next@24.1.0(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwindcss:
         specifier: 3.4.17
         version: 3.4.17
@@ -2328,8 +2328,13 @@ packages:
     engines: {node: ^12.18.0 || >=14.13.1}
     hasBin: true
 
-  i18next@23.16.8:
-    resolution: {integrity: sha512-06r/TitrM88Mg5FdUXAKL96dJMzgqLE5dv3ryBAra4KCwD9mJ4ndOTS95ZuymIGoE+2hzfdaMak2X11/es7ZWg==}
+  i18next@24.1.0:
+    resolution: {integrity: sha512-suKlX82AlptkMUO5YRfaAeH4FQyyKvR66jNaubTMiyPPMx7INU6PXAiy3PGULc0q6K+t9nxmDf/TRj9KjAivmw==}
+    peerDependencies:
+      typescript: ^5
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -6431,9 +6436,11 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  i18next@23.16.8:
+  i18next@24.1.0(typescript@5.5.4):
     dependencies:
       '@babel/runtime': 7.26.0
+    optionalDependencies:
+      typescript: 5.5.4
 
   iconv-lite@0.4.24:
     dependencies:
@@ -7247,11 +7254,11 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-i18next@15.2.0(i18next@23.16.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-i18next@15.2.0(i18next@24.1.0(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.26.0
       html-parse-stringify: 3.0.1
-      i18next: 23.16.8
+      i18next: 24.1.0(typescript@5.5.4)
       react: 18.3.1
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
