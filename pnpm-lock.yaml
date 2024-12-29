@@ -106,7 +106,7 @@ importers:
     dependencies:
       '@geoman-io/leaflet-geoman-free':
         specifier: ^2.17.0
-        version: 2.18.0(leaflet@1.9.4)
+        version: 2.18.1(leaflet@1.9.4)
       glob:
         specifier: ^11.0.0
         version: 11.0.0
@@ -746,8 +746,8 @@ packages:
     resolution: {integrity: sha512-zSkKow6H5Kdm0ZUQUB2kV5JIXqoG0+uH5YADhaEHswm664N9Db8dXSi0nMJpacpMf+MyyglF1vnZohpEg5yUtg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@geoman-io/leaflet-geoman-free@2.18.0':
-    resolution: {integrity: sha512-cM3cSCDSvcD4No0zjIHT/Kz1F/0ILqTp02msjRvOGwjZ9gOfDVup/TMIV604f5y5kOGq/JmoDvkN0I86swflaA==}
+  '@geoman-io/leaflet-geoman-free@2.18.1':
+    resolution: {integrity: sha512-6xb2hekgDTMeFcznKjM5i7JpZvPwQYYQpwmqZhWzVHt+SdA5Ijnn4ViblEmIDYNBiA33UgjJ3DaA+3E+5LiCJw==}
     peerDependencies:
       leaflet: ^1.2.0
 
@@ -1102,6 +1102,9 @@ packages:
   '@turf/bbox@6.5.0':
     resolution: {integrity: sha512-RBbLaao5hXTYyyg577iuMtDB8ehxMlUqHEJiMs8jT1GHkFhr6sYre3lmLsPeYEi/ZKj5TP5tt7fkzNdJ4GIVyw==}
 
+  '@turf/bbox@7.2.0':
+    resolution: {integrity: sha512-wzHEjCXlYZiDludDbXkpBSmv8Zu6tPGLmJ1sXQ6qDwpLE1Ew3mcWqt8AaxfTP5QwDNQa3sf2vvgTEzNbPQkCiA==}
+
   '@turf/bearing@6.5.0':
     resolution: {integrity: sha512-dxINYhIEMzgDOztyMZc20I7ssYVNEpSv04VbMo5YPQsqa80KO3TFvbuCahMsCAW5z8Tncc8dwBlEFrmRjJG33A==}
 
@@ -1123,6 +1126,9 @@ packages:
   '@turf/helpers@6.5.0':
     resolution: {integrity: sha512-VbI1dV5bLFzohYYdgqwikdMVpe7pJ9X3E+dlr425wa2/sMJqYDhTO++ec38/pcPvPE6oD9WEEeU3Xu3gza+VPw==}
 
+  '@turf/helpers@7.2.0':
+    resolution: {integrity: sha512-cXo7bKNZoa7aC7ydLmUR02oB3IgDe7MxiPuRz3cCtYQHn+BJ6h1tihmamYDWWUlPHgSNF0i3ATc4WmDECZafKw==}
+
   '@turf/invariant@6.5.0':
     resolution: {integrity: sha512-Wv8PRNCtPD31UVbdJE/KVAWKe7l6US+lJItRR/HOEW3eh+U/JwRCSUl/KZ7bmjM/C+zLNoreM2TU6OoLACs4eg==}
 
@@ -1140,6 +1146,9 @@ packages:
 
   '@turf/meta@6.5.0':
     resolution: {integrity: sha512-RrArvtsV0vdsCBegoBtOalgdSOfkBrTJ07VkpiCnq/491W67hnMWmDu7e6Ztw0C3WldRYTXkg3SumfdzZxLBHA==}
+
+  '@turf/meta@7.2.0':
+    resolution: {integrity: sha512-igzTdHsQc8TV1RhPuOLVo74Px/hyPrVgVOTgjWQZzt3J9BVseCdpfY/0cJBdlSRI4S/yTmmHl7gAqjhpYH5Yaw==}
 
   '@turf/nearest-point-on-line@6.5.0':
     resolution: {integrity: sha512-WthrvddddvmymnC+Vf7BrkHGbDOUu6Z3/6bFYUGv1kxw8tiZ6n83/VG6kHz4poHOfS0RaNflzXSkmCi64fLBlg==}
@@ -4475,7 +4484,7 @@ snapshots:
     dependencies:
       levn: 0.4.1
 
-  '@geoman-io/leaflet-geoman-free@2.18.0(leaflet@1.9.4)':
+  '@geoman-io/leaflet-geoman-free@2.18.1(leaflet@1.9.4)':
     dependencies:
       '@turf/boolean-contains': 6.5.0
       '@turf/kinks': 6.5.0
@@ -4854,6 +4863,13 @@ snapshots:
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
 
+  '@turf/bbox@7.2.0':
+    dependencies:
+      '@turf/helpers': 7.2.0
+      '@turf/meta': 7.2.0
+      '@types/geojson': 7946.0.15
+      tslib: 2.8.1
+
   '@turf/bearing@6.5.0':
     dependencies:
       '@turf/helpers': 6.5.0
@@ -4888,6 +4904,11 @@ snapshots:
       '@turf/invariant': 6.5.0
 
   '@turf/helpers@6.5.0': {}
+
+  '@turf/helpers@7.2.0':
+    dependencies:
+      '@types/geojson': 7946.0.15
+      tslib: 2.8.1
 
   '@turf/invariant@6.5.0':
     dependencies:
@@ -4927,6 +4948,11 @@ snapshots:
   '@turf/meta@6.5.0':
     dependencies:
       '@turf/helpers': 6.5.0
+
+  '@turf/meta@7.2.0':
+    dependencies:
+      '@turf/helpers': 7.2.0
+      '@types/geojson': 7946.0.15
 
   '@turf/nearest-point-on-line@6.5.0':
     dependencies:
@@ -6181,7 +6207,7 @@ snapshots:
 
   geojson-rbush@3.2.0:
     dependencies:
-      '@turf/bbox': 6.5.0
+      '@turf/bbox': 7.2.0
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
       '@types/geojson': 7946.0.8
