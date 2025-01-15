@@ -21,7 +21,7 @@ importers:
         version: 19.6.0
       '@commitlint/cz-commitlint':
         specifier: 19.6.1
-        version: 19.6.1(@types/node@20.17.13)(commitizen@4.3.1(@types/node@20.17.13)(typescript@5.7.2))(inquirer@12.3.0(@types/node@20.17.13))(typescript@5.7.2)
+        version: 19.6.1(@types/node@20.17.13)(commitizen@4.3.1(@types/node@20.17.13)(typescript@5.7.2))(inquirer@12.3.2(@types/node@20.17.13))(typescript@5.7.2)
       commitizen:
         specifier: 4.3.1
         version: 4.3.1(@types/node@20.17.13)(typescript@5.7.2)
@@ -29,8 +29,8 @@ importers:
         specifier: 6.3.0
         version: 6.3.0
       inquirer:
-        specifier: 12.3.0
-        version: 12.3.0(@types/node@20.17.13)
+        specifier: 12.3.2
+        version: 12.3.2(@types/node@20.17.13)
       lefthook:
         specifier: 1.10.1
         version: 1.10.1
@@ -2363,8 +2363,8 @@ packages:
     resolution: {integrity: sha512-QQnnxNyfvmHFIsj7gkPcYymR8Jdw/o7mp5ZFihxn6h8Ci6fh3Dx4E1gPjpQEpIuPo9XVNY/ZUwh4BPMjGyL01g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  inquirer@12.3.0:
-    resolution: {integrity: sha512-3NixUXq+hM8ezj2wc7wC37b32/rHq1MwNZDYdvx+d6jokOD+r+i8Q4Pkylh9tISYP114A128LCX8RKhopC5RfQ==}
+  inquirer@12.3.2:
+    resolution: {integrity: sha512-YjQCIcDd3yyDuQrbII0FBtm/ZqNoWtvaC71yeCnd5Vbg4EgzsAGaemzfpzmqfvIZEp2roSwuZZKdM0C65hA43g==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -4279,14 +4279,14 @@ snapshots:
       '@commitlint/types': 19.5.0
       ajv: 8.17.1
 
-  '@commitlint/cz-commitlint@19.6.1(@types/node@20.17.13)(commitizen@4.3.1(@types/node@20.17.13)(typescript@5.7.2))(inquirer@12.3.0(@types/node@20.17.13))(typescript@5.7.2)':
+  '@commitlint/cz-commitlint@19.6.1(@types/node@20.17.13)(commitizen@4.3.1(@types/node@20.17.13)(typescript@5.7.2))(inquirer@12.3.2(@types/node@20.17.13))(typescript@5.7.2)':
     dependencies:
       '@commitlint/ensure': 19.5.0
       '@commitlint/load': 19.6.1(@types/node@20.17.13)(typescript@5.7.2)
       '@commitlint/types': 19.5.0
       chalk: 5.4.1
       commitizen: 4.3.1(@types/node@20.17.13)(typescript@5.7.2)
-      inquirer: 12.3.0(@types/node@20.17.13)
+      inquirer: 12.3.2(@types/node@20.17.13)
       lodash.isplainobject: 4.0.6
       word-wrap: 1.2.5
     transitivePeerDependencies:
@@ -6444,7 +6444,7 @@ snapshots:
 
   ini@4.1.1: {}
 
-  inquirer@12.3.0(@types/node@20.17.13):
+  inquirer@12.3.2(@types/node@20.17.13):
     dependencies:
       '@inquirer/core': 10.1.4(@types/node@20.17.13)
       '@inquirer/prompts': 7.2.3(@types/node@20.17.13)
