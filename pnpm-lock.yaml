@@ -106,7 +106,7 @@ importers:
     dependencies:
       '@geoman-io/leaflet-geoman-free':
         specifier: ^2.17.0
-        version: 2.18.1(leaflet@1.9.4)
+        version: 2.18.3(leaflet@1.9.4)
       glob:
         specifier: ^11.0.0
         version: 11.0.1
@@ -750,8 +750,8 @@ packages:
     resolution: {integrity: sha512-lB05FkqEdUg2AA0xEbUz0SnkXT1LcCTa438W4IWTUh4hdOnVbQyOJ81OrDXsJk/LSiJHubgGEFoR5EHq1NsH1A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@geoman-io/leaflet-geoman-free@2.18.1':
-    resolution: {integrity: sha512-6xb2hekgDTMeFcznKjM5i7JpZvPwQYYQpwmqZhWzVHt+SdA5Ijnn4ViblEmIDYNBiA33UgjJ3DaA+3E+5LiCJw==}
+  '@geoman-io/leaflet-geoman-free@2.18.3':
+    resolution: {integrity: sha512-XzxSKRk2UJUVeGiOt1jU2hyo412Qee1Q0Xsfw4A2r8EoUIo48XKSWfusYe7E53fSPr0aYgZxPevnFdcUXimpdA==}
     peerDependencies:
       leaflet: ^1.2.0
 
@@ -4450,7 +4450,7 @@ snapshots:
       '@eslint/core': 0.10.0
       levn: 0.4.1
 
-  '@geoman-io/leaflet-geoman-free@2.18.1(leaflet@1.9.4)':
+  '@geoman-io/leaflet-geoman-free@2.18.3(leaflet@1.9.4)':
     dependencies:
       '@turf/boolean-contains': 6.5.0
       '@turf/kinks': 6.5.0
