@@ -27,7 +27,7 @@ interface CreateNodeSvgProgramOptions<
 > extends TextureManagerOptions {
   // - If "background", color will be used to color full node behind the image.
   // - If "color", color will be used to color image pixels (for pictograms)
-  drawingMode: "background" | "color";  
+  drawingMode: "background" | "color";
   // If true, the images are always cropped to the circle
   keepWithinCircle: boolean;
   // Allows overriding drawLabel and drawHover returned class methods.
@@ -37,7 +37,7 @@ interface CreateNodeSvgProgramOptions<
   // A padding of 0.05 will always be 5% of the diameter of a node.
   padding: number;
   // Allows using a different color attribute name.
-  colorAttribute: string;  
+  colorAttribute: string;
   // Allows using a different image attribute name.
   imageAttribute: string;
 }

@@ -13,7 +13,7 @@ class IconService {
   private readonly svgs = new Map<string, string>()
   private readonly pngs = new Map<string, string>()
 
-  public async init (): Promise<void> {
+  public async init(): Promise<void> {
     const config = configService.getConfiguration()
 
     const iconsToImport: Record<string, string> = {
@@ -32,11 +32,11 @@ class IconService {
     // }
   }
 
-  public getSVG (icon: string): string {
+  public getSVG(icon: string): string {
     return this.getSVGInternal(icon)
   }
 
-  public async getPNG (icon: string, color: string, icon2?: string, color2?: string, withSelectedStyle?: boolean): Promise<string> {
+  public async getPNG(icon: string, color: string, icon2?: string, color2?: string, withSelectedStyle?: boolean): Promise<string> {
     const key = icon + '-color-' + color + '-size-' + size + '-icon2-' + icon2 + '-color2-' + color2 + '-withSelectedStyle-' + withSelectedStyle
 
     if (this.pngs.has(key)) {
@@ -48,7 +48,7 @@ class IconService {
     return png
   }
 
-  private getSVGInternal (icon: string): string {
+  private getSVGInternal(icon: string): string {
     if (!this.svgs.has(icon)) {
       for (const prefix of ['outlined', 'round', 'sharp']) {
         const test = prefix + '_' + icon

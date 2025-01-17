@@ -4,7 +4,7 @@
 
 import { EventEmitter } from "events";
 import { Coordinates } from "sigma/types";
-import iconService from '../../../../services/iconService'
+import iconService from '../../../../services/iconService';
 
 /**
  * Useful types:
@@ -107,29 +107,29 @@ export async function loadSVGImage(
  */
 
 export function loadRasterImage(
-    imageSource: string
-  ): Promise<HTMLImageElement> {
-    return new Promise((resolve, reject) => {
-      const image = new Image();
-  
-      image.addEventListener(
-        "load",
-        () => {
-          resolve(image);
-        },
-        { once: true },
-      );
-      image.addEventListener(
-        "error",
-        (e) => {
-          reject(e.error);
-        },
-        { once: true },
-      );
-  
-      image.src = imageSource;
-    });
-  }
+  imageSource: string
+): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+
+    image.addEventListener(
+      "load",
+      () => {
+        resolve(image);
+      },
+      { once: true },
+    );
+    image.addEventListener(
+      "error",
+      (e) => {
+        reject(e.error);
+      },
+      { once: true },
+    );
+
+    image.src = imageSource;
+  });
+}
 
 /**
  * This helper computes exact coordinates to draw an image onto a texture.

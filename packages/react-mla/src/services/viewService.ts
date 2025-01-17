@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { freeze } from 'immer'
+import { DateTime } from 'luxon'
 import { type IThemeConfiguration } from '../interfaces/configuration/theme-configuration'
 import type { IBaseViewConfiguration, IRuleConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
 import type { IBase, IChartBase, IEntity } from '../interfaces/data-models'
 import useAppStore from '../store/app-store'
-import configService, { type PropertyAndConfiguration } from './configurationService'
 import { toDateAndTimeString } from '../utils/date'
-import { DateTime } from 'luxon'
+import configService, { type PropertyAndConfiguration } from './configurationService'
 
 import * as global from '../global.json'
 
@@ -51,7 +51,7 @@ class ViewService {
 
     defaultConfig.Show.forEach(obj => {
       if (obj.Icon == null) {
-        obj.Icon = 'default'
+        obj.Icon = 'warning'
       }
 
       if (obj.Color == null) {
