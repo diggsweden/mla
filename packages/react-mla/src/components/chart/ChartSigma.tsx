@@ -2,30 +2,30 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useRef } from 'react'
-import { useDrop } from 'react-dnd'
+import EdgeCurveProgram, { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
+import { createNodeBorderProgram } from "@sigma/node-border";
+import { useEffect, useRef } from 'react';
+import { useDrop } from 'react-dnd';
+import { EdgeArrowProgram, EdgeRectangleProgram, createNodeCompoundProgram } from 'sigma/rendering';
 import { drawDiscNodeHover, drawDiscNodeLabel } from './rendering/node-renderer';
 import { createNodeSvgProgram } from "./rendering/svg-node-renderer/index";
-import { createNodeBorderProgram } from "@sigma/node-border";
-import { EdgeArrowProgram, EdgeRectangleProgram, createNodeCompoundProgram } from 'sigma/rendering';
-import EdgeCurveProgram, { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 
 import Sigma from "sigma";
 import { Settings } from "sigma/settings";
 
 import ContentRenderer from './sigma/ContentRenderer';
 
-import useMainStore from '../../store/main-store'
+import useMainStore from '../../store/main-store';
 
-import useRightMousePan from './right-mouse-pan';
+import useKeyDown from '../../effects/keydown';
+import configService from '../../services/configurationService';
+import useAppStore from '../../store/app-store';
+import bindFabricLayer from './fabric-drawing';
+import useMultiselect from './multiselect';
 import useDragNodes from './node-drag';
 import useNodeHighlight from './node-highlight';
-import useMultiselect from './multiselect';
-import useKeyDown from '../../effects/keydown'
-import configService from '../../services/configurationService';
 import { TextureManager } from './rendering/svg-node-renderer/texture';
-import bindFabricLayer from './fabric-drawing';
-import useAppStore from '../../store/app-store';
+import useRightMousePan from './right-mouse-pan';
 
 interface Props {
   className?: string
@@ -89,8 +89,8 @@ function Chart(props: Props) {
       defaultNodeType: "pictogram",
       defaultEdgeType: "straight",
       stagePadding: 75,
-      minCameraRatio: 0.25,
-      maxCameraRatio: 5,
+      //minCameraRatio: 0.5,
+      //maxCameraRatio: 5,
       nodeProgramClasses: {
         pictogram: NodeProgram
       },

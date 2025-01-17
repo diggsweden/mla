@@ -2,22 +2,23 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import useAppStore from '../../../store/app-store'
-import RibbonMenuButton from '../RibbonMenuButton'
-import RibbonMenuSection from '../RibbonMenuSection'
-import RibbonMenuDivider from '../RibbonMenuDivider'
-import configService from '../../../services/configurationService'
-import { type ChangeEvent, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import useMainStore from '../../../store/main-store'
-import forceAtlas2 from 'graphology-layout-forceatlas2'
-import circlepack from 'graphology-layout/circlepack'
+import { fitViewportToNodes } from '@sigma/utils'
 import louvain from 'graphology-communities-louvain'
+import ForceSupervisor from 'graphology-layout-force/worker'
+import forceAtlas2 from 'graphology-layout-forceatlas2'
 import FA2Layout from "graphology-layout-forceatlas2/worker"
 import NoverlapLayout from 'graphology-layout-noverlap/worker'
-import { animateNodes } from "sigma/utils"
+import circlepack from 'graphology-layout/circlepack'
+import { type ChangeEvent, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PlainObject } from 'sigma/types'
-import { fitViewportToNodes } from '@sigma/utils'
+import { animateNodes } from "sigma/utils"
+import configService from '../../../services/configurationService'
+import useAppStore from '../../../store/app-store'
+import useMainStore from '../../../store/main-store'
+import RibbonMenuButton from '../RibbonMenuButton'
+import RibbonMenuDivider from '../RibbonMenuDivider'
+import RibbonMenuSection from '../RibbonMenuSection'
 
 function LayoutTabPanel() {
   const { t } = useTranslation();
@@ -66,7 +67,7 @@ function LayoutTabPanel() {
     });
   }
 
-  function setGroupLayout() {
+  function setCircleLayout() {
     if (cancelAnimation.current) {
       cancelAnimation.current();
     }
@@ -74,8 +75,9 @@ function LayoutTabPanel() {
     // To directly assign communities as a node attribute
     louvain.assign(graph);
 
+    const scale = graph.nodes().length * 1;
     const positions = circlepack(graph, {
-      scale: 2,
+      scale: scale,
       hierarchyAttributes: ['community'],
     });
 
@@ -83,43 +85,6 @@ function LayoutTabPanel() {
       storePositions();
       fit();
     });
-  }
-
-  function toggleFa2() {
-    if (cancelAnimation.current) {
-      cancelAnimation.current();
-    }
-    if (graph) {
-      if (layout === 'fa2') {
-        setLayout("reset")
-        graph.forEachNode(n => {
-          graph.updateNodeAttribute(n, "fixed", () => true)
-        })
-        storePositions();
-        fit();
-      } else {
-        setLayout('fa2')
-        const sensibleSettings = forceAtlas2.inferSettings(graph);
-        const fa2Layout = new FA2Layout(graph, {
-          settings: {
-            ...sensibleSettings,
-            gravity: 0.025,
-            scalingRatio: 40,
-            adjustSizes: true
-          }
-        });
-
-        graph.forEachNode(n => {
-          graph.removeNodeAttribute(n, "fixed")
-        })
-
-        cancelAnimation.current = () => {
-          fa2Layout.kill();
-        }
-
-        fa2Layout.start();
-      }
-    }
   }
 
   function toggleNoOverlap() {
@@ -138,10 +103,11 @@ function LayoutTabPanel() {
       } else {
         setLayout('na')
 
-        const layout = new NoverlapLayout(graph, {
+        const margin = graph.nodes().length * 20;
+        const noOverlapLayout = new NoverlapLayout(graph, {
           settings: {
             gridSize: 80,
-            margin: 40,
+            margin: margin,
             speed: 1
           }
         });
@@ -151,10 +117,92 @@ function LayoutTabPanel() {
         })
 
         cancelAnimation.current = () => {
-          layout.kill();
+          noOverlapLayout.kill();
         }
 
-        layout.start();
+        noOverlapLayout.start();
+      }
+    }
+  }
+
+  function toggleForceLayout() {
+    if (cancelAnimation.current) {
+      cancelAnimation.current();
+    }
+    if (graph) {
+      if (layout === 'fl') {
+        setLayout("reset")
+        graph.forEachNode(n => {
+          graph.updateNodeAttribute(n, "fixed", () => true)
+        })
+        storePositions();
+        fit();
+      } else {
+        setLayout('fl')
+
+        graph.forEachNode(n => {
+          graph.removeNodeAttribute(n, "fixed")
+        })
+
+        const forceLayoutSupervisor = new ForceSupervisor(graph, {
+          settings: {
+            attraction: 0.0005,
+            repulsion: 10,
+            gravity: 0.0001,
+            inertia: 0.6,
+            maxMove: 200
+          }
+        });
+
+        cancelAnimation.current = () => {
+          forceLayoutSupervisor.kill();
+
+          graph?.forEachNode(n => {
+            const x = graph.getNodeAttribute(n, "x")
+            const y = graph.getNodeAttribute(n, "y")
+            console.log("Pos", n, x, y)
+          })
+
+        }
+
+        forceLayoutSupervisor.start();
+      }
+    }
+  }
+
+  function toggleForceAtlas2Layout() {
+    if (cancelAnimation.current) {
+      cancelAnimation.current();
+    }
+    if (graph) {
+      if (layout === 'fa2') {
+        setLayout("reset")
+        graph.forEachNode(n => {
+          graph.updateNodeAttribute(n, "fixed", () => true)
+        })
+        storePositions();
+        fit();
+      } else {
+        setLayout('fa2')
+        const sensibleSettings = forceAtlas2.inferSettings(graph);
+        const fa2Layout = new FA2Layout(graph, {
+          settings: {
+            ...sensibleSettings,
+            gravity: 0.025,
+            scalingRatio: 400,
+            adjustSizes: true
+          }
+        });
+
+        graph.forEachNode(n => {
+          graph.removeNodeAttribute(n, "fixed")
+        })
+
+        cancelAnimation.current = () => {
+          fa2Layout.kill();
+        }
+
+        fa2Layout.start();
       }
     }
   }
@@ -171,10 +219,11 @@ function LayoutTabPanel() {
 
   return <div className="m-flex m-text-center m-h-full m-p-1">
     <RibbonMenuSection title={t('placement')} >
-      <RibbonMenuButton label={(t('up'))} onClick={() => { setRandomLayout() }} iconName="outlined_casino" />
-      <RibbonMenuButton label={'circle'} onClick={() => { setGroupLayout() }} iconName="workspaces" />
-      <RibbonMenuButton label={layout === 'na' ? t('stop') : t('placera')} onClick={() => { toggleNoOverlap() }} iconName="join" iconClassName={layout === 'na' ? 'm-animate-spin' : ''} />
-      <RibbonMenuButton label={layout === 'fa2' ? t('stop') : t('dynamic')} onClick={() => { toggleFa2() }} iconName="hub" iconClassName={layout === 'fa2' ? 'm-animate-spin' : ''} />
+      <RibbonMenuButton label={(t('random'))} onClick={() => { setRandomLayout() }} iconName="outlined_casino" />
+      <RibbonMenuButton label={t('circle')} onClick={() => { setCircleLayout() }} iconName="workspaces" />
+      <RibbonMenuButton label={layout === 'na' ? t('stop') : t('no overlap')} onClick={() => { toggleNoOverlap() }} iconName="join" iconClassName={layout === 'na' ? 'm-animate-spin' : ''} />
+      <RibbonMenuButton label={layout === 'fl' ? t('stop') : t('dynamic 1')} onClick={() => { toggleForceLayout() }} iconName="hub" iconClassName={layout === 'fl' ? 'm-animate-spin' : ''} />
+      <RibbonMenuButton label={layout === 'fa2' ? t('stop') : t('dynamic 2')} onClick={() => { toggleForceAtlas2Layout() }} iconName="hub" iconClassName={layout === 'fa2' ? 'm-animate-spin' : ''} />
     </RibbonMenuSection>
     <RibbonMenuDivider />
     <RibbonMenuSection title={t('views')}>

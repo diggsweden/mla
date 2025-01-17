@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import ChartEntity from './ChartNode'
-import ChartEdge from './ChartEdge'
-import useMainStore from '../../../store/main-store'
 import { useEffect, useMemo } from 'react'
+import useMainStore from '../../../store/main-store'
 import { getId } from '../../../utils/utils'
+import ChartEdge from './ChartEdge'
+import ChartEntity from './ChartNode'
 
-import { DEFAULT_EDGE_CURVATURE, indexParallelEdgesIndex } from "@sigma/edge-curve";
+import { DEFAULT_EDGE_CURVATURE, indexParallelEdgesIndex } from "@sigma/edge-curve"
 
 function ContentRenderer() {
   const date = useMainStore(state => state.currentDate)

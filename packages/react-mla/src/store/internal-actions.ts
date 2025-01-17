@@ -4,15 +4,20 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { WritableDraft, produce } from 'immer'
-import type { IChartBase, IEntity, IHistory, ILink } from '../interfaces/data-models'
-import configService from '../services/configurationService'
-import { getId, getInternalId, isLinked, mergeProps } from '../utils/utils'
-import useMainStore from './main-store'
-import viewService from '../services/viewService'
-import { fixDate } from '../utils/date'
+import Graph from 'graphology';
+import forceLayout from 'graphology-layout-force';
+import { collectLayout } from 'graphology-layout/utils';
+
 import i18n from "i18next";
-import forceLayout from 'graphology-layout-force'
+import { WritableDraft, produce } from 'immer';
+import Sigma from 'sigma';
+import type { IChartBase, IEntity, IHistory, ILink } from '../interfaces/data-models';
+import configService from '../services/configurationService';
+import viewService from '../services/viewService';
+import { fixDate } from '../utils/date';
+import { getId, getInternalId, isLinked, mergeProps } from '../utils/utils';
+import useMainStore from './main-store';
+
 
 function updateProps(draft: WritableDraft<IChartBase>) {
   draft.InternalId = getInternalId()
@@ -25,6 +30,55 @@ function updateProps(draft: WritableDraft<IChartBase>) {
 
 function hasDifferentLabel(b1: IChartBase, b2: IChartBase) {
   return b1.LabelShort !== b2.LabelShort || b1.LabelLong !== b2.LabelLong || b1.LabelChart !== b2.LabelChart
+}
+
+const getLocationCentrumForNewNodes = (sigma: Sigma) => {
+  const viewport = sigma.getContainer().getBoundingClientRect();
+  const graphBox = sigma.viewportToGraph(viewport);
+  const centerX = graphBox.x / 2;
+  const centerY = graphBox.y / 2;
+
+  return { x: centerX, y: centerY }
+}
+
+function calculatePositions(sigma: Sigma, graph: Graph, entities: IEntity[], links: ILink[],): { [key: string]: { x: number; y: number } } {
+  const numberOfIterations = 50;
+  const centrum = getLocationCentrumForNewNodes(sigma)
+
+  // Create a copy of the graph
+  const graphCopy = graph.copy()
+
+  // Set all existing nodes to fixed position
+  graphCopy.forEachNode((node) => graphCopy.setNodeAttribute(node, "fixed", true))
+
+  let i = 0;
+
+  // Find new nodes
+  entities.filter(e => !graphCopy.hasNode(getId(e))).forEach(e => {
+    i++
+    graphCopy.addNode(getId(e), { x: e.PosX ?? centrum.x + i * 20, y: e.PosY ?? centrum.y + (i * 10), fixed: false })
+  })
+
+  links.forEach((e) => {
+    const added = graphCopy.updateEdgeWithKey(e.Id, e.FromEntityId + e.FromEntityTypeId, e.ToEntityId + e.ToEntityTypeId)
+  })
+
+  for (let index = 0; index < numberOfIterations; index++) {
+    forceLayout.assign(graphCopy, {
+      maxIterations: 50,
+      settings: {
+        attraction: 0.0005,
+        repulsion: 10,
+        gravity: 0.0001,
+        inertia: 0.6,
+        maxMove: 200
+      },
+      isNodeFixed: (_, attr) => attr.fixed,
+    });
+  }
+
+  const positions = collectLayout(graphCopy);
+  return positions;
 }
 
 export const updateSelected = (selectedIds?: string[]) => {
@@ -46,33 +100,8 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
     let max = state.maxDate
 
     const stateUpEntities = produce(state.entities, stateDraft => {
-      let positions = {} as {[key: string]: {x: number; y: number}}
-      if (entities.some(e => e.PosX == null || e.PosY == null)) {
-        const test = state.graph!.copy()
-        let i = 0;
-        entities.filter(e => !test.hasNode(getId(e))).forEach(e => {
-          i++
-          const angle = (i * 2 * Math.PI) / test.order;
-          const size = Math.max(state.sigma!.getGraphDimensions().width, state.sigma!.getGraphDimensions().height)
-          return test.addNode(getId(e), { x: e.PosX ?? size * Math.cos(angle), y: e.PosY ?? size * Math.sin(angle), fixed: false })
-        })
-        links.forEach(e => test.updateEdgeWithKey(e.Id, e.FromEntityId + e.FromEntityTypeId, e.ToEntityId + e.ToEntityTypeId))
-
-        console.log("before", test.getNodeAttributes(getId(entities[0])))
-
-        positions = forceLayout(test, {
-          maxIterations: 500,
-          isNodeFixed: (_, attr) => attr.fixed
-        });
-
-        forceLayout.assign(test, {
-          maxIterations: 500,
-          isNodeFixed: (_, attr) => attr.fixed
-        })
-
-        console.log("after", test.getNodeAttributes(getId(entities[0])))
-        console.log(positions)
-      }
+      const newEntities = entities.filter(e => (e.PosX == null || e.PosY == null) && !state.graph.hasNode(getId(e)));
+      const positions = calculatePositions(state.sigma!, state.graph, newEntities, links)
 
       for (let entity of entities) {
         const config = configService.getEntityConfiguration(entity.TypeId, entity.GlobalType)
@@ -163,7 +192,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           min = link.DateFrom!.startOf("day")
         }
 
-        if (link.DateTo != null && link.DateTo> max) {
+        if (link.DateTo != null && link.DateTo > max) {
           max = link.DateTo!.endOf("day")
         }
 
@@ -219,7 +248,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
       draft.dirty = true
       draft.entities = stateUpEntities
       draft.links = stateUpLinks
-      draft.selectedIds = setSelected ? [...entities, ...links].map(x => getId(x)): draft.selectedIds
+      draft.selectedIds = setSelected ? [...entities, ...links].map(x => getId(x)) : draft.selectedIds
 
       draft.minDate = min
       draft.maxDate = max

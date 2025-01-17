@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import useMainStore from '../../../store/main-store'
-import viewService from '../../../services/viewService'
+import Graph from 'graphology';
+import { useEffect, useMemo, useRef } from 'react';
+import type { IEntity } from '../../../interfaces/data-models';
 import configService from '../../../services/configurationService';
-import { useEffect, useMemo, useRef } from 'react'
-import useAppStore from '../../../store/app-store'
-import type { IEntity } from '../../../interfaces/data-models'
-import { getId, isSelected } from '../../../utils/utils'
-import Graph from 'graphology'
+import viewService from '../../../services/viewService';
+import useAppStore from '../../../store/app-store';
+import useMainStore from '../../../store/main-store';
+import { getId, isSelected } from '../../../utils/utils';
 
 interface Props {
   entity: IEntity
@@ -29,7 +29,6 @@ function ChartNode(props: Props) {
   const id = useMemo(() => {
     return getId(entity)
   }, [entity])
-
 
   const view = useMemo(() => {
     return { ...viewService.getDefaultView(entity.TypeId, entity.GlobalType), ...selectedView }
@@ -83,8 +82,6 @@ function ChartNode(props: Props) {
       props.graph.setNodeAttribute(created.current, "image", icon?.name)
       props.graph.setNodeAttribute(created.current, "iconColor", icon?.iconColor)
       props.graph.setNodeAttribute(created.current, "borderColor", borderColor)
-
-      console.log(icon?.backgroundColor)
       props.graph.setNodeAttribute(created.current, "color", selected ? "#dbeafe" : icon?.backgroundColor)
     }
   }, [icon, props.graph, showIconBorder, selected])
