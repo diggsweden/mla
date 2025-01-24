@@ -2,25 +2,25 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import CreateToolbox from '../toolbox/CreateToolbox'
-import RibbonMenuSection from '../RibbonMenuSection'
+import { fitViewportToNodes } from '@sigma/utils'
+import { useTranslation } from 'react-i18next'
+import configService from '../../../services/configurationService'
+import useMainStore from '../../../store/main-store'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
+import RibbonMenuSection from '../RibbonMenuSection'
+import CreateToolbox from '../toolbox/CreateToolbox'
 import GraphToolbox from '../toolbox/GraphToolbox'
-import useMainStore from '../../../store/main-store'
-import configService from '../../../services/configurationService'
 import UndoToolbox from '../toolbox/UndoToolbox'
-import { useTranslation } from 'react-i18next'
-import { fitViewportToNodes } from '@sigma/utils'
 
-function StartTabPanel () {
+function StartTabPanel() {
   const { t } = useTranslation();
   const config = configService.getConfiguration()
   const sigma = useMainStore((state) => state.sigma)
   const graph = useMainStore((state) => state.graph)
 
-  function fit () {
-    if (sigma && graph) {
+  function fit() {
+    if (sigma && graph && graph.nodes().length) {
       fitViewportToNodes(
         sigma,
         graph.filterNodes(() => true),
@@ -35,7 +35,7 @@ function StartTabPanel () {
     <GraphToolbox show={config.Menu?.Start?.Tools} />
 
     <RibbonMenuSection title={t('show')} visible={config.Menu?.Start?.ViewAll ?? true}>
-      <RibbonMenuButton label={t('show all')} onClick={() => { fit() }} iconName="center_focus_strong"/>
+      <RibbonMenuButton label={t('show all')} onClick={() => { fit() }} iconName="center_focus_strong" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
   </div>

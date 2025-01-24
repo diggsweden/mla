@@ -208,7 +208,7 @@ function LayoutTabPanel() {
   }
 
   function fit() {
-    if (sigma) {
+    if (sigma && graph && graph.nodes().length) {
       fitViewportToNodes(
         sigma,
         graph.nodes(),

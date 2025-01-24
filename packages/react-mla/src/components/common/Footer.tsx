@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useTranslation } from 'react-i18next'
-import useMainStore from '../../store/main-store'
 import { fitViewportToNodes } from "@sigma/utils";
-import Icon from './Icon'
+import { useTranslation } from 'react-i18next';
 import useAppStore from '../../store/app-store';
+import useMainStore from '../../store/main-store';
+import Icon from './Icon';
 
-function Footer () {
+function Footer() {
   const { t } = useTranslation()
   const selected = useMainStore((state) => state.selectedIds)
   const dirty = useMainStore((state) => state.dirty)
@@ -18,8 +18,8 @@ function Footer () {
   const hoverEffect = useAppStore((state) => state.hoverEffect)
   const setHoverEffect = useAppStore((state) => state.setHoverEffect)
 
-  function fit (selection: boolean) {
-    if (sigma && graph) {
+  function fit(selection: boolean) {
+    if (sigma && graph && graph.nodes().length) {
       fitViewportToNodes(
         sigma,
         graph.filterNodes((node) => !selection || selected.includes(node)),
