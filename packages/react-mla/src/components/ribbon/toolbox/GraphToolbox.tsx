@@ -2,22 +2,22 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+import { produce } from 'immer'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import type { IEntity, ILink } from '../../../interfaces/data-models'
+import configService from '../../../services/configurationService'
+import { internalAdd, internalRemove } from '../../../store/internal-actions'
 import useMainStore from '../../../store/main-store'
+import { findId, getId } from '../../../utils/utils'
+import Modal from '../../common/Modal'
+import Spinner from '../../common/Spinner'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
-import Modal from '../../common/Modal'
-import Spinner from '../../common/Spinner'
-import configService from '../../../services/configurationService'
-import { findId, getId } from '../../../utils/utils'
-import type { IEntity, ILink } from '../../../interfaces/data-models'
-import { produce } from 'immer'
-import { internalAdd, internalRemove } from '../../../store/internal-actions'
-import { useTranslation } from 'react-i18next'
 
-import { bidirectional } from 'graphology-shortest-path/unweighted';
-import { edgePathFromNodePath } from 'graphology-shortest-path/utils';
+import { bidirectional } from 'graphology-shortest-path/unweighted'
+import { edgePathFromNodePath } from 'graphology-shortest-path/utils'
 
 interface Props {
   show?: boolean
@@ -86,6 +86,27 @@ export default function GraphTools(props: Props) {
     setJoinLoading(false)
     setShowJoin(false)
   }
+
+  function getKey(result: JoinResult, index: number): number {
+    if (result.entity != null) {
+      return result.entity.InternalId;
+    } else if (result.link != null) {
+      return result.link.InternalId
+    } else {
+      return index;
+    }
+  }
+  function getDescription(result: JoinResult): string {
+    if (result.entity != null) {
+      return configService.getEntityConfiguration(result.entity.TypeId)?.Name + ": " + result.entity.LabelShort
+    } else if (result.link != null) {
+      return configService.getLinkConfiguration(result.link.TypeId)?.Name + ": " + result.link.LabelShort
+    } else {
+      return "";
+    }
+  }
+
+
 
   useEffect(() => {
     if (showJoin && !joinLoading) {
@@ -178,14 +199,8 @@ export default function GraphTools(props: Props) {
         {!joinLoading && joinResult.length > 0 && <div className="m-text-left m-px-3 m-py-2">
           <p>{t('merge')}</p>
           <ul className="m-list-inside m-list-disc">
-            {joinResult.filter(r => r.show).map(r => (<>
-              {r.entity &&
-                <li key={r.entity.InternalId}>{configService.getEntityConfiguration(r.entity.TypeId)?.Name}: {r.entity.LabelShort} </li>
-              }
-              {r.link &&
-                <li key={r.link.InternalId}>{configService.getLinkConfiguration(r.link.TypeId)?.Name}: {r.link.LabelShort} </li>
-              }
-            </>
+            {joinResult.filter(r => r.show).map((r, index) => (
+              <li key={getKey(r, index)}>{getDescription(r)}</li>
             ))}
           </ul>
         </div>}

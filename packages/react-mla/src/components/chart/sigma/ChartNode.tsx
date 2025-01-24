@@ -68,13 +68,13 @@ function ChartNode(props: Props) {
       props.graph.setNodeAttribute(created.current, "x", entity.PosX)
       props.graph.setNodeAttribute(created.current, "y", entity.PosY)
     }
-  }, [icon, props.graph, entity.PosY, entity.PosX])
+  }, [props.graph, entity.PosY, entity.PosX])
 
   useEffect(() => {
     if (created.current) {
       props.graph.setNodeAttribute(created.current, "label", entity.LabelChart)
     }
-  }, [icon, props.graph, entity.LabelChart])
+  }, [props.graph, entity.LabelChart])
 
   useEffect(() => {
     if (created.current) {

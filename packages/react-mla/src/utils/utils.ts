@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+import { DateTime, Interval } from 'luxon'
 import type { IBasePropertyConfiguration, IEntityTypeConfiguration, IMatchRule, IQueryIntegration } from '../interfaces/configuration'
 import type { IBase, IChartBase, IEntity, IHistory, ILink, IProperty, ITimeSpan } from '../interfaces/data-models'
-import { DateTime, Interval } from 'luxon'
 
-function getId (thing?: IBase): string {
+function getId(thing?: IBase): string {
   if (thing) {
     return thing.Id + thing.TypeId
   }
@@ -14,26 +14,26 @@ function getId (thing?: IBase): string {
   return ''
 }
 
-function generateUUID (): string {
+function generateUUID(): string {
   return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
     (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
   )
 }
 
-let internalId = 0;
-function getInternalId (): number {
+let internalId = 1;
+function getInternalId(): number {
   return internalId++
 }
 
-function randomNumber (min: number, max: number): number {
+function randomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-function arrayDistinct<T> (a1: T[]): T[] {
+function arrayDistinct<T>(a1: T[]): T[] {
   return a1.filter((value, index, array) => array.indexOf(value) === index)
 }
 
-function filterEntityIntegrations (integrations: IQueryIntegration[], selectedTypes: string[]): IQueryIntegration[] {
+function filterEntityIntegrations(integrations: IQueryIntegration[], selectedTypes: string[]): IQueryIntegration[] {
   const configFulfilled = (selectedTypes: string[], config: IEntityTypeConfiguration): boolean => {
     const count = selectedTypes.filter(x => x === config.TypeId).length
     if (count < config.Min) {
@@ -63,7 +63,7 @@ function filterEntityIntegrations (integrations: IQueryIntegration[], selectedTy
 }
 
 // Does all elements in a1 exist in a2
-function isSubSetOf<T> (a1: T[], a2: T[]): boolean {
+function isSubSetOf<T>(a1: T[], a2: T[]): boolean {
   const superSet: Record<string, number> = {}
   for (const i of a2) {
     const e = i + typeof i
@@ -81,7 +81,7 @@ function isSubSetOf<T> (a1: T[], a2: T[]): boolean {
 }
 
 // Does a1 and a2 contain the same elements, regardless of order
-function areArraysEqualSets<T> (a1: T[], a2: T[]): boolean {
+function areArraysEqualSets<T>(a1: T[], a2: T[]): boolean {
   const superSet: Record<string, number> = {}
   for (const i of a1) {
     const e = i + typeof i
@@ -105,25 +105,25 @@ function areArraysEqualSets<T> (a1: T[], a2: T[]): boolean {
   return true
 }
 
-function isLinked (e: IEntity, l: ILink): boolean {
+function isLinked(e: IEntity, l: ILink): boolean {
   return isLinkedId(e.Id, e.TypeId, l)
 }
 
-function isLinkedId (id: string, typeId: string, l: ILink): boolean {
+function isLinkedId(id: string, typeId: string, l: ILink): boolean {
   return (id === l.FromEntityId && typeId === l.FromEntityTypeId) ||
-        (id === l.ToEntityId && typeId === l.ToEntityTypeId)
+    (id === l.ToEntityId && typeId === l.ToEntityTypeId)
 }
 
-function compareWildcard (a: string, b: string): boolean {
+function compareWildcard(a: string, b: string): boolean {
   return a === b || a === '*' || b === '*'
 }
 
-function getContextValue (ctx: string, key: string): string | undefined {
+function getContextValue(ctx: string, key: string): string | undefined {
   const ctxname = ctx.split(',').map(c => c.split(':')).find(c => c[0] === key)
   return ctxname ? ctxname[1] : undefined
 }
 
-function setContextValue (ctx: string, key: string, value?: string): string {
+function setContextValue(ctx: string, key: string, value?: string): string {
   const ctxname = ctx.split(',').filter(s => !s.startsWith(key))
   if (value != null) {
     ctxname.push(key + ':' + value)
@@ -131,7 +131,7 @@ function setContextValue (ctx: string, key: string, value?: string): string {
   return ctxname.join(',')
 }
 
-function mergeContext (ctxa: string, ctxb: string): string {
+function mergeContext(ctxa: string, ctxb: string): string {
   const update: Record<string, string> = {}
 
   ctxa.split(',').map(c => c.split(':')).forEach(c => {
@@ -145,7 +145,7 @@ function mergeContext (ctxa: string, ctxb: string): string {
   return list.join(',')
 }
 
-function findId (thing: IChartBase, config: IMatchRule[], things: IChartBase[]): string | undefined {
+function findId(thing: IChartBase, config: IMatchRule[], things: IChartBase[]): string | undefined {
   for (const conf of config) {
     for (const test of things.filter(t => t.TypeId === thing.TypeId)) {
       let a = thing.Properties.find(x => x.TypeId === conf.PropertyTypeId)?.Value ?? 'NOT_FOUND_A'
@@ -166,7 +166,7 @@ function findId (thing: IChartBase, config: IMatchRule[], things: IChartBase[]):
   return undefined
 }
 
-function isSameType(p1: IBasePropertyConfiguration | IProperty, p2: IBasePropertyConfiguration | IProperty) : boolean {
+function isSameType(p1: IBasePropertyConfiguration | IProperty, p2: IBasePropertyConfiguration | IProperty): boolean {
   if (p1.TypeId == p2.TypeId) {
     return true
   }
@@ -178,7 +178,7 @@ function isSameType(p1: IBasePropertyConfiguration | IProperty, p2: IBasePropert
   return false
 }
 
-function getText (str: string, regex: RegExp): string {
+function getText(str: string, regex: RegExp): string {
   const res = str.match(regex)
   if (res != null && res.length > 0) {
     if (res.length > 1) {
@@ -190,7 +190,7 @@ function getText (str: string, regex: RegExp): string {
   return str
 }
 
-async function blobToBase64 (blob: Blob): Promise<string> {
+async function blobToBase64(blob: Blob): Promise<string> {
   return await new Promise((resolve) => {
     const reader = new FileReader()
     reader.onloadend = () => { resolve(reader.result as string) }
@@ -198,36 +198,36 @@ async function blobToBase64 (blob: Blob): Promise<string> {
   })
 }
 
-async function canvasToBlob (canvas: HTMLCanvasElement): Promise<Blob> {
+async function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   return await new Promise((resolve, reject) => {
     canvas.toBlob((blob) => { blob != null ? resolve(blob) : reject(new Error('Failed to convert canvas')) })
   })
 }
 
-async function delay (ms: number): Promise<void> {
+async function delay(ms: number): Promise<void> {
   await new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function compareDates (a: IHistory, b: IHistory): boolean {
+function compareDates(a: IHistory, b: IHistory): boolean {
   return a.DateFrom == b.DateFrom && a.DateTo == b.DateTo
 }
 
-function hasDate (a: IHistory, from?: DateTime, to?: DateTime): boolean {
+function hasDate(a: IHistory, from?: DateTime, to?: DateTime): boolean {
   return a.DateFrom == from && a.DateTo == to
 }
 
-function toDashedCase (camelCase: string): string {
+function toDashedCase(camelCase: string): string {
   return camelCase.replace(
     /([a-z0-9])([A-Z])/g,
     (_, a: string, b: string) => `${a}-${b.toLowerCase()}`
   )
 }
 
-function toCamelCase (dashedCase: string): string {
+function toCamelCase(dashedCase: string): string {
   return dashedCase.replace(/[-:]([a-z])/g, (_, b: string) => `${b.toUpperCase()}`)
 }
 
-function mergeProps (oldProps: IProperty[], newProps: IProperty[]): IProperty[] {
+function mergeProps(oldProps: IProperty[], newProps: IProperty[]): IProperty[] {
   const result = [...newProps] as IProperty[]
   oldProps.forEach(p => {
     if (!result.some(o => o.TypeId === p.TypeId)) {
@@ -237,7 +237,7 @@ function mergeProps (oldProps: IProperty[], newProps: IProperty[]): IProperty[] 
   return result
 }
 
-function find (thing: IHistory, things: IChartBase[]): IChartBase | undefined {
+function find(thing: IHistory, things: IChartBase[]): IChartBase | undefined {
   return things.find(x => compareDates(x, thing))
 }
 
@@ -289,17 +289,13 @@ export {
   getContextValue,
   getId,
   getInternalId,
-  hasDate,
-  isLinked,
-  isLinkedId,
-  isActive,
-  isSelected,
-  isSubSetOf,
-  isSameType,
-  mergeContext,
+  hasDate, isActive, isLinked,
+  isLinkedId, isSameType, isSelected,
+  isSubSetOf, mergeContext,
   mergeProps,
   randomNumber,
   setContextValue,
   toCamelCase,
-  toDashedCase,
+  toDashedCase
 }
+

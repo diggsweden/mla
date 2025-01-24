@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 //
 // SPDX-License-Identifier: EUPL-1.2
-import useMainStore from '../../../store/main-store'
+import Graph from 'graphology'
 import { useEffect, useMemo, useRef } from 'react'
 import type { ILink } from '../../../interfaces/data-models'
-import { getId, isSelected } from '../../../utils/utils'
-import Graph from 'graphology'
 import viewService from '../../../services/viewService'
 import useAppStore from '../../../store/app-store'
+import useMainStore from '../../../store/main-store'
+import { getId, isSelected } from '../../../utils/utils'
 
 interface Props {
   link: ILink
@@ -52,6 +52,7 @@ function ChartEdge(props: Props) {
         created.current = props.graph.addDirectedEdgeWithKey(id, fromId, toId, {
           label: link.LabelChart,
           drawLabel: true,
+          color: selected ? "#60a5fa" : link.Color,
           type: "straightWithArrow",
           size: link.Size ?? DEFAULT_EDGE_SIZE
         });
@@ -60,6 +61,7 @@ function ChartEdge(props: Props) {
         created.current = props.graph.addDirectedEdgeWithKey(id, toId, fromId, {
           label: link.LabelChart,
           drawLabel: true,
+          color: selected ? "#60a5fa" : link.Color,
           type: "straightWithArrow",
           size: link.Size ?? DEFAULT_EDGE_SIZE
         });
@@ -68,6 +70,7 @@ function ChartEdge(props: Props) {
         created.current = props.graph.addUndirectedEdgeWithKey(id, fromId, toId, {
           label: link.LabelChart,
           drawLabel: true,
+          color: selected ? "#60a5fa" : link.Color,
           type: "straight",
           size: link.Size ?? DEFAULT_EDGE_SIZE
         });

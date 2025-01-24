@@ -84,6 +84,7 @@ function calculatePositions(sigma: Sigma, graph: Graph, entities: IEntity[], lin
 export const updateSelected = (selectedIds?: string[]) => {
   useMainStore.setState(state => {
     const ids = selectedIds ?? state.selectedIds
+
     return {
       selectedIds: ids,
       selectedEntities: (ids).map(id => state.getCurrentEntity(id)).filter(e => e !== undefined) as IEntity[],
@@ -146,6 +147,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
 
         let update = [] as IEntity[]
         const existing = stateDraft[getId(entity)]
+
         if (existing == null) {
           update = [entity]
         } else {
@@ -153,11 +155,11 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           if (found) {
             console.warn('There is already an entity with this id and date date, overwriting')
             const updateEntity = produce(entity, draft => {
+              updateProps(draft)
               draft.InternalId = found.InternalId
               draft.Properties = mergeProps(found.Properties, entity.Properties)
               draft.PosX = found.PosX
               draft.PosY = found.PosY
-              updateProps(draft)
             })
             update = [updateEntity, ...existing.filter(x => x.InternalId !== updateEntity.InternalId)]
           } else {
@@ -209,9 +211,9 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           if (found !== undefined) {
             console.warn('There is already a link with this id and date date, overwriting')
             const updateLink = produce(link, draft => {
+              updateProps(draft)
               draft.InternalId = found.InternalId
               draft.Properties = mergeProps(found.Properties, link.Properties)
-              updateProps(draft)
             })
             update = [updateLink, ...existing.filter(x => updateLink.InternalId !== x.InternalId)]
           } else {
@@ -270,8 +272,8 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
     const stateUpEntities = produce(state.entities, stateDraft => {
       for (const entity of entities) {
         const update = produce(entity, draft => {
-          draft.SourceSystemId = i18n.t("modified")
           updateProps(draft)
+          draft.SourceSystemId = i18n.t("modified")
         })
         const existing = stateDraft[getId(entity)]
         stateDraft[getId(entity)] = [update, ...existing.filter(x => x.InternalId !== entity.InternalId)].sort((a, b) => sortByDate(a, b))
@@ -289,8 +291,8 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
     const stateUpLinks = produce(state.links, stateDraft => {
       for (const link of links) {
         const update = produce(link, draft => {
-          draft.SourceSystemId = i18n.t("modified")
           updateProps(draft)
+          draft.SourceSystemId = i18n.t("modified")
         })
         const existing = stateDraft[getId(link)]
         stateDraft[getId(link)] = [update, ...existing.filter(x => x.InternalId !== link.InternalId)].sort((a, b) => sortByDate(a, b))
