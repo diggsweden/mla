@@ -10,6 +10,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@material-symbols/svg-400": "^0.27.0"
+    "@material-symbols/svg-400": "^0.28.0"
   }
 }
