@@ -34,7 +34,7 @@
     "@types/react-dom": "18.3.5",
     "@types/wicg-file-system-access": "2023.10.5",
     "@vitejs/plugin-react": "4.3.4",
-    "tailwindcss": "3.4.17",
+    "tailwindcss": "4.0.1",
     "typescript": "5.6.3",
     "vite": "5.4.14",
     "vite-plugin-commonjs": "0.10.4"
