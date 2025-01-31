@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import useKeyDown from '../../effects/keydown'
 import { useEffect, useRef } from 'react'
-import Button from './Button'
 import { useTranslation } from 'react-i18next'
+import useKeyDown from '../../effects/keydown'
+import Button from './Button'
 
 interface ModalProps {
   title?: string
@@ -20,9 +20,9 @@ interface ModalProps {
   sidebar?: React.ReactNode
 }
 
-function Modal (props: ModalProps) {
-  const { t } = useTranslation() 
-  function onPositive () {
+function Modal(props: ModalProps) {
+  const { t } = useTranslation()
+  function onPositive() {
     if (props.onPositive && props.show && (props.valid ?? true)) {
       props.onPositive()
     }
@@ -33,7 +33,7 @@ function Modal (props: ModalProps) {
     onPositive()
   }, dialog, ['Enter'])
 
-  function handleSubmit (ev: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
     ev.preventDefault()
     onPositive()
   }
@@ -56,11 +56,11 @@ function Modal (props: ModalProps) {
   return (
     <dialog ref={dialog} className={'m-p-0 m-animate-in m-fade-in m-duration-300 m-rounded m-shadow-lg m-backdrop:bg-black/50 ' + (props.wide ? ' m-w-full ' : ' m-w-2/4 m-max-w-2xl ') + props.className}>
       {props.show &&
-        <form className="m-w-full m-overflow-x-hidden m-overflow-y-auto m-md:h-full" onSubmit={handleSubmit}>
+        <form className="m-w-full m-overflow-x-hidden m-overflow-y-auto m-h-full" onSubmit={handleSubmit}>
           <div className="m-relative m-w-full m-h-full m-mx-auto m-z-100">
-            <div className="m-duration-300 m-relative">
+            <div className="m-flex m-flex-col m-duration-300 m-relative m-h-full ">
               <div className="m-flex m-items-center m-justify-between m-p-4 m-bg-primary">
-                <h3 hidden={props.title == null} className="m-text-xl m-font-semibold m-text-white dark:m-text-white">
+                <h3 hidden={props.title == null} className="m-text-xl m-font-semibold m-text-white">
                   {props.title}
                 </h3>
                 <button type="button" onClick={props.onNegative} className="m-text-white m-bg-transparent hover:m-bg-gray-200 hover:m-text-gray-900 m-rounded-lg m-text-sm m-p-1.5 m-ml-auto m-inline-flex m-items-center" data-modal-hide="defaultModal">
@@ -68,7 +68,7 @@ function Modal (props: ModalProps) {
                   <span className="m-sr-only">{t('close')}</span>
                 </button>
               </div>
-              <div className="m-flex">
+              <div className="m-flex m-grow">
                 {props.sidebar && <div className="m-basis-36 m-bg-gray-100 m-border-r m-py-5">
                   {props.sidebar}
                 </div>}
@@ -84,11 +84,12 @@ function Modal (props: ModalProps) {
                       </Button>
                     </div>
                   }
-                  {props.mode === 'ok' &&
+
+                  {props.mode === 'ok' && props.onNegative &&
                     <div className="m-flex m-justify-end m-p-3 m-space-x-2 m-border-t m-border-gray-200">
-                      <button data-modal-hide="defaultModal" type="button" onClick={props.onNegative} className="text-white bg-primary enabled:hover:bg-blue-800 disabled:opacity-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center ">
+                      <Button dataModalHide='defaultModal' disabled={props.valid != null ? !props.valid : false} onClick={props.onNegative}>
                         {t('ok')}
-                      </button>
+                      </Button>
                     </div>
                   }
                 </div>

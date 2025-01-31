@@ -53,6 +53,9 @@
         "Start": {},
         "Archive": {
             "Import": true
+        },
+        "Analysis": {
+            "SnaPreview": true
         }
     },
     "Display": [
