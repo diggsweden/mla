@@ -293,8 +293,8 @@ function ActivityAnalysis(props: Props) {
     })
   }
 
-  function dots(count: number, color: string): ReactElement[] {
-    const result = [] as ReactElement[]
+  function dots(count: number, color: string): ReactElement<any>[] {
+    const result = [] as ReactElement<any>[]
     for (let i = 0; i < Math.min(10, count); i++) {
       result.push(<svg key={i} className={`m-h-3 m-w-3 m-mt-1 m-inline m-z-10 ${i > 0 ? ' m-ml-1' : ''}`}>
         <circle cx="5" cy="5" r="5" fill={color} />

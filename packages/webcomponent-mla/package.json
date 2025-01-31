@@ -9,10 +9,10 @@
     "src"
   ],
   "dependencies": {
-    "react-mla": "workspace:^",
-    "@r2wc/react-to-web-component": "^2.0.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@r2wc/react-to-web-component": "^2.0.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-mla": "workspace:^"
   },
   "scripts": {
     "dev": "vite dev --open",

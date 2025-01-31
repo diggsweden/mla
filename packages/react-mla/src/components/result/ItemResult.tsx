@@ -9,6 +9,8 @@ import { useDrag } from 'react-dnd'
 import viewService from '../../services/viewService'
 import { useTranslation } from 'react-i18next'
 
+import type { JSX } from "react";
+
 interface Props {
   className?: string
   onClick: () => void
