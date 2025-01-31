@@ -132,7 +132,7 @@ jobs:
 
       # Upload artifact
       - name: Upload mla-component.umd.cjs
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: mla-component.umd.cjs
           path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
@@ -141,7 +141,7 @@ jobs:
 
       # Upload signature
       - name: Upload mla-component.umd.cjs
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: mla-component.umd.cjs.asc
           path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.asc
@@ -185,7 +185,7 @@ jobs:
 
       # Update GitHub release with changelog
       - name: Update GitHub release documentation
-        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.0.9
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2.2.1
         with:
           tag_name: ${{ needs.build-release.outputs.version }}
           body: ${{ needs.build-release.outputs.changelog }}
