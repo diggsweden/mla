@@ -20,9 +20,10 @@ import useMainStore from '../../store/main-store';
 import useKeyDown from '../../effects/keydown';
 import configService from '../../services/configurationService';
 import useAppStore from '../../store/app-store';
+import useDropRef from "../hooks/useDropRef";
 import bindFabricLayer from './fabric-drawing';
 import useMultiselect from './multiselect';
-import useDragNodes from './node-drag';
+import { useDragNodes } from './node-drag';
 import useNodeHighlight from './node-highlight';
 import { TextureManager } from './rendering/svg-node-renderer/texture';
 import useRightMousePan from './right-mouse-pan';
@@ -172,7 +173,7 @@ function Chart(props: Props) {
       <div className="m-h-full m-w-full m-absolute m-pointer-events-none m-z-10">
         {props.children}
       </div>
-      <div className="m-h-full m-w-full" ref={dropRef[1]} >
+      <div className="m-h-full m-w-full" ref={useDropRef(dropRef[1])} >
         <div className="m-h-full m-w-full m-outline-none" id="m-chart" tabIndex={1} ref={sigmaContainer}>
         </div>
         <ContentRenderer />

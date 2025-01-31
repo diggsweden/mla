@@ -52,25 +52,19 @@ export default function SnaTools(props: Props) {
   ]
 
   function resetCentrality() {
-    graph.forEachNode((node, atts) => {
-      atts.size = DEFAULT_NODE_SIZE;
-    });
-
-    sigma?.scheduleRefresh();
-  }
-
-  function setClosenessCentrality() {
-    setCentrality(centralityTypes[1])
-    applyCentrality();
-  }
-
-  function applyCentrality() {
-    setShowAdvancedSettings(false)
     setCentrality(null)
+    applyCentrality(null);
+  }
 
+  function modalOnNegative() {
+    setShowAdvancedSettings(false)
+    applyCentrality(centrality?.id ?? null)
+  }
+
+  function applyCentrality(id: string | null) {
     if (graph.size == 0) return;
 
-    switch (centrality?.id) {
+    switch (id) {
       case 'closeness':
         resizeNodes(closenessCentrality(graph));
         break;
@@ -94,6 +88,13 @@ export default function SnaTools(props: Props) {
         break;
       case 'edge betweenness':
         setEdgeBetweennessCentrality();
+        break;
+      case null:
+        graph.forEachNode((node, atts) => {
+          atts.size = DEFAULT_NODE_SIZE;
+        });
+
+        sigma?.scheduleRefresh();
         break;
       default:
         break;
@@ -137,13 +138,13 @@ export default function SnaTools(props: Props) {
   return (<>
     <RibbonMenuSection title={(t('centrality measures'))}>
       <RibbonMenuButton label={t('centrality reset')} title={t('centrality reset')} onClick={() => { resetCentrality() }} iconName="route" />
-      <RibbonMenuButton label={t('centrality closeness')} title={t('centrality closeness desc')} onClick={() => { setClosenessCentrality() }} iconName="nearby" />
+      <RibbonMenuButton label={t('centrality closeness')} title={t('centrality closeness desc')} onClick={() => { applyCentrality('closeness') }} iconName="nearby" />
       <RibbonMenuButton label={t('centrality advanced')} title={t('centrality advanced desc')} onClick={() => { setShowAdvancedSettings(true) }} iconName="rule_settings" />
     </RibbonMenuSection>
     <RibbonMenuDivider />
 
     {showAdvancedSettings &&
-      <Modal mode='ok' className='m-h-96' show={showAdvancedSettings} title={t('centrality measures')} onNegative={() => { applyCentrality() }} onPositive={() => { }} sidebar={
+      <Modal mode='ok' className='m-h-96' show={showAdvancedSettings} title={t('centrality measures')} onNegative={() => { modalOnNegative() }} onPositive={() => { }} sidebar={
         <div className="m-text-left m-mx-5">
           <div className='m-font-medium m-text-lg'>
             {t('centrality')}

@@ -3,11 +3,12 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { useEffect, useState } from 'react'
-import Icon from '../common/Icon'
 import { DragPreviewImage, useDrag } from 'react-dnd'
 import { type IEntityConfiguration } from '../../interfaces/configuration'
 import iconService from '../../services/iconService'
 import viewService from '../../services/viewService'
+import Icon from '../common/Icon'
+import { useDragRef } from '../hooks/useDragRef'
 
 interface Props {
   entity: IEntityConfiguration
@@ -17,7 +18,7 @@ interface Props {
   onDrop?: (x: number, y: number) => void
 }
 
-function RibbonEntityButton (props: Props) {
+function RibbonEntityButton(props: Props) {
   const view = viewService.getView(props.entity.TypeId)
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
@@ -34,9 +35,10 @@ function RibbonEntityButton (props: Props) {
     }),
     []
   )
+  const handleDragRef = useDragRef(drag);
   const [icon, setIcon] = useState('')
   useEffect(() => {
-    async function getToken () {
+    async function getToken() {
       const png = await iconService.getPNG(view.Icon, view.Color)
       setIcon(png)
     }
@@ -61,7 +63,7 @@ function RibbonEntityButton (props: Props) {
   return <>
     <DragPreviewImage connect={preview} src={icon} />
     <button
-      ref={drag}
+      ref={handleDragRef}
       type='button'
       disabled={props.disabled}
       onClick={props.onClick}

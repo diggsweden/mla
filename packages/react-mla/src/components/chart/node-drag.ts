@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+import { produce } from "immer";
 import { useEffect, useRef } from "react";
 import Sigma from "sigma";
-import useMainStore from "../../store/main-store";
 import { SigmaNodeEventPayload, SigmaStageEventPayload } from "sigma/types";
 import { IEntity } from "../../interfaces/data-models";
-import { produce } from "immer";
+import useMainStore from "../../store/main-store";
 
 const LEFT_CLICK = 0
 

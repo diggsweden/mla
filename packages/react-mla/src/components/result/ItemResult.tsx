@@ -2,14 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import type { IChartBase, IEntity, ILink } from '../../interfaces/data-models'
-import Icon from '../common/Icon'
-import configService from '../../services/configurationService'
 import { useDrag } from 'react-dnd'
-import viewService from '../../services/viewService'
 import { useTranslation } from 'react-i18next'
+import type { IChartBase, IEntity, ILink } from '../../interfaces/data-models'
+import configService from '../../services/configurationService'
+import viewService from '../../services/viewService'
+import Icon from '../common/Icon'
 
-import type { JSX } from "react";
+import type { JSX } from "react"
+import { useDragRef } from '../hooks/useDragRef'
 
 interface Props {
   className?: string
@@ -29,12 +30,12 @@ export interface IEntityGroup {
   links: ILink[]
 }
 
-function InternalResult (props: InternalProps) {
-  const { t } = useTranslation() 
+function InternalResult(props: InternalProps) {
+  const { t } = useTranslation()
   const { item } = props
   const view = viewService.getView(props.item.primary.TypeId)
 
-  function getLabel (thing: IChartBase) {
+  function getLabel(thing: IChartBase) {
     if (thing.LabelShort == null || thing.LabelShort === '') {
       return viewService.getShortName(thing)
     } else {
@@ -42,7 +43,7 @@ function InternalResult (props: InternalProps) {
     }
   }
 
-  function getLinkLabel (link: ILink) {
+  function getLinkLabel(link: ILink) {
     const label = getLabel(link)
     if (label.length === 0) {
       return t('linked')
@@ -51,7 +52,7 @@ function InternalResult (props: InternalProps) {
     return label
   }
 
-  function getLinkDirectionIcon (link: ILink): JSX.Element | null {
+  function getLinkDirectionIcon(link: ILink): JSX.Element | null {
     switch (link.Direction) {
       case 'TO': return <Icon name='arrow_forward' className="m-text-primary m-relative m-h-5 m-w-5 m-ml-1 m-" />
       case 'FROM': return <Icon name='arrow_back' className="m-text-primary m-relative m-h-5 m-w-5 m- m-ml-1 m-" />
@@ -73,7 +74,7 @@ function InternalResult (props: InternalProps) {
       <div className="m-flex m-flex-nowrap m-w-full m-py-1">
         <div className="m-height-f m-flex m-mx-2 m-items-center"><Icon name={view.Icon} className="m-text-primary m-relative m-h-5 m-w-5 m-" /></div>
         <div className="m-grow m-truncate m-text-left m-mr-1 m-text-normal">
-          { getLabel(item.primary) }
+          {getLabel(item.primary)}
         </div>
       </div>
       {item.entities.length > 0 && item.entities.map(subEntity => (
@@ -83,7 +84,7 @@ function InternalResult (props: InternalProps) {
   )
 }
 
-function ItemResult (props: Props) {
+function ItemResult(props: Props) {
   const config = configService.getEntityConfiguration(props.item.primary.TypeId)
 
   const [{ isDragging }, drag] = useDrag(
@@ -107,12 +108,12 @@ function ItemResult (props: Props) {
     []
   )
 
-  function add () {
+  function add() {
     props.onClick()
   }
 
   return (
-    <div ref={drag} className={props.className + (isDragging ? ' m-opacity-50' : ' m-opacity-100') + ' m-w-full m-rounded m-border-solid m-border m-bg-white m-mb-1 m-py-1 m-relative'}>
+    <div ref={useDragRef(drag)} className={props.className + (isDragging ? ' m-opacity-50' : ' m-opacity-100') + ' m-w-full m-rounded m-border-solid m-border m-bg-white m-mb-1 m-py-1 m-relative'}>
       {config && config.Internal !== true && props.onClick != null &&
         <span className='m-absolute m-top-4 -m-right-4 -m-translate-y-1/2' onClick={() => { add() }}>
           <button className="m-text-white m-bg-primary m-rounded-full m-text-lg m-px-2 m-m-2 m-h-5 m-w-5 m-leading-5 m-flex m-justify-center">+</button>
