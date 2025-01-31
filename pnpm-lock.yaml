@@ -108,8 +108,8 @@ importers:
         specifier: 2023.10.5
         version: 2023.10.5
       '@vitejs/plugin-react':
-        specifier: 4.3.3
-        version: 4.3.3(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))
+        specifier: 4.3.4
+        version: 4.3.4(vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6))
       tailwindcss:
         specifier: 3.4.14
         version: 3.4.14
@@ -117,11 +117,11 @@ importers:
         specifier: 5.6.3
         version: 5.6.3
       vite:
-        specifier: 5.4.11
-        version: 5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6)
+        specifier: 5.4.14
+        version: 5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6)
       vite-plugin-commonjs:
-        specifier: 0.10.3
-        version: 0.10.3
+        specifier: 0.10.4
+        version: 0.10.4
 
   packages/config-tailwind:
     devDependencies:
@@ -360,8 +360,8 @@ importers:
         specifier: 2023.10.5
         version: 2023.10.5
       '@vitejs/plugin-react':
-        specifier: 4.3.3
-        version: 4.3.3(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))
+        specifier: 4.3.4
+        version: 4.3.4(vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6))
       sass-embedded:
         specifier: 1.80.6
         version: 1.80.6
@@ -372,14 +372,14 @@ importers:
         specifier: 5.6.3
         version: 5.6.3
       vite:
-        specifier: 5.4.11
-        version: 5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6)
+        specifier: 5.4.14
+        version: 5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6)
       vite-plugin-commonjs:
-        specifier: 0.10.3
-        version: 0.10.3
+        specifier: 0.10.4
+        version: 0.10.4
       vite-plugin-css-injected-by-js:
         specifier: 3.5.2
-        version: 3.5.2(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))
+        version: 3.5.2(vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6))
     publishDirectory: dist
 
 packages:
@@ -1385,6 +1385,12 @@ packages:
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0
+
+  '@vitejs/plugin-react@4.3.4':
+    resolution: {integrity: sha512-SCCPBJtYLdE8PX/7ZQAs1QAZ8Jqwih+0VBLum1EGqmCCQal+MIUqLCzj3ZUy8ufbC0cAM4LRlSTm7IQJwWT4ug==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      vite: ^4.2.0 || ^5.0.0 || ^6.0.0
 
   '@vitest/browser@2.1.4':
     resolution: {integrity: sha512-89SrvShW6kWzmEYtBj5k1gBq88emoC2qrngw5hE1vNpRFteQ5/1URbKIVww391rIALTpzhhCt5yJt5tjLPZxYw==}
@@ -4197,8 +4203,8 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
-  vite-plugin-commonjs@0.10.3:
-    resolution: {integrity: sha512-trtH4dfAqrbqwiUhSKcqrfjnlXnqLHdIbYuUy943y34JnDjIX8qlpExP0nFN+kE2s6/BS6r9d1cAHS0KtiF4yQ==}
+  vite-plugin-commonjs@0.10.4:
+    resolution: {integrity: sha512-eWQuvQKCcx0QYB5e5xfxBNjQKyrjEWZIR9UOkOV6JAgxVhtbZvCOF+FNC2ZijBJ3U3Px04ZMMyyMyFBVWIJ5+g==}
 
   vite-plugin-css-injected-by-js@3.5.2:
     resolution: {integrity: sha512-2MpU/Y+SCZyWUB6ua3HbJCrgnF0KACAsmzOQt1UvRVJCGF6S8xdA3ZUhWcWdM9ivG4I5az8PnQmwwrkC2CAQrQ==}
@@ -4221,37 +4227,6 @@ packages:
     resolution: {integrity: sha512-RIMeVnqBK/8I0E9nnQWzws6pdj5ilRMPJSnXYb6nWxNR4EmDPnksnb/ACoR5Fy7QfzULqS4gtQMrjwnNCC9zoA==}
     peerDependencies:
       vite: '*'
-
-  vite@5.4.11:
-    resolution: {integrity: sha512-c7jFQRklXua0mTzneGW9QVyxFjUgwcihC4bXEtujIo2ouWCe1Ajt/amn2PCxYnhYfd5k09JX3SB7OYWFKYqj8Q==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      sass-embedded: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
 
   vite@5.4.14:
     resolution: {integrity: sha512-EK5cY7Q1D8JNhSaPKVK4pwBFvaTmZxEnoKXLG/U9gmdDcihQGNzFlgIvaxezFR4glP1LsuiedwMBqCXH3wZccA==}
@@ -5584,18 +5559,18 @@ snapshots:
       '@typescript-eslint/types': 8.14.0
       eslint-visitor-keys: 3.4.3
 
-  '@vitejs/plugin-react@4.3.3(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6))':
+  '@vitejs/plugin-react@4.3.3(vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6)
+      vite: 5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6)
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-react@4.3.3(vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6))':
+  '@vitejs/plugin-react@4.3.4(vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
@@ -5667,7 +5642,7 @@ snapshots:
     dependencies:
       '@vitest/spy': 2.1.8
       estree-walker: 3.0.3
-      magic-string: 0.30.14
+      magic-string: 0.30.17
     optionalDependencies:
       msw: 2.6.7(@types/node@20.17.6)(typescript@5.5.4)
       vite: 5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6)
@@ -5688,7 +5663,7 @@ snapshots:
   '@vitest/snapshot@2.1.8':
     dependencies:
       '@vitest/pretty-format': 2.1.8
-      magic-string: 0.30.14
+      magic-string: 0.30.17
       pathe: 1.1.2
 
   '@vitest/spy@2.1.4':
@@ -8691,15 +8666,11 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-commonjs@0.10.3:
+  vite-plugin-commonjs@0.10.4:
     dependencies:
       acorn: 8.14.0
-      magic-string: 0.30.14
+      magic-string: 0.30.17
       vite-plugin-dynamic-import: 1.6.0
-
-  vite-plugin-css-injected-by-js@3.5.2(vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6)):
-    dependencies:
-      vite: 5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6)
 
   vite-plugin-css-injected-by-js@3.5.2(vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6)):
     dependencies:
@@ -8729,7 +8700,7 @@ snapshots:
       acorn: 8.14.0
       es-module-lexer: 1.5.4
       fast-glob: 3.3.2
-      magic-string: 0.30.14
+      magic-string: 0.30.17
 
   vite-plugin-lib-inject-css@2.1.1(vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6)):
     dependencies:
@@ -8737,16 +8708,6 @@ snapshots:
       magic-string: 0.30.14
       picocolors: 1.1.1
       vite: 5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6)
-
-  vite@5.4.11(@types/node@20.17.6)(sass-embedded@1.80.6):
-    dependencies:
-      esbuild: 0.21.5
-      postcss: 8.4.49
-      rollup: 4.28.1
-    optionalDependencies:
-      '@types/node': 20.17.6
-      fsevents: 2.3.3
-      sass-embedded: 1.80.6
 
   vite@5.4.14(@types/node@20.17.6)(sass-embedded@1.80.6):
     dependencies:
