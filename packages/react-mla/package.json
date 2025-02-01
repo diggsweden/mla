@@ -53,7 +53,7 @@
     "test:browser": "vitest"
   },
   "devDependencies": {
-    "@eslint/compat": "1.2.5",
+    "@eslint/compat": "1.2.6",
     "@eslint/eslintrc": "3.2.0",
     "@eslint/js": "9.19.0",
     "@playwright/test": "1.50.1",
