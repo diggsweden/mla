@@ -102,7 +102,11 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
 
     const stateUpEntities = produce(state.entities, stateDraft => {
       const newEntities = entities.filter(e => (e.PosX == null || e.PosY == null) && !state.graph.hasNode(getId(e)));
-      const positions = calculatePositions(state.sigma!, state.graph, newEntities, links)
+      let positions: { [key: string]: { x: number; y: number } } = {};
+
+      if (state.sigma) {
+        positions = calculatePositions(state.sigma, state.graph, newEntities, links)
+      }
 
       for (let entity of entities) {
         const config = configService.getEntityConfiguration(entity.TypeId, entity.GlobalType)
