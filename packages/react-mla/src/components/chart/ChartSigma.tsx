@@ -4,7 +4,7 @@
 
 import EdgeCurveProgram, { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 import { createNodeBorderProgram } from "@sigma/node-border";
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import { EdgeArrowProgram, EdgeRectangleProgram, createNodeCompoundProgram } from 'sigma/rendering';
 import { drawDiscNodeHover, drawDiscNodeLabel } from './rendering/node-renderer';
@@ -19,9 +19,7 @@ import useMainStore from '../../store/main-store';
 
 import useKeyDown from '../../effects/keydown';
 import configService from '../../services/configurationService';
-import useAppStore from '../../store/app-store';
 import useDropRef from "../hooks/useDropRef";
-import bindFabricLayer from './fabric-drawing';
 import useMultiselect from './multiselect';
 import { useDragNodes } from './node-drag';
 import useNodeHighlight from './node-highlight';
@@ -49,21 +47,14 @@ function Chart(props: Props) {
   const graph = useMainStore((state) => state.graph)
   const sigma = useMainStore((state) => state.sigma)
 
-  const fabric = useMainStore((state) => state.fabric)
-  const drawingMode = useAppStore((state) => state.drawingMode)
-
-  const init = useMainStore((state) => state.init)
+  const initChart = useMainStore((state) => state.setSigma)
 
   const entities = useMainStore((state) => state.entities)
   const links = useMainStore((state) => state.links)
 
   const sigmaContainer = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (sigmaContainer.current == null) {
-      return
-    }
-
+  const createRenderer = useCallback((container: HTMLElement) => {
     const NodeBorderCustomProgram = createNodeBorderProgram({
       borders: [
         { size: { value: 0.1 }, color: { attribute: "borderColor" } },
@@ -107,7 +98,7 @@ function Chart(props: Props) {
       defaultDrawNodeHover: drawDiscNodeHover
     } as Partial<Settings>
 
-    const renderer = new Sigma(graph, sigmaContainer.current, settings);
+    const renderer = new Sigma(graph, container, settings);
 
     const setBBox = () => {
       renderer.setCustomBBox({
@@ -127,20 +118,21 @@ function Chart(props: Props) {
     renderer.on("doubleClickEdge", (e) => e.preventSigmaDefault())
     renderer.on("doubleClickStage", (e) => e.preventSigmaDefault())
 
-    const fabric = bindFabricLayer(renderer)
-    init(renderer, fabric.fabric)
+    return renderer
+  }, [graph])
+
+  useEffect(() => {
+    if (sigmaContainer.current == null) {
+      return
+    }
+
+    const renderer = createRenderer(sigmaContainer.current)
+    initChart(renderer)
 
     return () => {
       renderer.kill()
     }
-  }, [graph, init])
-
-  useEffect(() => {
-    if (fabric != null) {
-      fabric.elements.container.style.zIndex = drawingMode ? "1" : "-1"
-    }
-
-  }, [drawingMode, fabric])
+  }, [createRenderer, initChart])
 
   useRightMousePan(sigma)
   useMultiselect(sigma)

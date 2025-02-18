@@ -3,23 +3,23 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { create } from 'zustand'
 import { produce } from 'immer'
+import { create } from 'zustand'
 
 import type { IEntity, IEvent, IEventLink, ILink, IPhaseEvent, ITimeSpan } from '../interfaces/data-models'
 import { generateUUID, mergeContext } from '../utils/utils'
 import useAppStore from './app-store'
 
-import Graph from "graphology";
-import Sigma from "sigma";
-import * as fabric from "fabric";
+import * as fabric from "fabric"
+import Graph from "graphology"
+import Sigma from "sigma"
 
-import { internalAdd, internalRemove, internalUpdate, updateSelected } from './internal-actions'
-import { assignLinks, computeLinks, filterEvents } from '../utils/event-utils'
-import type { IEventFilter } from '../interfaces/configuration/event-operations'
 import { DateTime } from 'luxon'
-import { fixDate, removeInternals } from '../utils/date'
+import type { IEventFilter } from '../interfaces/configuration/event-operations'
 import { IGeoFeature } from '../interfaces/data-models/geo'
+import { fixDate, removeInternals } from '../utils/date'
+import { assignLinks, computeLinks, filterEvents } from '../utils/event-utils'
+import { internalAdd, internalRemove, internalUpdate, updateSelected } from './internal-actions'
 
 export type IntervalType = 'day' | 'week' | 'month' | 'custom'
 
@@ -62,15 +62,17 @@ export interface MainState {
   context: string
   setContext: (ctx: string) => void
 
+  drawings?: string
+
   selectedEntities: IEntity[]
   selectedLinks: ILink[]
   selectedIds: string[]
 
-
   graph: Graph
   sigma: Sigma | undefined
   fabric: fabric.Canvas | undefined
-  init: (sigma: Sigma, fabric: fabric.Canvas) => void
+  setSigma: (sigma: Sigma) => void
+  setFabric: (fabric: fabric.Canvas) => void
 
   setEvent: (...events: IEvent[]) => void
   removeEvent: (...events: IEvent[]) => void
@@ -98,6 +100,8 @@ export interface MainState {
 
   setGeoFeature: (feature: IGeoFeature) => void
   removeGeoFeature: (feature: IGeoFeature) => void
+
+  setDrawings: (json: string) => void;
 
   setSelected: (selectedIds: string[]) => void
 
@@ -134,9 +138,13 @@ const useMainStore = create<MainState>((set, get) => ({
   graph: new Graph({ multi: true, type: "mixed" }),
   sigma: undefined,
   fabric: undefined,
-  init: (sigma, fabric) => {
+  setSigma: (sigma) => {
     set((state) => ({
-      sigma,
+      sigma
+    }))
+  },
+  setFabric: (fabric) => {
+    set((state) => ({
       fabric
     }))
   },
@@ -424,6 +432,13 @@ const useMainStore = create<MainState>((set, get) => ({
     })
   },
 
+  drawings: "",
+  setDrawings: (json: string) => {
+    set((state) => ({
+      drawings: json
+    }))
+  },
+
   selectedEntities: [],
   selectedLinks: [],
   selectedIds: [],
@@ -486,14 +501,15 @@ const useMainStore = create<MainState>((set, get) => ({
     return json
   },
   open: (json: string) => {
-    const parsed = JSON.parse(json) as { 
-      Entities: IEntity[], 
-      Links: ILink[], 
-      PhaseEvents: IPhaseEvent[], 
-      Events: IPhaseEvent[] | IEvent[], 
+    const parsed = JSON.parse(json) as {
+      Entities: IEntity[],
+      Links: ILink[],
+      PhaseEvents: IPhaseEvent[],
+      Events: IPhaseEvent[] | IEvent[],
       GeoFeatures: IGeoFeature[],
       Drawings: any,
-      context: string }
+      context: string
+    }
 
     internalAdd(false, parsed.Entities, parsed.Links)
 
@@ -523,7 +539,8 @@ const useMainStore = create<MainState>((set, get) => ({
     }
 
     if (parsed.Drawings) {
-      get().fabric?.loadFromJSON(parsed.Drawings)
+      get().setDrawings(parsed.Drawings)
+      //get().fabric?.loadFromJSON(parsed.Drawings)
     }
 
     set((state) => ({
