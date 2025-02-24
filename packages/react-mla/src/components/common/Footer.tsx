@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { fitViewportToNodes } from "@sigma/utils";
 import { useTranslation } from 'react-i18next';
 import useAppStore from '../../store/app-store';
 import useMainStore from '../../store/main-store';
+import { fitNodesInView } from "../chart/sigma/chart-utils";
 import Icon from './Icon';
 
 function Footer() {
@@ -18,13 +18,15 @@ function Footer() {
   const hoverEffect = useAppStore((state) => state.hoverEffect)
   const setHoverEffect = useAppStore((state) => state.setHoverEffect)
 
-  function fit(selection: boolean) {
+  function fitChart(selection: boolean) {
     if (sigma && graph && graph.nodes().length) {
-      fitViewportToNodes(
-        sigma,
-        graph.filterNodes((node) => !selection || selected.includes(node)),
-        { animate: true },
-      );
+      fitNodesInView(sigma, graph.filterNodes((node) => !selection || selected.includes(node)))
+
+      //fitViewportToNodes(
+      //  sigma,
+      //  graph.filterNodes((node) => !selection || selected.includes(node)),
+      //  { animate: true },
+      //);
     }
   }
 
@@ -34,8 +36,8 @@ function Footer() {
       <div className="m-flex-1"></div>
       <span className=''>
         <button className={"m-pr-3" + (!hoverEffect ? " m-text-secondary" : "")} onClick={() => { setHoverEffect(!hoverEffect) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="group_work" />{t('highlight')}</button>
-        <button className="m-pr-3" onClick={() => { fit(false) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="monitor" />{t('show all')}</button>
-        <button disabled={selected.length === 0} className='disabled:opacity-50 m-mr-2' onClick={() => { fit(true) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="screenshot_monitor" />{t('show selected')}</button>
+        <button className="m-pr-3" onClick={() => { fitChart(false) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="monitor" />{t('show all')}</button>
+        <button disabled={selected.length === 0} className='disabled:opacity-50 m-mr-2' onClick={() => { fitChart(true) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="screenshot_monitor" />{t('show selected')}</button>
       </span>
     </footer>
   )

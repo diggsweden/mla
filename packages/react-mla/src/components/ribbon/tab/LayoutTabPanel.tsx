@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { fitViewportToNodes } from '@sigma/utils'
 import louvain from 'graphology-communities-louvain'
 import ForceSupervisor from 'graphology-layout-force/worker'
 import forceAtlas2 from 'graphology-layout-forceatlas2'
@@ -16,6 +15,7 @@ import { animateNodes } from "sigma/utils"
 import configService from '../../../services/configurationService'
 import useAppStore from '../../../store/app-store'
 import useMainStore from '../../../store/main-store'
+import { fitNodesInView } from '../../chart/sigma/chart-utils'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
@@ -209,11 +209,7 @@ function LayoutTabPanel() {
 
   function fit() {
     if (sigma && graph && graph.nodes().length) {
-      fitViewportToNodes(
-        sigma,
-        graph.nodes(),
-        { animate: true },
-      );
+      fitNodesInView(sigma, graph.nodes())
     }
   }
 

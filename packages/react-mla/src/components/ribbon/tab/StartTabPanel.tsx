@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { fitViewportToNodes } from '@sigma/utils'
 import { useTranslation } from 'react-i18next'
 import configService from '../../../services/configurationService'
 import useMainStore from '../../../store/main-store'
+import { fitNodesInView } from '../../chart/sigma/chart-utils'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
@@ -21,11 +21,7 @@ function StartTabPanel() {
 
   function fit() {
     if (sigma && graph && graph.nodes().length) {
-      fitViewportToNodes(
-        sigma,
-        graph.filterNodes(() => true),
-        { animate: true },
-      );
+      fitNodesInView(sigma, graph.nodes())
     }
   }
 

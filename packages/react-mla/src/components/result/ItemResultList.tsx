@@ -2,24 +2,24 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { type IQueryResponse } from '../../services/queryService'
-import type { IEntity, IEvent, ILink } from '../../interfaces/data-models'
-import ItemResult from './ItemResult'
-import type { IEntityGroup } from './ItemResult'
-import { useEffect, useState } from 'react'
-import { generateUUID, getId, isLinked } from '../../utils/utils'
-import useAppStore from '../../store/app-store'
 import { produce } from 'immer'
-import useMainStore from '../../store/main-store'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import type { IEntity, IEvent, ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
+import { type IQueryResponse } from '../../services/queryService'
+import useAppStore from '../../store/app-store'
+import { internalAdd } from '../../store/internal-actions'
+import useMainStore from '../../store/main-store'
+import { toDateString } from '../../utils/date'
+import { generateUUID, getId, isLinked } from '../../utils/utils'
+import { fitNodesInView } from '../chart/sigma/chart-utils'
+import Button from '../common/Button'
 import Icon from '../common/Icon'
 import Modal from '../common/Modal'
 import TableTool from '../tools/TableTool'
-import { toDateString } from '../../utils/date'
-import { internalAdd } from '../../store/internal-actions'
-import Button from '../common/Button'
-import { useTranslation } from 'react-i18next'
-import { fitViewportToNodes } from '@sigma/utils'
+import type { IEntityGroup } from './ItemResult'
+import ItemResult from './ItemResult'
 
 interface ItemResultProps {
   result: IQueryResponse
@@ -36,7 +36,7 @@ interface EventGroup {
 
 const last = 'zzzzzzzzzzzz'
 
-function ItemResultList (props: ItemResultProps) {
+function ItemResultList(props: ItemResultProps) {
   const { t } = useTranslation();
   const sigma = useMainStore((state) => state.sigma)
   const graph = useMainStore((state) => state.graph)
@@ -49,24 +49,18 @@ function ItemResultList (props: ItemResultProps) {
   const [eventGroups, setEventGroups] = useState<EventGroup[]>([])
   const [showEvents, setShowEvents] = useState<IEvent[]>([])
 
-  function add (entities: IEntity[], links: ILink[]) {
+  function add(entities: IEntity[], links: ILink[]) {
     const distinctEntities = Object.values(Object.fromEntries(entities.map(x => [getId(x), x])));
     const distinctLinks = Object.values(Object.fromEntries(links.map(x => [getId(x), x])));
 
     internalAdd(true, distinctEntities, distinctLinks, true)
 
     if (sigma && graph) {
-      window.setTimeout(() => {
-        fitViewportToNodes(
-          sigma,
-          entities.map(e => getId(e)),
-          { animate: true },
-        );
-      }, 150)
+      fitNodesInView(sigma, entities.map(e => getId(e)), { timeout: 150 })
     }
   }
 
-  function gatherGroup (groupToAdd: IEntityGroup, entities: IEntity[], links: ILink[]) {
+  function gatherGroup(groupToAdd: IEntityGroup, entities: IEntity[], links: ILink[]) {
     const add = (group: IEntityGroup) => {
       entities.push(group.primary)
       links.push(...group.links)
@@ -76,7 +70,7 @@ function ItemResultList (props: ItemResultProps) {
     add(groupToAdd)
   }
 
-  function addAll () {
+  function addAll() {
     if (Object.keys(mainEntities).length > 0) {
       const entities: IEntity[] = []
       const links: ILink[] = []
@@ -95,7 +89,7 @@ function ItemResultList (props: ItemResultProps) {
     setTool(undefined)
   }
 
-  function addEvents (group: EventGroup) {
+  function addEvents(group: EventGroup) {
     setEvents(...group.Events)
 
     setEventGroups(eventGroups.filter(g => g.GroupId !== group.GroupId))
@@ -103,7 +97,7 @@ function ItemResultList (props: ItemResultProps) {
     autoCloseIfEmpty()
   }
 
-  function addGroup (groupToAdd: IEntityGroup, key: string) {
+  function addGroup(groupToAdd: IEntityGroup, key: string) {
     const entities: IEntity[] = []
     const links: ILink[] = []
     gatherGroup(groupToAdd, entities, links)
@@ -122,13 +116,13 @@ function ItemResultList (props: ItemResultProps) {
     autoCloseIfEmpty()
   }
 
-  function autoCloseIfEmpty () {
+  function autoCloseIfEmpty() {
     if (Object.keys(mainEntities).length === 0 && eventGroups.length === 0) {
       setTool(undefined)
     }
   }
 
-  function sortByLinks (a: IEntity, b: IEntity, links: ILink[]): number {
+  function sortByLinks(a: IEntity, b: IEntity, links: ILink[]): number {
     const linkCountA = links.filter(l => isLinked(a, l)).length
     const linkCountB = links.filter(l => isLinked(b, l)).length
 
@@ -157,7 +151,7 @@ function ItemResultList (props: ItemResultProps) {
           res[groupname].push(group)
         }
 
-        
+
         const linked = result.Links.filter(l => isLinked(entity, l))
         for (const link of linked) {
           if (parentEntity && used[getId(link)] == null && isLinked(parentEntity, link)) {
