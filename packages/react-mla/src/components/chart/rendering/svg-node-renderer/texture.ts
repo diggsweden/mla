@@ -79,8 +79,9 @@ export async function loadSVGImage(
   const originalWidth = root.getAttribute("width");
   const originalHeight = root.getAttribute("height");
 
-  if (!originalWidth || !originalHeight)
-    throw new Error("loadSVGImage: cannot use `size` if target SVG has no definite dimensions.");
+  if (!originalWidth || !originalHeight) {
+    throw new Error("loadSVGImage: cannot use `size` if target SVG has no definite dimensions. Icon: " + imageSource);
+  }
 
   if (typeof size === "number") {
     root.setAttribute("width", "" + size);
@@ -427,7 +428,9 @@ export class TextureManager extends EventEmitter {
         ...refineImage(image, this.corrector, this.options),
       };
       this.scheduleGenerateTexture();
-    } catch {
+    } catch (e) {
+      console.error(e)
+
       this.imageStates[source] = {
         status: "error",
       };
