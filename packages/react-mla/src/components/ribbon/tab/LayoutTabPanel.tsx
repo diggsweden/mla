@@ -12,10 +12,10 @@ import { type ChangeEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PlainObject } from 'sigma/types'
 import { animateNodes } from "sigma/utils"
+import chartService from '../../../services/chartService'
 import configService from '../../../services/configurationService'
 import useAppStore from '../../../store/app-store'
 import useMainStore from '../../../store/main-store'
-import { fitNodesInView } from '../../chart/sigma/chart-utils'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
@@ -209,7 +209,7 @@ function LayoutTabPanel() {
 
   function fit() {
     if (sigma && graph && graph.nodes().length) {
-      fitNodesInView(sigma, graph.nodes())
+      chartService.fitNodesInView(sigma, graph.nodes())
     }
   }
 

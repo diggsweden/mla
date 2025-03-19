@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { useEffect, useRef } from 'react'
-import useAppStore from '../../store/app-store'
 import Sigma from 'sigma'
 import { SigmaEdgeEventPayload, SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
-import useMainStore from '../../store/main-store'
+import useAppStore from '../../../store/app-store'
+import useMainStore from '../../../store/main-store'
 
 const LEFT_CLICK = 0
 
@@ -60,9 +60,9 @@ function useMultiselect(renderer: Sigma | undefined) {
         }
 
         const selectInGraph = (addToAlreadySelected: boolean) => {
-            const rect = graphSelect.current    
-            const start = renderer.viewportToGraph({x : rect.startX, y: rect.startY})
-            const end = renderer.viewportToGraph({x : rect.endX, y: rect.endY})
+            const rect = graphSelect.current
+            const start = renderer.viewportToGraph({ x: rect.startX, y: rect.startY })
+            const end = renderer.viewportToGraph({ x: rect.endX, y: rect.endY })
 
             const order = (a: number, b: number) => {
                 return b < a ? [b, a] : [a, b]
@@ -70,26 +70,26 @@ function useMultiselect(renderer: Sigma | undefined) {
             const [sX, eX] = order(start.x, end.x)
             const [sY, eY] = order(start.y, end.y)
 
-            const result = addToAlreadySelected ? [...selectedIds]  : []
+            const result = addToAlreadySelected ? [...selectedIds] : []
             for (const entityId of Object.keys(entities)) {
                 const entity = entities[entityId][0]
 
                 const t = {
-                  x: entity.PosX ?? 0,
-                  y: entity.PosY ?? 0
+                    x: entity.PosX ?? 0,
+                    y: entity.PosY ?? 0
                 }
 
                 if (sX <= t.x && t.x <= eX && sY <= t.y && t.y <= eY) {
-                  if (!result.includes(entityId)) {
-                      result.push(entityId)
-                  }
+                    if (!result.includes(entityId)) {
+                        result.push(entityId)
+                    }
                 }
             }
 
             setSelected(result)
         }
 
-        const selectInMultiSelectBox = (addToAlreadySelected : boolean) =>{
+        const selectInMultiSelectBox = (addToAlreadySelected: boolean) => {
             multiselectBox.current = false;
             selectInGraph(addToAlreadySelected)
             drawMultiSelectBox()
@@ -97,8 +97,8 @@ function useMultiselect(renderer: Sigma | undefined) {
 
         const select = (toggle: boolean, id: string) => {
             if (toggle) {
-                if (selectedIds.indexOf(id) >= 0){
-                    setSelected(selectedIds.filter(x=> x != id))
+                if (selectedIds.indexOf(id) >= 0) {
+                    setSelected(selectedIds.filter(x => x != id))
                 } else {
                     setSelected([id, ...selectedIds])
                 }
@@ -120,8 +120,8 @@ function useMultiselect(renderer: Sigma | undefined) {
 
             const ctx = canvas.current.getContext("2d")!;
             if (multiselectBox.current == false) {
-                 ctx.clearRect(0, 0, container.clientWidth, container.clientHeight)
-                 return
+                ctx.clearRect(0, 0, container.clientWidth, container.clientHeight)
+                return
             }
 
             const rect = graphSelect.current

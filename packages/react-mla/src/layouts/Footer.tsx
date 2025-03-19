@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { useTranslation } from 'react-i18next';
-import useAppStore from '../../store/app-store';
-import useMainStore from '../../store/main-store';
-import { fitNodesInView } from "../chart/sigma/chart-utils";
-import Icon from './Icon';
+import Icon from '../components/common/Icon';
+import chartService from '../services/chartService';
+import useAppStore from '../store/app-store';
+import useMainStore from '../store/main-store';
 
 function Footer() {
   const { t } = useTranslation()
@@ -20,13 +20,7 @@ function Footer() {
 
   function fitChart(selection: boolean) {
     if (sigma && graph && graph.nodes().length) {
-      fitNodesInView(sigma, graph.filterNodes((node) => !selection || selected.includes(node)))
-
-      //fitViewportToNodes(
-      //  sigma,
-      //  graph.filterNodes((node) => !selection || selected.includes(node)),
-      //  { animate: true },
-      //);
+      chartService.fitNodesInView(sigma, graph.filterNodes((node) => !selection || selected.includes(node)))
     }
   }
 

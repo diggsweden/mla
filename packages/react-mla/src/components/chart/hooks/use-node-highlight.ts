@@ -4,9 +4,9 @@
 
 import { useEffect, useState } from "react";
 import Sigma from "sigma";
-import useAppStore from "../../store/app-store";
 import { SigmaNodeEventPayload } from "sigma/types";
-import useMainStore from "../../store/main-store";
+import useAppStore from "../../../store/app-store";
+import useMainStore from "../../../store/main-store";
 
 function useNodeHighlight(renderer: Sigma | undefined) {
     const [hoveredNode, setHoveredNode] = useState<string | null>(null);

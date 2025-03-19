@@ -2,19 +2,22 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+import { freeze } from 'immer'
+
 import { type IChangeLayout, type IDelay, type IQueryAction, type IWorkflowConfiguration } from '../interfaces/configuration/workflow-configuration'
 import useAppStore from '../store/app-store'
-import configService from './configurationService'
-import queryService from './queryService'
+import { internalAdd } from '../store/internal-actions'
+import useMainStore from '../store/main-store'
 import useWorkflowStore from '../store/workflow-store'
 import { delay } from '../utils/utils'
-import { internalAdd } from '../store/internal-actions'
-import { freeze } from 'immer'
+import chartService from './chartService'
+import configService from './configurationService'
+import queryService from './queryService'
 
 class WorkflowService {
   private progress_handle?: number
 
-  public async Execute (id: string): Promise<void> {
+  public async Execute(id: string): Promise<void> {
     const workflowStore = useWorkflowStore.getState()
     const workflow = configService.getWorkflow(id)
     workflowStore.setWorkflow(id)
@@ -38,6 +41,9 @@ class WorkflowService {
           case 'CloseDialog':
             this.Close()
             break
+          case 'CenterChart':
+            this.CenterChart()
+            break
         }
       } catch (e: any) {
         workflowStore.setActionError(action.Id, e.message as string)
@@ -48,7 +54,7 @@ class WorkflowService {
     }
   }
 
-  private UpdateDialog (config: IWorkflowConfiguration): void {
+  private UpdateDialog(config: IWorkflowConfiguration): void {
     if (this.progress_handle) {
       window.clearTimeout(this.progress_handle)
     }
@@ -60,7 +66,7 @@ class WorkflowService {
     }
   }
 
-  private async RunQuery (queryParameter: IQueryAction): Promise<void> {
+  private async RunQuery(queryParameter: IQueryAction): Promise<void> {
     const result = await queryService.QueryEntities(queryParameter.QueryId, [])
 
     if (result.Entities) {
@@ -72,19 +78,29 @@ class WorkflowService {
     }
   }
 
-  private async Add (): Promise<void> {
+  private async Add(): Promise<void> {
     internalAdd(false, useWorkflowStore.getState().entities, useWorkflowStore.getState().links)
     await delay(100)
   }
 
-  private ChangeLayout (queryParameter: IChangeLayout): void {
+  private ChangeLayout(queryParameter: IChangeLayout): void {
     const layoutId = queryParameter.LayoutId
     useAppStore.getState().setLayout(layoutId)
   }
 
-  private Close (): void {
+  private Close(): void {
     useWorkflowStore.getState().setShowDialog(false)
   }
+
+  private CenterChart(): void {
+    const sigma = useMainStore.getState().sigma;
+    const graph = useMainStore.getState().graph;
+
+    if (sigma != null && graph != null) {
+      chartService.fitNodesInView(sigma, graph.nodes())
+    }
+  }
+
 }
 
 const workflowService = freeze(new WorkflowService())

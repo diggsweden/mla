@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { useTranslation } from 'react-i18next'
+import chartService from '../../../services/chartService'
 import configService from '../../../services/configurationService'
 import useMainStore from '../../../store/main-store'
-import { fitNodesInView } from '../../chart/sigma/chart-utils'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
@@ -21,7 +21,7 @@ function StartTabPanel() {
 
   function fit() {
     if (sigma && graph && graph.nodes().length) {
-      fitNodesInView(sigma, graph.nodes())
+      chartService.fitNodesInView(sigma, graph.nodes())
     }
   }
 

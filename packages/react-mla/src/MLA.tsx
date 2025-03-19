@@ -4,37 +4,36 @@
 
 import { useEffect, useState } from 'react'
 
+import App from './App'
+import ErrorBoundary from './components/common/ErrorBoundary'
+import Spinner from './components/common/Spinner'
 import configService from './services/configurationService'
 import iconService from './services/iconService'
-import viewService from './services/viewService'
-import workflowService from './services/workflowService'
-import { getContextValue } from './utils/utils'
 import queryService from './services/queryService'
+import viewService from './services/viewService'
 import useMainStore from './store/main-store'
-import Spinner from './components/common/Spinner'
-import ErrorBoundary from './components/common/ErrorBoundary'
-import App from './App'
+import { getContextValue } from './utils/utils'
 
-import './MLA.scss'
 import { useTranslation } from 'react-i18next'
+import './MLA.scss'
 
-import i18n from "i18next";
+import i18n from "i18next"
 import { initReactI18next } from 'react-i18next'
 import en from '../i18n/en.json'
 import sv from '../i18n/sv.json'
 
 i18n
-.use(initReactI18next)
-.init({
-  resources: {
-    en: { translation: en },
-    sv: { translation: sv }
-  },
-  fallbackLng: "en",
-  interpolation: {
-    escapeValue: false // react already safes from xss
-  }
-});
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: { translation: en },
+      sv: { translation: sv }
+    },
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false // react already safes from xss
+    }
+  });
 
 export interface MlaProps {
   config?: string
@@ -44,11 +43,11 @@ export interface MlaProps {
   workflowId?: string
 }
 
-export function MLA (props: MlaProps) {
+export function MLA(props: MlaProps) {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    async function init () {
+    async function init() {
       if (configService.isConfigured()) {
         return
       }
@@ -73,9 +72,7 @@ export function MLA (props: MlaProps) {
         }
       }
 
-      if (props.workflowId) {
-        void workflowService.Execute(props.workflowId)
-      }
+      useMainStore.getState().setWorkflowToExecute(props.workflowId ?? '')
 
       setReady(true)
     }
@@ -86,7 +83,7 @@ export function MLA (props: MlaProps) {
   const { t } = useTranslation()
   return (
     <div className='mla-component'>
-      { !ready &&
+      {!ready &&
         <div id="loader">
           <h1>{t('starting')}</h1>
           <div className="m-h-16 m-w-16 m-m-auto">
@@ -94,9 +91,9 @@ export function MLA (props: MlaProps) {
           </div>
         </div>
       }
-      { ready &&
+      {ready &&
         <ErrorBoundary>
-            <App />
+          <App />
         </ErrorBoundary>
       }
     </div>

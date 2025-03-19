@@ -6,8 +6,8 @@ import { useEffect, useRef } from 'react'
 
 import Sigma from 'sigma'
 import { SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
-import useAppStore from '../../store/app-store'
-import useMainStore from '../../store/main-store'
+import useAppStore from '../../../store/app-store'
+import useMainStore from '../../../store/main-store'
 
 const RIGHT_CLICK = 2
 

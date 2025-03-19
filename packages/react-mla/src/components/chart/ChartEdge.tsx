@@ -1,13 +1,14 @@
 // SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 //
 // SPDX-License-Identifier: EUPL-1.2
+
 import Graph from 'graphology'
 import { useEffect, useMemo, useRef } from 'react'
-import type { ILink } from '../../../interfaces/data-models'
-import viewService from '../../../services/viewService'
-import useAppStore from '../../../store/app-store'
-import useMainStore from '../../../store/main-store'
-import { getId, isSelected } from '../../../utils/utils'
+import type { ILink } from '../../interfaces/data-models'
+import viewService from '../../services/viewService'
+import useAppStore from '../../store/app-store'
+import useMainStore from '../../store/main-store'
+import { getId, isSelected } from '../../utils/utils'
 
 interface Props {
   link: ILink

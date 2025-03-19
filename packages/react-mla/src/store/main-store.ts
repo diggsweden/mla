@@ -62,6 +62,9 @@ export interface MainState {
   context: string
   setContext: (ctx: string) => void
 
+  workflowToExecute: string
+  setWorkflowToExecute: (workflowId: string) => void
+
   drawings?: string
 
   selectedEntities: IEntity[]
@@ -72,7 +75,7 @@ export interface MainState {
   sigma: Sigma | undefined
   fabric: fabric.Canvas | undefined
   setSigma: (sigma: Sigma) => void
-  setFabric: (fabric: fabric.Canvas) => void
+  setFabric: (fabric?: fabric.Canvas) => void
 
   setEvent: (...events: IEvent[]) => void
   removeEvent: (...events: IEvent[]) => void
@@ -552,6 +555,13 @@ const useMainStore = create<MainState>((set, get) => ({
   setDirty: (isDirty: boolean) => {
     set((state) => ({
       dirty: isDirty
+    }))
+  },
+
+  workflowToExecute: '',
+  setWorkflowToExecute: (workflowId: string) => {
+    set((state) => ({
+      workflowToExecute: workflowId
     }))
   },
 

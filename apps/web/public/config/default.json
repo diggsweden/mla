@@ -734,11 +734,15 @@
                     "Id": "7",
                     "ActionType": "Delay",
                     "ActionParameters": {
-                        "ms": 1500
+                        "ms": 500
                     }
                 },
                 {
                     "Id": "8",
+                    "ActionType": "CenterChart"
+                },
+                {
+                    "Id": "9",
                     "ActionType": "CloseDialog"
                 }
             ]

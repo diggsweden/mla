@@ -6,6 +6,7 @@ import { produce } from 'immer'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { IEntity, IEvent, ILink } from '../../interfaces/data-models'
+import chartService from '../../services/chartService'
 import configService from '../../services/configurationService'
 import { type IQueryResponse } from '../../services/queryService'
 import useAppStore from '../../store/app-store'
@@ -13,7 +14,6 @@ import { internalAdd } from '../../store/internal-actions'
 import useMainStore from '../../store/main-store'
 import { toDateString } from '../../utils/date'
 import { generateUUID, getId, isLinked } from '../../utils/utils'
-import { fitNodesInView } from '../chart/sigma/chart-utils'
 import Button from '../common/Button'
 import Icon from '../common/Icon'
 import Modal from '../common/Modal'
@@ -56,7 +56,7 @@ function ItemResultList(props: ItemResultProps) {
     internalAdd(true, distinctEntities, distinctLinks, true)
 
     if (sigma && graph) {
-      fitNodesInView(sigma, entities.map(e => getId(e)), { timeout: 150 })
+      chartService.fitNodesInView(sigma, entities.map(e => getId(e)), { timeout: 150 })
     }
   }
 

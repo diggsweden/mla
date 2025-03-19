@@ -17,8 +17,8 @@ import edgeBetweennessCentrality from 'graphology-metrics/centrality/edge-betwee
 import eigenvectorCentrality from 'graphology-metrics/centrality/eigenvector'
 import pagerank from 'graphology-metrics/centrality/pagerank'
 
-import { DEFAULT_EDGE_SIZE } from '../../chart/sigma/ChartEdge'
-import { DEFAULT_NODE_SIZE } from '../../chart/sigma/ChartNode'
+import { DEFAULT_EDGE_SIZE } from '../../chart/ChartEdge'
+import { DEFAULT_NODE_SIZE } from '../../chart/ChartNode'
 import Modal from '../../common/Modal'
 
 interface Props {

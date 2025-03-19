@@ -4,12 +4,12 @@
 
 import Graph from 'graphology';
 import { useEffect, useMemo, useRef } from 'react';
-import type { IEntity } from '../../../interfaces/data-models';
-import configService from '../../../services/configurationService';
-import viewService from '../../../services/viewService';
-import useAppStore from '../../../store/app-store';
-import useMainStore from '../../../store/main-store';
-import { getId, isSelected } from '../../../utils/utils';
+import type { IEntity } from '../../interfaces/data-models';
+import configService from '../../services/configurationService';
+import viewService from '../../services/viewService';
+import useAppStore from '../../store/app-store';
+import useMainStore from '../../store/main-store';
+import { getId, isSelected } from '../../utils/utils';
 
 interface Props {
   entity: IEntity

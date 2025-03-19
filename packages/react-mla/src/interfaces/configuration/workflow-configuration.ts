@@ -13,7 +13,7 @@ export interface IAction {
   Id: string
   Description: string
   Name: string
-  ActionType: 'RunQuery' | 'Add' | 'ChangeLayout' | 'CloseDialog' | 'Delay'
+  ActionType: 'RunQuery' | 'Add' | 'ChangeLayout' | 'CloseDialog' | 'Delay' | 'CenterChart'
   ActionParameters: IQueryAction | IQueryAdd | IChangeLayout | IDelay
   Icon: string | undefined
 }
@@ -36,8 +36,9 @@ interface IDelay {
 }
 
 export type {
-  IWorkflowConfiguration,
-  IQueryAction,
   IChangeLayout,
-  IDelay
+  IDelay,
+  IQueryAction,
+  IWorkflowConfiguration
 }
+

@@ -6,8 +6,8 @@ import { produce } from "immer";
 import { useEffect, useRef } from "react";
 import Sigma from "sigma";
 import { SigmaNodeEventPayload, SigmaStageEventPayload } from "sigma/types";
-import { IEntity } from "../../interfaces/data-models";
-import useMainStore from "../../store/main-store";
+import { IEntity } from "../../../interfaces/data-models";
+import useMainStore from "../../../store/main-store";
 
 const LEFT_CLICK = 0
 

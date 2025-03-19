@@ -3,14 +3,14 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { useEffect, useMemo } from 'react'
-import useMainStore from '../../../store/main-store'
-import { getId } from '../../../utils/utils'
+import useMainStore from '../../store/main-store'
+import { getId } from '../../utils/utils'
 import ChartEdge from './ChartEdge'
 import ChartEntity from './ChartNode'
 
 import { DEFAULT_EDGE_CURVATURE, indexParallelEdgesIndex } from "@sigma/edge-curve"
 
-function ContentRenderer() {
+function ChartContent() {
   const date = useMainStore(state => state.currentDate)
 
   const entities = useMainStore((state) => state.entities)
@@ -97,4 +97,4 @@ function getCurvature(index: number, maxIndex: number): number {
   return (maxCurvature * index) / maxIndex;
 }
 
-export default ContentRenderer
+export default ChartContent
