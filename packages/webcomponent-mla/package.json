@@ -25,7 +25,7 @@
     "@types/react-dom": "18.3.5",
     "@types/wicg-file-system-access": "2023.10.5",
     "@vitejs/plugin-react": "4.3.4",
-    "sass-embedded": "1.83.4",
+    "sass-embedded": "1.86.0",
     "tailwindcss": "3.4.17",
     "typescript": "5.6.3",
     "vite": "5.4.14",
