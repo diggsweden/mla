@@ -262,8 +262,8 @@ importers:
         specifier: 2.1.9
         version: 2.1.9(@types/node@20.17.24)(@vitest/browser@2.1.9)(msw@2.7.0(@types/node@20.17.24)(typescript@5.5.4))(sass-embedded@1.83.4)
       vitest-browser-react:
-        specifier: 0.0.4
-        version: 0.0.4(@types/react-dom@18.3.5(@types/react@18.3.19))(@types/react@18.3.19)(@vitest/browser@2.1.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.9)
+        specifier: 0.1.1
+        version: 0.1.1(@types/react-dom@18.3.5(@types/react@18.3.19))(@types/react@18.3.19)(@vitest/browser@2.1.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.9)
     publishDirectory: dist
 
   packages/webcomponent-mla:
@@ -3964,8 +3964,8 @@ packages:
       terser:
         optional: true
 
-  vitest-browser-react@0.0.4:
-    resolution: {integrity: sha512-4uK8zgo5eHlhrBVEPX8ejRt8Bn4gzV6OZFTPdb1en3FtgjEhhst400XkIQHUC875Q90rOO5Tc4zPpCl8YXvoxg==}
+  vitest-browser-react@0.1.1:
+    resolution: {integrity: sha512-n9l+sIAexKqqfBuEkjVGdfZ4xAn1Gn/+wc4Mo8KsUSUOVoM9evSY0rVXdMIzCQqloT/zvmFGAtziFINkqu+t7g==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       '@types/react': '>18.0.0'
@@ -8074,7 +8074,7 @@ snapshots:
       fsevents: 2.3.3
       sass-embedded: 1.83.4
 
-  vitest-browser-react@0.0.4(@types/react-dom@18.3.5(@types/react@18.3.19))(@types/react@18.3.19)(@vitest/browser@2.1.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.9):
+  vitest-browser-react@0.1.1(@types/react-dom@18.3.5(@types/react@18.3.19))(@types/react@18.3.19)(@vitest/browser@2.1.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@2.1.9):
     dependencies:
       '@vitest/browser': 2.1.9(@types/node@20.17.24)(playwright@1.50.1)(typescript@5.5.4)(vite@5.4.14(@types/node@20.17.24)(sass-embedded@1.83.4))(vitest@2.1.9)
       react: 18.3.1
