@@ -63,7 +63,7 @@
     "@testing-library/react": "16.2.0",
     "@types/leaflet": "1.9.17",
     "@types/luxon": "3.4.2",
-    "@types/node": "20.17.27",
+    "@types/node": "20.17.28",
     "@types/offscreencanvas": "2019.7.3",
     "@types/react": "18.3.20",
     "@types/react-dom": "18.3.5",
