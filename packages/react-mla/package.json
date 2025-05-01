@@ -78,7 +78,7 @@
     "eslint-plugin-autofix": "2.2.0",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "5.2.0",
-    "eslint-plugin-react-refresh": "0.4.19",
+    "eslint-plugin-react-refresh": "0.4.20",
     "globals": "15.15.0",
     "playwright": "1.51.1",
     "sass-embedded": "1.86.0",
