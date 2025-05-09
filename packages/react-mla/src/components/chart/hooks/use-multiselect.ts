@@ -2,249 +2,263 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useRef } from 'react'
-import Sigma from 'sigma'
-import { SigmaEdgeEventPayload, SigmaNodeEventPayload, SigmaStageEventPayload } from 'sigma/types'
-import useAppStore from '../../../store/app-store'
-import useMainStore from '../../../store/main-store'
+import { useEffect, useRef } from "react";
+import Sigma from "sigma";
+import { SigmaEdgeEventPayload, SigmaNodeEventPayload, SigmaStageEventPayload } from "sigma/types";
+import useAppStore from "../../../store/app-store";
+import useMainStore from "../../../store/main-store";
 
-const LEFT_CLICK = 0
+const LEFT_CLICK = 0;
 
 function useMultiselect(renderer: Sigma | undefined) {
-    const leftMouseButtonIsDown = useRef(false)
-    const nodesMoved = useRef(false)
-    const multiselectBox = useRef(false)
-    const canvas = useRef(null as null | HTMLCanvasElement)
-    const graphSelect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0, clientOffsetX: 0, clientOffsetY: 0 })
+  const leftMouseButtonIsDown = useRef(false);
+  const nodesMoved = useRef(false);
+  const multiselectBox = useRef(false);
+  const canvas = useRef(null as null | HTMLCanvasElement);
+  const graphSelect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0, clientOffsetX: 0, clientOffsetY: 0 });
 
-    const setSelected = useMainStore((state) => state.setSelected)
-    const selectedIds = useMainStore((state) => state.selectedIds)
-    const entities = useMainStore((state) => state.entities)
-    const setGeo = useAppStore(state => state.setSelectedGeoFeature)
+  const setSelected = useMainStore((state) => state.setSelected);
+  const selectedIds = useMainStore((state) => state.selectedIds);
+  const entities = useMainStore((state) => state.entities);
+  const currentShapeType = useMainStore((state) => state.currentShapeType);
+  const selectedShapeId = useMainStore((state) => state.selectedShapeId);
+  const setGeo = useAppStore((state) => state.setSelectedGeoFeature);
 
-    useEffect(() => {
-        if (renderer == null) return
+  useEffect(() => {
+    if (renderer == null) return;
 
-        const canv = renderer.getCanvases()["multiselect"] ?? renderer.createCanvas("multiselect")
-        const container = renderer.getContainer();
-        canv.style.userSelect = "none";
-        canv.style.touchAction = "none";
-        canv.style.pointerEvents = "none";
-        canv.style["width"] = `${container.clientWidth}px`;
-        canv.style["height"] = `${container.clientHeight}px`;
-        canv.setAttribute("width", `${container.clientWidth}px`)
-        canv.setAttribute("height", `${container.clientHeight}px`)
+    const canv = renderer.getCanvases()["multiselect"] ?? renderer.createCanvas("multiselect");
+    const container = renderer.getContainer();
+    canv.style.userSelect = "none";
+    canv.style.touchAction = "none";
+    canv.style.pointerEvents = "none";
+    canv.style["width"] = `${container.clientWidth}px`;
+    canv.style["height"] = `${container.clientHeight}px`;
+    canv.setAttribute("width", `${container.clientWidth}px`);
+    canv.setAttribute("height", `${container.clientHeight}px`);
 
-        canvas.current = canv
+    canvas.current = canv;
 
-        return () => {
-            canvas.current = null;
+    return () => {
+      canvas.current = null;
+    };
+  });
+
+  useEffect(() => {
+    if (renderer == null || canvas.current == null) return;
+
+    if (canvas.current == null) {
+      const container = renderer.getContainer();
+      const canv = renderer.createCanvas("multiselect");
+      canv.style.userSelect = "none";
+      canv.style.touchAction = "none";
+      canv.style.pointerEvents = "none";
+      canv.style["width"] = `${container.clientWidth}px`;
+      canv.style["height"] = `${container.clientHeight}px`;
+      canv.setAttribute("width", `${container.clientWidth}px`);
+      canv.setAttribute("height", `${container.clientHeight}px`);
+
+      canvas.current = canv;
+    }
+
+    const selectInGraph = (addToAlreadySelected: boolean) => {
+      const rect = graphSelect.current;
+      const start = renderer.viewportToGraph({ x: rect.startX, y: rect.startY });
+      const end = renderer.viewportToGraph({ x: rect.endX, y: rect.endY });
+
+      const order = (a: number, b: number) => {
+        return b < a ? [b, a] : [a, b];
+      };
+      const [sX, eX] = order(start.x, end.x);
+      const [sY, eY] = order(start.y, end.y);
+
+      const result = addToAlreadySelected ? [...selectedIds] : [];
+      for (const entityId of Object.keys(entities)) {
+        const entity = entities[entityId][0];
+
+        const t = {
+          x: entity.PosX ?? 0,
+          y: entity.PosY ?? 0,
+        };
+
+        if (sX <= t.x && t.x <= eX && sY <= t.y && t.y <= eY) {
+          if (!result.includes(entityId)) {
+            result.push(entityId);
+          }
         }
-    })
+      }
 
-    useEffect(() => {
-        if (renderer == null || canvas.current == null) return
+      setSelected(result);
+    };
 
-        if (canvas.current == null) {
-            const container = renderer.getContainer();
-            const canv = renderer.createCanvas("multiselect")
-            canv.style.userSelect = "none";
-            canv.style.touchAction = "none";
-            canv.style.pointerEvents = "none";
-            canv.style["width"] = `${container.clientWidth}px`;
-            canv.style["height"] = `${container.clientHeight}px`;
-            canv.setAttribute("width", `${container.clientWidth}px`)
-            canv.setAttribute("height", `${container.clientHeight}px`)
+    const selectInMultiSelectBox = (addToAlreadySelected: boolean) => {
+      multiselectBox.current = false;
+      selectInGraph(addToAlreadySelected);
+      drawMultiSelectBox();
+    };
 
-            canvas.current = canv
+    const select = (toggle: boolean, id: string) => {
+      if (toggle) {
+        if (selectedIds.indexOf(id) >= 0) {
+          setSelected(selectedIds.filter((x) => x != id));
+        } else {
+          setSelected([id, ...selectedIds]);
         }
+      } else {
+        setSelected([id]);
+      }
+    };
 
-        const selectInGraph = (addToAlreadySelected: boolean) => {
-            const rect = graphSelect.current
-            const start = renderer.viewportToGraph({ x: rect.startX, y: rect.startY })
-            const end = renderer.viewportToGraph({ x: rect.endX, y: rect.endY })
+    const drawMultiSelectBox = () => {
+      if (renderer == null || canvas.current == null) {
+        return;
+      }
 
-            const order = (a: number, b: number) => {
-                return b < a ? [b, a] : [a, b]
-            }
-            const [sX, eX] = order(start.x, end.x)
-            const [sY, eY] = order(start.y, end.y)
+      const container = renderer.getContainer();
+      canvas.current.style["width"] = `${container.clientWidth}px`;
+      canvas.current.style["height"] = `${container.clientHeight}px`;
+      canvas.current.setAttribute("width", `${container.clientWidth}px`);
+      canvas.current.setAttribute("height", `${container.clientHeight}px`);
 
-            const result = addToAlreadySelected ? [...selectedIds] : []
-            for (const entityId of Object.keys(entities)) {
-                const entity = entities[entityId][0]
+      const ctx = canvas.current.getContext("2d")!;
+      if (multiselectBox.current == false) {
+        ctx.clearRect(0, 0, container.clientWidth, container.clientHeight);
+        return;
+      }
 
-                const t = {
-                    x: entity.PosX ?? 0,
-                    y: entity.PosY ?? 0
-                }
+      const rect = graphSelect.current;
 
-                if (sX <= t.x && t.x <= eX && sY <= t.y && t.y <= eY) {
-                    if (!result.includes(entityId)) {
-                        result.push(entityId)
-                    }
-                }
-            }
+      ctx.setLineDash([5]);
+      ctx.strokeStyle = "rgba(78, 146, 237, 0.75)";
+      ctx.strokeRect(rect.startX + rect.clientOffsetX, rect.startY, rect.endX + rect.clientOffsetX - rect.startX, rect.endY - rect.startY);
+      ctx.setLineDash([]);
+      ctx.fillStyle = "rgba(151, 194, 252, 0.45)";
+      ctx.fillRect(rect.startX + rect.clientOffsetX, rect.startY, rect.endX + rect.clientOffsetX - rect.startX, rect.endY - rect.startY);
+    };
 
-            setSelected(result)
-        }
+    const moveBody = (e: SigmaStageEventPayload) => {
+      if (multiselectBox.current && !selectedShapeId) {
+        Object.assign(graphSelect.current, {
+          endX: e.event.x,
+          endY: e.event.y,
+        });
 
-        const selectInMultiSelectBox = (addToAlreadySelected: boolean) => {
-            multiselectBox.current = false;
-            selectInGraph(addToAlreadySelected)
-            drawMultiSelectBox()
-        }
+        e.preventSigmaDefault();
+        e.event.original.preventDefault();
+        e.event.original.stopPropagation();
 
-        const select = (toggle: boolean, id: string) => {
-            if (toggle) {
-                if (selectedIds.indexOf(id) >= 0) {
-                    setSelected(selectedIds.filter(x => x != id))
-                } else {
-                    setSelected([id, ...selectedIds])
-                }
-            } else {
-                setSelected([id])
-            }
-        }
+        drawMultiSelectBox();
+      }
 
-        const drawMultiSelectBox = () => {
-            if (renderer == null || canvas.current == null) {
-                return
-            }
+      if (currentShapeType || selectedShapeId) {
+        e.preventSigmaDefault();
+        e.event.original.preventDefault();
+        e.event.original.stopPropagation();
+      }
 
-            const container = renderer.getContainer();
-            canvas.current.style["width"] = `${container.clientWidth}px`;
-            canvas.current.style["height"] = `${container.clientHeight}px`;
-            canvas.current.setAttribute("width", `${container.clientWidth}px`)
-            canvas.current.setAttribute("height", `${container.clientHeight}px`)
+      if (leftMouseButtonIsDown.current && !nodesMoved.current) {
+        nodesMoved.current = true;
+      }
+    };
 
-            const ctx = canvas.current.getContext("2d")!;
-            if (multiselectBox.current == false) {
-                ctx.clearRect(0, 0, container.clientWidth, container.clientHeight)
-                return
-            }
+    const downStage = (e: SigmaStageEventPayload) => {
+      const click = e.event.original as MouseEvent;
+      if (click.button != LEFT_CLICK) return;
 
-            const rect = graphSelect.current
+      if (currentShapeType) return; // Don't allow multiselect when drawing shapes
 
-            ctx.setLineDash([5])
-            ctx.strokeStyle = 'rgba(78, 146, 237, 0.75)'
-            ctx.strokeRect(rect.startX + rect.clientOffsetX, rect.startY, rect.endX + rect.clientOffsetX - rect.startX, rect.endY - rect.startY)
-            ctx.setLineDash([])
-            ctx.fillStyle = 'rgba(151, 194, 252, 0.45)'
-            ctx.fillRect(rect.startX + rect.clientOffsetX, rect.startY, rect.endX + rect.clientOffsetX - rect.startX, rect.endY - rect.startY)
-        }
+      // Add offset to the coordinates so that a client click in the upper left corner of the sigma container i [0,0]
+      const offset = renderer.getContainer().getBoundingClientRect();
+      const x = click.clientX - offset.x;
+      const y = click.clientY - offset.y;
 
-        const moveBody = (e: SigmaStageEventPayload) => {
-            if (multiselectBox.current) {
-                Object.assign(graphSelect.current, {
-                    endX: e.event.x,
-                    endY: e.event.y
-                })
+      Object.assign(graphSelect.current, {
+        startX: x,
+        startY: y,
+        endX: x,
+        endY: y,
+        clientOffsetX: offset.x,
+        clientOffsetY: offset.y,
+      });
 
-                e.preventSigmaDefault();
-                e.event.original.preventDefault();
-                e.event.original.stopPropagation();
+      multiselectBox.current = true;
+    };
 
-                drawMultiSelectBox();
-            }
+    const upStage = (e: SigmaStageEventPayload) => {
+      const click = e.event.original as MouseEvent;
+      if (click.button != LEFT_CLICK) return;
 
-            if (leftMouseButtonIsDown.current && !nodesMoved.current) {
-                nodesMoved.current = true;
-            }
-        }
+      if (multiselectBox.current) {
+        selectInMultiSelectBox(click.ctrlKey);
+      } else {
+        setSelected([]);
+      }
+    };
 
-        const downStage = (e: SigmaStageEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button != LEFT_CLICK) return;
+    const downNode = (e: SigmaNodeEventPayload) => {
+      const click = e.event.original as MouseEvent;
+      if (click.button != LEFT_CLICK) return;
 
-            // Add offset to the coordinates so that a client click in the upper left corner of the sigma container i [0,0]
-            const offset = renderer.getContainer().getBoundingClientRect();
-            const x = click.clientX - offset.x
-            const y = click.clientY - offset.y
+      if (currentShapeType) return; // Don't allow multiselect when drawing shapes
 
-            Object.assign(graphSelect.current, {
-                startX: x,
-                startY: y,
-                endX: x,
-                endY: y,
-                clientOffsetX: offset.x,
-                clientOffsetY: offset.y
-            })
+      leftMouseButtonIsDown.current = true;
+    };
 
-            multiselectBox.current = true
-        }
+    const upNode = (e: SigmaNodeEventPayload) => {
+      const click = e.event.original as MouseEvent;
+      if (click.button != LEFT_CLICK) return;
 
-        const upStage = (e: SigmaStageEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button != LEFT_CLICK) return;
+      if (multiselectBox.current) {
+        selectInMultiSelectBox(click.ctrlKey);
+      } else if (!nodesMoved.current) {
+        select(e.event.original.ctrlKey, e.node);
+      }
 
-            if (multiselectBox.current) {
-                selectInMultiSelectBox(click.ctrlKey)
-            } else {
-                setSelected([])
-            }
-        }
+      nodesMoved.current = false;
+      leftMouseButtonIsDown.current = false;
+    };
 
-        const downNode = (e: SigmaNodeEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button != LEFT_CLICK) return;
+    const downEdge = (e: SigmaEdgeEventPayload) => {
+      const click = e.event.original as MouseEvent;
+      if (click.button != LEFT_CLICK) return;
 
-            leftMouseButtonIsDown.current = true;
-        }
+      if (currentShapeType) return; // Don't allow multiselect when drawing shapes
 
-        const upNode = (e: SigmaNodeEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button != LEFT_CLICK) return;
+      leftMouseButtonIsDown.current = true;
+    };
 
-            if (multiselectBox.current) {
-                selectInMultiSelectBox(click.ctrlKey)
-            } else if (!nodesMoved.current) {
-                select(e.event.original.ctrlKey, e.node)
-            }
+    const upEdge = (e: SigmaEdgeEventPayload) => {
+      const click = e.event.original as MouseEvent;
+      if (click.button != LEFT_CLICK) return;
 
-            nodesMoved.current = false;
-            leftMouseButtonIsDown.current = false
-        }
+      if (multiselectBox.current) {
+        selectInMultiSelectBox(click.ctrlKey);
+      } else if (!nodesMoved.current) {
+        select(e.event.original.ctrlKey, e.edge);
+      }
 
-        const downEdge = (e: SigmaEdgeEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button != LEFT_CLICK) return;
+      nodesMoved.current = false;
+      leftMouseButtonIsDown.current = false;
+    };
 
-            leftMouseButtonIsDown.current = true;
-        }
+    renderer.on("upStage", upStage);
+    renderer.on("downStage", downStage);
+    renderer.on("upNode", upNode);
+    renderer.on("downNode", downNode);
+    renderer.on("downEdge", downEdge);
+    renderer.on("upEdge", upEdge);
+    renderer.on("moveBody", moveBody);
 
-        const upEdge = (e: SigmaEdgeEventPayload) => {
-            const click = e.event.original as MouseEvent;
-            if (click.button != LEFT_CLICK) return;
-
-            if (multiselectBox.current) {
-                selectInMultiSelectBox(click.ctrlKey)
-            } else if (!nodesMoved.current) {
-                select(e.event.original.ctrlKey, e.edge)
-            }
-
-            nodesMoved.current = false;
-            leftMouseButtonIsDown.current = false
-        }
-
-        renderer.on("upStage", upStage)
-        renderer.on("downStage", downStage)
-        renderer.on("upNode", upNode)
-        renderer.on("downNode", downNode)
-        renderer.on("downEdge", downEdge)
-        renderer.on("upEdge", upEdge)
-        renderer.on("moveBody", moveBody)
-
-        return () => {
-            renderer.off("upStage", upStage)
-            renderer.off("downStage", downStage)
-            renderer.off("upNode", upNode)
-            renderer.off("downNode", downNode)
-            renderer.off("downEdge", downEdge)
-            renderer.off("upEdge", upEdge)
-            renderer.off("moveBody", moveBody)
-        }
-    }, [entities, renderer, selectedIds, setGeo, setSelected])
+    return () => {
+      renderer.off("upStage", upStage);
+      renderer.off("downStage", downStage);
+      renderer.off("upNode", upNode);
+      renderer.off("downNode", downNode);
+      renderer.off("downEdge", downEdge);
+      renderer.off("upEdge", upEdge);
+      renderer.off("moveBody", moveBody);
+    };
+  }, [entities, renderer, selectedIds, setGeo, setSelected, currentShapeType, selectedShapeId]);
 }
 
-export default useMultiselect
+export default useMultiselect;

@@ -26,6 +26,7 @@ export function useDragNodes(renderer: Sigma | undefined) {
         if (renderer == null) return
 
         const downNode = (e: SigmaNodeEventPayload) => {
+
             const click = e.event.original as MouseEvent
             if (click.button != LEFT_CLICK || click.ctrlKey) return
 

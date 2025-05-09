@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { Attributes } from 'graphology-types';
-import { NodeDisplayData, PartialButFor } from 'sigma/types';
-import { Settings } from "sigma/settings"; 
+import { Attributes } from "graphology-types";
+import { Settings } from "sigma/settings";
+import { NodeDisplayData, PartialButFor } from "sigma/types";
 
 /**
  * Draw an hovered node.
@@ -12,14 +12,10 @@ import { Settings } from "sigma/settings";
  * - if the label box is bigger than node size => display a label box that contains the node with a shadow
  * - else node with shadow and the label box
  */
-export function drawDiscNodeHover<
-  N extends Attributes = Attributes,
-  E extends Attributes = Attributes,
-  G extends Attributes = Attributes,
->(
+export function drawDiscCustomNodeHover<N extends Attributes = Attributes, E extends Attributes = Attributes, G extends Attributes = Attributes>(
   context: CanvasRenderingContext2D,
   data: PartialButFor<NodeDisplayData, "x" | "y" | "size" | "label" | "color">,
-  settings: Settings<N, E, G>,
+  settings: Settings<N, E, G>
 ): void {
   const size = settings.labelSize,
     font = settings.labelFont,
@@ -53,7 +49,7 @@ export function drawDiscNodeHover<
     context.lineTo(data.x - (boxWidth / 2 + padding), data.y + boxHeight + padding + yDeltaCoord);
     context.lineTo(data.x - (boxWidth / 2 + padding), data.y + yDeltaCoord);
     context.lineTo(data.x - padding, data.y + yDeltaCoord);
-    context.arc(data.x, data.y, radius, Math.PI - angleRadian, (Math.PI * 2) + angleRadian);
+    context.arc(data.x, data.y, radius, Math.PI - angleRadian, Math.PI * 2 + angleRadian);
     context.closePath();
     context.fill();
   } else {
@@ -68,17 +64,13 @@ export function drawDiscNodeHover<
   context.shadowBlur = 0;
 
   // And finally we draw the label
-  drawDiscNodeLabel(context, data, settings);
+  drawDiscCustomNodeLabel(context, data, settings);
 }
 
-export function drawDiscNodeLabel<
-  N extends Attributes = Attributes,
-  E extends Attributes = Attributes,
-  G extends Attributes = Attributes,
->(
+export function drawDiscCustomNodeLabel<N extends Attributes = Attributes, E extends Attributes = Attributes, G extends Attributes = Attributes>(
   context: CanvasRenderingContext2D,
   data: PartialButFor<NodeDisplayData, "x" | "y" | "size" | "label" | "color">,
-  settings: Settings<N, E, G>,
+  settings: Settings<N, E, G>
 ): void {
   if (!data.label) return;
 
@@ -86,13 +78,10 @@ export function drawDiscNodeLabel<
     size = settings.labelSize,
     font = settings.labelFont,
     weight = settings.labelWeight,
-    color = settings.labelColor.attribute
-      ? data[settings.labelColor.attribute] || settings.labelColor.color || "#000"
-      : settings.labelColor.color;
+    color = settings.labelColor.attribute ? data[settings.labelColor.attribute] || settings.labelColor.color || "#000" : settings.labelColor.color;
 
   context.fillStyle = color;
   context.font = `${weight} ${size}px ${font}`;
 
-  context.fillText(data.label, data.x - (textWidth / 2), data.y + data.size + 20);
+  context.fillText(data.label, data.x - textWidth / 2, data.y + data.size + 20);
 }
-

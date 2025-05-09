@@ -4,26 +4,25 @@
 
 import HttpRequestMock from 'http-request-mock'
 
-import * as sokPerson from './SvarSokPerson.json'
 import * as sokBolagEngagemang from './SvarSokBolagsEngagemang.json'
-import * as sokOrganisation from './SvarSokOrganisation.json'
 import * as sokKonton from './SvarSokKonton.json'
+import * as sokOrganisation from './SvarSokOrganisation.json'
+import * as sokPerson from './SvarSokPerson.json'
 import * as test from './Testdata.json'
 
-import { faker } from '@faker-js/faker/locale/sv';
+import { faker } from '@faker-js/faker/locale/sv'
 
-import Graph from 'graphology';
-import { complete } from 'graphology-generators/classic';
-import { clusters } from 'graphology-generators/random';
-import { erdosRenyi } from 'graphology-generators/random';
+import Graph from 'graphology'
+import { complete } from 'graphology-generators/classic'
+import { clusters, erdosRenyi } from 'graphology-generators/random'
 
 // Social networks
-import { girvanNewman } from 'graphology-generators/random';
+import { girvanNewman } from 'graphology-generators/random'
 // const graph = girvanNewman(Graph, {zOut: 4});
 
 // "real" data
-import florentineFamilies from 'graphology-generators/social/florentine-families';
-import karateClub from 'graphology-generators/social/karate-club';
+import florentineFamilies from 'graphology-generators/social/florentine-families'
+import karateClub from 'graphology-generators/social/karate-club'
 
 function generateUUID() {
   let d = new Date().getTime()
@@ -61,7 +60,7 @@ function mapGraphToResult(graph) {
         },
         {
           TypeId: "personE2",
-          Value:faker.person.firstName()
+          Value: faker.person.firstName()
         },
         {
           TypeId: "personE3",
@@ -83,7 +82,6 @@ function mapGraphToResult(graph) {
     })
   })
 
-  console.log(result)
   return result
 }
 

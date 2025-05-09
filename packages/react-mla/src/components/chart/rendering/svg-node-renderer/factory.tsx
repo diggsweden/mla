@@ -4,13 +4,7 @@
 
 import { Attributes } from "graphology-types";
 import Sigma from "sigma";
-import {
-  NodeHoverDrawingFunction,
-  NodeLabelDrawingFunction,
-  NodeProgram,
-  NodeProgramType,
-  ProgramInfo,
-} from "sigma/rendering";
+import { NodeHoverDrawingFunction, NodeLabelDrawingFunction, NodeProgram, NodeProgramType, ProgramInfo } from "sigma/rendering";
 import { NodeDisplayData, RenderParams } from "sigma/types";
 import { floatColor } from "sigma/utils";
 
@@ -20,11 +14,7 @@ import { Atlas, DEFAULT_TEXTURE_MANAGER_OPTIONS, TextureManager, TextureManagerO
 
 const { UNSIGNED_BYTE, FLOAT } = WebGLRenderingContext;
 
-interface CreateNodeSvgProgramOptions<
-  N extends Attributes = Attributes,
-  E extends Attributes = Attributes,
-  G extends Attributes = Attributes,
-> extends TextureManagerOptions {
+interface CreateNodeSvgProgramOptions<N extends Attributes = Attributes, E extends Attributes = Attributes, G extends Attributes = Attributes> extends TextureManagerOptions {
   // - If "background", color will be used to color full node behind the image.
   // - If "color", color will be used to color image pixels (for pictograms)
   drawingMode: "background" | "color";
@@ -50,48 +40,23 @@ const DEFAULT_CREATE_NODE_IMAGE_OPTIONS: CreateNodeSvgProgramOptions<Attributes,
   drawHover: undefined,
   padding: 0,
   colorAttribute: "color",
-  imageAttribute: "image"
+  imageAttribute: "image",
 };
 
-const UNIFORMS = [
-  "u_sizeRatio",
-  "u_correctionRatio",
-  "u_cameraAngle",
-  "u_percentagePadding",
-  "u_matrix",
-  "u_colorizeImages",
-  "u_keepWithinCircle",
-  "u_atlas",
-] as const;
+const UNIFORMS = ["u_sizeRatio", "u_correctionRatio", "u_cameraAngle", "u_percentagePadding", "u_matrix", "u_colorizeImages", "u_keepWithinCircle", "u_atlas"] as const;
 
 /**
  * To share the texture between the program instances of the graph and the
  * hovered nodes (to prevent some flickering, mostly), this program must be
  * "built" for each sigma instance:
  */
-export default function createNodeSvgProgram<
-  N extends Attributes = Attributes,
-  E extends Attributes = Attributes,
-  G extends Attributes = Attributes,
->(options?: Partial<CreateNodeSvgProgramOptions<N, E, G>>): NodeProgramType<N, E, G> {
+export default function createNodeSvgProgram<N extends Attributes = Attributes, E extends Attributes = Attributes, G extends Attributes = Attributes>(options?: Partial<CreateNodeSvgProgramOptions<N, E, G>>): NodeProgramType<N, E, G> {
   // Compute effective MAX_TEXTURE_SIZE from the current WebGL context:
   const gl = document.createElement("canvas").getContext("webgl") as WebGLRenderingContext;
-  const defaultMaxTextureSize = Math.min(
-    gl.getParameter(gl.MAX_TEXTURE_SIZE),
-    DEFAULT_TEXTURE_MANAGER_OPTIONS.maxTextureSize,
-  );
+  const defaultMaxTextureSize = Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), DEFAULT_TEXTURE_MANAGER_OPTIONS.maxTextureSize);
   (gl.canvas as HTMLCanvasElement).remove();
 
-  const {
-    drawHover,
-    drawLabel,
-    drawingMode,
-    keepWithinCircle,
-    padding,
-    colorAttribute,
-    imageAttribute,
-    ...textureManagerOptions
-  }: CreateNodeSvgProgramOptions<N, E, G> = {
+  const { drawHover, drawLabel, drawingMode, keepWithinCircle, padding, colorAttribute, imageAttribute, ...textureManagerOptions }: CreateNodeSvgProgramOptions<N, E, G> = {
     ...(DEFAULT_CREATE_NODE_IMAGE_OPTIONS as CreateNodeSvgProgramOptions<N, E, G>),
     ...{ maxTextureSize: defaultMaxTextureSize },
     ...(options || {}),
@@ -173,13 +138,7 @@ export default function createNodeSvgProgram<
       gl.deleteBuffer(buffer);
       gl.deleteShader(vertexShader);
       gl.deleteShader(fragmentShader);
-      this.normalProgram = this.getProgramInfo(
-        "normal",
-        gl,
-        def.VERTEX_SHADER_SOURCE,
-        def.FRAGMENT_SHADER_SOURCE,
-        null,
-      );
+      this.normalProgram = this.getProgramInfo("normal", gl, def.VERTEX_SHADER_SOURCE, def.FRAGMENT_SHADER_SOURCE, null);
     }
 
     kill() {
@@ -230,7 +189,9 @@ export default function createNodeSvgProgram<
     processVisibleItem(nodeIndex: number, startIndex: number, data: NodeDisplayData & { image?: string }): void {
       const array = this.array;
 
-      const color = floatColor(data[colorAttribute as "color"]);
+      // Add a fallback default color if the color attribute is undefined
+      const colorValue = data[colorAttribute as "color"] || "#ffffff";
+      const color = floatColor(colorValue);
 
       const imageSource = data[imageAttribute as "image"];
       const imagePosition = imageSource ? this.atlas[imageSource] : undefined;
@@ -261,16 +222,7 @@ export default function createNodeSvgProgram<
     }
 
     setUniforms(params: RenderParams, { gl, uniformLocations }: ProgramInfo): void {
-      const {
-        u_sizeRatio,
-        u_correctionRatio,
-        u_matrix,
-        u_atlas,
-        u_colorizeImages,
-        u_keepWithinCircle,
-        u_cameraAngle,
-        u_percentagePadding,
-      } = uniformLocations;
+      const { u_sizeRatio, u_correctionRatio, u_matrix, u_atlas, u_colorizeImages, u_keepWithinCircle, u_cameraAngle, u_percentagePadding } = uniformLocations;
       this.latestRenderParams = params;
 
       gl.uniform1f(u_correctionRatio, params.correctionRatio);
@@ -280,7 +232,7 @@ export default function createNodeSvgProgram<
       gl.uniformMatrix3fv(u_matrix, false, params.matrix);
       gl.uniform1iv(
         u_atlas,
-        [...new Array(this.textureImages.length)].map((_, i) => i),
+        [...new Array(this.textureImages.length)].map((_, i) => i)
       );
       gl.uniform1i(u_colorizeImages, drawingMode === "color" ? 1 : 0);
       gl.uniform1i(u_keepWithinCircle, keepWithinCircle ? 1 : 0);

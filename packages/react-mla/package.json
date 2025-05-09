@@ -29,7 +29,6 @@
     "@sigma/node-image": "3.0.0",
     "@sigma/utils": "3.0.0",
     "events": "^3.3.0",
-    "fabric": "^6.6.1",
     "glob": "^11.0.1",
     "graphology": "^0.26.0",
     "graphology-communities-louvain": "^2.0.2",

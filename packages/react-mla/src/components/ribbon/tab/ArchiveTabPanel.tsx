@@ -2,306 +2,326 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useRef, useState } from 'react'
-import type { ChangeEvent } from 'react'
-import useMainStore from '../../../store/main-store'
-import RibbonMenuButton from '../RibbonMenuButton'
-import RibbonMenuSection from '../RibbonMenuSection'
-import RibbonMenuDivider from '../RibbonMenuDivider'
-import { blobToBase64, getContextValue, setContextValue } from '../../../utils/utils'
-import queryService from '../../../services/queryService'
-import Modal from '../../common/Modal'
-import configService from '../../../services/configurationService'
-import ImportToolbox from '../toolbox/ImportToolbox'
-import { useTranslation } from 'react-i18next'
+import type { ChangeEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import configService from "../../../services/configurationService";
+import queryService from "../../../services/queryService";
+import useMainStore from "../../../store/main-store";
+import { blobToBase64, getContextValue, setContextValue } from "../../../utils/utils";
+import Modal from "../../common/Modal";
+import RibbonMenuButton from "../RibbonMenuButton";
+import RibbonMenuDivider from "../RibbonMenuDivider";
+import RibbonMenuSection from "../RibbonMenuSection";
+import ImportToolbox from "../toolbox/ImportToolbox";
 
 const MIME_TYPE = "image/png";
 
-function ArchiveTabPanel () {
-  const config = configService.getConfiguration()
+function ArchiveTabPanel() {
+  const config = configService.getConfiguration();
   const { t } = useTranslation();
 
-  const sigma = useMainStore((state) => state.sigma)
-  const fabric = useMainStore((state) => state.fabric)
-  const save = useMainStore((state) => state.save)
-  const open = useMainStore((state) => state.open)
-  const setDirty = useMainStore((state) => state.setDirty)
-  const context = useMainStore((state) => state.context)
-  const setContext = useMainStore((state) => state.setContext)
+  const sigma = useMainStore((state) => state.sigma);
+  const save = useMainStore((state) => state.save);
+  const open = useMainStore((state) => state.open);
+  const setDirty = useMainStore((state) => state.setDirty);
+  const context = useMainStore((state) => state.context);
+  const setContext = useMainStore((state) => state.setContext);
 
-  const [showSave, setShowSave] = useState(false)
-  const [showImageSave, setShowImageSave] = useState(false)
-  const [newFilename, setNewFilename] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [showSave, setShowSave] = useState(false);
+  const [showImageSave, setShowImageSave] = useState(false);
+  const [newFilename, setNewFilename] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [filename, setFilename] = useState(getContextValue(context, 'filename'))
+  const [filename, setFilename] = useState(getContextValue(context, "filename"));
   useEffect(() => {
-    setFilename(getContextValue(context, 'filename'))
-  }, [context])
+    setFilename(getContextValue(context, "filename"));
+  }, [context]);
 
-  let reader = undefined as FileReader | undefined
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  let reader = undefined as FileReader | undefined;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  function checkFileAPI () {
+  function checkFileAPI() {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
-      reader = new FileReader()
-      return true
+      reader = new FileReader();
+      return true;
     } else {
-      alert('The File APIs are not fully supported by your browser. Fallback required.')
-      return false
+      alert("The File APIs are not fully supported by your browser. Fallback required.");
+      return false;
     }
   }
 
-  function saveRemote (name?: string) {
+  function saveRemote(name?: string) {
     if (loading) {
-      return
+      return;
     }
     if (name && name.length > 0) {
-      setLoading(true)
-      const update = setContextValue(context, 'filename', name)
-      setContext(update)
+      setLoading(true);
+      const update = setContextValue(context, "filename", name);
+      setContext(update);
 
-      const json = save()
+      const json = save();
       const saveAction = async () => {
-        const result = await queryService.SaveFile(json)
+        const result = await queryService.SaveFile(json);
         if (result) {
-          setDirty(false)
-          closeSave()
+          setDirty(false);
+          closeSave();
         } else {
-          window.alert('Failed to save')
+          window.alert("Failed to save");
         }
-        setLoading(false)
-        setNewFilename('')
-      }
+        setLoading(false);
+        setNewFilename("");
+      };
 
-      void saveAction()
+      void saveAction();
     } else {
-      showSaveAs()
+      showSaveAs();
     }
   }
 
-  function showSaveAs () {
-    setNewFilename(filename ?? '')
-    setShowSave(true)
+  function showSaveAs() {
+    setNewFilename(filename ?? "");
+    setShowSave(true);
   }
 
-  function showImageSaveAs () {
-    setNewFilename('')
-    setShowImageSave(true)
+  function showImageSaveAs() {
+    setNewFilename("");
+    setShowImageSave(true);
   }
 
-  function closeSave () {
-    setNewFilename('')
-    setShowSave(false)
+  function closeSave() {
+    setNewFilename("");
+    setShowSave(false);
   }
 
-  function closeImageSave () {
-    setNewFilename('')
-    setShowImageSave(false)
+  function closeImageSave() {
+    setNewFilename("");
+    setShowImageSave(false);
   }
 
-  function saveAsFile () {
-    const json = save()
-    const blob = new Blob([json], { type: 'application/json' })
+  function saveAsFile() {
+    const json = save();
+    const blob = new Blob([json], { type: "application/json" });
 
     if (window.showSaveFilePicker != null) {
       const options = {
-        suggestedName: t('default_filename'),
+        suggestedName: t("default_filename"),
         types: [
           {
-            description: t('default_description'),
-            accept: { 'application/json': ['.json'] }
-          } satisfies FilePickerAcceptType
-        ]
-      }
+            description: t("default_description"),
+            accept: { "application/json": [".json"] },
+          } satisfies FilePickerAcceptType,
+        ],
+      };
 
       const saveAction = async () => {
         try {
-          const handle = await window.showSaveFilePicker(options)
+          const handle = await window.showSaveFilePicker(options);
 
-          const writable = await handle.createWritable()
-          await writable.write(blob)
-          await writable.close()
-          setDirty(false)
+          const writable = await handle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+          setDirty(false);
         } catch (err: any) {
           // Fail silently if the user has simply canceled the dialog.
-          if (err.name !== 'AbortError') {
-            console.error(err.name, err.message)
+          if (err.name !== "AbortError") {
+            console.error(err.name, err.message);
           }
-          setDirty(true)
+          setDirty(true);
         }
-      }
+      };
 
-      void saveAction()
+      void saveAction();
     } else {
-      const url = URL.createObjectURL(blob)
+      const url = URL.createObjectURL(blob);
 
-      const link = document.createElement('a')
-      link.download = t('default_filename')
-      link.href = url
+      const link = document.createElement("a");
+      link.download = t("default_filename");
+      link.href = url;
 
-      link.click()
-      link.remove()
+      link.click();
+      link.remove();
     }
   }
 
-  function saveImage () {
-      const imgURL = createDataUrl()
-  
-      const dlLink = document.createElement('a');
-      dlLink.download = "graph";
-      dlLink.href = imgURL;
-      dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
-  
-      document.body.appendChild(dlLink);
-      dlLink.click();
-      document.body.removeChild(dlLink);
+  function saveImage() {
+    const imgURL = createDataUrl();
+
+    const dlLink = document.createElement("a");
+    dlLink.download = "graph";
+    dlLink.href = imgURL;
+    dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(":");
+
+    document.body.appendChild(dlLink);
+    dlLink.click();
+    document.body.removeChild(dlLink);
   }
 
-  function saveImageRemote (name?: string) {
+  function saveImageRemote(name?: string) {
     if (loading) {
-      return
+      return;
     }
 
     if (sigma) {
       if (name && name.length > 0) {
-        setLoading(true)
+        setLoading(true);
 
         const saveAction = async () => {
           const imageUrl = createDataUrl();
-          const imageBlob = await (await fetch(imageUrl)).blob(); 
-          const base64data = await blobToBase64(imageBlob)
+          const imageBlob = await (await fetch(imageUrl)).blob();
+          const base64data = await blobToBase64(imageBlob);
 
-          const result = await queryService.SaveImage(base64data, name)
+          const result = await queryService.SaveImage(base64data, name);
           if (result) {
-            setDirty(false)
-            closeImageSave()
+            setDirty(false);
+            closeImageSave();
           } else {
-            window.alert('Failed to save')
+            window.alert("Failed to save");
           }
-          setLoading(false)
-          setNewFilename('')
-        }
-        void saveAction()
+          setLoading(false);
+          setNewFilename("");
+        };
+        void saveAction();
       } else {
-        showImageSaveAs()
+        showImageSaveAs();
       }
     }
   }
 
   function createDataUrl(): string {
-    if (sigma != null && fabric != null) {
-      const canv = document.createElement("canvas") as HTMLCanvasElement
-      canv.width = sigma.getContainer().clientWidth
-      canv.height = sigma.getContainer().clientHeight
+    if (sigma != null) {
+      const canv = document.createElement("canvas") as HTMLCanvasElement;
+      canv.width = sigma.getContainer().clientWidth;
+      canv.height = sigma.getContainer().clientHeight;
 
-      const ctx = canv.getContext('2d')!;
+      const ctx = canv.getContext("2d")!;
 
       sigma.refresh();
       const sigmaCanvas = sigma.getCanvases();
       const layers = [
-        fabric.toCanvasElement(), 
-        sigmaCanvas["edges"], 
-        sigmaCanvas["edgeLabels"], 
+        sigmaCanvas["edges"],
+        sigmaCanvas["edgeLabels"],
         sigmaCanvas["nodes"],
-        sigmaCanvas["labels"], 
+        sigmaCanvas["labels"],
         sigmaCanvas["hovers"],
         sigmaCanvas["hoverNodes"],
-      ]
+      ];
 
       // Draw the background first:
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canv.width, canv.height);
 
-      layers.forEach(l => {
-        ctx.drawImage(
-          l,
-          0,
-          0,
-          canv.width,
-          canv.height,
-          0,
-          0,
-          canv.width,
-          canv.height,
-        ) 
-      })
+      layers.forEach((l) => {
+        ctx.drawImage(l, 0, 0, canv.width, canv.height, 0, 0, canv.width, canv.height);
+      });
 
       return canv.toDataURL(MIME_TYPE);
     }
 
-    return ""
+    return "";
   }
 
-  function fileChange (event: ChangeEvent<HTMLInputElement>) {
-    event.preventDefault()
+  function fileChange(event: ChangeEvent<HTMLInputElement>) {
+    event.preventDefault();
 
     if (event.target.files != null && event.target.files.length > 0) {
-      const file = event.target.files[0]
+      const file = event.target.files[0];
 
       if (file && reader) {
         reader.onload = async (e) => {
-          const text = e.target?.result as string
+          const text = e.target?.result as string;
 
-          open(text)
-        }
-        reader.readAsText(file)
+          open(text);
+        };
+        reader.readAsText(file);
       }
     }
   }
 
-  const inputClass = (newFilename.length > 0 ? 'm-border-gray-300 ' : 'm-border-red-500 bg-red-200 ') + 'm-p-1 m-mb-3 m-bg-white m-border m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 m-block m-w-full';
-  return <div className="m-flex m-text-center m-h-full m-p-1">
-    <input
-      type="file"
-      accept="application/json"
-      ref={fileInputRef}
-      onChange={event => { fileChange(event) }}
-      hidden
-    />
-    <RibbonMenuSection title={t('diagram')} >
-      {config.Save === 'file' && (
-        <RibbonMenuButton label={t('save')} onClick={saveAsFile} disabled={!checkFileAPI()} iconName="save" />
-      )}
-      {config.Save && config.Save.length > 0 && config.Save !== 'file' && <div>
-        <RibbonMenuButton label={t('save')} disabled={loading} onClick={() => { saveRemote(filename) }} iconName="save" />
-        {filename && filename?.length > 0 && (
-          <RibbonMenuButton label={t('save as')} disabled={loading} onClick={showSaveAs} iconName="move_to_inbox" />
+  const inputClass = (newFilename.length > 0 ? "m-border-gray-300 " : "m-border-red-500 bg-red-200 ") + "m-p-1 m-mb-3 m-bg-white m-border m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 m-block m-w-full";
+  return (
+    <div className="m-flex m-text-center m-h-full m-p-1">
+      <input
+        type="file"
+        accept="application/json"
+        ref={fileInputRef}
+        onChange={(event) => {
+          fileChange(event);
+        }}
+        hidden
+      />
+      <RibbonMenuSection title={t("diagram")}>
+        {config.Save === "file" && <RibbonMenuButton label={t("save")} onClick={saveAsFile} disabled={!checkFileAPI()} iconName="save" />}
+        {config.Save && config.Save.length > 0 && config.Save !== "file" && (
+          <div>
+            <RibbonMenuButton
+              label={t("save")}
+              disabled={loading}
+              onClick={() => {
+                saveRemote(filename);
+              }}
+              iconName="save"
+            />
+            {filename && filename?.length > 0 && <RibbonMenuButton label={t("save as")} disabled={loading} onClick={showSaveAs} iconName="move_to_inbox" />}
+          </div>
         )}
-      </div>}
 
-      {config.Open === 'file' && (
-        <RibbonMenuButton label={t('open')} onClick={() => fileInputRef?.current?.click()} disabled={!checkFileAPI()} iconName="outlined_file_open" />
-      )}
-    </RibbonMenuSection>
-    <RibbonMenuDivider />
+        {config.Open === "file" && <RibbonMenuButton label={t("open")} onClick={() => fileInputRef?.current?.click()} disabled={!checkFileAPI()} iconName="outlined_file_open" />}
+      </RibbonMenuSection>
+      <RibbonMenuDivider />
 
-    <RibbonMenuSection title={t('share')} >
-      {config.SaveImage === 'file' && (
-        <RibbonMenuButton label={t('as picture')} onClick={ saveImage } iconName="outlined_add_a_photo" />
-      )}
-      {config.SaveImage && config.SaveImage !== '' && config.SaveImage.length > 0 && config.SaveImage !== 'file' && (
-        <RibbonMenuButton label={t('as picture')} onClick={ saveImageRemote } iconName="outlined_add_a_photo" />
-      )}
-    </RibbonMenuSection>
-    <RibbonMenuDivider />
-    <ImportToolbox show={config.Menu?.Archive?.Import} />
-    <Modal mode="save" show={showSave} title={t('save as')} onNegative={closeSave} onPositive={() => { saveRemote(newFilename) }}>
-      <div className="m-text-start m-px-4 m-py-1">
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('filename')}</span>
-        <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
-        {loading && <p>{t('saving')}</p>}
-      </div>
-    </Modal>
+      <RibbonMenuSection title={t("share")}>
+        {config.SaveImage === "file" && <RibbonMenuButton label={t("as picture")} onClick={saveImage} iconName="outlined_add_a_photo" />}
+        {config.SaveImage && config.SaveImage !== "" && config.SaveImage.length > 0 && config.SaveImage !== "file" && <RibbonMenuButton label={t("as picture")} onClick={saveImageRemote} iconName="outlined_add_a_photo" />}
+      </RibbonMenuSection>
+      <RibbonMenuDivider />
+      <ImportToolbox show={config.Menu?.Archive?.Import} />
+      <Modal
+        mode="save"
+        show={showSave}
+        title={t("save as")}
+        onNegative={closeSave}
+        onPositive={() => {
+          saveRemote(newFilename);
+        }}
+      >
+        <div className="m-text-start m-px-4 m-py-1">
+          <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t("filename")}</span>
+          <input
+            type="text"
+            value={newFilename}
+            onChange={(e) => {
+              setNewFilename(e.target.value);
+            }}
+            className={inputClass}
+          ></input>
+          {loading && <p>{t("saving")}</p>}
+        </div>
+      </Modal>
 
-    <Modal mode="save" show={showImageSave} title={t('save image as')}  onNegative={closeImageSave} onPositive={() => { saveImageRemote(newFilename) }}>
-      <div className="m-text-start m-px-4 m-py-1">
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('filename')}</span>
-        <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
-        {loading && <p>{t('saving')}</p>}
-      </div>
-    </Modal>
-
-  </div>
+      <Modal
+        mode="save"
+        show={showImageSave}
+        title={t("save image as")}
+        onNegative={closeImageSave}
+        onPositive={() => {
+          saveImageRemote(newFilename);
+        }}
+      >
+        <div className="m-text-start m-px-4 m-py-1">
+          <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t("filename")}</span>
+          <input
+            type="text"
+            value={newFilename}
+            onChange={(e) => {
+              setNewFilename(e.target.value);
+            }}
+            className={inputClass}
+          ></input>
+          {loading && <p>{t("saving")}</p>}
+        </div>
+      </Modal>
+    </div>
+  );
 }
-export default ArchiveTabPanel
+export default ArchiveTabPanel;

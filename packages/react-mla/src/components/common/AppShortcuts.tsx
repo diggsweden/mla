@@ -3,20 +3,19 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { useEffect, useRef, useState } from 'react'
-import Modal from './Modal'
-import Delete from '../modal/Delete'
 import useKeyDown from '../../effects/keydown'
-import useWorkflowStore from '../../store/workflow-store'
-import useMainStore from '../../store/main-store'
-import { internalRemove } from '../../store/internal-actions'
-import type { IQueryResponse } from '../../services/queryService'
 import type { IEntity, ILink } from '../../interfaces/data-models'
-import WorkflowProgress from '../modal/WorkflowProgress'
 import configService from '../../services/configurationService'
+import type { IQueryResponse } from '../../services/queryService'
+import { internalRemove } from '../../store/internal-actions'
+import useMainStore from '../../store/main-store'
+import useWorkflowStore from '../../store/workflow-store'
+import Delete from '../modal/Delete'
+import WorkflowProgress from '../modal/WorkflowProgress'
+import Modal from './Modal'
 
-import ContextMenu from "./ContextMenu"
 import { useTranslation } from 'react-i18next'
-import useAppStore from '../../store/app-store'
+import ContextMenu from "./ContextMenu"
 
 interface Props {
   className?: string
@@ -29,7 +28,6 @@ function AppShortcuts(props: Props) {
   const showWorkflow = useWorkflowStore((state) => state.showDialog)
   const setShowWorkflow = useWorkflowStore((state) => state.setShowDialog)
 
-  const fabric = useMainStore(state => state.fabric)
   const selectedEntities = useMainStore((state) => state.selectedEntities)
   const selectedLinks = useMainStore((state) => state.selectedLinks)
 
@@ -38,8 +36,6 @@ function AppShortcuts(props: Props) {
 
   const undo = useMainStore((state) => state.undo)
   const redo = useMainStore((state) => state.redo)
-
-  const drawingMode = useAppStore(state => state.drawingMode)
 
   const [showDelete, setDelete] = useState(false)
   const dirty = useMainStore((state) => state.dirty)
@@ -52,13 +48,8 @@ function AppShortcuts(props: Props) {
   }, [dirty])
 
   function onDelete() {
-    if (drawingMode && fabric) {
-      fabric.remove(...fabric.getActiveObjects());
-      fabric.discardActiveObject();
-    } else {
-      if (selectedEntities.length > 0 || selectedLinks.length > 0) {
-        setDelete(true)
-      }
+    if (selectedEntities.length > 0 || selectedLinks.length > 0) {
+      setDelete(true)
     }
   }
 

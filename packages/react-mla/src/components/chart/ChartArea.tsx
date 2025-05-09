@@ -2,32 +2,55 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import ChartContent from './ChartContent';
+import ChartContent from "./ChartContent";
 
-import useMainStore from '../../store/main-store';
+import useMainStore, { DrawingTool } from "../../store/main-store";
 
-import useDropRef from "../hooks/useDropRef";
-import PropertiesPanel from '../properties/PropertiesPanel';
-import Timeline from '../timeline/Timeline';
-import ToolPanel from '../tools/ToolPanel';
-import useDraw from './hooks/use-draw';
-import useSigma from './hooks/use-sigma';
+import PropertiesPanel from "../properties/PropertiesPanel";
+import Timeline from "../timeline/Timeline";
+import ToolPanel from "../tools/ToolPanel";
+import useDraw from "./hooks/use-draw";
+import useSigma from "./hooks/use-sigma";
 
-import { useEffect } from 'react';
-import workflowService from '../../services/workflowService';
+import { useEffect } from "react";
+import workflowService from "../../services/workflowService";
 
 function ChartArea() {
-  const workflow = useMainStore((state) => state.workflowToExecute)
-  const graph = useMainStore((state) => state.graph)
+  const workflow = useMainStore((state) => state.workflowToExecute);
+  const graph = useMainStore((state) => state.graph);
+  const setDrawingTool = useMainStore((state) => state.setDrawingTool);
+
   const { sigma, container, dropRef } = useSigma(graph);
-  useDraw(sigma)
+
+  // Initialize our custom drawing implementation
+  const drawTools = useDraw(sigma);
+
+  // Store drawing tool in global state so it can be accessed from the DrawTabPanel
+  useEffect(() => {
+    // Create an adapter that matches the DrawingTool interface
+    const drawingToolAdapter: DrawingTool = {
+      setCurrentShape: drawTools.setCurrentShape,
+      deleteSelectedShape: drawTools.deleteSelectedShape,
+      setShapeColor: drawTools.setShapeColor,
+      setTextProperties: drawTools.setTextProperties,
+      selectedShape: drawTools.selectedShape, // Convert to boolean as expected by interface
+      hasShapes: drawTools.hasShapes,
+      currentShapeType: drawTools.currentShapeType,
+    };
+
+    setDrawingTool(drawingToolAdapter);
+
+    return () => {
+      setDrawingTool(undefined);
+    };
+  }, [drawTools, setDrawingTool]); // Added drawTools as dependency
 
   useEffect(() => {
     // Run workflow after sigma is created
-    if (workflow != '') {
-      workflowService.Execute("testdata")
+    if (workflow != "") {
+      workflowService.Execute("testdata");
     }
-  }, [workflow])
+  }, [workflow]);
 
   return (
     <>
@@ -39,13 +62,13 @@ function ChartArea() {
             <PropertiesPanel className="m-w-72 m-flex-none m-h-full m-border-l m-border-gray-300 m-pointer-events-auto" />
           </div>
         </div>
-        <div className="m-h-full m-w-full" ref={useDropRef(dropRef[1])} >
+        <div className="m-h-full m-w-full" ref={dropRef}>
           <div className="m-h-full m-w-full m-outline-none" id="m-chart" tabIndex={1} ref={container}></div>
           <ChartContent />
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default ChartArea
+export default ChartArea;

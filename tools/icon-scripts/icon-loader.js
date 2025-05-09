@@ -34,5 +34,4 @@ for (var file of fs.readdirSync(customIcons)) {
     }
 }
 
-console.log(`Imported ${Object.keys(result).length} icons`)
 fs.writeFileSync(output, JSON.stringify(result, null, 2))

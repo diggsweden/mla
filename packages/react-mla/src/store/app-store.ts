@@ -10,9 +10,9 @@ import interactionOptions from '../utils/interaction-options'
 import type { IBaseViewConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
 import { type IGeoFeatureBounds } from '../interfaces/data-models/geo'
 import viewService from '../services/viewService'
-import useSearchStore from './search-state'
 import { internalUpdateLabels } from './internal-actions'
 import useMainStore from './main-store'
+import useSearchStore from './search-state'
 
 export type Tab = 'archive' | 'start' | 'search find' | 'analysis' | 'select' | 'look feel' | 'show' | 'map' | 'draw'
 export type Tool = 'search' | 'explore' | 'import' | 'activity'
@@ -29,8 +29,6 @@ interface AppState {
 
   currentViewConfiguration: IViewConfiguration
   thingViewConfiguration: Record<string, IBaseViewConfiguration>
-
-  drawingMode: boolean
 
   view: string
 
@@ -95,13 +93,6 @@ const useAppStore = create<AppState>((set, get) => ({
     }))
   },
 
-  drawingMode: false,
-  setDrawingMode: (enabled: boolean) => {
-    set((state) => ({
-      drawingMode: enabled
-    }))
-  },
-
   selectedGeoFeature: undefined,
   setSelectedGeoFeature: (feature?: IGeoFeatureBounds) => {
     set((state) => ({
@@ -157,7 +148,6 @@ const useAppStore = create<AppState>((set, get) => ({
   setTab: (tab) => {
     set((state) => ({
       selectedTab: tab,
-      drawingMode: tab === 'draw'
     }))
   },
 
