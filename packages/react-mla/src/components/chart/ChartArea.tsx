@@ -48,7 +48,7 @@ function ChartArea() {
   useEffect(() => {
     // Run workflow after sigma is created
     if (workflow != "") {
-      workflowService.Execute("testdata");
+      workflowService.Execute(workflow);
     }
   }, [workflow]);
 
