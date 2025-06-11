@@ -253,8 +253,8 @@ importers:
         specifier: 3.5.2
         version: 3.5.2(vite@5.4.19(@types/node@20.17.32)(sass-embedded@1.87.0))
       vite-plugin-dts:
-        specifier: 4.5.3
-        version: 4.5.3(@types/node@20.17.32)(rollup@4.38.0)(typescript@5.5.4)(vite@5.4.19(@types/node@20.17.32)(sass-embedded@1.87.0))
+        specifier: 4.5.4
+        version: 4.5.4(@types/node@20.17.32)(rollup@4.38.0)(typescript@5.5.4)(vite@5.4.19(@types/node@20.17.32)(sass-embedded@1.87.0))
       vite-plugin-lib-inject-css:
         specifier: 2.2.2
         version: 2.2.2(vite@5.4.19(@types/node@20.17.32)(sass-embedded@1.87.0))
@@ -4097,8 +4097,8 @@ packages:
     peerDependencies:
       vite: '>2.0.0-0'
 
-  vite-plugin-dts@4.5.3:
-    resolution: {integrity: sha512-P64VnD00dR+e8S26ESoFELqc17+w7pKkwlBpgXteOljFyT0zDwD8hH4zXp49M/kciy//7ZbVXIwQCekBJjfWzA==}
+  vite-plugin-dts@4.5.4:
+    resolution: {integrity: sha512-d4sOM8M/8z7vRXHHq/ebbblfaxENjogAAekcfcDCCwAyvGqnPrc7f4NZbvItS+g4WTgerW0xDwSz5qz11JT3vg==}
     peerDependencies:
       typescript: '*'
       vite: '*'
@@ -8441,7 +8441,7 @@ snapshots:
     dependencies:
       vite: 5.4.19(@types/node@20.17.32)(sass-embedded@1.87.0)
 
-  vite-plugin-dts@4.5.3(@types/node@20.17.32)(rollup@4.38.0)(typescript@5.5.4)(vite@5.4.19(@types/node@20.17.32)(sass-embedded@1.87.0)):
+  vite-plugin-dts@4.5.4(@types/node@20.17.32)(rollup@4.38.0)(typescript@5.5.4)(vite@5.4.19(@types/node@20.17.32)(sass-embedded@1.87.0)):
     dependencies:
       '@microsoft/api-extractor': 7.52.2(@types/node@20.17.32)
       '@rollup/pluginutils': 5.1.4(rollup@4.38.0)
