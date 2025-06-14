@@ -89,7 +89,7 @@
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-lib-inject-css": "2.2.2",
     "vitest": "3.0.9",
-    "vitest-browser-react": "0.2.0"
+    "vitest-browser-react": "0.3.0"
   },
   "publishConfig": {
     "directory": "dist"
