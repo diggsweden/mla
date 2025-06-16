@@ -11,8 +11,8 @@
   "dependencies": {
     "react-mla": "workspace:^",
     "@r2wc/react-to-web-component": "^2.0.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "scripts": {
     "dev": "vite dev --open",
@@ -21,8 +21,8 @@
   "devDependencies": {
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/react": "18.3.23",
-    "@types/react-dom": "18.3.7",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
     "@types/wicg-file-system-access": "2023.10.6",
     "@vitejs/plugin-react": "4.5.2",
     "sass-embedded": "1.89.2",
