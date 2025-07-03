@@ -21,7 +21,7 @@ export const DEFAULT_NODE_SIZE = 25;
 function ChartNode(props: Props) {
   const entity = props.entity;
 
-  const selectedIds = useMainStore((state) => state.selectedIds);
+  const selectedIds = useMainStore((state) => state.selectedNodeAndLinkIds);
   const viewConfig = useAppStore((state) => state.currentViewConfiguration);
   const selectedView = useAppStore((state) => state.thingViewConfiguration[entity.TypeId]);
   const showIconBorder = configService.getConfiguration().Theme?.IconBorder == true;

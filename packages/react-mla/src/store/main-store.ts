@@ -19,19 +19,18 @@ import { IGeoFeature } from "../interfaces/data-models/geo";
 import { IShape, ShapeType } from "../interfaces/data-models/shape";
 import { fixDate, removeInternals } from "../utils/date";
 import { assignLinks, computeLinks, filterEvents } from "../utils/event-utils";
-import { internalAdd, internalRemove, internalUpdate, updateSelected } from "./internal-actions";
+import { internalAdd, internalAddShapes, internalRemove, internalRemoveShapes, internalUpdate, internalUpdateShapes, updateSelected } from "./internal-actions";
 
 export type IntervalType = "day" | "week" | "month" | "custom";
 
 // Drawing tool interface for accessing drawing functionality
 export interface DrawingTool {
   setCurrentShape: (type: ShapeType | null) => void;
-  deleteSelectedShape: () => void;
   setShapeColor: (strokeColor: string, fillColor: string) => void;
   setTextProperties: (text: string, fontSize: number, fontColor: string) => void;
-  selectedShape: boolean;
+  hasSelection: boolean; // True if any shapes are selected (single or multiple)
   hasShapes: boolean;
-  currentShapeType: ShapeType | null;
+  activeShapeType: ShapeType | null;
 }
 
 type HistoryAction = "ADD" | "UPDATE" | "REMOVE";
@@ -40,10 +39,12 @@ interface IChangeHistory {
   from: {
     entities: IEntity[];
     links: ILink[];
+    shapes: IShape[];
   };
   to: {
     entities: IEntity[];
     links: ILink[];
+    shapes: IShape[];
   };
 }
 
@@ -54,25 +55,23 @@ export interface MainState {
   events: Record<string, IEvent>;
   eventFilters: Record<string, IEventFilter[] | undefined>;
   computedLinks: IEventLink[];
-
   phaseEvents: IPhaseEvent[];
-  geoFeatures: IGeoFeature[];
-
-  // Drawing shapes - moved from use-draw.ts
+  geoFeatures: IGeoFeature[]; // Drawing shapes - moved from use-draw.ts
   shapes: IShape[];
-  selectedShapeId: string | null;
-  currentShapeType: ShapeType | null;
+  selectedShapeIds: string[]; // Multiple selected shapes
+  activeShapeType: ShapeType | null;
 
   // Layout state
   activeLayout: string;
-  setActiveLayout: (layout: string) => void;
-
-  // Shape operations
-  setSelectedShapeId: (id: string | null) => void;
-  setCurrentShapeType: (type: ShapeType | null) => void;
+  setActiveLayout: (layout: string) => void; // Shape operations
+  setSelectedShapeIds: (ids: string[]) => void;
+  removeFromSelectedShapes: (id: string) => void;
+  clearSelection: () => void;
+  setActiveShapeType: (type: ShapeType | null) => void;
   addShape: (shape: IShape) => void;
   updateShape: (shape: IShape) => void;
   removeShape: (id: string) => void;
+  getSelectedShapes: () => IShape[];
 
   dirty: boolean;
 
@@ -98,7 +97,7 @@ export interface MainState {
 
   selectedEntities: IEntity[];
   selectedLinks: ILink[];
-  selectedIds: string[];
+  selectedNodeAndLinkIds: string[];
 
   graph: Graph;
   sigma: Sigma | undefined;
@@ -133,7 +132,7 @@ export interface MainState {
 
   setDrawings: (json: string) => void;
 
-  setSelected: (selectedIds: string[]) => void;
+  setSelectedNodeAndLinkIds: (selectedIds: string[]) => void;
 
   setDirty: (isDirty: boolean) => void;
   save: () => string;
@@ -154,60 +153,55 @@ const useMainStore = create<MainState>((set, get) => ({
   events: {},
   eventFilters: {},
   phaseEvents: [],
-  geoFeatures: [],
-
-  // Drawing shapes - moved from use-draw.ts
+  geoFeatures: [], // Drawing shapes - moved from use-draw.ts
   shapes: [],
-  selectedShapeId: null,
-  currentShapeType: null,
+  selectedShapeIds: [],
+  activeShapeType: null,
 
   activeLayout: "",
   setActiveLayout: (layout: string) => {
     set({ activeLayout: layout });
   },
-
-  setSelectedShapeId: (id: string | null) => {
-    set({ selectedShapeId: id });
+  setSelectedShapeIds: (ids: string[]) => {
+    console.debug("Setting selected shape IDs:", ids);
+    set({
+      selectedShapeIds: ids,
+    });
   },
-
-  setCurrentShapeType: (type: ShapeType | null) => {
-    set({ currentShapeType: type });
+  removeFromSelectedShapes: (id: string) => {
+    set((state) => {
+      const newSelectedShapeIds = state.selectedShapeIds.filter((shapeId) => shapeId !== id);
+      return {
+        selectedShapeIds: newSelectedShapeIds,
+      };
+    });
+  },
+  clearSelection: () => {
+    set({ selectedShapeIds: [] });
+  },
+  setActiveShapeType: (type: ShapeType | null) => {
+    set({ activeShapeType: type });
   },
 
   addShape: (shape: IShape) => {
-    set((state) => {
-      const newShapes = [...state.shapes, shape];
-      return {
-        shapes: newShapes,
-        drawings: JSON.stringify(newShapes),
-        dirty: true,
-      };
-    });
+    // Unselect any selected nodes when adding a shape
+    get().setSelectedNodeAndLinkIds([]);
+    internalAddShapes(true, [shape]);
   },
 
   updateShape: (updatedShape: IShape) => {
-    set((state) => {
-      const newShapes = state.shapes.map((s) => (s.id === updatedShape.id ? updatedShape : s));
-      return {
-        shapes: newShapes,
-        drawings: JSON.stringify(newShapes),
-        dirty: true,
-      };
-    });
+    internalUpdateShapes(true, [updatedShape]);
   },
-
   removeShape: (id: string) => {
-    set((state) => {
-      const newShapes = state.shapes.filter((s) => s.id !== id);
-      // If we're removing the currently selected shape, deselect it
-      const newSelectedShapeId = state.selectedShapeId === id ? null : state.selectedShapeId;
-      return {
-        shapes: newShapes,
-        selectedShapeId: newSelectedShapeId,
-        drawings: JSON.stringify(newShapes),
-        dirty: true,
-      };
-    });
+    const currentState = get();
+    const shapeToRemove = currentState.shapes.find((s) => s.id === id);
+    if (shapeToRemove) {
+      internalRemoveShapes(true, [shapeToRemove]);
+    }
+  },
+  getSelectedShapes: () => {
+    const currentState = get();
+    return currentState.shapes.filter((s) => currentState.selectedShapeIds.includes(s.id));
   },
 
   dirty: false,
@@ -391,6 +385,8 @@ const useMainStore = create<MainState>((set, get) => ({
     return get().entities[entityId];
   },
   addEntity: (...entities: IEntity[]) => {
+    // Unselect any selected shapes when adding an entity
+    get().clearSelection();
     internalAdd(true, entities, [], true);
   },
   updateEntity: (...entities: IEntity[]) => {
@@ -527,8 +523,8 @@ const useMainStore = create<MainState>((set, get) => ({
 
   selectedEntities: [],
   selectedLinks: [],
-  selectedIds: [],
-  setSelected: (selectedIds: string[]) => {
+  selectedNodeAndLinkIds: [],
+  setSelectedNodeAndLinkIds: (selectedIds: string[]) => {
     useAppStore.getState().setSelectedGeoFeature(undefined);
     updateSelected(selectedIds);
   },
@@ -681,12 +677,21 @@ const useMainStore = create<MainState>((set, get) => ({
       switch (history.action) {
         case "ADD":
           internalRemove(false, history.to.entities, history.to.links);
+          if (history.to.shapes.length > 0) {
+            internalRemoveShapes(false, history.to.shapes);
+          }
           break;
         case "UPDATE":
           internalUpdate(false, history.from.entities, history.from.links);
+          if (history.from.shapes.length > 0) {
+            internalUpdateShapes(false, history.from.shapes);
+          }
           break;
         case "REMOVE":
           internalAdd(false, history.from.entities, history.from.links);
+          if (history.from.shapes.length > 0) {
+            internalAddShapes(false, history.from.shapes);
+          }
           break;
       }
 
@@ -704,12 +709,21 @@ const useMainStore = create<MainState>((set, get) => ({
     switch (history.action) {
       case "ADD":
         internalAdd(false, history.to.entities, history.to.links);
+        if (history.to.shapes.length > 0) {
+          internalAddShapes(false, history.to.shapes);
+        }
         break;
       case "UPDATE":
         internalUpdate(false, history.to.entities, history.to.links);
+        if (history.to.shapes.length > 0) {
+          internalUpdateShapes(false, history.to.shapes);
+        }
         break;
       case "REMOVE":
         internalRemove(false, history.from.entities, history.from.links);
+        if (history.from.shapes.length > 0) {
+          internalRemoveShapes(false, history.from.shapes);
+        }
         break;
     }
 

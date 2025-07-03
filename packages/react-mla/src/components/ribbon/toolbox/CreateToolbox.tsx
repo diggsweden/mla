@@ -31,7 +31,7 @@ export default function CreateToolbox(props: Props) {
 
   const selectedEntities = useMainStore((state) => state.selectedEntities);
   const selectedLinks = useMainStore((state) => state.selectedLinks);
-  const setSelected = useMainStore((state) => state.setSelected);
+  const setSelected = useMainStore((state) => state.setSelectedNodeAndLinkIds);
 
   const addEntity = useMainStore((state) => state.addEntity);
   const addLink = useMainStore((state) => state.addLink);

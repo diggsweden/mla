@@ -2,39 +2,67 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useTranslation } from 'react-i18next';
-import Icon from '../components/common/Icon';
-import chartService from '../services/chartService';
-import useAppStore from '../store/app-store';
-import useMainStore from '../store/main-store';
+import { useTranslation } from "react-i18next";
+import Icon from "../components/common/Icon";
+import chartService from "../services/chartService";
+import useAppStore from "../store/app-store";
+import useMainStore from "../store/main-store";
 
 function Footer() {
-  const { t } = useTranslation()
-  const selected = useMainStore((state) => state.selectedIds)
-  const dirty = useMainStore((state) => state.dirty)
-  const sigma = useMainStore((state) => state.sigma)
-  const graph = useMainStore((state) => state.graph)
+  const { t } = useTranslation();
+  const selected = useMainStore((state) => state.selectedNodeAndLinkIds);
+  const dirty = useMainStore((state) => state.dirty);
+  const sigma = useMainStore((state) => state.sigma);
+  const graph = useMainStore((state) => state.graph);
 
-  const hoverEffect = useAppStore((state) => state.hoverEffect)
-  const setHoverEffect = useAppStore((state) => state.setHoverEffect)
+  const hoverEffect = useAppStore((state) => state.hoverEffect);
+  const setHoverEffect = useAppStore((state) => state.setHoverEffect);
 
   function fitChart(selection: boolean) {
     if (sigma && graph && graph.nodes().length) {
-      chartService.fitNodesInView(sigma, graph.filterNodes((node) => !selection || selected.includes(node)))
+      chartService.fitNodesInView(
+        sigma,
+        graph.filterNodes((node) => !selection || selected.includes(node))
+      );
     }
   }
 
   return (
     <footer className="m-h-5 m-flex m-flex-row m-w-full m-border-t m-border-gray-300 m-bg-gray-50">
-      <span className={(!dirty ? 'm-hidden ' : '') + 'm-ml-1'}>{t('unsaved changes')}</span>
+      <span className={(!dirty ? "m-hidden " : "") + "m-ml-1"}>{t("unsaved changes")}</span>
       <div className="m-flex-1"></div>
-      <span className=''>
-        <button className={"m-pr-3" + (!hoverEffect ? " m-text-secondary" : "")} onClick={() => { setHoverEffect(!hoverEffect) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="group_work" />{t('highlight')}</button>
-        <button className="m-pr-3" onClick={() => { fitChart(false) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="monitor" />{t('show all')}</button>
-        <button disabled={selected.length === 0} className='disabled:opacity-50 m-mr-2' onClick={() => { fitChart(true) }}><Icon className="m-h-3 m-inline-block m-mr-1" name="screenshot_monitor" />{t('show selected')}</button>
+      <span className="">
+        <button
+          className={"m-pr-3" + (!hoverEffect ? " m-text-secondary" : "")}
+          onClick={() => {
+            setHoverEffect(!hoverEffect);
+          }}
+        >
+          <Icon className="m-h-3 m-inline-block m-mr-1" name="group_work" />
+          {t("highlight")}
+        </button>
+        <button
+          className="m-pr-3"
+          onClick={() => {
+            fitChart(false);
+          }}
+        >
+          <Icon className="m-h-3 m-inline-block m-mr-1" name="monitor" />
+          {t("show all")}
+        </button>
+        <button
+          disabled={selected.length === 0}
+          className="disabled:opacity-50 m-mr-2"
+          onClick={() => {
+            fitChart(true);
+          }}
+        >
+          <Icon className="m-h-3 m-inline-block m-mr-1" name="screenshot_monitor" />
+          {t("show selected")}
+        </button>
       </span>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

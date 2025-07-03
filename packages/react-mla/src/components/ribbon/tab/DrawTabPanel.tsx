@@ -7,11 +7,11 @@ import { useTranslation } from "react-i18next";
 import { ShapeType } from "../../../interfaces/data-models/shape";
 import viewService from "../../../services/viewService";
 import useMainStore from "../../../store/main-store";
-import RibbonMenuButton from "../RibbonMenuButton";
 import RibbonMenuButtonGroup from "../RibbonMenuButtonGroup";
 import RibbonMenuColorPickerButton from "../RibbonMenuColorPickerButton";
 import RibbonMenuDivider from "../RibbonMenuDivider";
 import RibbonMenuSection from "../RibbonMenuSection";
+import RibbonShapeButton from "../RibbonShapeButton";
 
 function DrawTabPanel() {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ function DrawTabPanel() {
   // Handle shape selection
   function selectShape(type: ShapeType) {
     if (drawingTool) {
-      const sameType = drawingTool.currentShapeType === type;
+      const sameType = drawingTool.activeShapeType === type;
 
       // If clicking the same button, toggle off drawing mode
       if (sameType) {
@@ -34,7 +34,7 @@ function DrawTabPanel() {
   }
 
   function setFontColor(color?: string) {
-    if (drawingTool && drawingTool.selectedShape) {
+    if (drawingTool && drawingTool.hasSelection) {
       // Only modify text properties if color is provided
       if (color) {
         drawingTool.setTextProperties("", 16, color);
@@ -43,48 +43,36 @@ function DrawTabPanel() {
   }
 
   function setForeColor(color?: string) {
-    if (drawingTool && drawingTool.selectedShape) {
+    if (drawingTool && drawingTool.hasSelection) {
       // Keep existing fill color, just update stroke
       drawingTool.setShapeColor(color || "black", "");
     }
   }
 
   function setFillColor(color?: string) {
-    if (drawingTool && drawingTool.selectedShape) {
+    if (drawingTool && drawingTool.hasSelection) {
       // Keep existing stroke color, just update fill
       drawingTool.setShapeColor("", color || "transparent");
     }
   }
 
-  function deleteSelected() {
-    if (drawingTool && drawingTool.selectedShape) {
-      drawingTool.deleteSelectedShape();
-    }
-  }
-
   return (
     <div className="m-flex m-text-center m-h-full m-p-1">
-      <RibbonMenuSection title={t("text")}>
-        <RibbonMenuButton label={t("textbox")} active={drawingTool?.currentShapeType === "text"} onClick={() => selectShape("text")} iconName="format_shapes" />
-      </RibbonMenuSection>
-      <RibbonMenuDivider />
       <RibbonMenuSection title={t("shapes")}>
-        <RibbonMenuButton label={t("rectangle")} active={drawingTool?.currentShapeType === "rectangle"} onClick={() => selectShape("rectangle")} iconName="rectangle" />
-        <RibbonMenuButton label={t("ellipse")} active={drawingTool?.currentShapeType === "ellipse"} onClick={() => selectShape("ellipse")} iconName="circle" />
-        <RibbonMenuButton label={t("line")} active={drawingTool?.currentShapeType === "line"} onClick={() => selectShape("line")} iconName="horizontal_rule" />
+        <RibbonShapeButton shapeType="text" iconName="format_shapes" label={t("textbox")} draggable active={drawingTool?.activeShapeType === "text"} onClick={() => selectShape("text")} />
+        <RibbonShapeButton shapeType="rectangle" iconName="rectangle" label={t("rectangle")} draggable active={drawingTool?.activeShapeType === "rectangle"} onClick={() => selectShape("rectangle")} />
+        <RibbonShapeButton shapeType="ellipse" iconName="circle" label={t("ellipse")} draggable active={drawingTool?.activeShapeType === "ellipse"} onClick={() => selectShape("ellipse")} />
+        <RibbonShapeButton shapeType="line" iconName="horizontal_rule" label={t("line")} draggable active={drawingTool?.activeShapeType === "line"} onClick={() => selectShape("line")} />
       </RibbonMenuSection>
       <RibbonMenuDivider />
       <RibbonMenuSection title={t("color")}>
         <RibbonMenuButtonGroup>
-          <RibbonMenuColorPickerButton disabled={!drawingTool?.selectedShape} label={t("font color")} colors={config.CustomIconColorPicklist} onColorSelected={setFontColor} icon="format_color_text" />
-          <RibbonMenuColorPickerButton disabled={!drawingTool?.selectedShape} label={t("line color")} colors={config.CustomIconColorPicklist} onColorSelected={setForeColor} icon="border_color" />
-          <RibbonMenuColorPickerButton disabled={!drawingTool?.selectedShape} label={t("fill color")} colors={config.CustomContourColorPicklist} onColorSelected={setFillColor} icon="format_color_fill" />
+          <RibbonMenuColorPickerButton disabled={!drawingTool?.hasSelection} label={t("font color")} colors={config.CustomIconColorPicklist} onColorSelected={setFontColor} icon="format_color_text" />
+          <RibbonMenuColorPickerButton disabled={!drawingTool?.hasSelection} label={t("line color")} colors={config.CustomIconColorPicklist} onColorSelected={setForeColor} icon="border_color" />
+          <RibbonMenuColorPickerButton disabled={!drawingTool?.hasSelection} label={t("fill color")} colors={config.CustomContourColorPicklist} onColorSelected={setFillColor} icon="format_color_fill" />
         </RibbonMenuButtonGroup>
       </RibbonMenuSection>
       <RibbonMenuDivider />
-      <RibbonMenuSection title={t("edit")}>
-        <RibbonMenuButton label={t("delete")} disabled={!drawingTool?.selectedShape} onClick={deleteSelected} iconName="delete" />
-      </RibbonMenuSection>
     </div>
   );
 }

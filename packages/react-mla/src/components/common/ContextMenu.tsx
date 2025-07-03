@@ -30,7 +30,7 @@ export default function ContextMenu(props: Props) {
   const selectedEntities = useMainStore((state) => state.selectedEntities);
   const selectedLinks = useMainStore((state) => state.selectedLinks);
   const entities = useMainStore((state) => state.entities);
-  const setSelected = useMainStore((state) => state.setSelected);
+  const setSelected = useMainStore((state) => state.setSelectedNodeAndLinkIds);
   const setExploreTool = useSearchStore((state) => state.setExploreTool);
   const performExplore = useSearchStore((state) => state.explore);
   const graph = useMainStore((state) => state.graph);

@@ -3,39 +3,36 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import ChartContent from "./ChartContent";
-
 import useMainStore, { DrawingTool } from "../../store/main-store";
-
 import PropertiesPanel from "../properties/PropertiesPanel";
 import Timeline from "../timeline/Timeline";
 import ToolPanel from "../tools/ToolPanel";
-import useDraw from "./hooks/use-draw";
-import useSigma from "./hooks/use-sigma";
+import useChart from "./hooks/use-chart";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import workflowService from "../../services/workflowService";
 
 function ChartArea() {
   const workflow = useMainStore((state) => state.workflowToExecute);
-  const graph = useMainStore((state) => state.graph);
   const setDrawingTool = useMainStore((state) => state.setDrawingTool);
+  const setActiveShapeType = useMainStore((state) => state.setActiveShapeType);
 
-  const { sigma, container, dropRef } = useSigma(graph);
+  // Create a shared container ref
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Initialize our custom drawing implementation
-  const drawTools = useDraw(sigma);
+  // Initialize sigma
+  const chart = useChart(containerRef);
 
   // Store drawing tool in global state so it can be accessed from the DrawTabPanel
   useEffect(() => {
     // Create an adapter that matches the DrawingTool interface
     const drawingToolAdapter: DrawingTool = {
-      setCurrentShape: drawTools.setCurrentShape,
-      deleteSelectedShape: drawTools.deleteSelectedShape,
-      setShapeColor: drawTools.setShapeColor,
-      setTextProperties: drawTools.setTextProperties,
-      selectedShape: drawTools.selectedShape, // Convert to boolean as expected by interface
-      hasShapes: drawTools.hasShapes,
-      currentShapeType: drawTools.currentShapeType,
+      setCurrentShape: setActiveShapeType,
+      setShapeColor: chart.setShapeColor,
+      setTextProperties: chart.setTextProperties,
+      hasSelection: chart.hasSelection,
+      hasShapes: chart.hasShapes,
+      activeShapeType: chart.activeShapeType,
     };
 
     setDrawingTool(drawingToolAdapter);
@@ -43,12 +40,12 @@ function ChartArea() {
     return () => {
       setDrawingTool(undefined);
     };
-  }, [drawTools, setDrawingTool]); // Added drawTools as dependency
+  }, [chart, setActiveShapeType, setDrawingTool]); // Added drawTools as dependency
 
   useEffect(() => {
     // Run workflow after sigma is created
     if (workflow != "") {
-      workflowService.Execute(workflow);
+      workflowService.Execute("testdata");
     }
   }, [workflow]);
 
@@ -62,8 +59,14 @@ function ChartArea() {
             <PropertiesPanel className="m-w-72 m-flex-none m-h-full m-border-l m-border-gray-300 m-pointer-events-auto" />
           </div>
         </div>
-        <div className="m-h-full m-w-full" ref={dropRef}>
-          <div className="m-h-full m-w-full m-outline-none" id="m-chart" tabIndex={1} ref={container}></div>
+        <div
+          className="m-h-full m-w-full"
+          ref={(el) => {
+            containerRef.current = el;
+            chart.dropRef(el);
+          }}
+        >
+          <div className="m-h-full m-w-full m-outline-none" id="m-chart" tabIndex={1} ref={chart.container}></div>
           <ChartContent />
         </div>
       </div>

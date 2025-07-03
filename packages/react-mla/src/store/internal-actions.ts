@@ -4,32 +4,32 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import Graph from 'graphology';
-import forceLayout from 'graphology-layout-force';
-import { collectLayout } from 'graphology-layout/utils';
+import Graph from "graphology";
+import forceLayout from "graphology-layout-force";
+import { collectLayout } from "graphology-layout/utils";
 
 import i18n from "i18next";
-import { WritableDraft, produce } from 'immer';
-import Sigma from 'sigma';
-import type { IChartBase, IEntity, IHistory, ILink } from '../interfaces/data-models';
-import configService from '../services/configurationService';
-import viewService from '../services/viewService';
-import { fixDate } from '../utils/date';
-import { getId, getInternalId, isLinked, mergeProps } from '../utils/utils';
-import useMainStore from './main-store';
-
+import { WritableDraft, produce } from "immer";
+import Sigma from "sigma";
+import type { IChartBase, IEntity, IHistory, ILink } from "../interfaces/data-models";
+import type { IShape } from "../interfaces/data-models/shape";
+import configService from "../services/configurationService";
+import viewService from "../services/viewService";
+import { fixDate } from "../utils/date";
+import { getId, getInternalId, isLinked, mergeProps } from "../utils/utils";
+import useMainStore from "./main-store";
 
 function updateProps(draft: WritableDraft<IChartBase>) {
-  draft.InternalId = getInternalId()
-  draft.DateFrom = fixDate(draft.DateFrom)
-  draft.DateTo = fixDate(draft.DateTo)
-  draft.LabelShort = viewService.getShortName(draft)
-  draft.LabelLong = viewService.getLongName(draft)
-  draft.LabelChart = viewService.getChartName(draft)
+  draft.InternalId = getInternalId();
+  draft.DateFrom = fixDate(draft.DateFrom);
+  draft.DateTo = fixDate(draft.DateTo);
+  draft.LabelShort = viewService.getShortName(draft);
+  draft.LabelLong = viewService.getLongName(draft);
+  draft.LabelChart = viewService.getChartName(draft);
 }
 
 function hasDifferentLabel(b1: IChartBase, b2: IChartBase) {
-  return b1.LabelShort !== b2.LabelShort || b1.LabelLong !== b2.LabelLong || b1.LabelChart !== b2.LabelChart
+  return b1.LabelShort !== b2.LabelShort || b1.LabelLong !== b2.LabelLong || b1.LabelChart !== b2.LabelChart;
 }
 
 const getLocationCentrumForNewNodes = (sigma: Sigma) => {
@@ -38,30 +38,32 @@ const getLocationCentrumForNewNodes = (sigma: Sigma) => {
   const centerX = graphBox.x / 2;
   const centerY = graphBox.y / 2;
 
-  return { x: centerX, y: centerY }
-}
+  return { x: centerX, y: centerY };
+};
 
-function calculatePositions(sigma: Sigma, graph: Graph, entities: IEntity[], links: ILink[],): { [key: string]: { x: number; y: number } } {
+function calculatePositions(sigma: Sigma, graph: Graph, entities: IEntity[], links: ILink[]): { [key: string]: { x: number; y: number } } {
   const numberOfIterations = 50;
-  const centrum = getLocationCentrumForNewNodes(sigma)
+  const centrum = getLocationCentrumForNewNodes(sigma);
 
   // Create a copy of the graph
-  const graphCopy = graph.copy()
+  const graphCopy = graph.copy();
 
   // Set all existing nodes to fixed position
-  graphCopy.forEachNode((node) => graphCopy.setNodeAttribute(node, "fixed", true))
+  graphCopy.forEachNode((node) => graphCopy.setNodeAttribute(node, "fixed", true));
 
   let i = 0;
 
   // Find new nodes
-  entities.filter(e => !graphCopy.hasNode(getId(e))).forEach(e => {
-    i++
-    graphCopy.addNode(getId(e), { x: e.PosX ?? centrum.x + i * 20, y: e.PosY ?? centrum.y + (i * 10), fixed: false })
-  })
+  entities
+    .filter((e) => !graphCopy.hasNode(getId(e)))
+    .forEach((e) => {
+      i++;
+      graphCopy.addNode(getId(e), { x: e.PosX ?? centrum.x + i * 20, y: e.PosY ?? centrum.y + i * 10, fixed: false });
+    });
 
   links.forEach((e) => {
-    const added = graphCopy.updateEdgeWithKey(e.Id, e.FromEntityId + e.FromEntityTypeId, e.ToEntityId + e.ToEntityTypeId)
-  })
+    const added = graphCopy.updateEdgeWithKey(e.Id, e.FromEntityId + e.FromEntityTypeId, e.ToEntityId + e.ToEntityTypeId);
+  });
 
   for (let index = 0; index < numberOfIterations; index++) {
     forceLayout.assign(graphCopy, {
@@ -71,7 +73,7 @@ function calculatePositions(sigma: Sigma, graph: Graph, entities: IEntity[], lin
         repulsion: 10,
         gravity: 0.0001,
         inertia: 0.6,
-        maxMove: 200
+        maxMove: 200,
       },
       isNodeFixed: (_, attr) => attr.fixed,
     });
@@ -82,407 +84,544 @@ function calculatePositions(sigma: Sigma, graph: Graph, entities: IEntity[], lin
 }
 
 export const updateSelected = (selectedIds?: string[]) => {
-  useMainStore.setState(state => {
-    const ids = selectedIds ?? state.selectedIds
+  useMainStore.setState((state) => {
+    const ids = selectedIds ?? state.selectedNodeAndLinkIds;
 
     return {
-      selectedIds: ids,
-      selectedEntities: (ids).map(id => state.getCurrentEntity(id)).filter(e => e !== undefined) as IEntity[],
-      selectedLinks: ids.map(id => state.getCurrentLink(id)).filter(l => l !== undefined) as ILink[],
-    }
-  })
-}
+      selectedNodeAndLinkIds: ids,
+      selectedEntities: ids.map((id) => state.getCurrentEntity(id)).filter((e) => e !== undefined) as IEntity[],
+      selectedLinks: ids.map((id) => state.getCurrentLink(id)).filter((l) => l !== undefined) as ILink[],
+    };
+  });
+};
 
 export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILink[], setSelected = false) => {
-  const updateEntities: IEntity[] = []
-  const updateLinks: ILink[] = []
-  useMainStore.setState(state => {
-    let min = state.minDate
-    let max = state.maxDate
+  const updateEntities: IEntity[] = [];
+  const updateLinks: ILink[] = [];
+  useMainStore.setState((state) => {
+    let min = state.minDate;
+    let max = state.maxDate;
 
-    const stateUpEntities = produce(state.entities, stateDraft => {
-      const newEntities = entities.filter(e => (e.PosX == null || e.PosY == null) && !state.graph.hasNode(getId(e)));
+    const stateUpEntities = produce(state.entities, (stateDraft) => {
+      const newEntities = entities.filter((e) => (e.PosX == null || e.PosY == null) && !state.graph.hasNode(getId(e)));
       let positions: { [key: string]: { x: number; y: number } } = {};
 
       if (state.sigma) {
-        positions = calculatePositions(state.sigma, state.graph, newEntities, links)
+        positions = calculatePositions(state.sigma, state.graph, newEntities, links);
       }
 
       for (let entity of entities) {
-        const config = configService.getEntityConfiguration(entity.TypeId, entity.GlobalType)
+        const config = configService.getEntityConfiguration(entity.TypeId, entity.GlobalType);
         if (config == null) {
-          console.error("Could not map, skipping", entity)
-          continue
+          console.error("Could not map, skipping", entity);
+          continue;
         }
 
         if (config.Internal === true) {
-          continue
+          continue;
         }
 
-        entity = produce(entity, draft => {
-          updateProps(draft)
+        entity = produce(entity, (draft) => {
+          updateProps(draft);
 
           // Assign positions
-          if (draft.PosX == null || draft.PosY == null && positions[getId(draft)] != null) {
-            draft.PosX = positions[getId(draft)].x
-            draft.PosY = positions[getId(draft)].y
+          if (draft.PosX == null || (draft.PosY == null && positions[getId(draft)] != null)) {
+            draft.PosX = positions[getId(draft)].x;
+            draft.PosY = positions[getId(draft)].y;
           }
 
           // Show on map
           if (entity.Coordinates) {
-            draft.ShowOnMap = true
+            draft.ShowOnMap = true;
           }
 
           // Align global type
-          draft.TypeId = config.TypeId
-        })
+          draft.TypeId = config.TypeId;
+        });
 
         if (entity.DateFrom != null && entity.DateFrom < min) {
-          min = entity.DateFrom!.startOf("day")
+          min = entity.DateFrom!.startOf("day");
         }
 
         if (entity.DateTo != null && entity.DateTo > max) {
-          max = entity.DateTo!.endOf("day")
+          max = entity.DateTo!.endOf("day");
         }
 
         if (addHistory) {
-          updateEntities.push(entity)
+          updateEntities.push(entity);
         }
 
-        let update = [] as IEntity[]
-        const existing = stateDraft[getId(entity)]
+        let update = [] as IEntity[];
+        const existing = stateDraft[getId(entity)];
 
         if (existing == null) {
-          update = [entity]
+          update = [entity];
         } else {
-          const found = existing.find(x => x.InternalId === entity.InternalId || (x.DateFrom === entity.DateFrom && x.DateTo === entity.DateTo))
+          const found = existing.find((x) => x.InternalId === entity.InternalId || (x.DateFrom === entity.DateFrom && x.DateTo === entity.DateTo));
           if (found) {
-            console.warn('There is already an entity with this id and date date, overwriting')
-            const updateEntity = produce(entity, draft => {
-              updateProps(draft)
-              draft.InternalId = found.InternalId
-              draft.Properties = mergeProps(found.Properties, entity.Properties)
-              draft.PosX = found.PosX
-              draft.PosY = found.PosY
-            })
-            update = [updateEntity, ...existing.filter(x => x.InternalId !== updateEntity.InternalId)]
+            console.warn("There is already an entity with this id and date date, overwriting");
+            const updateEntity = produce(entity, (draft) => {
+              updateProps(draft);
+              draft.InternalId = found.InternalId;
+              draft.Properties = mergeProps(found.Properties, entity.Properties);
+              draft.PosX = found.PosX;
+              draft.PosY = found.PosY;
+            });
+            update = [updateEntity, ...existing.filter((x) => x.InternalId !== updateEntity.InternalId)];
           } else {
-            update = [...existing, entity].sort((a, b) => sortByDate(a, b))
+            update = [...existing, entity].sort((a, b) => sortByDate(a, b));
           }
         }
 
-        stateDraft[getId(entity)] = update
+        stateDraft[getId(entity)] = update;
       }
-    })
+    });
 
-    const stateUpLinks = produce(state.links, stateDraft => {
+    const stateUpLinks = produce(state.links, (stateDraft) => {
       for (let link of links) {
-        const config = configService.getLinkConfiguration(link.TypeId, link.GlobalType)
+        const config = configService.getLinkConfiguration(link.TypeId, link.GlobalType);
         if (config == null) {
-          console.error("Could not map, skipping", link)
-          continue
+          console.error("Could not map, skipping", link);
+          continue;
         }
 
         if (config.Internal === true) {
-          return
+          return;
         }
 
-        link = produce(link, draft => {
-          updateProps(draft)
+        link = produce(link, (draft) => {
+          updateProps(draft);
 
           // Align global type
-          draft.TypeId = config.TypeId
-        })
+          draft.TypeId = config.TypeId;
+        });
 
         if (link.DateFrom != null && link.DateFrom < min) {
-          min = link.DateFrom!.startOf("day")
+          min = link.DateFrom!.startOf("day");
         }
 
         if (link.DateTo != null && link.DateTo > max) {
-          max = link.DateTo!.endOf("day")
+          max = link.DateTo!.endOf("day");
         }
 
         if (addHistory) {
-          updateLinks.push(link)
+          updateLinks.push(link);
         }
 
-        let update = [] as ILink[]
-        const existing = stateDraft[getId(link)]
+        let update = [] as ILink[];
+        const existing = stateDraft[getId(link)];
         if (existing == null) {
-          update = [link]
+          update = [link];
         } else {
-          const found = existing.find(x => x.InternalId === link.InternalId || (x.DateFrom === link.DateFrom && x.DateTo === link.DateTo))
+          const found = existing.find((x) => x.InternalId === link.InternalId || (x.DateFrom === link.DateFrom && x.DateTo === link.DateTo));
           if (found !== undefined) {
-            console.warn('There is already a link with this id and date date, overwriting')
-            const updateLink = produce(link, draft => {
-              updateProps(draft)
-              draft.InternalId = found.InternalId
-              draft.Properties = mergeProps(found.Properties, link.Properties)
-            })
-            update = [updateLink, ...existing.filter(x => updateLink.InternalId !== x.InternalId)]
+            console.warn("There is already a link with this id and date date, overwriting");
+            const updateLink = produce(link, (draft) => {
+              updateProps(draft);
+              draft.InternalId = found.InternalId;
+              draft.Properties = mergeProps(found.Properties, link.Properties);
+            });
+            update = [updateLink, ...existing.filter((x) => updateLink.InternalId !== x.InternalId)];
           } else {
-            update = [...existing, link].sort((a, b) => sortByDate(a, b))
+            update = [...existing, link].sort((a, b) => sortByDate(a, b));
           }
         }
 
-        stateDraft[getId(link)] = update
+        stateDraft[getId(link)] = update;
       }
-    })
+    });
 
-    return produce(state, draft => {
+    return produce(state, (draft) => {
       if (addHistory) {
         draft.history.unshift({
-          action: 'ADD',
+          action: "ADD",
           from: {
             entities: [],
-            links: []
+            links: [],
+            shapes: [],
           },
           to: {
             entities: updateEntities,
-            links: updateLinks
-          }
-        })
-        draft.historyPosition = 0
-        draft.canRedo = false
-        draft.canUndo = true
+            links: updateLinks,
+            shapes: [],
+          },
+        });
+        draft.historyPosition = 0;
+        draft.canRedo = false;
+        draft.canUndo = true;
 
         if (draft.history.length > 20) {
-          draft.history.length = 20
+          draft.history.length = 20;
         }
       }
 
-      draft.dirty = true
-      draft.entities = stateUpEntities
-      draft.links = stateUpLinks
-      draft.selectedIds = setSelected ? [...entities, ...links].map(x => getId(x)) : draft.selectedIds
+      draft.dirty = true;
+      draft.entities = stateUpEntities;
+      draft.links = stateUpLinks;
+      draft.selectedNodeAndLinkIds = setSelected ? [...entities, ...links].map((x) => getId(x)) : draft.selectedNodeAndLinkIds;
 
-      draft.minDate = min
-      draft.maxDate = max
-    })
-  })
+      draft.minDate = min;
+      draft.maxDate = max;
+    });
+  });
 
   updateSelected();
 
   if (addHistory) {
-    console.debug('[history-add]', useMainStore.getState().history)
+    console.debug("[history-add]", useMainStore.getState().history);
   }
-}
+};
 
 export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: ILink[]) => {
-  useMainStore.setState(state => {
-    let min = state.minDate
-    let max = state.maxDate
+  useMainStore.setState((state) => {
+    let min = state.minDate;
+    let max = state.maxDate;
 
-    const stateUpEntities = produce(state.entities, stateDraft => {
+    const stateUpEntities = produce(state.entities, (stateDraft) => {
       for (const entity of entities) {
-        const update = produce(entity, draft => {
-          updateProps(draft)
-          draft.SourceSystemId = i18n.t("modified")
-        })
-        const existing = stateDraft[getId(entity)]
-        stateDraft[getId(entity)] = [update, ...existing.filter(x => x.InternalId !== entity.InternalId)].sort((a, b) => sortByDate(a, b))
+        const update = produce(entity, (draft) => {
+          updateProps(draft);
+          draft.SourceSystemId = i18n.t("modified");
+        });
+        const existing = stateDraft[getId(entity)];
+        stateDraft[getId(entity)] = [update, ...existing.filter((x) => x.InternalId !== entity.InternalId)].sort((a, b) => sortByDate(a, b));
 
         if (update.DateFrom != null && update.DateFrom < min) {
-          min = entity.DateFrom!.startOf("day")
+          min = entity.DateFrom!.startOf("day");
         }
 
         if (update.DateTo != null && update.DateTo > max) {
-          max = entity.DateTo!.endOf("day")
+          max = entity.DateTo!.endOf("day");
         }
       }
-    })
+    });
 
-    const stateUpLinks = produce(state.links, stateDraft => {
+    const stateUpLinks = produce(state.links, (stateDraft) => {
       for (const link of links) {
-        const update = produce(link, draft => {
-          updateProps(draft)
-          draft.SourceSystemId = i18n.t("modified")
-        })
-        const existing = stateDraft[getId(link)]
-        stateDraft[getId(link)] = [update, ...existing.filter(x => x.InternalId !== link.InternalId)].sort((a, b) => sortByDate(a, b))
+        const update = produce(link, (draft) => {
+          updateProps(draft);
+          draft.SourceSystemId = i18n.t("modified");
+        });
+        const existing = stateDraft[getId(link)];
+        stateDraft[getId(link)] = [update, ...existing.filter((x) => x.InternalId !== link.InternalId)].sort((a, b) => sortByDate(a, b));
 
         if (update.DateFrom != null && update.DateFrom < min) {
-          min = link.DateFrom!.startOf("day")
+          min = link.DateFrom!.startOf("day");
         }
 
         if (update.DateTo != null && update.DateTo > max) {
-          max = link.DateTo!.endOf("day")
+          max = link.DateTo!.endOf("day");
         }
       }
-    })
+    });
 
-    return produce(state, draft => {
+    return produce(state, (draft) => {
       if (addHistory) {
-        const restoreE = entities.map(e => {
-          return produce(draft.entities[getId(e)].find(x => x.InternalId === e.InternalId), draft => undefined)!
-        })
-        const restoreL = links.map(e => {
-          return produce(draft.links[getId(e)].find(x => x.InternalId === e.InternalId), draft => undefined)!
-        })
+        const restoreE = entities.map((e) => {
+          return produce(
+            draft.entities[getId(e)].find((x) => x.InternalId === e.InternalId),
+            (draft) => undefined
+          )!;
+        });
+        const restoreL = links.map((e) => {
+          return produce(
+            draft.links[getId(e)].find((x) => x.InternalId === e.InternalId),
+            (draft) => undefined
+          )!;
+        });
 
         for (let s = 0; s < draft.historyPosition; s++) {
-          draft.history.shift()
+          draft.history.shift();
         }
 
         draft.history.unshift({
-          action: 'UPDATE',
+          action: "UPDATE",
           from: {
             entities: restoreE,
-            links: restoreL
+            links: restoreL,
+            shapes: [],
           },
           to: {
             entities,
-            links
-          }
-        })
-        draft.historyPosition = 0
-        draft.canRedo = false
-        draft.canUndo = true
+            links,
+            shapes: [],
+          },
+        });
+        draft.historyPosition = 0;
+        draft.canRedo = false;
+        draft.canUndo = true;
 
         if (draft.history.length > 20) {
-          draft.history.length = 20
+          draft.history.length = 20;
         }
       }
 
-      draft.dirty = true
-      draft.entities = stateUpEntities
-      draft.links = stateUpLinks
+      draft.dirty = true;
+      draft.entities = stateUpEntities;
+      draft.links = stateUpLinks;
 
-      draft.minDate = min
-      draft.maxDate = max
-    })
-  })
+      draft.minDate = min;
+      draft.maxDate = max;
+    });
+  });
 
   updateSelected();
 
   if (addHistory) {
-    console.debug('[history-update]', useMainStore.getState().history)
+    console.debug("[history-update]", useMainStore.getState().history);
   }
-}
+};
 
 export const internalRemove = (addHistory: boolean, entities: IEntity[], links: ILink[]) => {
-  useMainStore.setState(state => {
-    return produce(state, draft => {
+  useMainStore.setState((state) => {
+    return produce(state, (draft) => {
       if (addHistory) {
         draft.history.unshift({
-          action: 'REMOVE',
+          action: "REMOVE",
           from: {
             entities,
-            links
+            links,
+            shapes: [],
           },
           to: {
             entities: [],
-            links: []
-          }
-        })
-        draft.historyPosition = 0
-        draft.canRedo = false
-        draft.canUndo = true
+            links: [],
+            shapes: [],
+          },
+        });
+        draft.historyPosition = 0;
+        draft.canRedo = false;
+        draft.canUndo = true;
 
         if (draft.history.length > 20) {
-          draft.history.length = 20
+          draft.history.length = 20;
         }
       }
 
       for (const entity of entities) {
-        let selected = draft.selectedIds
+        let selected = draft.selectedNodeAndLinkIds;
 
-        const existing = draft.entities[getId(entity)] ?? []
-        const update = existing.filter(x => x.InternalId !== entity.InternalId)
+        const existing = draft.entities[getId(entity)] ?? [];
+        const update = existing.filter((x) => x.InternalId !== entity.InternalId);
 
         if (update.length === 0) {
-          const copy = { ...draft.entities }
-          delete copy[getId(entity)]
-          selected = selected.filter(s => s !== getId(entity))
+          const copy = { ...draft.entities };
+          delete copy[getId(entity)];
+          selected = selected.filter((s) => s !== getId(entity));
 
-          const copyLinks = { ...draft.links }
+          const copyLinks = { ...draft.links };
 
-          for (const link of Object.values(draft.links).map(l => l[0])) {
+          for (const link of Object.values(draft.links).map((l) => l[0])) {
             if (isLinked(entity, link)) {
-              copyLinks[getId(link)].forEach(remove => {
-                if (addHistory && !draft.history[0].from.links.some(l => l.InternalId === remove.InternalId)) {
-                  draft.history[0].from.links.push(remove)
+              copyLinks[getId(link)].forEach((remove) => {
+                if (addHistory && !draft.history[0].from.links.some((l) => l.InternalId === remove.InternalId)) {
+                  draft.history[0].from.links.push(remove);
                 }
-              })
+              });
 
-              delete copyLinks[getId(link)]
-              selected = selected.filter(s => s !== getId(link))
+              delete copyLinks[getId(link)];
+              selected = selected.filter((s) => s !== getId(link));
             }
           }
 
-          draft.selectedIds = selected
-          draft.dirty = true
-          draft.entities = copy
-          draft.links = copyLinks
+          draft.selectedNodeAndLinkIds = selected;
+          draft.dirty = true;
+          draft.entities = copy;
+          draft.links = copyLinks;
         } else {
-          draft.dirty = true
-          draft.entities = { ...draft.entities, [getId(entity)]: update }
+          draft.dirty = true;
+          draft.entities = { ...draft.entities, [getId(entity)]: update };
         }
       }
 
       for (const link of links) {
-        const existing = draft.links[getId(link)] ?? []
-        const update = existing.filter(x => x.InternalId !== link.InternalId)
+        const existing = draft.links[getId(link)] ?? [];
+        const update = existing.filter((x) => x.InternalId !== link.InternalId);
 
         if (update.length === 0) {
-          draft.selectedIds = draft.selectedIds.filter(s => s !== getId(link))
-          delete draft.links[getId(link)]
+          draft.selectedNodeAndLinkIds = draft.selectedNodeAndLinkIds.filter((s) => s !== getId(link));
+          delete draft.links[getId(link)];
         } else {
-          draft.links = { ...draft.links, [getId(link)]: update }
+          draft.links = { ...draft.links, [getId(link)]: update };
         }
 
-        draft.dirty = true
+        draft.dirty = true;
       }
-    })
-  })
+    });
+  });
 
   updateSelected();
 
   if (addHistory) {
-    console.debug('[history-remove]', useMainStore.getState().history)
+    console.debug("[history-remove]", useMainStore.getState().history);
   }
-}
+};
 
 export const internalUpdateLabels = () => {
-  useMainStore.setState(state => {
-    const stateUpEntities = produce(state.entities, stateDraft => {
+  useMainStore.setState((state) => {
+    const stateUpEntities = produce(state.entities, (stateDraft) => {
       for (const entity of Object.values(state.entities).flat()) {
-        const update = produce(entity, draft => {
-          updateProps(draft)
-        })
+        const update = produce(entity, (draft) => {
+          updateProps(draft);
+        });
 
         if (hasDifferentLabel(update, entity)) {
-          const existing = stateDraft[getId(entity)]
-          stateDraft[getId(entity)] = [update, ...existing.filter(x => x.InternalId !== entity.InternalId)].sort((a, b) => sortByDate(a, b))
+          const existing = stateDraft[getId(entity)];
+          stateDraft[getId(entity)] = [update, ...existing.filter((x) => x.InternalId !== entity.InternalId)].sort((a, b) => sortByDate(a, b));
         }
       }
-    })
+    });
 
-    const stateUpLinks = produce(state.links, stateDraft => {
+    const stateUpLinks = produce(state.links, (stateDraft) => {
       for (const link of Object.values(state.links).flat()) {
-        const update = produce(link, draft => {
-          updateProps(draft)
-        })
+        const update = produce(link, (draft) => {
+          updateProps(draft);
+        });
 
         if (hasDifferentLabel(update, link)) {
-          const existing = stateDraft[getId(link)]
-          stateDraft[getId(link)] = [update, ...existing.filter(x => x.InternalId !== link.InternalId)].sort((a, b) => sortByDate(a, b))
+          const existing = stateDraft[getId(link)];
+          stateDraft[getId(link)] = [update, ...existing.filter((x) => x.InternalId !== link.InternalId)].sort((a, b) => sortByDate(a, b));
         }
       }
-    })
+    });
 
-    const stateUpComputedLinks = state.computedLinks.map(l => {
-      return produce(l, draft => {
-        updateProps(draft)
-      })
-    })
+    const stateUpComputedLinks = state.computedLinks.map((l) => {
+      return produce(l, (draft) => {
+        updateProps(draft);
+      });
+    });
 
-    return produce(state, draft => {
-      draft.entities = stateUpEntities
-      draft.links = stateUpLinks
-      draft.computedLinks = stateUpComputedLinks
-    })
-  })
-}
+    return produce(state, (draft) => {
+      draft.entities = stateUpEntities;
+      draft.links = stateUpLinks;
+      draft.computedLinks = stateUpComputedLinks;
+    });
+  });
+};
 
-const sortByDate = (a: IHistory, b: IHistory) => ((a.DateFrom != null && b.DateFrom != null) ? a.DateFrom.diff(b.DateFrom).milliseconds : 0)
+// Shape operations for undo/redo functionality
+export const internalAddShapes = (addHistory: boolean, shapes: IShape[]) => {
+  useMainStore.setState((state) => {
+    return produce(state, (draft) => {
+      if (addHistory) {
+        draft.history.unshift({
+          action: "ADD",
+          from: {
+            entities: [],
+            links: [],
+            shapes: [],
+          },
+          to: {
+            entities: [],
+            links: [],
+            shapes: shapes,
+          },
+        });
+        draft.historyPosition = 0;
+        draft.canRedo = false;
+        draft.canUndo = true;
+
+        if (draft.history.length > 20) {
+          draft.history.length = 20;
+        }
+      }
+
+      draft.dirty = true;
+      draft.shapes = [...draft.shapes, ...shapes];
+      draft.drawings = JSON.stringify(draft.shapes);
+    });
+  });
+
+  if (addHistory) {
+    console.debug("[history-add-shapes]", useMainStore.getState().history);
+  }
+};
+
+export const internalUpdateShapes = (addHistory: boolean, shapes: IShape[]) => {
+  useMainStore.setState((state) => {
+    return produce(state, (draft) => {
+      if (addHistory) {
+        const restoreShapes = shapes.map((shape) => {
+          return draft.shapes.find((s) => s.id === shape.id)!;
+        });
+
+        for (let s = 0; s < draft.historyPosition; s++) {
+          draft.history.shift();
+        }
+
+        draft.history.unshift({
+          action: "UPDATE",
+          from: {
+            entities: [],
+            links: [],
+            shapes: restoreShapes,
+          },
+          to: {
+            entities: [],
+            links: [],
+            shapes: shapes,
+          },
+        });
+        draft.historyPosition = 0;
+        draft.canRedo = false;
+        draft.canUndo = true;
+
+        if (draft.history.length > 20) {
+          draft.history.length = 20;
+        }
+      }
+
+      draft.dirty = true;
+      draft.shapes = draft.shapes.map((s) => {
+        const updatedShape = shapes.find((us) => us.id === s.id);
+        return updatedShape ? updatedShape : s;
+      });
+      draft.drawings = JSON.stringify(draft.shapes);
+    });
+  });
+
+  if (addHistory) {
+    console.debug("[history-update-shapes]", useMainStore.getState().history);
+  }
+};
+
+export const internalRemoveShapes = (addHistory: boolean, shapes: IShape[]) => {
+  useMainStore.setState((state) => {
+    return produce(state, (draft) => {
+      if (addHistory) {
+        draft.history.unshift({
+          action: "REMOVE",
+          from: {
+            entities: [],
+            links: [],
+            shapes: shapes,
+          },
+          to: {
+            entities: [],
+            links: [],
+            shapes: [],
+          },
+        });
+        draft.historyPosition = 0;
+        draft.canRedo = false;
+        draft.canUndo = true;
+
+        if (draft.history.length > 20) {
+          draft.history.length = 20;
+        }
+      }
+
+      draft.dirty = true;
+      const shapeIds = shapes.map((s) => s.id);
+      draft.shapes = draft.shapes.filter((s) => !shapeIds.includes(s.id));
+      draft.selectedShapeIds = draft.selectedShapeIds.filter((id) => !shapeIds.includes(id));
+      draft.drawings = JSON.stringify(draft.shapes);
+    });
+  });
+
+  if (addHistory) {
+    console.debug("[history-remove-shapes]", useMainStore.getState().history);
+  }
+};
+
+const sortByDate = (a: IHistory, b: IHistory) => (a.DateFrom != null && b.DateFrom != null ? a.DateFrom.diff(b.DateFrom).milliseconds : 0);

@@ -2,15 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react';
+import commonjs from 'vite-plugin-commonjs';
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
-import commonjs from 'vite-plugin-commonjs'
 
-import path, { resolve } from 'path'
-
-const isDev1 = process.env
+import path, { resolve } from 'path';
 
 export default defineConfig(({ mode }) => {
   return {
@@ -19,7 +17,7 @@ export default defineConfig(({ mode }) => {
       cssInjectedByJsPlugin(),
       commonjs(),
     ],
-    define: {'process.env': process.env},
+    define: { 'process.env.GITHUB_ACTIONS': JSON.stringify(process.env.GITHUB_ACTIONS) },
     build: {
       copyPublicDir: false,
       target: "es2020",

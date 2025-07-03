@@ -13,27 +13,27 @@ function useNodeHighlight(renderer: Sigma | undefined) {
   const [hoveredEdge, setHoveredEdge] = useState<string | null>(null);
   const disableHoverEffect = useAppStore((state) => !state.hoverEffect);
   const graph = useMainStore((state) => state.graph);
-  const selectedShapeId = useMainStore((state) => state.selectedShapeId);
+  const selectedShapeIds = useMainStore((state) => state.selectedShapeIds);
 
   useEffect(() => {
     if (renderer == null) return;
 
     const enterNode = (e: SigmaNodeEventPayload) => {
-      if (selectedShapeId != null) return;
+      if (selectedShapeIds.length > 0) return;
 
       graph.setNodeAttribute(e.node, "highlighted", true);
       setHoveredNode(e.node);
     };
 
     const exitNode = (e: SigmaNodeEventPayload) => {
-      if (selectedShapeId != null) return;
+      if (selectedShapeIds.length > 0) return;
 
       graph.setNodeAttribute(e.node, "highlighted", false);
       setHoveredNode(null);
     };
 
     const enterEdge = (e: SigmaEdgeEventPayload) => {
-      if (selectedShapeId != null) return;
+      if (selectedShapeIds.length > 0) return;
 
       // Only attempt to modify the edge if it still exists in the graph
       if (graph.hasEdge(e.edge)) {
@@ -43,7 +43,7 @@ function useNodeHighlight(renderer: Sigma | undefined) {
     };
 
     const exitEdge = (e: SigmaEdgeEventPayload) => {
-      if (selectedShapeId != null) return;
+      if (selectedShapeIds.length > 0) return;
 
       // Only attempt to modify the edge if it still exists in the graph
       if (graph.hasEdge(e.edge)) {
@@ -63,7 +63,7 @@ function useNodeHighlight(renderer: Sigma | undefined) {
       renderer.off("enterEdge", enterEdge);
       renderer.off("leaveEdge", exitEdge);
     };
-  }, [selectedShapeId, graph, renderer]);
+  }, [selectedShapeIds, graph, renderer]);
 
   useEffect(() => {
     if (renderer == null) return;

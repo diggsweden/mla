@@ -37,7 +37,7 @@ export const drawText = (ctx: CanvasRenderingContext2D, shape: Omit<IShape, "inG
   ctx.textBaseline = "top";
 
   // First, clean the text by removing potential spaces before newlines
-  const cleanText = (shape.text || "").replace(/\s+\n/g, "\n");
+  const cleanText = shape.text || "";
 
   // Split text by newlines first, then process each line separately for word wrapping
   const lines = cleanText.split("\n");
@@ -59,7 +59,12 @@ export const drawText = (ctx: CanvasRenderingContext2D, shape: Omit<IShape, "inG
       const testWidth = ctx.measureText(testLine).width;
 
       if (testWidth > shape.width && i > 0) {
-        ctx.fillText(line.trim(), shape.x, y);
+        let text = line.trim();
+        if (text == "") {
+          text = " ";
+        }
+
+        ctx.fillText(text, shape.x, y);
         line = words[i] + " ";
         y += lineHeight;
 
@@ -176,6 +181,26 @@ export const drawResizeHandles = (ctx: CanvasRenderingContext2D, shape: Omit<ISh
   // Bottom-right
   ctx.fillRect(shape.x + shape.width - handleSize / 2, shape.y + shape.height - handleSize / 2, handleSize, handleSize);
   ctx.strokeRect(shape.x + shape.width - handleSize / 2, shape.y + shape.height - handleSize / 2, handleSize, handleSize);
+};
+
+/**
+ * Draw resize handles for a line
+ */
+export const drawLineResizeHandles = (ctx: CanvasRenderingContext2D, linePoints: { x1: number; y1: number; x2: number; y2: number }) => {
+  const handleSize = 8;
+  const halfHandleSize = handleSize / 2;
+
+  ctx.fillStyle = "#ffffff"; // White fill
+  ctx.strokeStyle = "#4e92ed"; // Blue border
+  ctx.lineWidth = 1;
+
+  // Handle at start point (x1, y1)
+  ctx.fillRect(linePoints.x1 - halfHandleSize, linePoints.y1 - halfHandleSize, handleSize, handleSize);
+  ctx.strokeRect(linePoints.x1 - halfHandleSize, linePoints.y1 - halfHandleSize, handleSize, handleSize);
+
+  // Handle at end point (x2, y2)
+  ctx.fillRect(linePoints.x2 - halfHandleSize, linePoints.y2 - halfHandleSize, handleSize, handleSize);
+  ctx.strokeRect(linePoints.x2 - halfHandleSize, linePoints.y2 - halfHandleSize, handleSize, handleSize);
 };
 
 /**
