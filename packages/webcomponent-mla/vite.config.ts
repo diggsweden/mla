@@ -17,7 +17,10 @@ export default defineConfig(({ mode }) => {
       cssInjectedByJsPlugin(),
       commonjs(),
     ],
-    define: { 'process.env.GITHUB_ACTIONS': JSON.stringify(process.env.GITHUB_ACTIONS) },
+    define: {
+      'process.env.GITHUB_ACTIONS': JSON.stringify(process.env.GITHUB_ACTIONS),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    },
     build: {
       copyPublicDir: false,
       target: "es2020",
