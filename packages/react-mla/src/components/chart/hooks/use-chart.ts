@@ -6,8 +6,8 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 // Third-party imports
-import Sigma from "sigma";
 import { produce } from "immer";
+import Sigma from "sigma";
 import { SigmaEdgeEventPayload, SigmaNodeEventPayload, SigmaStageEventPayload } from "sigma/types";
 
 // Store imports
@@ -19,15 +19,15 @@ import { IEntity } from "../../../interfaces/data-models";
 import { IShape } from "../../../interfaces/data-models/shape";
 
 // Utility imports
+import { drawCanvas } from "../utils/canvas-utils";
 import { calculateResizedDimensions, convertToGraphCoordinates, convertToScreenCoordinates } from "../utils/coordinate-utils";
 import { isNodeIntersectingRect } from "../utils/node-detection";
 import { checkForResizeHandleInSelectedShapes, getShapeAtPoint, isShapeIntersectingRect } from "../utils/shape-detection";
-import { drawCanvas } from "../utils/canvas-utils";
 
 // Hook imports
 import useKeyDown from "../../../effects/keydown";
-import useNodeHighlight from "./use-node-highlight";
 import useChartDrop from "./use-chart-drop";
+import useNodeHighlight from "./use-node-highlight";
 import { useSigmaConfig } from "./use-sigma-config";
 import { useSigmaInitialization } from "./use-sigma-initialization";
 
@@ -548,6 +548,19 @@ function useChart(containerRef: RefObject<HTMLDivElement | null>) {
       ctx.fillRect(rect.startX + rect.clientOffsetX, rect.startY, rect.endX + rect.clientOffsetX - rect.startX, rect.endY - rect.startY);
     };
 
+    const stopDrawingShape = (shapeBeingDrawn: IShape) => {
+      setInteractiveMode("idle");
+
+      if (shapeBeingDrawn.type === "line" || shapeBeingDrawn.width > 5 || shapeBeingDrawn.height > 5) {
+        const graphShape = convertToGraphCoordinates(shapeBeingDrawn, renderer);
+        addShape(graphShape);
+        setActiveShapeType(null);
+      }
+
+      setSelectedShapeIds([shapeBeingDrawn.id]);
+      setShapeBeingDrawn(null);
+    }
+
     const moveBody = (e: SigmaStageEventPayload) => {
       // Always prevent sigmas default panning
       e.preventSigmaDefault();
@@ -779,10 +792,14 @@ function useChart(containerRef: RefObject<HTMLDivElement | null>) {
     };
 
     const upNode = (e: SigmaNodeEventPayload) => {
-      if (activeShapeType) return; // Don't allow multiselect when drawing shapes
-
       const click = e.event.original as MouseEvent;
       if (click.button != LEFT_CLICK) return;
+
+      // Is drawing
+      if (interactiveMode === "drawing" && shapeBeingDrawn) {
+        stopDrawingShape(shapeBeingDrawn);
+        return;
+      }
 
       if (interactiveMode === "dragging") {
         const positionUpdate = [] as IEntity[];
@@ -1010,16 +1027,7 @@ function useChart(containerRef: RefObject<HTMLDivElement | null>) {
       if (click.button == LEFT_CLICK) {
         // Is drawing
         if (interactiveMode === "drawing" && shapeBeingDrawn) {
-          setInteractiveMode("idle");
-
-          if (shapeBeingDrawn.type === "line" || shapeBeingDrawn.width > 5 || shapeBeingDrawn.height > 5) {
-            const graphShape = convertToGraphCoordinates(shapeBeingDrawn, renderer);
-            addShape(graphShape);
-            setActiveShapeType(null);
-          }
-
-          setSelectedShapeIds([shapeBeingDrawn.id]);
-          setShapeBeingDrawn(null);
+          stopDrawingShape(shapeBeingDrawn);
           return;
         }
 
