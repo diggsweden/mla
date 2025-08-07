@@ -26,6 +26,7 @@
   "version": "1.1.5",
   "pnpm": {
     "overrides": {
+      "tmp@<0.2.3": ">=0.2.4",
       "minimatch@<3.0.5": ">=3.0.5",
       "app-builder-lib@<24.13.2": ">=24.13.2"
     }
