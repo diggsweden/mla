@@ -16,7 +16,7 @@ import useMainStore from "../../../store/main-store";
 
 // Interface imports
 import { IEntity } from "../../../interfaces/data-models";
-import { IShape } from "../../../interfaces/data-models/shape";
+import { IShape, ShapeType } from "../../../interfaces/data-models/shape";
 
 // Utility imports
 import { drawCanvas } from "../utils/canvas-utils";
@@ -300,7 +300,10 @@ function useChart(containerRef: RefObject<HTMLDivElement | null>) {
   const dropRef = useChartDrop(renderer, containerRef);
 
   // Keyboard shortcuts
-  useKeyDown(() => setSelectedNodeAndLinkIds([...Object.keys(entities), ...Object.keys(links)]), chartContainerRef, ["KeyA"], true);
+  useKeyDown(() => {
+    setSelectedNodeAndLinkIds([...Object.keys(entities), ...Object.keys(links)]);
+    setSelectedShapeIds(shapes.map(shape => shape.id))
+  }, chartContainerRef, ["KeyA"], true);
 
   // Initialize canvas and textarea only once when renderer is available
   useEffect(() => {
@@ -548,6 +551,30 @@ function useChart(containerRef: RefObject<HTMLDivElement | null>) {
       ctx.fillRect(rect.startX + rect.clientOffsetX, rect.startY, rect.endX + rect.clientOffsetX - rect.startX, rect.endY - rect.startY);
     };
 
+    const startDrawingShape = (posX: number, posY: number, shapeType: ShapeType) => {
+      setInteractiveMode("drawing");
+      setDrawStart({ x: posX, y: posY });
+      clearSelection();
+
+      const newTempShape: IShape = {
+        id: `temp-${Date.now().toString()}`,
+        type: shapeType,
+        x: posX,
+        y: posY,
+        width: 0,
+        height: 0,
+        strokeColor: "#000000",
+        fillColor: "rgba(255, 255, 255, 0.0)",
+        text: shapeType === "text" ? "Text" : undefined,
+        fontSize: 16,
+        fontColor: "#000000",
+        linePoints: shapeType === "line" ? { x1: posX, y1: posY, x2: posX, y2: posY } : undefined,
+        inGraphCoordinates: false,
+      };
+
+      setShapeBeingDrawn(newTempShape);
+    }
+
     const stopDrawingShape = (shapeBeingDrawn: IShape) => {
       setInteractiveMode("idle");
 
@@ -775,10 +802,18 @@ function useChart(containerRef: RefObject<HTMLDivElement | null>) {
     };
 
     const downNode = (e: SigmaNodeEventPayload) => {
-      if (activeShapeType) return; // Don't allow when drawing shapes
-
       const click = e.event.original as MouseEvent;
       if (click.button != LEFT_CLICK) return;
+
+      // Draw a new shape
+      if (activeShapeType != null) {
+        const offset = renderer.getContainer().getBoundingClientRect();
+        const screenX = click.clientX - offset.x;
+        const screenY = click.clientY - offset.y;
+
+        startDrawingShape(screenX, screenY, activeShapeType)
+        return;
+      }
 
       // Handle shape selection with Ctrl+click support
       if (click.ctrlKey) {
@@ -801,6 +836,19 @@ function useChart(containerRef: RefObject<HTMLDivElement | null>) {
         return;
       }
 
+      // Resizing
+      if (interactiveMode === "resizing") {
+        setInteractiveMode("idle");
+        setResizeHandle(null);
+        setShapeBeingResized(null);
+
+        if (liveShapeUpdates) {
+          updateShape(liveShapeUpdates);
+          setLiveShapeUpdates(null);
+        }
+      }
+
+      // Dragging
       if (interactiveMode === "dragging") {
         const positionUpdate = [] as IEntity[];
         const nodes = selectedNodeAndLinkIds.filter((n) => graph.hasNode(n));
@@ -884,27 +932,7 @@ function useChart(containerRef: RefObject<HTMLDivElement | null>) {
 
         // Draw a new shape
         if (activeShapeType != null) {
-          setInteractiveMode("drawing");
-          setDrawStart({ x: screenX, y: screenY });
-          clearSelection();
-
-          const newTempShape: IShape = {
-            id: `temp-${Date.now().toString()}`,
-            type: activeShapeType,
-            x: screenX,
-            y: screenY,
-            width: 0,
-            height: 0,
-            strokeColor: "#000000",
-            fillColor: "rgba(255, 255, 255, 0.0)",
-            text: activeShapeType === "text" ? "Text" : undefined,
-            fontSize: 16,
-            fontColor: "#000000",
-            linePoints: activeShapeType === "line" ? { x1: screenX, y1: screenY, x2: screenX, y2: screenY } : undefined,
-            inGraphCoordinates: false,
-          };
-
-          setShapeBeingDrawn(newTempShape);
+          startDrawingShape(screenX, screenY, activeShapeType)
           return;
         }
 
