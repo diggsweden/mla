@@ -276,7 +276,8 @@ class ViewService {
 const defaultTheme = {
   Primary: '#64748b',
   Secondary: '#94a3b8',
-  Icon: '#64748b'
+  Icon: '#64748b',
+  DefaultLinkColor: '#CCCCCC'
 } satisfies IThemeConfiguration
 
 const viewService = freeze(new ViewService())

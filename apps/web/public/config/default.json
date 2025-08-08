@@ -47,7 +47,8 @@
                 "Color": "#339900"
             }
         ],
-        "IconBorder": true
+        "IconBorder": true,
+        "DefaultLinkColor": "#000000"
     },
     "Menu": {
         "Start": {},

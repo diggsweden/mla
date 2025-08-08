@@ -28,6 +28,7 @@ interface Props {
 export default function CreateToolbox(props: Props) {
   const { t } = useTranslation();
   const config = configService.getConfiguration();
+  const theme = viewService.getTheme();
 
   const selectedEntities = useMainStore((state) => state.selectedEntities);
   const selectedLinks = useMainStore((state) => state.selectedLinks);
@@ -58,7 +59,7 @@ export default function CreateToolbox(props: Props) {
       from = entity2;
       to = entity1;
     }
-    setLinkToAdd(createLink(from, to, config));
+    setLinkToAdd(createLink(from, to, config, theme.DefaultLinkColor));
   }
 
   function onAddEntity(entity?: IEntity) {

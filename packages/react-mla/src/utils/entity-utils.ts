@@ -32,7 +32,7 @@ export function createEntity(type: IEntityConfiguration): IEntity {
  * @param type The link configuration to base the new link on
  * @returns A new link instance
  */
-export function createLink(from: IEntity, to: IEntity, type: ILinkConfiguration): ILink {
+export function createLink(from: IEntity, to: IEntity, type: ILinkConfiguration, color: string): ILink {
   return {
     Id: generateUUID(),
     InternalId: getInternalId(),
@@ -41,6 +41,7 @@ export function createLink(from: IEntity, to: IEntity, type: ILinkConfiguration)
     LabelLong: "",
     LabelShort: "",
     LabelChart: "",
+    Color: color,
     SourceSystemId: "Egenskapad",
     FromEntityId: from.Id,
     FromEntityTypeId: from.TypeId,
