@@ -42,45 +42,250 @@ const getLocationCentrumForNewNodes = (sigma: Sigma) => {
 };
 
 function calculatePositions(sigma: Sigma, graph: Graph, entities: IEntity[], links: ILink[]): { [key: string]: { x: number; y: number } } {
-  const numberOfIterations = 50;
-  const centrum = getLocationCentrumForNewNodes(sigma);
+  // Compute graph-space viewport bounds and center correctly
+  const container = sigma.getContainer();
+  const rect = container.getBoundingClientRect();
+  const width = Math.max(1, rect.width);
+  const height = Math.max(1, rect.height);
 
-  // Create a copy of the graph
+  const topLeft = sigma.viewportToGraph({ x: 0, y: 0 });
+  const bottomRight = sigma.viewportToGraph({ x: width, y: height });
+
+  const minX = Math.min(topLeft.x, bottomRight.x);
+  const maxX = Math.max(topLeft.x, bottomRight.x);
+  const minY = Math.min(topLeft.y, bottomRight.y);
+  const maxY = Math.max(topLeft.y, bottomRight.y);
+
+  const center = sigma.viewportToGraph({ x: width / 2, y: height / 2 });
+
+  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+  const padding = Math.max(maxX - minX, maxY - minY) * 0.05; // 5% padding
+
+  // Pixel to graph unit conversion (approximate, near center)
+  const g00 = sigma.viewportToGraph({ x: 0, y: 0 });
+  const g10 = sigma.viewportToGraph({ x: 1, y: 0 });
+  const g01 = sigma.viewportToGraph({ x: 0, y: 1 });
+  const scaleX = Math.abs(g10.x - g00.x) || 1; // graph units per px
+  const scaleY = Math.abs(g01.y - g00.y) || 1;
+  const pxToGraph = (px: number) => px * Math.min(scaleX, scaleY);
+
+  // Create a copy of the graph and lock existing nodes
   const graphCopy = graph.copy();
-
-  // Set all existing nodes to fixed position
   graphCopy.forEachNode((node) => graphCopy.setNodeAttribute(node, "fixed", true));
 
-  let i = 0;
+  // Determine which entities are new and need positions
+  const newEntities = entities.filter((e) => !graphCopy.hasNode(getId(e)));
+  if (newEntities.length === 0) return {};
 
-  // Find new nodes
-  entities
-    .filter((e) => !graphCopy.hasNode(getId(e)))
-    .forEach((e) => {
-      i++;
-      graphCopy.addNode(getId(e), { x: e.PosX ?? centrum.x + i * 20, y: e.PosY ?? centrum.y + i * 10, fixed: false });
-    });
+  // Determine node visual size in pixels and derive a minimum separation distance
+  const sizes: number[] = [];
+  graphCopy.forEachNode((n, attrs: any) => {
+    if (attrs && typeof attrs.size === "number" && !Number.isNaN(attrs.size)) sizes.push(attrs.size);
+  });
+  const avgSizePx = sizes.length ? sizes.reduce((a, b) => a + b, 0) / sizes.length : 8; // assume radius in px
+  const nodeDiameterPx = Math.max(10, avgSizePx * 2); // diameter estimate in px
+  const minCenterDistPx = nodeDiameterPx * 2; // at least the width of two nodes between centers
+  const minCenterDistGraph = pxToGraph(minCenterDistPx);
+  const minCenterDistGraphSq = minCenterDistGraph * minCenterDistGraph;
 
-  links.forEach((e) => {
-    const added = graphCopy.updateEdgeWithKey(e.Id, e.FromEntityId + e.FromEntityTypeId, e.ToEntityId + e.ToEntityTypeId);
+  // Gather existing nodes' positions once
+  const existingPositions: Array<{ x: number; y: number }> = [];
+  graphCopy.forEachNode((n, attrs: any) => {
+    if (attrs && typeof attrs.x === "number" && typeof attrs.y === "number") {
+      existingPositions.push({ x: attrs.x, y: attrs.y });
+    }
   });
 
-  for (let index = 0; index < numberOfIterations; index++) {
-    forceLayout.assign(graphCopy, {
-      maxIterations: 50,
-      settings: {
-        attraction: 0.0005,
-        repulsion: 10,
-        gravity: 0.0001,
-        inertia: 0.6,
-        maxMove: 200,
-      },
-      isNodeFixed: (_, attr) => attr.fixed,
-    });
+  const placedPositions: Array<{ id: string; x: number; y: number }> = [];
+  const isFarEnough = (x: number, y: number): boolean => {
+    for (const p of existingPositions) {
+      const dx = p.x - x;
+      const dy = p.y - y;
+      if (dx * dx + dy * dy < minCenterDistGraphSq) return false;
+    }
+    for (const p of placedPositions) {
+      const dx = p.x - x;
+      const dy = p.y - y;
+      if (dx * dx + dy * dy < minCenterDistGraphSq) return false;
+    }
+    return true;
+  };
+
+  // Seed initial non-overlapping positions using a Fermat spiral around the center
+  const graphWidth = Math.abs(maxX - minX);
+  const graphHeight = Math.abs(maxY - minY);
+  const baseSpacing = Math.max(minCenterDistGraph, Math.min(0.15 * Math.min(graphWidth, graphHeight), pxToGraph(150)));
+  const baseRadius = Math.min(graphWidth, graphHeight) * 0.05;
+  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+
+  newEntities.forEach((e, idx) => {
+    const id = getId(e);
+    const baseAngle = idx * goldenAngle;
+    const constRadius = baseRadius + baseSpacing * Math.sqrt(idx);
+
+    // Try to find a collision-free spot around the spiral
+    let chosenX = center.x + constRadius * Math.cos(baseAngle);
+    let chosenY = center.y + constRadius * Math.sin(baseAngle);
+
+    const maxTries = 50;
+    let placed = false;
+    for (let t = 0; t <= maxTries; t++) {
+      const angle = baseAngle + t * (goldenAngle * 0.33);
+      const r = constRadius + t * (minCenterDistGraph * 0.75);
+      let x = center.x + r * Math.cos(angle);
+      let y = center.y + r * Math.sin(angle);
+
+      // Keep within current viewport bounds
+      x = clamp(x, minX + padding, maxX - padding);
+      y = clamp(y, minY + padding, maxY - padding);
+
+      if (isFarEnough(x, y)) {
+        chosenX = x;
+        chosenY = y;
+        placed = true;
+        break;
+      }
+    }
+
+    // If not found, gently jitter outward until we have something reasonable
+    if (!placed) {
+      let t = 1;
+      while (!isFarEnough(chosenX, chosenY) && t < 20) {
+        const angle = baseAngle + t * (Math.PI / 4);
+        const r = constRadius + t * minCenterDistGraph;
+        let x = center.x + r * Math.cos(angle);
+        let y = center.y + r * Math.sin(angle);
+        x = clamp(x, minX + padding, maxX - padding);
+        y = clamp(y, minY + padding, maxY - padding);
+        chosenX = x;
+        chosenY = y;
+        t++;
+      }
+    }
+
+    graphCopy.addNode(id, { x: chosenX, y: chosenY, fixed: false });
+    placedPositions.push({ id, x: chosenX, y: chosenY });
+  });
+
+  // Add links to the copy (best effort)
+  for (const l of links) {
+    try {
+      graphCopy.updateEdgeWithKey(l.Id, l.FromEntityId + l.FromEntityTypeId, l.ToEntityId + l.ToEntityTypeId);
+    } catch {
+      // Ignore linking errors in the temporary layout graph
+    }
   }
 
-  const positions = collectLayout(graphCopy);
-  return positions;
+  // Run a controlled force layout once to avoid large drifts
+  forceLayout.assign(graphCopy, {
+    maxIterations: Math.min(200, 30 + newEntities.length * 10),
+    settings: {
+      attraction: 0.0005,
+      repulsion: 10,
+      gravity: 0.0001,
+      inertia: 0.6,
+      maxMove: 50, // limit movement to keep nodes within view
+    },
+    isNodeFixed: (_: string, attr: any) => attr.fixed,
+  });
+
+  // Post-layout: enforce minimum separation between new nodes and all other nodes
+  const newIds = newEntities.map(getId);
+  const enforceSeparationIterations = 5;
+  for (let iter = 0; iter < enforceSeparationIterations; iter++) {
+    // Rebuild placed positions from graphCopy to reflect layout moves
+    const current: Record<string, { x: number; y: number }> = {};
+    for (const id of newIds) {
+      const attrs: any = graphCopy.getNodeAttributes(id);
+      current[id] = { x: attrs.x, y: attrs.y };
+    }
+
+    // Pairwise separation among new nodes
+    for (let i = 0; i < newIds.length; i++) {
+      for (let j = i + 1; j < newIds.length; j++) {
+        const a = current[newIds[i]];
+        const b = current[newIds[j]];
+        let dx = b.x - a.x;
+        let dy = b.y - a.y;
+        let d2 = dx * dx + dy * dy;
+        if (d2 === 0) {
+          // Random tiny nudge to avoid zero division
+          dx = (Math.random() - 0.5) * 1e-6;
+          dy = (Math.random() - 0.5) * 1e-6;
+          d2 = dx * dx + dy * dy;
+        }
+        if (d2 < minCenterDistGraphSq) {
+          const d = Math.sqrt(d2);
+          const needed = (minCenterDistGraph - d) / 2; // move each half the needed distance
+          const ux = dx / d;
+          const uy = dy / d;
+          let ax = a.x - ux * needed;
+          let ay = a.y - uy * needed;
+          let bx = b.x + ux * needed;
+          let by = b.y + uy * needed;
+          ax = clamp(ax, minX + padding, maxX - padding);
+          ay = clamp(ay, minY + padding, maxY - padding);
+          bx = clamp(bx, minX + padding, maxX - padding);
+          by = clamp(by, minY + padding, maxY - padding);
+          graphCopy.setNodeAttribute(newIds[i], "x", ax);
+          graphCopy.setNodeAttribute(newIds[i], "y", ay);
+          graphCopy.setNodeAttribute(newIds[j], "x", bx);
+          graphCopy.setNodeAttribute(newIds[j], "y", by);
+          current[newIds[i]] = { x: ax, y: ay };
+          current[newIds[j]] = { x: bx, y: by };
+        }
+      }
+    }
+
+    // Push new nodes away from existing nodes if too close
+    for (const id of newIds) {
+      const a = current[id];
+      let moved = false;
+      for (const p of existingPositions) {
+        const dx = a.x - p.x;
+        const dy = a.y - p.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < minCenterDistGraphSq) {
+          const d = Math.sqrt(d2) || 1e-6;
+          const needed = (minCenterDistGraph - d);
+          const ux = dx / d;
+          const uy = dy / d;
+          let nx = a.x + ux * needed;
+          let ny = a.y + uy * needed;
+          nx = clamp(nx, minX + padding, maxX - padding);
+          ny = clamp(ny, minY + padding, maxY - padding);
+          graphCopy.setNodeAttribute(id, "x", nx);
+          graphCopy.setNodeAttribute(id, "y", ny);
+          current[id] = { x: nx, y: ny };
+          moved = true;
+        }
+      }
+      if (moved) {
+        // Optionally break to re-evaluate distances in next iteration
+      }
+    }
+  }
+
+  // Clamp new nodes again after layout & separation
+  newEntities.forEach((e) => {
+    const key = getId(e);
+    if (graphCopy.hasNode(key)) {
+      const attrs: any = graphCopy.getNodeAttributes(key);
+      const x = clamp(attrs.x, minX + padding, maxX - padding);
+      const y = clamp(attrs.y, minY + padding, maxY - padding);
+      graphCopy.setNodeAttribute(key, "x", x);
+      graphCopy.setNodeAttribute(key, "y", y);
+    }
+  });
+
+  // Return positions for the new nodes only
+  const allPositions = collectLayout(graphCopy);
+  const result: { [key: string]: { x: number; y: number } } = {};
+  for (const e of newEntities) {
+    const k = getId(e);
+    if (allPositions[k]) result[k] = allPositions[k];
+  }
+  return result;
 }
 
 export const updateSelected = (selectedIds?: string[]) => {
@@ -125,9 +330,10 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           updateProps(draft);
 
           // Assign positions
-          if (draft.PosX == null || (draft.PosY == null && positions[getId(draft)] != null)) {
-            draft.PosX = positions[getId(draft)].x;
-            draft.PosY = positions[getId(draft)].y;
+          if ((draft.PosX == null || draft.PosY == null) && positions[getId(draft)] != null) {
+            const p = positions[getId(draft)];
+            draft.PosX = p.x;
+            draft.PosY = p.y;
           }
 
           // Show on map
