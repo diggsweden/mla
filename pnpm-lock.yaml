@@ -262,8 +262,8 @@ importers:
         specifier: 3.0.9
         version: 3.0.9(@types/node@20.19.17)(@vitest/browser@3.0.9)(msw@2.11.3(@types/node@20.19.17)(typescript@5.5.4))(sass-embedded@1.93.2)(sass@1.93.2)
       vitest-browser-react:
-        specifier: 0.3.0
-        version: 0.3.0(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(@vitest/browser@3.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.0.9)
+        specifier: 1.0.1
+        version: 1.0.1(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(@vitest/browser@3.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.0.9)
     publishDirectory: dist
 
   packages/webcomponent-mla:
@@ -4303,16 +4303,16 @@ packages:
       yaml:
         optional: true
 
-  vitest-browser-react@0.3.0:
-    resolution: {integrity: sha512-dk8T3GHhwrmCJLqDer1A2NB8MlIGsUb9Wr4/iMpbrwz4sBCh1PjV0SkZ9BYmoBrJ4j/Tx8qxzCXFXnbE2IbWzg==}
+  vitest-browser-react@1.0.1:
+    resolution: {integrity: sha512-LqiGFCdknrbMoSDWXTCTrPsED3SvdIXIgYOOZyYUNj2dkJusW2eF6NENOlBlxwq+FBQqzNK1X59b+b03pXFpAQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     peerDependencies:
       '@types/react': ^18.0.0 || ^19.0.0
       '@types/react-dom': ^18.0.0 || ^19.0.0
-      '@vitest/browser': ^2.1.0 || ^3.0.0
+      '@vitest/browser': ^2.1.0 || ^3.0.0 || ^4.0.0-0
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
-      vitest: ^2.1.0 || ^3.0.0
+      vitest: ^2.1.0 || ^3.0.0 || ^4.0.0-0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -8666,7 +8666,7 @@ snapshots:
       sass-embedded: 1.93.2
       yaml: 2.8.1
 
-  vitest-browser-react@0.3.0(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(@vitest/browser@3.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.0.9):
+  vitest-browser-react@1.0.1(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(@vitest/browser@3.0.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.0.9):
     dependencies:
       '@vitest/browser': 3.0.9(@types/node@20.19.17)(playwright@1.55.1)(typescript@5.5.4)(vite@7.1.7(@types/node@20.19.17)(jiti@2.6.0)(sass-embedded@1.93.2)(sass@1.93.2)(yaml@2.8.1))(vitest@3.0.9)
       react: 18.3.1
