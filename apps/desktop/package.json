@@ -19,7 +19,7 @@
     "@electron-forge/maker-zip": "7.9.0",
     "@electron-forge/plugin-auto-unpack-natives": "7.9.0",
     "@electron-forge/plugin-fuses": "7.9.0",
-    "@electron/fuses": "1.8.0",
+    "@electron/fuses": "2.0.0",
     "@rabbitholesyndrome/electron-forge-maker-portable": "0.2.0",
     "electron": "38.1.2"
   },
