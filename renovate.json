@@ -6,6 +6,7 @@
     ":maintainLockFilesWeekly",
     ":automergeMinor"
   ],
+  "internalChecksAsSuccess": true,
   "vulnerabilityAlerts": {
     "labels": ["security"],
     "enabled": true,
