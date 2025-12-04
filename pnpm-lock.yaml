@@ -113,7 +113,7 @@ importers:
         version: 2.0.2
       i18next:
         specifier: ^25.0.0
-        version: 25.6.3(typescript@5.5.4)
+        version: 25.7.0(typescript@5.5.4)
       immer:
         specifier: ^10.1.1
         version: 10.2.0
@@ -137,7 +137,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       react-i18next:
         specifier: ^16.0.0
-        version: 16.3.5(i18next@25.6.3(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4)
+        version: 16.3.5(i18next@25.7.0(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4)
       tailwindcss:
         specifier: 3.4.18
         version: 3.4.18
@@ -2522,8 +2522,8 @@ packages:
     engines: {node: ^12.18.0 || >=14.13.1}
     hasBin: true
 
-  i18next@25.6.3:
-    resolution: {integrity: sha512-AEQvoPDljhp67a1+NsnG/Wb1Nh6YoSvtrmeEd24sfGn3uujCtXCF3cXpr7ulhMywKNFF7p3TX1u2j7y+caLOJg==}
+  i18next@25.7.0:
+    resolution: {integrity: sha512-cpUOqkVTQe3/uCVtpfpC3J1Ejn1y8KiVbqVEW4WW6Yr8wMYw+Wvb2/+lL4e1sM9AbzKTYXyYkn8zCRlTf5XTcA==}
     peerDependencies:
       typescript: ^5
     peerDependenciesMeta:
@@ -6700,7 +6700,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  i18next@25.6.3(typescript@5.5.4):
+  i18next@25.7.0(typescript@5.5.4):
     dependencies:
       '@babel/runtime': 7.28.4
     optionalDependencies:
@@ -7485,11 +7485,11 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-i18next@16.3.5(i18next@25.6.3(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4):
+  react-i18next@16.3.5(i18next@25.7.0(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4):
     dependencies:
       '@babel/runtime': 7.28.4
       html-parse-stringify: 3.0.1
-      i18next: 25.6.3(typescript@5.5.4)
+      i18next: 25.7.0(typescript@5.5.4)
       react: 18.3.1
       use-sync-external-store: 1.6.0(react@18.3.1)
     optionalDependencies:
