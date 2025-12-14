@@ -132,7 +132,7 @@ jobs:
 
       # Upload artifact
       - name: Upload mla-component.umd.cjs
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: mla-component.umd.cjs
           path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
@@ -141,7 +141,7 @@ jobs:
 
       # Upload signature
       - name: Upload mla-component.umd.cjs
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: mla-component.umd.cjs.asc
           path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.asc
@@ -169,17 +169,17 @@ jobs:
       contents: write
     steps:
       - name: Download mla-component.umd.cjs
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: mla-component.umd.cjs
 
       - name: Download mla-component.umd.cjs.asc
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: mla-component.umd.cjs.asc
 
       - name: Download mla-component.umd.cjs.intoto.jsonl
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: mla-component.umd.cjs.intoto.jsonl
 
