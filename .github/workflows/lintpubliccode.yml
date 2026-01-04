@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ (github.event_name == 'pull_request') && (github.actor != 'dependabot[bot]') }}    
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - uses: italia/publiccode-parser-action@44a711e642b242be0cfc042b49f870ad2f9464fb # v1.4.3
         with:
           publiccode: "publiccode.yml"
