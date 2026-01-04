@@ -137,7 +137,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       react-i18next:
         specifier: ^16.0.0
-        version: 16.5.0(i18next@25.7.3(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4)
+        version: 16.5.1(i18next@25.7.3(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4)
       tailwindcss:
         specifier: 3.4.19
         version: 3.4.19
@@ -3345,8 +3345,8 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-i18next@16.5.0:
-    resolution: {integrity: sha512-IMpPTyCTKxEj8klCrLKUTIUa8uYTd851+jcu2fJuUB9Agkk9Qq8asw4omyeHVnOXHrLgQJGTm5zTvn8HpaPiqw==}
+  react-i18next@16.5.1:
+    resolution: {integrity: sha512-Hks6UIRZWW4c+qDAnx1csVsCGYeIR4MoBGQgJ+NUoNnO6qLxXuf8zu0xdcinyXUORgGzCdRsexxO1Xzv3sTdnw==}
     peerDependencies:
       i18next: '>= 25.6.2'
       react: '>= 16.8.0'
@@ -7455,7 +7455,7 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-i18next@16.5.0(i18next@25.7.3(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4):
+  react-i18next@16.5.1(i18next@25.7.3(typescript@5.5.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4):
     dependencies:
       '@babel/runtime': 7.28.4
       html-parse-stringify: 3.0.1
