@@ -20,8 +20,13 @@ export default defineConfig({
     outDir: './dist',
     lib: {
       entry: resolve(__dirname, 'index.ts'),
-      formats: [ "es", "umd" ],
-      name: "index"
+      name: "ReactMla",
+      formats: ["es", "cjs"],
+      fileName: (format) => {
+      if (format === "es") return "index.js";
+      if (format === "cjs") return "index.cjs";
+      return "react-mla.umd.cjs";
+    },
     },
     rollupOptions: {
       external: ["react", "react-dom"],

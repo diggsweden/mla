@@ -8,6 +8,7 @@
     "test": "pnpm -r test",
     "test:install": "pnpm -r test:install",
     "build:packages": "pnpm --filter ./packages/* build",
+    "pack:packages": "pnpm --filter @diggsweden/react-mla --filter @diggsweden/webcomponent-mla pack --pack-destination ./.local-packages",
     "lint": "pnpm --filter ./packages/react-mla run lint",
     "commit": "git-cz --signoff",
     "deploy:app": "pnpm --filter ./apps/web run deploy"
@@ -26,7 +27,8 @@
   "version": "1.1.5",
   "pnpm": {
     "overrides": {
-      "tmp@<=0.2.3": ">=0.2.4"
+      "tmp@<=0.2.3": ">=0.2.4",
+      "diff": "^8.0.3"
     }
   },
   "devDependencies": {

@@ -4,6 +4,10 @@
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# local packed npm artifacts
+.local-packages/
+*.tgz
+
 # dependencies
 /node_modules
 /.pnp

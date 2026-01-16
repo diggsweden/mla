@@ -9,7 +9,7 @@
     "http-request-mock": "^2.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-mla": "workspace:^"
+    "@diggsweden/react-mla": "workspace:^"
   },
   "scripts": {
     "dev": "vite --open",
@@ -36,7 +36,6 @@
     "@vitejs/plugin-react": "5.1.2",
     "tailwindcss": "3.4.19",
     "typescript": "5.6.3",
-    "vite": "7.3.1",
-    "vite-plugin-commonjs": "0.10.4"
+    "vite": "7.3.1"
   }
 }

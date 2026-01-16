@@ -6,6 +6,7 @@ settings:
 
 overrides:
   tmp@<=0.2.3: '>=0.2.4'
+  diff: ^8.0.3
 
 importers:
 
@@ -38,6 +39,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@diggsweden/react-mla':
+        specifier: workspace:^
+        version: link:../../packages/react-mla
       '@repo/tailwind-config':
         specifier: workspace:^
         version: link:../../packages/config-tailwind
@@ -53,9 +57,6 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
-      react-mla:
-        specifier: workspace:^
-        version: link:../../packages/react-mla/dist
     devDependencies:
       '@types/react':
         specifier: 18.3.27
@@ -78,9 +79,6 @@ importers:
       vite:
         specifier: 7.3.1
         version: 7.3.1(@types/node@20.19.28)(jiti@1.21.7)(sass-embedded@1.97.2)(sass@1.97.2)
-      vite-plugin-commonjs:
-        specifier: 0.10.4
-        version: 0.10.4
 
   packages/config-tailwind:
     devDependencies:
@@ -262,10 +260,12 @@ importers:
       vitest-browser-react:
         specifier: 1.0.1
         version: 1.0.1(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(@vitest/browser@3.2.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.2.4)
-    publishDirectory: dist
 
   packages/webcomponent-mla:
     dependencies:
+      '@diggsweden/react-mla':
+        specifier: workspace:^
+        version: link:../react-mla
       '@r2wc/react-to-web-component':
         specifier: ^2.0.3
         version: 2.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -275,9 +275,6 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
-      react-mla:
-        specifier: workspace:^
-        version: link:../react-mla/dist
     devDependencies:
       '@repo/tailwind-config':
         specifier: workspace:*
@@ -309,13 +306,9 @@ importers:
       vite:
         specifier: 7.3.1
         version: 7.3.1(@types/node@20.19.28)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)
-      vite-plugin-commonjs:
-        specifier: 0.10.4
-        version: 0.10.4
       vite-plugin-css-injected-by-js:
         specifier: 3.5.2
         version: 3.5.2(vite@7.3.1(@types/node@20.19.28)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2))
-    publishDirectory: dist
 
 packages:
 
@@ -2020,8 +2013,8 @@ packages:
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
 
-  diff@8.0.2:
-    resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
+  diff@8.0.3:
+    resolution: {integrity: sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ==}
     engines: {node: '>=0.3.1'}
 
   dir-glob@3.0.1:
@@ -4013,9 +4006,6 @@ packages:
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
 
-  vite-plugin-commonjs@0.10.4:
-    resolution: {integrity: sha512-eWQuvQKCcx0QYB5e5xfxBNjQKyrjEWZIR9UOkOV6JAgxVhtbZvCOF+FNC2ZijBJ3U3Px04ZMMyyMyFBVWIJ5+g==}
-
   vite-plugin-css-injected-by-js@3.5.2:
     resolution: {integrity: sha512-2MpU/Y+SCZyWUB6ua3HbJCrgnF0KACAsmzOQt1UvRVJCGF6S8xdA3ZUhWcWdM9ivG4I5az8PnQmwwrkC2CAQrQ==}
     peerDependencies:
@@ -4029,9 +4019,6 @@ packages:
     peerDependenciesMeta:
       vite:
         optional: true
-
-  vite-plugin-dynamic-import@1.6.0:
-    resolution: {integrity: sha512-TM0sz70wfzTIo9YCxVFwS8OA9lNREsh+0vMHGSkWDTZ7bgd1Yjs5RV8EgB634l/91IsXJReg0xtmuQqP0mf+rg==}
 
   vite-plugin-lib-inject-css@2.2.2:
     resolution: {integrity: sha512-NF30p0GwtfSAmVlxo2NgPXM2rEdtgV7LFi4lkzajKD7P3Ru/ZAFmI533M0Z5qyMZpvNMxVGkewzpjD0HOWtbDQ==}
@@ -4858,7 +4845,7 @@ snapshots:
       '@rushstack/rig-package': 0.6.0
       '@rushstack/terminal': 0.19.5(@types/node@20.19.28)
       '@rushstack/ts-command-line': 5.1.5(@types/node@20.19.28)
-      diff: 8.0.2
+      diff: 8.0.3
       lodash: 4.17.21
       minimatch: 10.0.3
       resolve: 1.22.11
@@ -6050,7 +6037,7 @@ snapshots:
 
   didyoumean@1.2.2: {}
 
-  diff@8.0.2: {}
+  diff@8.0.3: {}
 
   dir-glob@3.0.1:
     dependencies:
@@ -8194,12 +8181,6 @@ snapshots:
       - tsx
       - yaml
 
-  vite-plugin-commonjs@0.10.4:
-    dependencies:
-      acorn: 8.15.0
-      magic-string: 0.30.21
-      vite-plugin-dynamic-import: 1.6.0
-
   vite-plugin-css-injected-by-js@3.5.2(vite@7.3.1(@types/node@20.19.28)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)):
     dependencies:
       vite: 7.3.1(@types/node@20.19.28)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)
@@ -8222,13 +8203,6 @@ snapshots:
       - '@types/node'
       - rollup
       - supports-color
-
-  vite-plugin-dynamic-import@1.6.0:
-    dependencies:
-      acorn: 8.15.0
-      es-module-lexer: 1.7.0
-      fast-glob: 3.3.3
-      magic-string: 0.30.21
 
   vite-plugin-lib-inject-css@2.2.2(vite@7.3.1(@types/node@20.19.28)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)):
     dependencies:

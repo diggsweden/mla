@@ -1,22 +1,21 @@
 {
-  "name": "webcomponent-mla",
+  "name": "@diggsweden/webcomponent-mla",
   "version": "1.1.5",
   "license": "MIT",
   "type": "module",
   "main": "./dist/mla-component.umd.js",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "dependencies": {
-    "react-mla": "workspace:^",
+    "@diggsweden/react-mla": "workspace:^",
     "@r2wc/react-to-web-component": "^2.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "scripts": {
     "dev": "vite dev --open",
-    "build": "tsc && vite build"
+    "build": "tsc -p tsconfig.build.json && vite build && node ../../scripts/copy-meta.mjs packages/webcomponent-mla"
   },
   "devDependencies": {
     "@repo/tailwind-config": "workspace:*",
@@ -29,10 +28,9 @@
     "tailwindcss": "3.4.19",
     "typescript": "5.6.3",
     "vite": "7.3.1",
-    "vite-plugin-commonjs": "0.10.4",
     "vite-plugin-css-injected-by-js": "3.5.2"
   },
   "publishConfig": {
-    "directory": "dist"
+    "registry": "https://npm.pkg.github.com"
   }
 }
