@@ -26,7 +26,7 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "webcomponent-mla": "workspace:^",
+    "@diggsweden/webcomponent-mla": "workspace:^",
     "electron-squirrel-startup": "^1.0.1"
   }
 }

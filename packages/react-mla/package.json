@@ -1,19 +1,19 @@
 {
-  "name": "react-mla",
+  "name": "@diggsweden/react-mla",
   "version": "1.1.5",
   "license": "MIT",
   "type": "module",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
-  "main": "./dist/react-mla.umd.cjs",
-  "module": "./dist/react-mla.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/react-mla.js",
-      "require": "./dist/react-mla.umd.cjs"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./dist/*.css": {
       "import": "./dist/*.css",
@@ -44,7 +44,7 @@
   },
   "scripts": {
     "dev": "vite --open",
-    "build": "tsc && vite build",
+    "build": "tsc -p tsconfig.build.json && vite build && node ../../scripts/copy-meta.mjs packages/react-mla",
     "lint": "eslint ./src --max-warnings 0",
     "lint-fix": "eslint ./src --fix",
     "test": "vitest run --browser.headless --browser.name=chromium --browser.provider=playwright --reporter=dot",
@@ -92,6 +92,6 @@
     "vitest-browser-react": "1.0.1"
   },
   "publishConfig": {
-    "directory": "dist"
+    "registry": "https://npm.pkg.github.com"
   }
 }

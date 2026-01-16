@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import r2wc from "@r2wc/react-to-web-component"
-import { MLA, MlaProps} from "react-mla"
+import { MLA, MlaProps} from "@diggsweden/react-mla"
 
 function CreateMLAComponent() {
   const MLAComponent = r2wc(MLAComponentWrapper, {

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { createRoot } from 'react-dom/client'
-import { MLA } from 'react-mla'
+import { MLA } from '@diggsweden/react-mla'
 
 import setupMockApi from './mock-setup'
 
