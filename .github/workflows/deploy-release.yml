@@ -93,10 +93,25 @@ jobs:
 
         # Build
       - name: Build
+        run: pnpm run -r build
+
+        # Remove workspace dependencies from package.json when copying them to dist folder
+      - name: Prepare package.json files for publishing
         run: |
-          pnpm run -r build
-          cp ./packages/react-mla/package.json ./packages/react-mla/dist
-          cp ./packages/webcomponent-mla/package.json ./packages/webcomponent-mla/dist
+          for pkg in react-mla webcomponent-mla; do
+            echo "Preparing $pkg package.json for publish"
+
+            jq '
+              (.devDependencies // {}) as $dev
+              | .devDependencies = (
+                  $dev
+                  | with_entries(
+                      select(.value | startswith("workspace:") | not)
+                    )
+                )
+            ' packages/$pkg/package.json \
+            > packages/$pkg/dist/package.json
+          done
 
       # Publish version to public repository
       - name: Publish react-mla
