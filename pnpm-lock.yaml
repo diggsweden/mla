@@ -263,9 +263,6 @@ importers:
 
   packages/webcomponent-mla:
     dependencies:
-      '@diggsweden/react-mla':
-        specifier: workspace:^
-        version: link:../react-mla
       '@r2wc/react-to-web-component':
         specifier: ^2.0.3
         version: 2.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -276,6 +273,9 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@diggsweden/react-mla':
+        specifier: workspace:*
+        version: link:../react-mla
       '@repo/tailwind-config':
         specifier: workspace:*
         version: link:../config-tailwind

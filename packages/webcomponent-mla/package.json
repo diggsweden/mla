@@ -8,7 +8,6 @@
     "dist"
   ],
   "dependencies": {
-    "@diggsweden/react-mla": "workspace:^",
     "@r2wc/react-to-web-component": "^2.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -18,6 +17,7 @@
     "build": "tsc -p tsconfig.build.json && vite build && node ../../scripts/copy-meta.mjs packages/webcomponent-mla"
   },
   "devDependencies": {
+    "@diggsweden/react-mla": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/react": "18.3.27",
@@ -32,5 +32,9 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diggsweden/mla"
   }
 }
