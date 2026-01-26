@@ -21,7 +21,7 @@
     "@electron-forge/plugin-fuses": "7.11.1",
     "@electron/fuses": "2.0.0",
     "@rabbitholesyndrome/electron-forge-maker-portable": "0.2.0",
-    "electron": "39.2.7"
+    "electron": "40.0.0"
   },
   "keywords": [],
   "license": "MIT",
