@@ -9,8 +9,8 @@
   ],
   "dependencies": {
     "@r2wc/react-to-web-component": "^2.0.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "scripts": {
     "dev": "vite dev --open",
@@ -20,8 +20,8 @@
     "@diggsweden/react-mla": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/react": "18.3.27",
-    "@types/react-dom": "18.3.7",
+    "@types/react": "19.2.10",
+    "@types/react-dom": "19.2.3",
     "@types/wicg-file-system-access": "2023.10.7",
     "@vitejs/plugin-react": "5.1.2",
     "sass-embedded": "1.97.2",
