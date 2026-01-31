@@ -89,7 +89,7 @@
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-lib-inject-css": "2.2.2",
     "vitest": "3.2.4",
-    "vitest-browser-react": "1.0.1"
+    "vitest-browser-react": "2.0.5"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
