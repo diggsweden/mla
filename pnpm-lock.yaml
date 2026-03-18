@@ -68,8 +68,8 @@ importers:
         specifier: 2023.10.7
         version: 2023.10.7
       '@vitejs/plugin-react':
-        specifier: 5.1.2
-        version: 5.1.2(vite@7.3.1(@types/node@20.19.37)(jiti@1.21.7)(sass-embedded@1.97.2)(sass@1.97.2))
+        specifier: 5.2.0
+        version: 5.2.0(vite@7.3.1(@types/node@20.19.37)(jiti@1.21.7)(sass-embedded@1.97.2)(sass@1.97.2))
       tailwindcss:
         specifier: 3.4.19
         version: 3.4.19
@@ -201,8 +201,8 @@ importers:
         specifier: 8.53.1
         version: 8.53.1(eslint@9.39.4(jiti@2.6.1))(typescript@5.5.4)
       '@vitejs/plugin-react':
-        specifier: 5.1.2
-        version: 5.1.2(vite@7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2))
+        specifier: 5.2.0
+        version: 5.2.0(vite@7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2))
       '@vitest/browser':
         specifier: 3.2.4
         version: 3.2.4(playwright@1.57.0)(vite@7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2))(vitest@3.2.4)
@@ -292,8 +292,8 @@ importers:
         specifier: 2023.10.7
         version: 2023.10.7
       '@vitejs/plugin-react':
-        specifier: 5.1.2
-        version: 5.1.2(vite@7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2))
+        specifier: 5.2.0
+        version: 5.2.0(vite@7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2))
       sass-embedded:
         specifier: 1.97.2
         version: 1.97.2
@@ -1091,8 +1091,8 @@ packages:
   '@react-dnd/shallowequal@4.0.2':
     resolution: {integrity: sha512-/RVXdLvJxLg4QKvMoM5WlwNR9ViO9z8B/qPcc+C0Sa/teJY7QG7kJ441DwzOjMYEY7GmU4dj5EcGHIkKZiQZCA==}
 
-  '@rolldown/pluginutils@1.0.0-beta.53':
-    resolution: {integrity: sha512-vENRlFU4YbrwVqNDZ7fLvy+JR1CRkyr01jhSiDpE1u6py3OMzQfztQU2jxykW3ALNxO4kSlqIDeYyD0Y9RcQeQ==}
+  '@rolldown/pluginutils@1.0.0-rc.3':
+    resolution: {integrity: sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q==}
 
   '@rollup/pluginutils@5.3.0':
     resolution: {integrity: sha512-5EdhGZtnu3V88ces7s53hhfK5KSASnJZv8Lulpc04cWO3REESroJXg73DFsOmgbU2BhwV0E20bu2IDZb3VKW4Q==}
@@ -1460,11 +1460,11 @@ packages:
     resolution: {integrity: sha512-oy+wV7xDKFPRyNggmXuZQSBzvoLnpmJs+GhzRhPjrxl2b/jIlyjVokzm47CZCDUdXKr2zd7ZLodPfOBpOPyPlg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@vitejs/plugin-react@5.1.2':
-    resolution: {integrity: sha512-EcA07pHJouywpzsoTUqNh5NwGayl2PPVEJKUSinGGSxFGYn+shYbqMGBg6FXDqgXum9Ou/ecb+411ssw8HImJQ==}
+  '@vitejs/plugin-react@5.2.0':
+    resolution: {integrity: sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
+      vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
 
   '@vitest/browser@3.2.4':
     resolution: {integrity: sha512-tJxiPrWmzH8a+w9nLKlQMzAKX/7VjFs50MWgcAj7p9XQ7AQ9/35fByFYptgPELyLw+0aixTnC4pUWV+APcZ/kw==}
@@ -4931,7 +4931,7 @@ snapshots:
 
   '@react-dnd/shallowequal@4.0.2': {}
 
-  '@rolldown/pluginutils@1.0.0-beta.53': {}
+  '@rolldown/pluginutils@1.0.0-rc.3': {}
 
   '@rollup/pluginutils@5.3.0(rollup@4.59.0)':
     dependencies:
@@ -5363,24 +5363,24 @@ snapshots:
       '@typescript-eslint/types': 8.53.1
       eslint-visitor-keys: 4.2.1
 
-  '@vitejs/plugin-react@5.1.2(vite@7.3.1(@types/node@20.19.37)(jiti@1.21.7)(sass-embedded@1.97.2)(sass@1.97.2))':
+  '@vitejs/plugin-react@5.2.0(vite@7.3.1(@types/node@20.19.37)(jiti@1.21.7)(sass-embedded@1.97.2)(sass@1.97.2))':
     dependencies:
       '@babel/core': 7.29.0
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.29.0)
       '@babel/plugin-transform-react-jsx-source': 7.27.1(@babel/core@7.29.0)
-      '@rolldown/pluginutils': 1.0.0-beta.53
+      '@rolldown/pluginutils': 1.0.0-rc.3
       '@types/babel__core': 7.20.5
       react-refresh: 0.18.0
       vite: 7.3.1(@types/node@20.19.37)(jiti@1.21.7)(sass-embedded@1.97.2)(sass@1.97.2)
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-react@5.1.2(vite@7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2))':
+  '@vitejs/plugin-react@5.2.0(vite@7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2))':
     dependencies:
       '@babel/core': 7.29.0
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.29.0)
       '@babel/plugin-transform-react-jsx-source': 7.27.1(@babel/core@7.29.0)
-      '@rolldown/pluginutils': 1.0.0-beta.53
+      '@rolldown/pluginutils': 1.0.0-rc.3
       '@types/babel__core': 7.20.5
       react-refresh: 0.18.0
       vite: 7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)
