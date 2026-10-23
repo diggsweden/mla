@@ -13,14 +13,14 @@ importers:
   .:
     devDependencies:
       '@commitlint/cli':
-        specifier: 20.5.0
-        version: 20.5.0(@types/node@20.19.37)(conventional-commits-parser@6.4.0)(typescript@5.9.3)
+        specifier: 20.5.3
+        version: 20.5.3(@types/node@20.19.37)(conventional-commits-parser@6.4.0)(typescript@5.9.3)
       '@commitlint/config-conventional':
-        specifier: 20.5.0
-        version: 20.5.0
+        specifier: 20.5.3
+        version: 20.5.3
       '@commitlint/cz-commitlint':
-        specifier: 20.5.0
-        version: 20.5.0(@types/node@20.19.37)(commitizen@4.3.1(typescript@5.9.3))(inquirer@13.3.2(@types/node@20.19.37))(typescript@5.9.3)
+        specifier: 20.5.3
+        version: 20.5.3(@types/node@20.19.37)(commitizen@4.3.1(typescript@5.9.3))(inquirer@13.3.2(@types/node@20.19.37))(typescript@5.9.3)
       commitizen:
         specifier: 4.3.1
         version: 4.3.1(typescript@5.9.3)
@@ -472,13 +472,13 @@ packages:
   '@bufbuild/protobuf@2.16.0':
     resolution: {integrity: sha512-FWa0sPlqYGJgpTs6OxBRcL/AW4JT0OIO+W1ajerluoTVh8CV0B7XM1qsNCRgnkSCkRCgOICKHRQlY17jrsm0+Q==}
 
-  '@commitlint/cli@20.5.0':
-    resolution: {integrity: sha512-yNkyN/tuKTJS3wdVfsZ2tXDM4G4Gi7z+jW54Cki8N8tZqwKBltbIvUUrSbT4hz1bhW/h0CdR+5sCSpXD+wMKaQ==}
+  '@commitlint/cli@20.5.3':
+    resolution: {integrity: sha512-OJdL0EXWD5y9LPa0nr/geOwzaS8BsdaybKkcloB0JgsguGxNv2R+hC2FTPqrAcprg35zF33KOQerY0x8W1aesA==}
     engines: {node: '>=v18'}
     hasBin: true
 
-  '@commitlint/config-conventional@20.5.0':
-    resolution: {integrity: sha512-t3Ni88rFw1XMa4nZHgOKJ8fIAT9M2j5TnKyTqJzsxea7FUetlNdYFus9dz+MhIRZmc16P0PPyEfh6X2d/qw8SA==}
+  '@commitlint/config-conventional@20.5.3':
+    resolution: {integrity: sha512-j34Qqeaa152chJgz2ysyk0BCpHenJn1lV0Rx0VXf8k3ccQcED+48EZrzMvo9jLmJUyBrrBwvu89I+2er4gW7QQ==}
     engines: {node: '>=v18'}
 
   '@commitlint/config-validator@20.5.0':
@@ -489,8 +489,8 @@ packages:
     resolution: {integrity: sha512-JQ13v0GafSM4fBYX8UowSy++07Was20auq0NcTdnzSEq6/05Cq5GBUMIfKkqjzyBwC9sJFmPpKWgLLhH7cygkw==}
     engines: {node: '>=22.12.0'}
 
-  '@commitlint/cz-commitlint@20.5.0':
-    resolution: {integrity: sha512-DqhcftvM+gqAUfidJ91Vq7RUj+czVk/PepJydThY95MsTFBiJVM1NEGfPlhWa9ZVeNNtcRNhXez3dt6+ZXWrSw==}
+  '@commitlint/cz-commitlint@20.5.3':
+    resolution: {integrity: sha512-JHHN+YGFxNATd/oUIegmNbPqccSQstRmdRJnwmrT//qBBfsKbEXupWspn9+/1idsGg2RAPop5dfPGw79KlXQlA==}
     engines: {node: '>=v18'}
     peerDependencies:
       commitizen: ^4.0.3
@@ -4420,7 +4420,7 @@ snapshots:
 
   '@bufbuild/protobuf@2.16.0': {}
 
-  '@commitlint/cli@20.5.0(@types/node@20.19.37)(conventional-commits-parser@6.4.0)(typescript@5.9.3)':
+  '@commitlint/cli@20.5.3(@types/node@20.19.37)(conventional-commits-parser@6.4.0)(typescript@5.9.3)':
     dependencies:
       '@commitlint/format': 20.5.0
       '@commitlint/lint': 20.5.3
@@ -4435,7 +4435,7 @@ snapshots:
       - conventional-commits-parser
       - typescript
 
-  '@commitlint/config-conventional@20.5.0':
+  '@commitlint/config-conventional@20.5.3':
     dependencies:
       '@commitlint/types': 20.5.0
       conventional-changelog-conventionalcommits: 9.3.1
@@ -4451,7 +4451,7 @@ snapshots:
       ajv: 8.20.0
     optional: true
 
-  '@commitlint/cz-commitlint@20.5.0(@types/node@20.19.37)(commitizen@4.3.1(typescript@5.9.3))(inquirer@13.3.2(@types/node@20.19.37))(typescript@5.9.3)':
+  '@commitlint/cz-commitlint@20.5.3(@types/node@20.19.37)(commitizen@4.3.1(typescript@5.9.3))(inquirer@13.3.2(@types/node@20.19.37))(typescript@5.9.3)':
     dependencies:
       '@commitlint/ensure': 20.5.3
       '@commitlint/load': 20.5.3(@types/node@20.19.37)(typescript@5.9.3)
