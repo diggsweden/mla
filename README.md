@@ -80,6 +80,24 @@ $ pnpm run dev
 ## Documentation
 We have a <a href="https://github.com/diggsweden/mla/wiki">wiki</a>!
 
+## Verify a release
+Releases are built by [build-release.yml](.github/workflows/build-release.yml), which also creates a
+signed SLSA build provenance attestation of `mla-component.umd.cjs` (GitHub artifact attestations).
+Verify a downloaded file with the [GitHub CLI](https://cli.github.com/):
+
+```bash
+gh attestation verify mla-component.umd.cjs --repo diggsweden/mla \
+  --signer-workflow diggsweden/mla/.github/workflows/build-release.yml
+```
+
+The release has these files next to `mla-component.umd.cjs`:
+
+- `mla-component.umd.cjs.sigstore.json` is the complete attestation, so the file can be verified without fetching
+  the attestation from GitHub by adding `--bundle mla-component.umd.cjs.sigstore.json` to the command above.
+- `mla-component.umd.cjs.intoto.jsonl` is the signed SLSA provenance statement of the attestation, as an
+  [in-toto](https://in-toto.io/) DSSE envelope. Decode its `payload` (base64) to read it.
+- `mla-component.umd.cjs.asc` is a GPG signature.
+
 ## License
 
 This project is licensed under the EUPL 1.2 License- see the [LICENSE](https://github.com/diggsweden/mla/blob/main/LICENSE) file for details
