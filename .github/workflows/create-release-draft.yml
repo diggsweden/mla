@@ -116,18 +116,12 @@ jobs:
 
       # Update changelog unreleased section with new version
       - name: Update changelog
-        uses: superfaceai/release-changelog-action@38646ad355e5d79bf7aa12e233a1573e4d36faee # v2.1.3
-        with:
-          version: ${{ env.NEW_VERSION }}
-          operation: release
+        run: node scripts/changelog.mjs release "$NEW_VERSION"
 
       # Read changelog 
       - name: Get changelog
         id: get-changelog
-        uses: superfaceai/release-changelog-action@38646ad355e5d79bf7aa12e233a1573e4d36faee # v2.1.3
-        with:
-          version: ${{ env.NEW_VERSION }}
-          operation: read
+        run: node scripts/changelog.mjs read "$NEW_VERSION"
 
       # Commit changes and push
       - name: Commit CHANGELOG.md and package.json changes and create tag
