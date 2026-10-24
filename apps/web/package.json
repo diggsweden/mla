@@ -7,7 +7,7 @@
     "@diggsweden/react-mla": "workspace:^",
     "@repo/tailwind-config": "workspace:^",
     "@repo/typescript-config": "workspace:^",
-    "http-request-mock": "^2.0.0",
+    "msw": "^3.0.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },

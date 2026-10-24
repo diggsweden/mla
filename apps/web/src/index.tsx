@@ -8,7 +8,8 @@ import { MLA } from '@diggsweden/react-mla'
 import setupMockApi from './mock-setup'
 
 
-setupMockApi()
+// The mocked backend must be ready before the first request is made
+await setupMockApi()
 
 const urlParams = new URLSearchParams(window.location.search);
   const configSrc = urlParams.get("config") ?? "config/default.json";

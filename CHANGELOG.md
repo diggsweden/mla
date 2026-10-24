@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Replace `http-request-mock` with MSW (Mock Service Worker) for the demo app mocks. `http-request-mock` is removed from `react-mla`, where it was an unused dependency, and the `uuid` pnpm override is no longer needed. The unused `SokRelation` mock (it referenced a missing data file) is removed
 - Fix the warnings when starting the dev server: the vite configs use `import.meta.dirname` instead of `__dirname`, and `@repo/tailwind-config` is marked `"type": "module"`
 - Replace `react-dnd` and `react-dnd-html5-backend` (unmaintained since 2022) with native HTML5 drag and drop for the ribbon buttons, search results and the chart drop target
 - Update pnpm to 12.15.0. Overrides moved to `pnpm-workspace.yaml`, dependency install scripts are explicitly not run (`allowBuilds`) and `deploy-release` gets the GitHub Packages token from `setup-node`, pnpm no longer reads credentials from the project `.npmrc`. Contributors need pnpm 12 (`npm install -g pnpm`), pnpm 10 cannot switch to it

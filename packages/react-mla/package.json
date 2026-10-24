@@ -23,7 +23,6 @@
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.20.4",
     "glob": "^13.0.0",
-    "http-request-mock": "^2.0.0",
     "i18next": "^26.5.7",
     "immer": "^11.0.0",
     "leaflet": "^1.9.4",

@@ -7,7 +7,6 @@ packages:
   - "apps/web"
 
 overrides:
-  uuid@<11.1.1: ">=11.1.1"
   postcss-selector-parser@<7.1.6: ">=7.1.6"
 
 # Install scripts of dependencies are not run. These binaries come as separate packages, and lefthook is installed by the prepare script
