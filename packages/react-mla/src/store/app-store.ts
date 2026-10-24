@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { create } from 'zustand'
-import chartLayouts from '../utils/chart-layouts'
-import interactionOptions from '../utils/interaction-options'
 
 import type { IBaseViewConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
 import { type IGeoFeatureBounds } from '../interfaces/data-models/geo'
@@ -12,6 +10,8 @@ import viewService from '../services/viewService'
 import useSearchStore from './search-state'
 import { internalUpdateLabels } from './internal-actions'
 import useMainStore from './main-store'
+import chartLayouts, { type ChartLayout } from '../utils/chart-layouts'
+import interactionOptions, { type InteractionOptions } from '../utils/interaction-options'
 
 export type Tab = 'archive' | 'start' | 'search find' | 'analysis' | 'select' | 'look feel' | 'show' | 'map'
 export type Tool = 'search' | 'explore' | 'import' | 'activity'
@@ -33,9 +33,9 @@ interface AppState {
 
   selectedTab: Tab
   selectedTool: Tool | undefined
-  layout: any
+  layout: ChartLayout
   layoutId: string
-  interaction: any
+  interaction: InteractionOptions
   historyMode: boolean
   showMap: boolean
 
@@ -46,7 +46,7 @@ interface AppState {
   setTab: (tab: Tab) => void
   setLayout: (layoutId: string) => void
   setInteraction: (interactionId: string) => void
-  setInteractionObject: (interaction: any) => void
+  setInteractionObject: (interaction: InteractionOptions) => void
 
   setView: (viewId: string) => void
   setTool: (tool?: Tool) => void
@@ -129,7 +129,7 @@ const useAppStore = create<AppState>((set) => ({
       interaction: interactionOptions[interactionId]
     }))
   },
-  setInteractionObject: (interaction: string) => {
+  setInteractionObject: (interaction: InteractionOptions) => {
     set(() => ({
       interaction
     }))

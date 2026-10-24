@@ -141,7 +141,7 @@ function Property (props: Props) {
         )}
       </select>
       case 'File': return <input id={key} ref={inputRef} accept={config.FieldValidation} required={config.Required} type="file" onChange={(e) => { handeFileUpload(e) }} className={inputClass}></input>
-      default: throw Error('Unsupported config: ' + (config.FieldType as any))
+      default: throw Error('Unsupported config: ' + String(config.FieldType))
     }
   }
 

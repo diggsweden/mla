@@ -22,7 +22,7 @@ class ConfigurationService {
   private linksConfiguration = {} as Record<string, ILinkConfiguration>
   private eventsConfiguration = {} as Record<string, IEventConfiguration>
 
-  private plugins = {} as any
+  private plugins = {} as Record<string, boolean>
   private publicUrl = ''
 
   public async init_src (configUrl: string, context?: string, publicUrl?: string) {

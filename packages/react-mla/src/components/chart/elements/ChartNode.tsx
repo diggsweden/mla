@@ -68,7 +68,7 @@ function ChartNode (props: Props) {
     const dataset = props.data.getDataSet()
     if (created.current) {
       console.debug('[updating]', node.id)
-      dataset.updateOnly(node as any)
+      dataset.updateOnly(node as unknown as Parameters<typeof dataset.updateOnly>[0])
     } else {
       console.debug('[adding]', node.id)
       dataset.update(node)

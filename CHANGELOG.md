@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Enable `no-explicit-any` and the `no-unsafe-*` ESLint rules: `any` is replaced by real types (layout and interaction options, DOM and Leaflet events, plugin functions) and no suppressions are used
 - Run ESLint in CI through MegaLinter v10 using the project's own dependencies and the config in `packages/react-mla` (it was skipped before because MegaLinter only found legacy `.eslintrc` files)
 - Modernize the ESLint config: native flat config with `defineConfig`, type-aware `typescript-eslint` `recommendedTypeChecked`, `eslint-plugin-react-hooks` 7 `recommended` (React Compiler rules) and `eslint-plugin-react-refresh`
 - Remove `FlatCompat`, `@eslint/eslintrc`, `@eslint/compat` and the unused `eslint-plugin-react` from the ESLint setup

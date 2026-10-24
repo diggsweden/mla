@@ -11,6 +11,7 @@ import { findId, mergeContext } from '../utils/utils'
 import configService from './configurationService'
 import viewService from './viewService'
 import { fixDate } from '../utils/date'
+import { getPluginFunction } from '../utils/plugin-functions'
 
 interface IQueryResponse {
   Entities: IEntity[]
@@ -20,7 +21,7 @@ interface IQueryResponse {
 }
 
 class QueryService {
-  public async QueryForm (serviceId: string, query: any): Promise<IQueryResponse> {
+  public async QueryForm (serviceId: string, query: unknown): Promise<IQueryResponse> {
     const config = configService.getSearchServices().find(s => s.Id === serviceId)
     if (config == null) {
       throw new Error('No service registed with Id: ' + serviceId)
@@ -30,7 +31,7 @@ class QueryService {
     if (config.Url) {
       let req: RequestInit | undefined
       if (config.OutTransform) {
-        req = (window as any)[config.OutTransform](query, useMainStore.getState().context)
+        req = getPluginFunction(config.OutTransform)(query, useMainStore.getState().context) as RequestInit
       } else {
         req = {
           method: 'POST',
@@ -47,12 +48,12 @@ class QueryService {
 
       res = await this.HandleResponse(config, response)
     } else if (config.RequestFunction) {
-      res = await (window as any)[config.RequestFunction](query, useMainStore.getState().context)
+      res = await getPluginFunction(config.RequestFunction)(query, useMainStore.getState().context) as IQueryResponse
     } else {
       throw new Error('No way to create request for service registed with Id: ' + serviceId)
     }
 
-    return this.MapResponse(res!)
+    return this.MapResponse(res)
   }
 
   public async QueryEntities (serviceId: string, entities?: IEntity[], shape?: IGeoFeature): Promise<IQueryResponse> {
@@ -65,7 +66,7 @@ class QueryService {
     if (config.Url) {
       let req: RequestInit | undefined
       if (config.OutTransform) {
-        req = (window as any)[config.OutTransform]([...(entities ?? [])], useMainStore.getState().context)
+        req = getPluginFunction(config.OutTransform)([...(entities ?? [])], useMainStore.getState().context) as RequestInit
       } else {
         req = {
           method: 'POST',
@@ -82,12 +83,12 @@ class QueryService {
 
       res = await this.HandleResponse(config, response)
     } else if (config.RequestFunction) {
-      res = await (window as any)[config.RequestFunction]({ Entities: entities, Shape: shape }, useMainStore.getState().context)
+      res = await getPluginFunction(config.RequestFunction)({ Entities: entities, Shape: shape }, useMainStore.getState().context) as IQueryResponse
     } else {
       throw new Error('No way to create request for service registed with Id: ' + serviceId)
     }
 
-    return this.MapResponse(res!)
+    return this.MapResponse(res)
   }
 
   public async SaveFile (data: string): Promise<boolean> {
@@ -181,7 +182,7 @@ class QueryService {
 
     let json = await res.json() as IQueryResponse
     if (config.InTransform) {
-      json = ((window as any)[config.InTransform])(json) as IQueryResponse
+      json = getPluginFunction(config.InTransform)(json) as IQueryResponse
     }
 
     if (json?.ErrorMessage) {

@@ -9,6 +9,7 @@ import useAppStore from './app-store'
 import configService from '../services/configurationService'
 import type { IImportConfiguration, IQueryIntegration } from '../interfaces/configuration'
 import useMainStore from './main-store'
+import { getPluginFunction } from '../utils/plugin-functions'
 
 interface SearchState {
   searchTool: IQueryIntegration | undefined
@@ -24,7 +25,7 @@ interface SearchState {
   clearSelectedTool: () => void
 
   import: (fileContents: string) => IQueryResponse
-  search: (query: any) => Promise<IQueryResponse>
+  search: (query: unknown) => Promise<IQueryResponse>
   explore: () => Promise<IQueryResponse>
 }
 
@@ -84,7 +85,7 @@ const useSearchStore = create<SearchState>((set, get) => ({
     }))
   },
 
-  search: async (query: any) => {
+  search: async (query: unknown) => {
     useAppStore.getState().setTool('search')
 
     set(() => ({
@@ -146,9 +147,9 @@ const useSearchStore = create<SearchState>((set, get) => ({
       let result = undefined as IQueryResponse | undefined
       const transformFunction = get().importTool?.TransformFunction
       if (transformFunction) {
-        result = (window as any)[transformFunction](fileContents)
+        result = getPluginFunction(transformFunction)(fileContents) as IQueryResponse
       } else {
-        result = JSON.parse(fileContents)
+        result = JSON.parse(fileContents) as IQueryResponse
       }
       if (result?.Entities == null) {
         throw new Error('result.Entities is not Entity[]')

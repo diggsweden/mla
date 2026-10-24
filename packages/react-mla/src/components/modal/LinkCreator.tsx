@@ -37,7 +37,7 @@ function LinkCreator (props: Props) {
     onChange(up)
   }
 
-  const validMap = useRef({} as any)
+  const validMap = useRef<Record<string, boolean>>({})
   function setValidity (id: string, validity: boolean) {
     validMap.current = {
       ...validMap.current,

@@ -6,11 +6,12 @@ import { useEffect, useMemo } from 'react'
 import useAppStore from '../../../store/app-store'
 import * as L from 'leaflet'
 import { IGeoFeature } from '../../../interfaces/data-models/geo'
+import { leafletId } from '../../../utils/leaflet-utils'
 
 interface Props {
   geo: IGeoFeature
   map: L.Map
-  click?: (e: any) => void
+  click?: (e: unknown) => void
 }
 
 function GeoFeature (props: Props) {
@@ -32,7 +33,7 @@ function GeoFeature (props: Props) {
   useEffect(() => {
     if (poly && map) {
       map.eachLayer(l => {
-        if ((l as any)._leaflet_id.toString() === geo.Id) {
+        if (leafletId(l) === geo.Id) {
           map.removeLayer(l)
         }
       })

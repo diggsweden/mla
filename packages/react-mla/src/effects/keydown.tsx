@@ -8,7 +8,7 @@ export const useKeyDown = (callback: () => void, ref: RefObject<HTMLElement | nu
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const wasAnyKeyPressed = keys.some((key) => event.key === key || event.code === key)
-      if (wasAnyKeyPressed && (!requireControl || event.ctrlKey) && (event.target as any)?.tagName !== 'INPUT') {
+      if (wasAnyKeyPressed && (!requireControl || event.ctrlKey) && (event.target as HTMLElement | null)?.tagName !== 'INPUT') {
         event.preventDefault()
         event.stopPropagation()
         callback()
@@ -18,7 +18,7 @@ export const useKeyDown = (callback: () => void, ref: RefObject<HTMLElement | nu
     const element = ref.current
     if (element != null) {
       const element = ref.current ?? document
-      const ev = (e: any) => { onKeyDown(e as KeyboardEvent) }
+      const ev = (e: Event) => { onKeyDown(e as KeyboardEvent) }
       element.addEventListener('keydown', ev)
       return () => {
         element.removeEventListener('keydown', ev)

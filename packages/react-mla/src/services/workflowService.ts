@@ -39,8 +39,8 @@ class WorkflowService {
             this.Close()
             break
         }
-      } catch (e: any) {
-        workflowStore.setActionError(action.Id, e.message as string)
+      } catch (e) {
+        workflowStore.setActionError(action.Id, (e as { message: string }).message)
         return
       } finally {
         workflowStore.setActionCompleted(action.Id)

@@ -75,7 +75,7 @@ function ChartEdge(props: Props) {
     const dataset = props.data.getDataSet()
     if (created.current) {
       console.debug('[updating]', edge.id)
-      dataset.updateOnly(edge as any)
+      dataset.updateOnly(edge as unknown as Parameters<typeof dataset.updateOnly>[0])
     } else {
       console.debug('[adding]', edge.id)
       dataset.update(edge)

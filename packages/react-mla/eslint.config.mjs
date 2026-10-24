@@ -40,14 +40,6 @@ export default defineConfig([
         allowSeparatedGroups: false,
       }],
 
-      // This code base uses `any` on purpose, mostly around untyped internals of vis-network and leaflet.
-      // The no-unsafe-* rules only make sense when `any` is avoided, so they are off together with no-explicit-any.
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unsafe-argument": "off",
-      "@typescript-eslint/no-unsafe-assignment": "off",
-      "@typescript-eslint/no-unsafe-call": "off",
-      "@typescript-eslint/no-unsafe-member-access": "off",
-      "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/no-unused-expressions": "off",
     },
   },

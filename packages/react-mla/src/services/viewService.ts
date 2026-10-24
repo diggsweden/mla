@@ -58,7 +58,7 @@ class ViewService {
       }
     })
 
-    this.defaultViewConfiguration = freeze(defaultConfig.Show.reduce<any>(function (map, obj) {
+    this.defaultViewConfiguration = freeze(defaultConfig.Show.reduce<Record<string, IBaseViewConfiguration>>(function (map, obj) {
       map[obj.TypeId] = obj
       return map
     }, {}))
