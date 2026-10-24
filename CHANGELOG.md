@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Update the GitHub Actions in the workflows: checkout 7, setup-node 7, upload-artifact 7, download-artifact 8, pnpm/action-setup 6, ghaction-import-gpg 7, action-gh-release 3, scorecard 2.5, codeql upload-sarif 4.39 and publiccode-parser 1.7
 - Update Node.js to 24 (`.nvmrc`) and `@types/node` to 24
 - Enable `no-explicit-any` and the `no-unsafe-*` ESLint rules: `any` is replaced by real types (layout and interaction options, DOM and Leaflet events, plugin functions) and no suppressions are used
 - Run ESLint in CI through MegaLinter v10 using the project's own dependencies and the config in `packages/react-mla` (it was skipped before because MegaLinter only found legacy `.eslintrc` files)
