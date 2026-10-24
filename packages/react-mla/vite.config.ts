@@ -4,7 +4,7 @@
 
 /// <reference types="vitest" />
 import { resolve } from 'path'
-import { defineConfig } from 'vite'
+import { defineConfig, esmExternalRequirePlugin } from 'vite'
 
 import dts from 'vite-plugin-dts';
 import react from '@vitejs/plugin-react'
@@ -13,8 +13,11 @@ import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 export default defineConfig({
   plugins: [
     react(),
-    dts({ rollupTypes: true }),
-    cssInjectedByJsPlugin()
+    dts({ bundleTypes: true }),
+    cssInjectedByJsPlugin(),
+    // Bundled CJS dependencies (react jsx-runtime, use-sync-external-store) call require("react");
+    // convert those to imports so the ESM output works without a global require
+    esmExternalRequirePlugin({ external: ["react", "react-dom"] })
   ],
   build: {
     outDir: './dist',
@@ -28,8 +31,7 @@ export default defineConfig({
       return "react-mla.umd.cjs";
     },
     },
-    rollupOptions: {
-      external: ["react", "react-dom"],
+    rolldownOptions: {
       output: {
         globals: {
           react: "react",

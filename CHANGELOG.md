@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Update vite to v8 (Rolldown), `@vitejs/plugin-react` to v6, `vite-plugin-dts` to v5 and `vite-plugin-css-injected-by-js` to v5. Library type bundling now uses `bundleTypes` and `@microsoft/api-extractor`, bundled CJS `require("react")` calls are converted to imports, and the web component no longer inlines `process.env` (only `NODE_ENV`)
 - Update eslint to v10, `@eslint/js` to v10 and `eslint-plugin-react-hooks` to v7. Replace `eslint-plugin-autofix` (incompatible with ESLint 10) with the core `no-debugger` and `sort-imports` rules
 - Update vitest to v5 (`vitest`, `@vitest/browser-playwright`, `@vitest/coverage-v8`)
 - Update commitlint (`@commitlint/cli`, `config-conventional`, `cz-commitlint`) to v21
