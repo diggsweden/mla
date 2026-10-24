@@ -25,7 +25,7 @@ description:
       It has a config file that lets the user configure it's own information model, create rules,
       set theme colors, connect it to existing information sources and alot more.
 
-      MLA can run as part of a existing system, as a web application or as a desktop application. 
+      MLA can run as part of an existing system or as a web application. 
       It has no dependencies and works in a air-gaped environment.
     shortDescription: Network analysis application that supports Crime Scripting
 developmentStatus: stable
@@ -42,7 +42,6 @@ maintenance:
 name: MLA
 platforms:
   - web
-  - windows
 releaseDate: "2024-09-01"
 softwareType: "library"
 softwareVersion: "1.0"
