@@ -9,6 +9,8 @@ const usePrevious = (value: any, initialValue: any) => {
   useEffect(() => {
     ref.current = value
   })
+  // Reading the ref during render is the point of this debug helper: it returns the value from the previous render
+  // eslint-disable-next-line react-hooks/refs
   return ref.current
 }
 

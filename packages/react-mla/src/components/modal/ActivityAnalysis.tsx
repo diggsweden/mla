@@ -86,11 +86,7 @@ function ActivityAnalysis (props: Props) {
   const config = props.config
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
 
-  const [types, setTypes] = useState([] as Type[])
-  const [intervall, setIntervall] = useState({ Start: {}, End: {} } as Intervall)
-  const [loading, setLoading] = useState(false)
   const [dateDiff, setDateDiff] = useState(false)
-  const [attributes, setAttributes] = useState([] as Attribute[])
   const [showSettings, setShowSettings] = useState(undefined as undefined | { x: number, y: number })
 
   function filterUniqueLinks (value: Link, index: number, array: Link[]) {
@@ -114,8 +110,7 @@ function ActivityAnalysis (props: Props) {
     return undefined
   }
 
-  const view = useMemo(() => {
-    setLoading(true)
+  const analysis = useMemo(() => {
     const result = [] as TimePeriod[]
     const attributesUpdate = [] as Attribute[]
 
@@ -252,28 +247,17 @@ function ActivityAnalysis (props: Props) {
 
     const typeList = Object.keys(typeMap).map(t => ({ TypeId: t, Name: typeMap[t] } satisfies Type))
     typeList.sort((a, b) => a.Name.localeCompare(b.Name))
-    setTypes(typeList)
-    setAttributes(attributesUpdate)
-    setIntervall(inter)
-    setLoading(false)
-
-    return result
+    return { view: result, types: typeList, intervall: inter, attributes: attributesUpdate }
   }, [entities, events, maxDate, config.EntityTypeId, config.LinkPropertyId, getEntity, links, viewConfig])
 
-  if (loading) {
-    return <div className="m-animate-in m-fade-in m-duration-500 m-flex m-space-x-4 m-mt-4">
-      <div className="m-animate-pulse m-rounded-full m-bg-slate-200 m-h-10 m-w-10"></div>
-      <div className="m-flex-1 m-space-y-6 m-py-1">
-        <div className="m-h-2 m-bg-slate-200 m-rounded"></div>
-        <div className="m-space-y-3">
-          <div className="m-grid m-grid-cols-3 m-gap-4">
-            <div className="m-h-2 m-bg-slate-200 m-rounded m-col-span-2"></div>
-            <div className="m-h-2 m-bg-slate-200 m-rounded m-col-span-1"></div>
-          </div>
-          <div className="m-h-2 m-bg-slate-200 m-rounded"></div>
-        </div>
-      </div>
-    </div>
+  const { view, types, intervall } = analysis
+
+  // The user can toggle attributes on top of the computed ones, start over whenever the analysis is recomputed
+  const [attributeState, setAttributeState] = useState({ analysis, attributes: analysis.attributes })
+  let attributes = attributeState.attributes
+  if (attributeState.analysis !== analysis) {
+    attributes = analysis.attributes
+    setAttributeState({ analysis, attributes })
   }
 
   function show (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -284,7 +268,7 @@ function ActivityAnalysis (props: Props) {
     const idx = attributes.findIndex(a => a === attr)
     const update = [...attributes]
     update.splice(idx, 1, { Name: attr.Name, Show: !attr.Show })
-    setAttributes(update)
+    setAttributeState({ analysis, attributes: update })
   }
 
   function shouldShowAttribute (...attrs: string[]): boolean {
@@ -313,7 +297,7 @@ function ActivityAnalysis (props: Props) {
     return undefined
   }
 
-  let previousDay = (view.length > 0 && view[0].Description.length > 0) ? view[0].Description[0].Date : DateTime.now()
+  const firstDay = (view.length > 0 && view[0].Description.length > 0) ? view[0].Description[0].Date : DateTime.now()
   return (
     <div className={('m-bg-stone-400 m-p-5 ' + props.className)}>
       {view.length === 0 &&
@@ -363,13 +347,7 @@ function ActivityAnalysis (props: Props) {
                     <div className="m-w-full">
                       <div className="m-font-semibold m-text-left m-text-sm m-ml-2">{t('day')}</div>
                       {v.Description.filter(d => d.Attributes.length === 0 || shouldShowAttribute(...d.Attributes)).map((d, j) => {
-                        if (dateDiff) {
-                          if (j === 0) {
-                            previousDay = v.From
-                          } else {
-                            previousDay = v.Description[j - 1].Date
-                          }
-                        }
+                        const previousDay = dateDiff ? (j === 0 ? v.From : v.Description[j - 1].Date) : firstDay
                         const day = daysBetween(previousDay, d.Date)
                         return <div key={v.Header + j} className={'m-grid m-grid-cols-[36px_1fr] ' + (day > 0 ? 'm-mt-1' : '')}>
                           <div className="m-text-right m-text-sm m-font-semibold m-w-9 m-border-r m-border-gray-600 m-pr-1 m-pt-px" style={{ borderColor: d.Color, borderRightWidth: (d.Color != null) ? 3 : 1 }} key={'day-' + j}>{((dateDiff && day > 0) ? '+' : '') + ((dateDiff && day === 0) ? '' : day.toString())}</div>

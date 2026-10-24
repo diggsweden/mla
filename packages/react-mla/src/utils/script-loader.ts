@@ -21,7 +21,7 @@ export async function loadScript (fileUrl: string): Promise<{ status: boolean, e
 
       document.head.appendChild(scriptEle)
     } catch (error) {
-      reject(error)
+      reject(error instanceof Error ? error : new Error(String(error)))
     }
   })
 }

@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Modernize the ESLint config: native flat config with `defineConfig`, type-aware `typescript-eslint` `recommendedTypeChecked`, `eslint-plugin-react-hooks` 7 `recommended` (React Compiler rules) and `eslint-plugin-react-refresh`. Remove `FlatCompat`, `@eslint/eslintrc`, `@eslint/compat` and the unused `eslint-plugin-react`. Fix the findings: unhandled promises, non-Error rejections, redundant type assertions, derived state in effects, and a leaking `oncontextmenu` handler
 - Update typescript to v6 (TypeScript 7 is not yet supported by typescript-eslint). Remove the deprecated `es5` target from apps/web and add `vite/client` types to react-mla so `.scss` imports type-check. Remove the unused `typescript-eslint` package (the config uses `@typescript-eslint/parser` and `@typescript-eslint/eslint-plugin`)
 - Update vis-network to v10 and vis-data to v8 (new explicit `vis-util` v6 dependency, vis-network CSS now imported from `vis-network/styles`)
 - Update i18next to v26 and react-i18next to v17

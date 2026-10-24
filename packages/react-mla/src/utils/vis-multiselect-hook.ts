@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useRef } from 'react'
+import { type RefObject, useEffect, useRef } from 'react'
 import { type Network } from 'vis-network'
 
 import useAppStore from '../store/app-store'
@@ -18,7 +18,7 @@ const canvasify = (network: Network, DOMx: number, DOMy: number) => {
 const correctRange = (start: number, end: number) => start < end ? [start, end] : [end, start]
 const CONTEXT_TIMEOUT = 250
 
-export function useMultiselect (container: HTMLElement | null, network: Network | undefined, selectCallback: (startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) => void) {
+export function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: Network | undefined, selectCallback: (startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) => void) {
   const drag = useRef(false)
   const time = useRef(0)
   const DOMRect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0 })
@@ -26,6 +26,7 @@ export function useMultiselect (container: HTMLElement | null, network: Network 
   const setGeo = useAppStore(state => state.setSelectedGeoFeature)
 
   useEffect(() => {
+    const container = containerRef.current
     if (container == null || network == null) {
       return
     }
@@ -52,7 +53,7 @@ export function useMultiselect (container: HTMLElement | null, network: Network 
       selectCallback(x - iSize, x + iSize, y - iSize, y + iSize, true)
     }
 
-    container.oncontextmenu = (e) => {
+    const contextMenu = (e: MouseEvent) => {
       e.preventDefault()
       const diff = Date.now() - time.current
       if (diff < CONTEXT_TIMEOUT) {
@@ -130,16 +131,18 @@ export function useMultiselect (container: HTMLElement | null, network: Network 
       }
     }
 
+    container.addEventListener('contextmenu', contextMenu)
     container.addEventListener('mousedown', down)
     container.addEventListener('mousemove', move)
     container.addEventListener('mouseup', up)
 
     return () => {
+      container.removeEventListener('contextmenu', contextMenu)
       container.removeEventListener('mousedown', down)
       container.removeEventListener('mousemove', move)
       container.removeEventListener('mouseup', up)
     }
-  }, [container, network, selectCallback, setGeo, showContextMenu])
+  }, [containerRef, network, selectCallback, setGeo, showContextMenu])
 
   useEffect(() => {
     if (network == null) {
@@ -166,7 +169,7 @@ export function useMultiselect (container: HTMLElement | null, network: Network 
     return () => {
       network.off('afterDrawing', act)
     }
-  }, [container, network])
+  }, [network])
 }
 
 export default useMultiselect

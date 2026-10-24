@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useState } from 'react'
 import useMainStore from '../../store/main-store'
 import { getId } from '../../utils/utils'
 import configService from '../../services/configurationService'
@@ -26,40 +26,28 @@ function PropertiesPanel (props: Props) {
   const link = useMainStore((state) => state.getCurrentLink(display))
   const computedLink = useMainStore((state) => state.computedLinks.find(l => getId(l) === display))
 
-  const [title, setTitle] = useState('')
-  const [source, setSource] = useState('')
+  // Keep showing the same item while it is still selected, otherwise show the first selected one
+  const selectedDisplay = selectedIds.length > 0 ? (selectedIds.find(f => f === display) ?? selectedIds[0]) : ''
+  if (selectedDisplay !== display) {
+    setDisplay(selectedDisplay)
+  }
 
-  useEffect(() => {
-    let value = ''
-    if (selectedIds.length > 0) {
-      const set = selectedIds.find(f => f === display) ?? selectedIds[0]
-      value = set
-    }
+  let title = 'Properties'
+  let source = ''
+  if (entity) {
+    title = configService.getEntityConfiguration(entity.TypeId)?.Name ?? ''
+    source = entity.SourceSystemId
+  }
 
-    if (value !== display) {
-      setDisplay(value)
-    }
-  }, [display, selectedIds])
+  if (link) {
+    title = configService.getLinkConfiguration(link.TypeId)?.Name ?? ''
+    source = link.SourceSystemId
+  }
 
-  useLayoutEffect(() => {
-    let name = 'Properties'
-    if (entity) {
-      name = configService.getEntityConfiguration(entity.TypeId)?.Name ?? ''
-      setSource(entity.SourceSystemId)
-    }
-
-    if (link) {
-      name = configService.getLinkConfiguration(link.TypeId)?.Name ?? ''
-      setSource(link.SourceSystemId)
-    }
-
-    if (computedLink) {
-      name = configService.getEventConfiguration(computedLink.EventTypeId)?.Name ?? ''
-      setSource('')
-    }
-
-    setTitle(name)
-  }, [computedLink, display, entity, link])
+  if (computedLink) {
+    title = configService.getEventConfiguration(computedLink.EventTypeId)?.Name ?? ''
+    source = ''
+  }
 
   function next () {
     const idx = selectedIds.findIndex(f => f === display)

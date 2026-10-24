@@ -90,7 +90,7 @@ function Property (props: Props) {
   }
 
   function handleChangeDate (date?: Date) {
-    const dateString = date != undefined ? DateTime.fromJSDate(date).toFormat("yyyy-MM-dd")! : ''
+    const dateString = date != undefined ? DateTime.fromJSDate(date).toFormat("yyyy-MM-dd") : ''
     setValue(dateString)
     const test = inputRef.current?.validity.valid ?? true
     setValid(test)
@@ -105,8 +105,9 @@ function Property (props: Props) {
       const reader = new FileReader()
 
       if (file && reader && onChange) {
-        reader.onload = async (e) => {
-          onChange(e.target?.result?.toString())
+        reader.onload = (e) => {
+          const result = e.target?.result
+          onChange(typeof result === 'string' ? result : undefined)
         }
         reader.readAsDataURL(file)
       }

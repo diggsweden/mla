@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import configService from '../../services/configurationService'
 import type { IBase, IEvent } from '../../interfaces/data-models'
 import Table from '../common/Table'
@@ -48,11 +48,13 @@ function EventFilterTool (props: Props) {
     return res
   }, [props.items])
 
-  useEffect(() => {
-    const config = configService.getThingConfiguration(selectedType)
-    setSortColumn(config.Properties[0].TypeId)
+  // Reset the sorting when the items or the selected type change
+  const [sortInputs, setSortInputs] = useState({ items: props.items, selectedType })
+  if (sortInputs.items !== props.items || sortInputs.selectedType !== selectedType) {
+    setSortInputs({ items: props.items, selectedType })
+    setSortColumn(configService.getThingConfiguration(selectedType).Properties[0].TypeId)
     setSortDirection(true)
-  }, [props.items, selectedType])
+  }
 
   const showList = useMemo(() => {
     const newList = props.items.filter(e => e.TypeId === selectedType).sort((a: IBase, b: IBase): number => {
@@ -70,7 +72,7 @@ function EventFilterTool (props: Props) {
     })
 
     if (updatedFilter[selectedType]) {
-      return filterEvents(updatedFilter[selectedType]!, ...newList)
+      return filterEvents(updatedFilter[selectedType], ...newList)
     }
 
     return newList
@@ -105,9 +107,9 @@ function EventFilterTool (props: Props) {
         draft[selectedType] = []
       }
 
-      draft[selectedType] = draft[selectedType]!.filter(f => f.PropertyTypeId !== propertyType)
+      draft[selectedType] = draft[selectedType].filter(f => f.PropertyTypeId !== propertyType)
       if (filterValue) {
-        draft[selectedType]!.push({ PropertyTypeId: propertyType, Filter: filterValue })
+        draft[selectedType].push({ PropertyTypeId: propertyType, Filter: filterValue })
       } else if (draft[selectedType]?.length === 0) {
         draft[selectedType] = undefined
       }

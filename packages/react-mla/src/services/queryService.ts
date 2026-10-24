@@ -181,7 +181,7 @@ class QueryService {
 
     let json = await res.json() as IQueryResponse
     if (config.InTransform) {
-      json = ((window as any)[config.InTransform] as any)(json) as IQueryResponse
+      json = ((window as any)[config.InTransform])(json) as IQueryResponse
     }
 
     if (json?.ErrorMessage) {

@@ -17,7 +17,6 @@ import { produce } from 'immer'
 import EntityMarker from './elements/EntityMarker'
 import { getId } from '../../utils/utils'
 import { IEntity } from '../../interfaces/data-models'
-import { TileConfiguration, WmsConfiguration } from '../../interfaces/configuration/map-configuration'
 import { IGeoFeatureBounds } from '../../interfaces/data-models/geo'
 import GeoFeature from './elements/GeoFeature'
 import { useTranslation } from 'react-i18next'
@@ -78,7 +77,7 @@ export default function Map(props: Props) {
 
         const layers = [] as L.TileLayer[]
         if (config.MapLayers) {
-          (config.MapLayers as TileConfiguration[]).forEach((layer) => {
+          (config.MapLayers).forEach((layer) => {
             const mapLayer = L.tileLayer(layer.Url, {
               attribution: layer.Attribution,
               maxZoom: layer.MaxZoom,
@@ -93,7 +92,7 @@ export default function Map(props: Props) {
         }
 
         if (config.WmsMapLayers) {
-          (config.WmsMapLayers as WmsConfiguration[]).forEach((layer) => {
+          (config.WmsMapLayers).forEach((layer) => {
             const mapLayer = L.tileLayer.wms(layer.Url, {
               layers: layer.Layers,
               format: layer.Format,
@@ -115,7 +114,7 @@ export default function Map(props: Props) {
         layers[0].addTo(lMap)
 
         if (config.Layers != null) {
-          (config.Layers as WmsConfiguration[]).forEach((map) => {
+          (config.Layers).forEach((map) => {
             const overlay = L.tileLayer.wms(map.Url, {
               layers: map.Layers,
               format: map.Format,

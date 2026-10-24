@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import useMainStore from '../../store/main-store'
 import Icon from '../common/Icon'
 import { ITimeSpan } from '../../interfaces/data-models'
@@ -142,20 +142,19 @@ function Timeline (props: Props) {
     }
   }, [animateDate, play, targetDate])
 
-  useEffect(() => {
+  // When not playing, the target follows the current date
+  const [targetSync, setTargetSync] = useState<{ from: DateTime, play: number, transitionTime: number } | undefined>(undefined)
+  if (targetSync == null || targetSync.from !== currentDate.DateFrom || targetSync.play !== play || targetSync.transitionTime !== transitionTime) {
+    setTargetSync({ from: currentDate.DateFrom, play, transitionTime })
     if (play == 0) {
       setTargetDate(currentDate.DateFrom)
     }
-  }, [currentDate.DateFrom, play, transitionTime])
+  }
 
-  const [width, setWidth] = useState(0)
   const monthsDiff = useMemo(() => {
     return currentDate.DateTo.diff(currentDate.DateFrom, "month").months
   }, [currentDate])
-  useEffect(() => {
-    const px = monthsDiff * 96
-    setWidth(px)
-  }, [monthsDiff])
+  const width = monthsDiff * 96
 
   function activatePlay (direction: number) {
     const next = getNextDate(direction, currentDate)

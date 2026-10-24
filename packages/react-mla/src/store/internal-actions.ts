@@ -34,8 +34,8 @@ export const updateSelected = (selectedIds?: string[]) => {
     const ids = selectedIds ?? state.selectedIds
     return {
       selectedIds:ids,
-      selectedEntities: (ids).map(id => state.getCurrentEntity(id)).filter(e => e !== undefined) as IEntity[],
-      selectedLinks: ids.map(id => state.getCurrentLink(id)).filter(l => l !== undefined) as ILink[],
+      selectedEntities: ids.map(id => state.getCurrentEntity(id)).filter((e): e is IEntity => e !== undefined),
+      selectedLinks: ids.map(id => state.getCurrentLink(id)).filter((l): l is ILink => l !== undefined),
     }
   })
 }
@@ -77,11 +77,11 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
         })
 
         if (entity.DateFrom != null && entity.DateFrom < min) {
-          min = entity.DateFrom!.startOf("day")
+          min = entity.DateFrom.startOf("day")
         }
 
         if (entity.DateTo != null && entity.DateTo > max) {
-          max = entity.DateTo!.endOf("day")
+          max = entity.DateTo.endOf("day")
         }
 
         if (addHistory) {
@@ -131,11 +131,11 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
         })
 
         if (link.DateFrom != null && link.DateFrom < min) {
-          min = link.DateFrom!.startOf("day")
+          min = link.DateFrom.startOf("day")
         }
 
         if (link.DateTo != null && link.DateTo> max) {
-          max = link.DateTo!.endOf("day")
+          max = link.DateTo.endOf("day")
         }
 
         if (addHistory) {
@@ -219,11 +219,11 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
         stateDraft[getId(entity)] = [entity, ...existing.filter(x => x.InternalId !== entity.InternalId)].sort((a, b) => sortByDate(a, b))
 
         if (entity.DateFrom != null && entity.DateFrom < min) {
-          min = entity.DateFrom!.startOf("day")
+          min = entity.DateFrom.startOf("day")
         }
 
         if (entity.DateTo != null && entity.DateTo > max) {
-          max = entity.DateTo!.endOf("day")
+          max = entity.DateTo.endOf("day")
         }
       }
     })
@@ -238,11 +238,11 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
         stateDraft[getId(link)] = [link, ...existing.filter(x => x.InternalId !== link.InternalId)].sort((a, b) => sortByDate(a, b))
 
         if (link.DateFrom != null && link.DateFrom < min) {
-          min = link.DateFrom!.startOf("day")
+          min = link.DateFrom.startOf("day")
         }
 
         if (link.DateTo != null && link.DateTo > max) {
-          max = link.DateTo!.endOf("day")
+          max = link.DateTo.endOf("day")
         }
       }
     })

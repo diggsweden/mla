@@ -284,7 +284,7 @@ function Chart (props: Props) {
     [network]
   )
 
-  useMultiselect(networkNode.current, network, select)
+  useMultiselect(networkNode, network, select)
 
   useLayoutEffect(() => {
     if (network) {

@@ -2,54 +2,53 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import react from "eslint-plugin-react";
+import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import { fixupPluginRules } from "@eslint/compat";
-import tsParser from "@typescript-eslint/parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-export default [{
-    ignores: ["**/*.js", "**/build/", "**/dist/", "**/demo/", "**/public/"],
-}, ...compat.extends("eslint:recommended", "plugin:@typescript-eslint/recommended"), {
-    plugins: {
-        "@typescript-eslint": typescriptEslint,
-        react,
-        "react-hooks": fixupPluginRules(reactHooks),
-        "react-refresh": reactRefresh,
-    },
-
+export default defineConfig([
+  globalIgnores(["**/dist/", "**/build/", "**/demo/", "**/public/", "**/reports/"]),
+  {
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommendedTypeChecked,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
     languageOptions: {
-        parser: tsParser,
+      globals: globals.browser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
-
-    rules: { 
-        yoda: "warn",
-        "no-debugger": "warn",
-
-        "sort-imports": ["warn", {
-            ignoreCase: false,
-            ignoreDeclarationSort: true,
-            ignoreMemberSort: false,
-            memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
-            allowSeparatedGroups: false,
-        }],
-
-        "@typescript-eslint/no-explicit-any": 0,
-        "@typescript-eslint/no-unused-expressions": 0,
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn"
+    linterOptions: {
+      reportUnusedDisableDirectives: "error",
     },
-}];
+    rules: {
+      yoda: "error",
+
+      "sort-imports": ["error", {
+        ignoreCase: false,
+        ignoreDeclarationSort: true,
+        ignoreMemberSort: false,
+        memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
+        allowSeparatedGroups: false,
+      }],
+
+      // This code base uses `any` on purpose, mostly around untyped internals of vis-network and leaflet.
+      // The no-unsafe-* rules only make sense when `any` is avoided, so they are off together with no-explicit-any.
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+    },
+  },
+]);

@@ -42,7 +42,7 @@ class ConfigurationService {
     const config = JSON.parse(configurationJson) as IConfiguration
 
     this.publicUrl = publicUrl ?? ''
-    i18n.changeLanguage(config.Language ?? "en");
+    void i18n.changeLanguage(config.Language ?? "en");
 
     try {
       this.entitiesConfiguration = freeze(config.Domain.EntityTypes.reduce(function (map, obj) {
