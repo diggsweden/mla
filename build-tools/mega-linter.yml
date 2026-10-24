@@ -22,6 +22,18 @@ CLEAR_REPORT_FOLDER: true
 EMAIL_REPORTER: false
 TEXT_REPORTER: true
 SARIF_REPORTER: true
+# Not TYPESCRIPT_ES: its SARIF output also lists the problems that are suppressed with eslint-disable comments
+# and MegaLinter counts them as errors, ESLint itself reports none of them.
+SARIF_REPORTER_LINTERS:
+  [
+    BASH_SHELLCHECK,
+    BASH_SHFMT,
+    MARKDOWN_MARKDOWNLINT,
+    YAML_PRETTIER,
+    ACTION_ACTIONLINT,
+    REPOSITORY_GITLEAKS,
+    CREDENTIALS
+  ]
 GITHUB_COMMENT_REPORTER: false
 GITHUB_STATUS_REPORTER: true
 GITLAB_COMMENT_REPORTER: false
@@ -43,3 +55,23 @@ ENABLE_LINTERS:
 BASH_SHFMT_ARGUMENTS: -i 2
 BASH_SHFMT_FILE_EXTENSIONS: [.sh]
 BASH_SHELLCHECK_FILE_EXTENSIONS: [.sh]
+
+# ESLint runs with the project's own dependencies and its config in packages/react-mla (eslint.config.mjs).
+# The config imports packages that are not in the MegaLinter image, so install the workspace and use its ESLint binary.
+# ESLint 10 looks up the config from the folder of each linted file and is called once for the whole project.
+TYPESCRIPT_ES_RULES_PATH: packages/react-mla
+TYPESCRIPT_ES_CONFIG_FILE: eslint.config.mjs
+TYPESCRIPT_ES_PRE_COMMANDS:
+  # The image has no corepack, install the pnpm version pinned in package.json
+  - command: npm install -g pnpm@$(node -p "require('./package.json').packageManager.split('@')[1]")
+    cwd: workspace
+    continue_if_failed: false
+  - command: pnpm install --frozen-lockfile --ignore-scripts
+    cwd: workspace
+    continue_if_failed: false
+TYPESCRIPT_ES_CLI_EXECUTABLE: packages/react-mla/node_modules/.bin/eslint
+# Same as `pnpm lint`: ESLint is called once on the source folder, not with the list of all .ts files in the repository.
+# In project mode MegaLinter also appends "." (the whole repository), which includes files outside of the tsconfig, remove it.
+TYPESCRIPT_ES_CLI_LINT_MODE: project
+TYPESCRIPT_ES_ARGUMENTS: packages/react-mla/src --max-warnings 0
+TYPESCRIPT_ES_COMMAND_REMOVE_ARGUMENTS: "."
