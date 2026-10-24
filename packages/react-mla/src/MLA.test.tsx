@@ -6,7 +6,7 @@ import { expect, test } from 'vitest'
 import { render } from "@testing-library/react"
 import { MLA } from "./MLA"
 import * as config from '../../../tools/test/default.json'
-import { page } from '@vitest/browser/context'
+import { page } from 'vitest/browser'
 import React from 'react'
 
 test("should render", async () => {

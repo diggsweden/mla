@@ -61,7 +61,7 @@ function RibbonEntityButton (props: Props) {
   return <>
     <DragPreviewImage connect={preview} src={icon} />
     <button
-      ref={drag}
+      ref={(node) => { drag(node) }}
       type='button'
       disabled={props.disabled}
       onClick={props.onClick}

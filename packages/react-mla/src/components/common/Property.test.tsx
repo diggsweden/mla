@@ -9,7 +9,7 @@ import Property from "./Property"
 import React from 'react';
 
 test("should handle string", async () => {
-    const { getByLabelText } = render(<Property config={{
+    const { getByLabelText } = await render(<Property config={{
         TypeId: 'xx',
         Name: 'Input',
         Description: 'Input description',
@@ -22,7 +22,7 @@ test("should handle string", async () => {
 });
 
 test("should handle number", async () => {
-    const { getByLabelText } = render(<Property config={{
+    const { getByLabelText } = await render(<Property config={{
         TypeId: 'xx',
         Name: 'Input',
         Description: 'Input description',

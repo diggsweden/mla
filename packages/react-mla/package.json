@@ -28,10 +28,10 @@
     "immer": "^11.0.0",
     "leaflet": "^1.9.4",
     "luxon": "^3.5.0",
-    "react": "^18.3.1",
+    "react": "^19.3.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.3.1",
     "react-i18next": "^16.0.0",
     "tailwindcss": "3.4.19",
     "vis-data": "^7.1.9",
@@ -39,16 +39,16 @@
     "zustand": "^5.0.0"
   },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "scripts": {
     "dev": "vite --open",
     "build": "tsc -p tsconfig.build.json && vite build && node ../../scripts/copy-meta.mjs packages/react-mla",
     "lint": "eslint ./src --max-warnings 0",
     "lint-fix": "eslint ./src --fix",
-    "test": "vitest run --browser.headless --browser.name=chromium --browser.provider=playwright --reporter=dot",
-    "test:coverage": "vitest run --browser.headless --browser.name=chromium --browser.provider=playwright --coverage",
+    "test": "vitest run --browser.headless --reporter=dot",
+    "test:coverage": "vitest run --browser.headless --coverage",
     "test:install": "pnpm exec playwright install chromium",
     "test:browser": "vitest"
   },
@@ -65,14 +65,14 @@
     "@types/luxon": "3.7.6",
     "@types/node": "20.19.43",
     "@types/offscreencanvas": "2019.7.3",
-    "@types/react": "18.3.28",
-    "@types/react-dom": "18.3.7",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "@types/wicg-file-system-access": "2023.10.7",
     "@typescript-eslint/eslint-plugin": "8.57.1",
     "@typescript-eslint/parser": "8.57.1",
     "@vitejs/plugin-react": "5.2.0",
-    "@vitest/browser": "3.2.7",
-    "@vitest/coverage-v8": "3.2.4",
+    "@vitest/browser-playwright": "4.1.12",
+    "@vitest/coverage-v8": "4.1.12",
     "autoprefixer": "10.4.27",
     "eslint": "9.39.4",
     "eslint-plugin-autofix": "2.2.0",
@@ -88,8 +88,8 @@
     "vite-plugin-css-injected-by-js": "3.5.2",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-lib-inject-css": "2.2.2",
-    "vitest": "3.2.6",
-    "vitest-browser-react": "1.0.1"
+    "vitest": "4.1.12",
+    "vitest-browser-react": "2.3.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { defineConfig } from 'vitest/config'
+import { playwright } from '@vitest/browser-playwright'
 
 export default defineConfig(
   {
@@ -15,8 +16,8 @@ export default defineConfig(
       },
       browser: {
         enabled: true,
-        name: 'chromium',
-        provider: 'playwright',
+        provider: playwright(),
+        instances: [{ browser: 'chromium' }],
         viewport: {
           width: 800,
           height: 600
