@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import {  useEffect, useLayoutEffect, useMemo, useRef } from 'react'
-import { useDrop } from 'react-dnd'
+import { type DragEvent, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import { dropEntity, isEntityDrag } from '../../utils/entity-drag'
 import { type Edge, Network, type Options } from 'vis-network'
 import useAppStore from '../../store/app-store'
 import useMainStore from '../../store/main-store'
@@ -270,21 +270,25 @@ function Chart (props: Props) {
     }
   }, [network, data, setSelectedIds, update, getHistory])
 
-  const dropRef = useDrop(
-    () => ({
-      accept: ['entity', 'result'],
-      drop: (item, monitor) => {
-        const clientPosition = monitor.getClientOffset()
-        if (clientPosition == null || networkNode.current == null) {
-          return
-        }
-        const offset = networkNode.current.getBoundingClientRect()
-        const dropPosition = network?.DOMtoCanvas({ x: clientPosition.x - offset.x, y: clientPosition.y - offset.y })
-        return dropPosition
-      }
-    }),
-    [network]
-  )
+  const onDragOver = useCallback((event: DragEvent) => {
+    if (isEntityDrag(event)) {
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'move'
+    }
+  }, [])
+
+  const onDrop = useCallback((event: DragEvent) => {
+    if (!isEntityDrag(event)) {
+      return
+    }
+    event.preventDefault()
+    if (networkNode.current == null) {
+      dropEntity(null)
+      return
+    }
+    const offset = networkNode.current.getBoundingClientRect()
+    dropEntity(network?.DOMtoCanvas({ x: event.clientX - offset.x, y: event.clientY - offset.y }) ?? null)
+  }, [network])
 
   useMultiselect(networkNode, network, select)
 
@@ -303,7 +307,7 @@ function Chart (props: Props) {
       <div className="m-h-full m-w-full m-absolute m-pointer-events-none m-z-10">
         {props.children}
       </div>
-      <div className="m-h-full m-w-full" ref={(node) => { dropRef[1](node) }} >
+      <div className="m-h-full m-w-full" onDragOver={onDragOver} onDrop={onDrop}>
         <div className="m-h-full m-w-full m-outline-none" id="m-chart" ref={networkNode}>
           <ContentRenderer />
         </div>

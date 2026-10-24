@@ -5,10 +5,11 @@
 import type { IChartBase, IEntity, ILink } from '../../interfaces/data-models'
 import Icon from '../common/Icon'
 import configService from '../../services/configurationService'
-import { useDrag } from 'react-dnd'
+import { type DragEvent, useState } from 'react'
 import viewService from '../../services/viewService'
 import useMainStore from '../../store/main-store'
 import { positionGroup } from '../../utils/vis-data-utils'
+import { endEntityDrag, startEntityDrag } from '../../utils/entity-drag'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
@@ -87,39 +88,37 @@ function ItemResult (props: Props) {
   const config = configService.getEntityConfiguration(props.item.primary.TypeId)
   const network = useMainStore(state => state.network)
 
-  const [{ isDragging }, drag] = useDrag(
-    () => ({
-      type: 'entity',
-      end: (item, monitor) => {
-        if (monitor.didDrop()) {
-          const dropPosition: { x: number, y: number } | null = monitor.getDropResult()
-          if (dropPosition != null && network != null) {
-            const update = positionGroup(props.item.primary, props.item.entities.map(x => x.primary), dropPosition.x, dropPosition.y)
-            props.item.primary.PosX = update[0].PosX
-            props.item.primary.PosY = update[0].PosY
+  const [isDragging, setIsDragging] = useState(false)
 
-            for (let i = 1; i < update.length; i++) {
-              props.item.entities[i - 1].primary.PosX = update[i].PosX
-              props.item.entities[i - 1].primary.PosY = update[i].PosY
-            }
-          }
+  function onDragStart (event: DragEvent<HTMLDivElement>) {
+    setIsDragging(true)
+    startEntityDrag(event, (dropPosition) => {
+      if (dropPosition != null && network != null) {
+        const update = positionGroup(props.item.primary, props.item.entities.map(x => x.primary), dropPosition.x, dropPosition.y)
+        props.item.primary.PosX = update[0].PosX
+        props.item.primary.PosY = update[0].PosY
 
-          add()
+        for (let i = 1; i < update.length; i++) {
+          props.item.entities[i - 1].primary.PosX = update[i].PosX
+          props.item.entities[i - 1].primary.PosY = update[i].PosY
         }
-      },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging()
-      })
-    }),
-    []
-  )
+      }
+
+      add()
+    })
+  }
+
+  function onDragEnd () {
+    setIsDragging(false)
+    endEntityDrag()
+  }
 
   function add () {
     props.onClick()
   }
 
   return (
-    <div ref={(node) => { drag(node) }} className={props.className + (isDragging ? ' m-opacity-50' : ' m-opacity-100') + ' m-w-full m-rounded m-border-solid m-border m-bg-white m-mb-1 m-py-1 m-relative'}>
+    <div draggable onDragStart={onDragStart} onDragEnd={onDragEnd} className={props.className + (isDragging ? ' m-opacity-50' : ' m-opacity-100') + ' m-w-full m-rounded m-border-solid m-border m-bg-white m-mb-1 m-py-1 m-relative'}>
       {config && config.Internal !== true && props.onClick != null &&
         <span className='m-absolute m-top-4 -m-right-4 -m-translate-y-1/2' onClick={() => { add() }}>
           <button className="m-text-white m-bg-primary m-rounded-full m-text-lg m-px-2 m-m-2 m-h-5 m-w-5 m-leading-5 m-flex m-justify-center">+</button>
