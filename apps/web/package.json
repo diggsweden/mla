@@ -4,12 +4,12 @@
   "type": "module",
   "homepage": "https://diggsweden.github.io/mla",
   "dependencies": {
+    "@diggsweden/react-mla": "workspace:^",
     "@repo/tailwind-config": "workspace:^",
     "@repo/typescript-config": "workspace:^",
     "http-request-mock": "^2.0.0",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "@diggsweden/react-mla": "workspace:^"
+    "react-dom": "^19.3.1"
   },
   "scripts": {
     "dev": "vite --open",
@@ -33,9 +33,9 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@types/wicg-file-system-access": "2023.10.7",
-    "@vitejs/plugin-react": "5.2.0",
+    "@vitejs/plugin-react": "6.1.2",
     "tailwindcss": "3.4.19",
     "typescript": "5.6.3",
-    "vite": "7.3.7"
+    "vite": "8.3.5"
   }
 }

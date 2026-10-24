@@ -17,7 +17,8 @@ export default defineConfig(({ mode }) => {
       react(),
       cssInjectedByJsPlugin()
     ],
-    define: {'process.env': process.env},
+    // Only NODE_ENV is needed (React etc). Never inline all of process.env: it would embed the build environment in the bundle
+    define: { 'process.env.NODE_ENV': JSON.stringify(mode === 'development' ? 'development' : 'production') },
     build: {
       copyPublicDir: false,
       target: "es2020",
