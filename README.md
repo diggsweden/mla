@@ -4,7 +4,6 @@ SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
 SPDX-License-Identifier: CC0-1.0
 -->
 
-<a name="top"></a>
 <h1 align="center">
   <br>
   <img src="https://github.com/diggsweden/mla/blob/main/assets/icon.png" alt="MLA" width="200">
@@ -15,9 +14,9 @@ SPDX-License-Identifier: CC0-1.0
 
 <h4 align="center">A powerful, easy to use and intuitive way to create network analysis charts.</h4>
 
-  [![GitHub release](https://img.shields.io/github/v/release/diggsweden/mla?style=for-the-badge)](#)
-  [![GitHub release date](https://img.shields.io/github/release-date/diggsweden/mla?style=for-the-badge)](#)
-  [![GitHub last commit](https://img.shields.io/github/last-commit/diggsweden/mla?style=for-the-badge)](#)
+  [![GitHub release](https://img.shields.io/github/v/release/diggsweden/mla?style=for-the-badge)](https://github.com/diggsweden/mla/releases)
+  [![GitHub release date](https://img.shields.io/github/release-date/diggsweden/mla?style=for-the-badge)](https://github.com/diggsweden/mla/releases)
+  [![GitHub last commit](https://img.shields.io/github/last-commit/diggsweden/mla?style=for-the-badge)](https://github.com/diggsweden/mla/commits/main)
   [![Test](https://img.shields.io/github/actions/workflow/status/diggsweden/mla/test.yml?label=Tests&style=for-the-badge)](https://github.com/diggsweden/mla/actions/workflows/test.yml)
   [![REUSE](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.reuse.software%2Fstatus%2Fgithub.com%2Fdiggsweden%2Fmla&query=status&style=for-the-badge&label=REUSE)](https://api.reuse.software/info/github.com/diggsweden/mla)
   [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/diggsweden/mla/badge?style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/diggsweden/mla)
