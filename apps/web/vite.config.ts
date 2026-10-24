@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        'react-mla': path.resolve(__dirname, mode === 'development' ? '../../packages/react-mla/index.ts' : '../../packages/react-mla/dist/react-mla.js')
+        'react-mla': path.resolve(import.meta.dirname, mode === 'development' ? '../../packages/react-mla/index.ts' : '../../packages/react-mla/dist/react-mla.js')
       },
     },
   }

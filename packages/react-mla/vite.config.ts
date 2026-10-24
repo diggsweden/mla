@@ -22,7 +22,7 @@ export default defineConfig({
   build: {
     outDir: './dist',
     lib: {
-      entry: resolve(__dirname, 'index.ts'),
+      entry: resolve(import.meta.dirname, 'index.ts'),
       name: "ReactMla",
       formats: ["es", "cjs"],
       fileName: (format) => {
