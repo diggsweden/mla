@@ -20,8 +20,61 @@ function isCustomClick (e: Event): e is CustomEvent<CustomClickDetail> {
   return typeof detail === 'object' && detail != null && (detail as CustomClickDetail).type === 'customclick'
 }
 
+// vis-network does not type its internals, only what is used here
+interface HammerEvent {
+  pointerType?: string
+  center: { x: number, y: number }
+}
+
+interface NetworkInternals {
+  body?: {
+    eventListeners?: {
+      onHold?: (event: HammerEvent) => void
+      onTap?: (event: HammerEvent) => void
+    }
+  }
+}
+
+// Holding the mouse button down on a node must not add it to the selection (vis-network does so with the multiselect option),
+// the selection rectangle is used for selecting many. A hold is treated as a click instead. Touch has no rectangle, so it keeps the long press
+function clickOnMouseHold (network: Network, container: HTMLElement) {
+  const listeners = (network as NetworkInternals).body?.eventListeners
+  const onHold = listeners?.onHold
+  const onTap = listeners?.onTap
+  if (listeners == null || onHold == null || onTap == null) {
+    return
+  }
+
+  listeners.onHold = (event) => {
+    if (event.pointerType !== 'mouse') {
+      onHold(event)
+      return
+    }
+
+    // A selection that already has the node under the mouse is kept, so that it can be dragged as a group
+    const bounds = container.getBoundingClientRect()
+    const pointer = { x: event.center.x - bounds.x, y: event.center.y - bounds.y }
+    const nodeId = network.getNodeAt(pointer)
+    const edgeId = network.getEdgeAt(pointer)
+    const selected = nodeId != null
+      ? network.getSelectedNodes().includes(nodeId)
+      : edgeId != null && network.getSelectedEdges().includes(edgeId)
+    if (!selected) {
+      onTap(event)
+    }
+  }
+
+  return () => {
+    listeners.onHold = onHold
+  }
+}
+
 const LEFT_CLICK = 0
 const RIGHT_CLICK = 2
+// Bit mask of MouseEvent.buttons while the right button is held down
+const RIGHT_BUTTONS = 2
+// A drag shorter than this (in pixels) is a click
+const MIN_DRAG = 4
 
 const canvasify = (network: Network, DOMx: number, DOMy: number) => {
   const { x, y } = network.DOMtoCanvas({ x: DOMx, y: DOMy })
@@ -29,11 +82,10 @@ const canvasify = (network: Network, DOMx: number, DOMy: number) => {
 }
 
 const correctRange = (start: number, end: number) => start < end ? [start, end] : [end, start]
-const CONTEXT_TIMEOUT = 250
 
 export function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: Network | undefined, selectCallback: (startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) => void) {
   const drag = useRef(false)
-  const time = useRef(0)
+  const pan = useRef<{ x: number, y: number, view: { x: number, y: number }, moved: boolean } | null>(null)
   const DOMRect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0 })
   const showContextMenu = useAppStore(state => state.showContextMenu)
   const setGeo = useAppStore(state => state.setSelectedGeoFeature)
@@ -66,22 +118,24 @@ export function useMultiselect (containerRef: RefObject<HTMLElement | null>, net
       selectCallback(x - iSize, x + iSize, y - iSize, y + iSize, true)
     }
 
+    // The right button moves the view when dragged and opens the context menu when clicked, see down and up
     const contextMenu = (e: MouseEvent) => {
       e.preventDefault()
-      const diff = Date.now() - time.current
-      if (diff < CONTEXT_TIMEOUT) {
-        selectPoint()
-
-        setGeo()
-        showContextMenu(e.clientX, e.clientY)
-      }
     }
 
     const down = function (e: MouseEvent) {
-      const { buttons, layerX, layerY } = e
-      // When mousedown, save the initial rectangle state
-      if (buttons === RIGHT_CLICK) {
-        time.current = Date.now()
+      const { button, layerX, layerY } = e
+      if (button === RIGHT_CLICK) {
+        // The view is moved with the right button, since the left button selects
+        Object.assign(DOMRect.current, {
+          startX: layerX,
+          startY: layerY,
+          endX: layerX,
+          endY: layerY
+        })
+        pan.current = { x: e.clientX, y: e.clientY, view: network.getViewPosition(), moved: false }
+      } else if (button === LEFT_CLICK && network.getNodeAt({ x: layerX, y: layerY }) == null && network.getEdgeAt({ x: layerX, y: layerY }) == null) {
+        // When mousedown on empty space, save the initial rectangle state. Nodes and edges are left to vis-network
         Object.assign(DOMRect.current, {
           startX: layerX,
           startY: layerY,
@@ -94,6 +148,28 @@ export function useMultiselect (containerRef: RefObject<HTMLElement | null>, net
 
     const move = function (e: MouseEvent) {
       const { buttons, layerX, layerY } = e
+      if (pan.current != null) {
+        if ((buttons & RIGHT_BUTTONS) === 0) {
+          pan.current = null
+        } else {
+          const dx = e.clientX - pan.current.x
+          const dy = e.clientY - pan.current.y
+          // A click is not a drag, so the view is moved first when the pointer has moved a bit
+          pan.current.moved ||= Math.abs(dx) >= MIN_DRAG || Math.abs(dy) >= MIN_DRAG
+          if (pan.current.moved) {
+            const scale = network.getScale()
+            network.moveTo({
+              position: {
+                x: pan.current.view.x - dx / scale,
+                y: pan.current.view.y - dy / scale
+              },
+              animation: false
+            })
+          }
+        }
+        return
+      }
+
       if (buttons === 0 && drag.current) {
         // Make selection rectangle disappear when accidently mouseupped outside 'container'
         drag.current = false
@@ -111,7 +187,6 @@ export function useMultiselect (containerRef: RefObject<HTMLElement | null>, net
     const up = function (e: MouseEvent | CustomEvent<CustomClickDetail>) {
       if (isCustomClick(e)) {
         const { button, x, y } = e.detail
-        time.current = Date.now()
         Object.assign(DOMRect.current, {
           startX: x,
           startY: y,
@@ -130,12 +205,21 @@ export function useMultiselect (containerRef: RefObject<HTMLElement | null>, net
         }
       } else {
         const { button } = e
-        // When mouseup, select the nodes in the rectangle
-        if (button === RIGHT_CLICK) {
+        if (button === RIGHT_CLICK && pan.current != null) {
+          const moved = pan.current.moved
+          pan.current = null
+          if (!moved) {
+            selectPoint()
+
+            setGeo()
+            showContextMenu(e.clientX, e.clientY)
+          }
+        } else if (button === LEFT_CLICK && drag.current) {
+          // When mouseup, select the nodes in the rectangle. A click is left to vis-network, which selects or deselects
           drag.current = false
           network.redraw()
-          const diff = Date.now() - time.current
-          if (diff >= CONTEXT_TIMEOUT) {
+          const { startX, endX, startY, endY } = DOMRect.current
+          if (Math.abs(endX - startX) >= MIN_DRAG || Math.abs(endY - startY) >= MIN_DRAG) {
             selectFromDOMRect()
           }
         }
@@ -154,6 +238,13 @@ export function useMultiselect (containerRef: RefObject<HTMLElement | null>, net
       container.removeEventListener('mouseup', up)
     }
   }, [containerRef, network, selectCallback, setGeo, showContextMenu])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (network != null && container != null) {
+      return clickOnMouseHold(network, container)
+    }
+  }, [containerRef, network])
 
   useEffect(() => {
     if (network == null) {
