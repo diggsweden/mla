@@ -6,7 +6,6 @@ import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import autofix from "eslint-plugin-autofix";
 import { fixupPluginRules } from "@eslint/compat";
 import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
@@ -30,7 +29,6 @@ export default [{
         react,
         "react-hooks": fixupPluginRules(reactHooks),
         "react-refresh": reactRefresh,
-        autofix,
     },
 
     languageOptions: {
@@ -39,9 +37,9 @@ export default [{
 
     rules: { 
         yoda: "warn",
-        "autofix/no-debugger": "warn",
+        "no-debugger": "warn",
 
-        "autofix/sort-imports": ["warn", {
+        "sort-imports": ["warn", {
             ignoreCase: false,
             ignoreDeclarationSort: true,
             ignoreMemberSort: false,
@@ -51,6 +49,7 @@ export default [{
 
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-unused-expressions": 0,
-        ...reactHooks.configs.recommended.rules
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
     },
 }];

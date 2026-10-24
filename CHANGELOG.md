@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Update eslint to v10, `@eslint/js` to v10 and `eslint-plugin-react-hooks` to v7. Replace `eslint-plugin-autofix` (incompatible with ESLint 10) with the core `no-debugger` and `sort-imports` rules
 - Update vitest to v5 (`vitest`, `@vitest/browser-playwright`, `@vitest/coverage-v8`)
 - Update commitlint (`@commitlint/cli`, `config-conventional`, `cz-commitlint`) to v21
 - Update Node.js to 22 (`.nvmrc`) and `@types/node` to 22

@@ -26,9 +26,9 @@ class QueryService {
       throw new Error('No service registed with Id: ' + serviceId)
     }
 
-    let res = undefined as IQueryResponse | undefined
+    let res: IQueryResponse | undefined
     if (config.Url) {
-      let req = undefined as RequestInit | undefined
+      let req: RequestInit | undefined
       if (config.OutTransform) {
         req = (window as any)[config.OutTransform](query, useMainStore.getState().context)
       } else {
@@ -61,9 +61,9 @@ class QueryService {
       throw new Error('No service registed with Id: ' + serviceId)
     }
 
-    let res = undefined as IQueryResponse | undefined
+    let res: IQueryResponse | undefined
     if (config.Url) {
-      let req = undefined as RequestInit | undefined
+      let req: RequestInit | undefined
       if (config.OutTransform) {
         req = (window as any)[config.OutTransform]([...(entities ?? [])], useMainStore.getState().context)
       } else {
