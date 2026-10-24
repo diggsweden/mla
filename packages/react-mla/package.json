@@ -71,8 +71,8 @@
     "@typescript-eslint/eslint-plugin": "8.72.0",
     "@typescript-eslint/parser": "8.72.0",
     "@vitejs/plugin-react": "5.2.0",
-    "@vitest/browser-playwright": "4.1.12",
-    "@vitest/coverage-v8": "4.1.12",
+    "@vitest/browser-playwright": "5.0.5",
+    "@vitest/coverage-v8": "5.0.5",
     "autoprefixer": "10.6.1",
     "eslint": "9.39.4",
     "eslint-plugin-autofix": "2.2.0",
@@ -88,7 +88,7 @@
     "vite-plugin-css-injected-by-js": "3.5.2",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-lib-inject-css": "2.2.2",
-    "vitest": "4.1.12",
+    "vitest": "5.0.5",
     "vitest-browser-react": "2.3.0"
   },
   "publishConfig": {

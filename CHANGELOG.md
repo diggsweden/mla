@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Update vitest to v5 (`vitest`, `@vitest/browser-playwright`, `@vitest/coverage-v8`)
 - Update commitlint (`@commitlint/cli`, `config-conventional`, `cz-commitlint`) to v21
 - Update Node.js to 22 (`.nvmrc`) and `@types/node` to 22
 - Update minor and patch dependencies (leaflet-geoman, zustand, playwright, typescript-eslint, testing-library, sass-embedded and others)
