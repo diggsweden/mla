@@ -22,18 +22,6 @@ CLEAR_REPORT_FOLDER: true
 EMAIL_REPORTER: false
 TEXT_REPORTER: true
 SARIF_REPORTER: true
-# Not TYPESCRIPT_ES: its SARIF output also lists the problems that are suppressed with eslint-disable comments
-# and MegaLinter counts them as errors, ESLint itself reports none of them.
-SARIF_REPORTER_LINTERS:
-  [
-    BASH_SHELLCHECK,
-    BASH_SHFMT,
-    MARKDOWN_MARKDOWNLINT,
-    YAML_PRETTIER,
-    ACTION_ACTIONLINT,
-    REPOSITORY_GITLEAKS,
-    CREDENTIALS
-  ]
 GITHUB_COMMENT_REPORTER: false
 GITHUB_STATUS_REPORTER: true
 GITLAB_COMMENT_REPORTER: false
@@ -49,13 +37,15 @@ ENABLE_LINTERS:
     ACTION_ACTIONLINT,
     REPOSITORY_GITLEAKS,
     CREDENTIALS,
-    TYPESCRIPT_ES
+    TYPESCRIPT_ES,
   ]
 
 BASH_SHFMT_ARGUMENTS: -i 2
 BASH_SHFMT_FILE_EXTENSIONS: [.sh]
 BASH_SHELLCHECK_FILE_EXTENSIONS: [.sh]
 
+# MegaLinter counts problems that are suppressed with eslint-disable comments as errors (through the SARIF output),
+# so a new eslint-disable comment fails this job. Fix the code instead of suppressing the rule.
 # ESLint runs with the project's own dependencies and its config in packages/react-mla (eslint.config.mjs).
 # The config imports packages that are not in the MegaLinter image, so install the workspace and use its ESLint binary.
 # ESLint 10 looks up the config from the folder of each linted file and is called once for the whole project.

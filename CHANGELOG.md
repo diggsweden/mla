@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 - Run ESLint in CI through MegaLinter v10 using the project's own dependencies and the config in `packages/react-mla` (it was skipped before because MegaLinter only found legacy `.eslintrc` files)
-- Modernize the ESLint config: native flat config with `defineConfig`, type-aware `typescript-eslint` `recommendedTypeChecked`, `eslint-plugin-react-hooks` 7 `recommended` (React Compiler rules) and `eslint-plugin-react-refresh`. Remove `FlatCompat`, `@eslint/eslintrc`, `@eslint/compat` and the unused `eslint-plugin-react`. Fix the findings: unhandled promises, non-Error rejections, redundant type assertions, derived state in effects, and a leaking `oncontextmenu` handler
+- Modernize the ESLint config: native flat config with `defineConfig`, type-aware `typescript-eslint` `recommendedTypeChecked`, `eslint-plugin-react-hooks` 7 `recommended` (React Compiler rules) and `eslint-plugin-react-refresh`
+- Remove `FlatCompat`, `@eslint/eslintrc`, `@eslint/compat` and the unused `eslint-plugin-react` from the ESLint setup
+- Fix ESLint findings: unhandled promises, non-Error rejections, redundant type assertions, derived state in effects, a leaking `oncontextmenu` handler, unused parameters and every `eslint-disable` comment (the `useEffectDebugger` helper is removed)
 - Update typescript to v6 (TypeScript 7 is not yet supported by typescript-eslint). Remove the deprecated `es5` target from apps/web and add `vite/client` types to react-mla so `.scss` imports type-check. Remove the unused `typescript-eslint` package (the config uses `@typescript-eslint/parser` and `@typescript-eslint/eslint-plugin`)
 - Update vis-network to v10 and vis-data to v8 (new explicit `vis-util` v6 dependency, vis-network CSS now imported from `vis-network/styles`)
 - Update i18next to v26 and react-i18next to v17
