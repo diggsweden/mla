@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
       copyPublicDir: false,
       target: "es2020",
       lib: {
-        entry: resolve(__dirname, 'index.ts'),
+        entry: resolve(import.meta.dirname, 'index.ts'),
         name: "MlaWebComponent",
         fileName: "mla-component",
         formats: ["umd"]
@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        "@diggsweden/react-mla": path.resolve(__dirname, mode === 'development' ? '../react-mla/index.ts' : '../react-mla/dist/index.js')
+        "@diggsweden/react-mla": path.resolve(import.meta.dirname, mode === 'development' ? '../react-mla/index.ts' : '../react-mla/dist/index.js')
       }
     }
   }

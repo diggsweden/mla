@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Fix the warnings when starting the dev server: the vite configs use `import.meta.dirname` instead of `__dirname`, and `@repo/tailwind-config` is marked `"type": "module"`
 - Replace `react-dnd` and `react-dnd-html5-backend` (unmaintained since 2022) with native HTML5 drag and drop for the ribbon buttons, search results and the chart drop target
 - Update pnpm to 12.15.0. Overrides moved to `pnpm-workspace.yaml`, dependency install scripts are explicitly not run (`allowBuilds`) and `deploy-release` gets the GitHub Packages token from `setup-node`, pnpm no longer reads credentials from the project `.npmrc`. Contributors need pnpm 12 (`npm install -g pnpm`), pnpm 10 cannot switch to it
 - Update the GitHub Actions in the workflows: checkout 7, setup-node 7, upload-artifact 7, download-artifact 8, pnpm/action-setup 6, ghaction-import-gpg 7, action-gh-release 3, scorecard 2.5, codeql upload-sarif 4.39 and publiccode-parser 1.7
