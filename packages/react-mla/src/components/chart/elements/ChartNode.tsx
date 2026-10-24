@@ -5,7 +5,7 @@
 import { type DataInterfaceNodes } from 'vis-network'
 import useMainStore from '../../../store/main-store'
 import viewService, { type IIcon } from '../../../services/viewService'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { isActive, isSelected, mapToNode } from '../../../utils/vis-data-utils'
 import useAppStore from '../../../store/app-store'
 import type { IEntity } from '../../../interfaces/data-models'
@@ -76,16 +76,16 @@ function ChartNode (props: Props) {
     }
   }, [entity, icon, node, props.data])
 
-  useEffect(() => {
-    return () => {
-      if (node != null) {
-        console.debug('[removing]', node.id)
-        props.data.getDataSet().remove(node.id!)
-        created.current = false
-      }
+  // Remove the node from the chart when unmounting, not each time the node changes
+  const removeNode = useEffectEvent(() => {
+    if (node != null) {
+      console.debug('[removing]', node.id)
+      props.data.getDataSet().remove(node.id!)
+      created.current = false
     }
-    // Only when unmounting, with the dependencies the node would be removed from the chart on every change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  })
+  useEffect(() => {
+    return () => { removeNode() }
   }, [])
 
   return <></>

@@ -4,7 +4,7 @@
 
 import { type DataInterfaceEdges } from 'vis-network'
 import useMainStore from '../../../store/main-store'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useEffectEvent, useMemo, useRef } from 'react'
 import { getLinkCount, isActive, isSelected, mapToEdge } from '../../../utils/vis-data-utils'
 import useAppStore from '../../../store/app-store'
 import type { ILink } from '../../../interfaces/data-models'
@@ -83,16 +83,16 @@ function ChartEdge(props: Props) {
     }
   }, [edge, props.data])
 
-  useEffect(() => {
-    return () => {
-      if (edge != null) {
-        console.debug('[removing]', edge.id)
-        props.data.getDataSet().remove(edge.id!)
-        created.current = false
-      }
+  // Remove the edge from the chart when unmounting, not each time the edge changes
+  const removeEdge = useEffectEvent(() => {
+    if (edge != null) {
+      console.debug('[removing]', edge.id)
+      props.data.getDataSet().remove(edge.id!)
+      created.current = false
     }
-    // Only when unmounting, with the dependencies the edge would be removed from the chart on every change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  })
+  useEffect(() => {
+    return () => { removeEdge() }
   }, [])
 
   return <></>

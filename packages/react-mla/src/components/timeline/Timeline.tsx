@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useMainStore from '../../store/main-store'
 import Icon from '../common/Icon'
 import { ITimeSpan } from '../../interfaces/data-models'
@@ -11,7 +11,6 @@ import useAppStore from '../../store/app-store'
 import TimelineBar from './TimlineBar'
 import { HistoryDot, createHistoryDots } from './common'
 import { DateTime } from 'luxon'
-import { useEffectDebugger } from '../../utils/debug'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
@@ -127,20 +126,23 @@ function Timeline (props: Props) {
     }
   }, [getNextDate, setDate, setTargetDate, play])
 
-  useEffectDebugger(() => {
+  useEffect(() => {
+    let firstStep: number | undefined
     if (play != 0) {
       const date = useMainStore.getState().currentDate
       const updates = 5 / Math.abs(play)
-    
+
       animationIndex.current = 0
-      animateDate(targetDate, date, transitionTime / updates)
+      // The first step is taken right away, but not synchronously in the effect
+      firstStep = window.setTimeout(() => { animateDate(targetDate, date, transitionTime / updates) }, 0)
       dateHandle.current = window.setInterval(() => animateDate(targetDate, date, updates), transitionTime / updates)
     }
 
     return () => {
+      window.clearTimeout(firstStep)
       window.clearInterval(dateHandle.current)
     }
-  }, [animateDate, play, targetDate])
+  }, [animateDate, play, targetDate, transitionTime])
 
   // When not playing, the target follows the current date
   const [targetSync, setTargetSync] = useState<{ from: DateTime, play: number, transitionTime: number } | undefined>(undefined)

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { type ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
 import Property from '../common/Property'
@@ -46,10 +46,10 @@ function LinkCreator (props: Props) {
     props.validChanged(!Object.values(validMap.current).some(v => !v))
   }
 
+  // Report the initial link to the parent when mounting
+  const reportLink = useEffectEvent(() => { onChange(link) })
   useEffect(() => {
-    onChange(link)
-    // Only on mount, to report the initial link to the parent
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    reportLink()
   }, [])
 
   let first = -1
