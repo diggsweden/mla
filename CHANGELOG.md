@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- **BREAKING:** Upgrade to React 19. `react` and `react-dom` peer dependencies now require `^19.3.1`
+- Update `@types/react` and `@types/react-dom` to v19
+- Fix react-dnd connector refs and the removed global `JSX` namespace for React 19
+- Update vitest to v4 (`@vitest/browser-playwright`, `vitest-browser-react` v2) and commitizen to 4.3.2
+- Fix security advisories (tinypool, lodash, uuid, fast-uri, postcss-selector-parser, esbuild) so `pnpm audit` is clean
 
 ## 1.2.2 - 2026-01-20
 
