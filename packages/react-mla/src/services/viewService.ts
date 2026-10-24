@@ -33,7 +33,7 @@ class ViewService {
     this.configurations = config.Display
     this.theme = { ...this.theme, ...config.Theme }
 
-    const r = document.querySelector(':root') as HTMLElement | null
+    const r = document.querySelector<HTMLElement>(':root')
     if (r == null) {
       throw new Error('Could not find document root')
     }
@@ -58,7 +58,7 @@ class ViewService {
       }
     })
 
-    this.defaultViewConfiguration = freeze(defaultConfig.Show.reduce<any>(function (map, obj) {
+    this.defaultViewConfiguration = freeze(defaultConfig.Show.reduce<Record<string, IBaseViewConfiguration>>(function (map, obj) {
       map[obj.TypeId] = obj
       return map
     }, {}))
@@ -108,7 +108,7 @@ class ViewService {
       this.defaultViewConfiguration[TypeId] ??
       global.Entities.find(x => x.GlobalType == GlobalType) ?? 
       global.Links.find(x => x.GlobalType == GlobalType)
-     ) as IBaseViewConfiguration
+     )
 
 
     if (defaultView == null) {

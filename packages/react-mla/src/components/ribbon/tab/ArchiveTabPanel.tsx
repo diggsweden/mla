@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import useMainStore from '../../../store/main-store'
 import RibbonMenuButton from '../RibbonMenuButton'
@@ -32,10 +32,7 @@ function ArchiveTabPanel () {
   const [newFilename, setNewFilename] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const [filename, setFilename] = useState(getContextValue(context, 'filename'))
-  useEffect(() => {
-    setFilename(getContextValue(context, 'filename'))
-  }, [context])
+  const filename = getContextValue(context, 'filename')
 
   let reader = undefined as FileReader | undefined
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -121,7 +118,8 @@ function ArchiveTabPanel () {
           await writable.write(blob)
           await writable.close()
           setDirty(false)
-        } catch (err: any) {
+        } catch (error) {
+      const err = error as { name?: string, message?: string }
           // Fail silently if the user has simply canceled the dialog.
           if (err.name !== 'AbortError') {
             console.error(err.name, err.message)
@@ -145,7 +143,7 @@ function ArchiveTabPanel () {
 
   function saveImage () {
     if (network) {
-      const canvas = (network as any).canvas.frame.canvas as HTMLCanvasElement
+      const canvas = (network as unknown as { canvas: { frame: { canvas: HTMLCanvasElement } } }).canvas.frame.canvas
       fillCanvasBackgroundWithColor(canvas, 'white')
       const url = canvas.toDataURL('image/png')
 
@@ -167,7 +165,7 @@ function ArchiveTabPanel () {
       if (name && name.length > 0) {
         setLoading(true)
 
-        const canvas = (network as any).canvas.frame.canvas as HTMLCanvasElement
+        const canvas = (network as unknown as { canvas: { frame: { canvas: HTMLCanvasElement } } }).canvas.frame.canvas
         fillCanvasBackgroundWithColor(canvas, 'white')
 
         const saveAction = async () => {
@@ -209,7 +207,7 @@ function ArchiveTabPanel () {
       const file = event.target.files[0]
 
       if (file && reader) {
-        reader.onload = async (e) => {
+        reader.onload = (e) => {
           const text = e.target?.result as string
 
           open(text)
@@ -250,7 +248,7 @@ function ArchiveTabPanel () {
         <RibbonMenuButton label={t('as picture')} onClick={ saveImage } iconName="outlined_add_a_photo" />
       )}
       {config.SaveImage && config.SaveImage !== '' && config.SaveImage.length > 0 && config.SaveImage !== 'file' && (
-        <RibbonMenuButton label={t('as picture')} onClick={ saveImageRemote } iconName="outlined_add_a_photo" />
+        <RibbonMenuButton label={t('as picture')} onClick={() => { saveImageRemote() }} iconName="outlined_add_a_photo" />
       )}
     </RibbonMenuSection>
     <RibbonMenuDivider />

@@ -4,7 +4,7 @@
 
 import {  useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { useDrop } from 'react-dnd'
-import { Network, type Options } from 'vis-network'
+import { type Edge, Network, type Options } from 'vis-network'
 import useAppStore from '../../store/app-store'
 import useMainStore from '../../store/main-store'
 import useKeyDown from '../../effects/keydown'
@@ -103,14 +103,14 @@ function Chart (props: Props) {
         selection = selectedIds
       }
 
-      const toSelect = data.nodes.get().reduce(
-        (selected: any, { id }) => {
+      const toSelect = data.nodes.get().reduce<string[]>(
+        (selected, { id }) => {
           const { x, y } = network.getPositions(id)[id]
           return (startX <= x && x <= endX && startY <= y && y <= endY)
-            ? selected.concat(id)
+            ? selected.concat(id as string)
             : selected
         }, []
-      ) as string[]
+      )
 
       const isSubSet = isSubSetOf(toSelect, selection)
       if (selectedIds.length === 0 || !(ctxMenu && isSubSet)) {
@@ -129,17 +129,17 @@ function Chart (props: Props) {
         }
 
         network.setSelection({
-          nodes: data.nodes.get().reduce(
-            (selected: any, { id }) => {
+          nodes: data.nodes.get().reduce<string[]>(
+            (selected, { id }) => {
               return (selectedIds.includes(id as string))
-                ? selected.concat(id)
+                ? selected.concat(id as string)
                 : selected
             }, []
           ),
-          edges: data.edges.get().reduce(
-            (selected: any, { id }) => {
+          edges: data.edges.get().reduce<string[]>(
+            (selected, { id }) => {
               return (selectedIds.includes(id as string))
-                ? selected.concat(id)
+                ? selected.concat(id as string)
                 : selected
             }, []
           )
@@ -150,7 +150,7 @@ function Chart (props: Props) {
     }
   }, [network, data, selectedIds])
 
-  const edgelayout = useRef({} as any)
+  const edgelayout = useRef<Record<string, Edge['smooth'] | null>>({})
   useEffect(() => {
     if (network) {
       try {
@@ -163,8 +163,9 @@ function Chart (props: Props) {
           })
         } else {
           data.edges.forEach(e => {
-            if (e.id != null && edgelayout.current[e.id]) {
-              data.edges.getDataSet().updateOnly({ id: e.id, smooth: edgelayout.current[e.id] })
+            const saved = e.id != null ? edgelayout.current[e.id] : undefined
+            if (e.id != null && saved) {
+              data.edges.getDataSet().updateOnly({ id: e.id, smooth: saved })
               edgelayout.current[e.id] = null
             }
           })
@@ -212,14 +213,15 @@ function Chart (props: Props) {
     }
 
     const n = new Network(networkNode.current, data, {})
-    document.body.addEventListener('contextMenuClick', (e: any) => {
+    document.body.addEventListener('contextMenuClick', (e) => {
       if (networkNode.current) {
+        const { detail } = e as CustomEvent<{ x: number, y: number, button: number }>
         const bounds = networkNode.current.getBoundingClientRect()
         const event = new CustomEvent('mouseup', {
           detail: {
-            x: e.detail.x - bounds.x,
-            y: e.detail.y - bounds.y,
-            button: e.detail.button,
+            x: detail.x - bounds.x,
+            y: detail.y - bounds.y,
+            button: detail.button,
             type: 'customclick'
           }
         })
@@ -284,7 +286,7 @@ function Chart (props: Props) {
     [network]
   )
 
-  useMultiselect(networkNode.current, network, select)
+  useMultiselect(networkNode, network, select)
 
   useLayoutEffect(() => {
     if (network) {

@@ -80,7 +80,7 @@ function AppShortcuts (props: Props) {
       .then((jsonData) => {
         let result: { Entities?: IEntity[], Links?: ILink[] } = {}
         try {
-          const data = JSON.parse(jsonData)
+          const data = JSON.parse(jsonData) as { Entities?: IEntity[], Links?: ILink[] } | null
           if (data?.Entities == null || data?.Links == null) {
             return
           }

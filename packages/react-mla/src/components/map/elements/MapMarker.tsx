@@ -18,12 +18,27 @@ interface Props {
   click?: (e: IEntity) => void
 }
 
+function getBaseCoordinates (entity: IEntity, from: IEntity | undefined, historyMode: boolean): LatLng | undefined {
+  if (historyMode && from?.Coordinates) {
+    return L.latLng(from.Coordinates.lat, from.Coordinates.lng)
+  }
+
+  if (entity.Coordinates == null) {
+    return undefined
+  }
+
+  return L.latLng(entity.Coordinates.lat, entity.Coordinates.lng)
+}
+
 function MapMarker (props: Props) {
   const selectedIds = useMainStore(state => state.selectedIds)
   const date = useMainStore(state => state.currentDate)
   const historyMode = useAppStore(state => state.historyMode)
   const view = useAppStore(state => state.currentViewConfiguration)
-  const [marker, setMarker] = useState(undefined as Marker | undefined)
+  const [marker] = useState(() => new Marker(new LatLng(0, 0), {
+    icon: undefined,
+    opacity: 1
+  }))
   const [icon, setIcon] = useState(undefined as IIcon | undefined)
 
   const { entity, from, map, click } = props
@@ -45,17 +60,13 @@ function MapMarker (props: Props) {
     return entity != null ? isActive(entity, date) : false
   }, [date, entity])
 
-  const [coordinates, setCoordinates] = useState(undefined as undefined | LatLng)
-
-  useEffect(() => {
-    if (historyMode && from?.Coordinates) {
-      setCoordinates(L.latLng(from.Coordinates.lat, from.Coordinates.lng))
-    } else if (entity.Coordinates == null) {
-      setCoordinates(undefined)
-    } else {
-      setCoordinates(L.latLng(entity.Coordinates.lat, entity.Coordinates.lng))
-    }
-  }, [entity, from, historyMode])
+  // The position starts at the base coordinates and is then animated, start over when the inputs change
+  const [coordinates, setCoordinates] = useState<LatLng | undefined>(undefined)
+  const [coordinateInputs, setCoordinateInputs] = useState<{ entity: IEntity, from: IEntity | undefined, historyMode: boolean } | undefined>(undefined)
+  if (coordinateInputs == null || coordinateInputs.entity !== entity || coordinateInputs.from !== from || coordinateInputs.historyMode !== historyMode) {
+    setCoordinateInputs({ entity, from, historyMode })
+    setCoordinates(getBaseCoordinates(entity, from, historyMode))
+  }
 
   const animate = useRef(0)
   useEffect(() => {
@@ -65,7 +76,6 @@ function MapMarker (props: Props) {
 
       let i = 0
       const count = 40
-      setCoordinates(L.latLng(from.Coordinates.lat, from.Coordinates.lng))
       animate.current = window.setInterval(() => {
         setCoordinates((value) => {
           if (i === count) {
@@ -86,15 +96,6 @@ function MapMarker (props: Props) {
       window.clearInterval(animate.current)
     }
   }, [from, entity, historyMode])
-
-  useEffect(() => {
-    const newMarker = new Marker(new LatLng(0, 0), {
-      icon: undefined,
-      opacity: 1
-    })
-
-    setMarker(newMarker)
-  }, [])
 
   useEffect(() => {
     if (marker && coordinates) {
@@ -124,8 +125,10 @@ function MapMarker (props: Props) {
     }
   }, [active, icon, marker, selected])
 
+  // A leaflet marker cannot be drawn before it has an icon, so wait until the icon is loaded
+  const hasIcon = icon != null
   useEffect(() => {
-    if (marker) {
+    if (marker && hasIcon) {
       if (historyMode && !active) {
         return
       }
@@ -133,9 +136,9 @@ function MapMarker (props: Props) {
     }
 
     return () => {
-      marker?.removeFrom(map)
+      marker.removeFrom(map)
     }
-  }, [marker, map, active, historyMode])
+  }, [marker, map, active, historyMode, hasIcon])
 
   useEffect(() => {
     if (marker) {

@@ -2,12 +2,19 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-const interactionOptions = {
+export interface InteractionOptions {
+  multiselect: boolean
+  selectConnectedEdges: boolean
+  navigationButtons: boolean
+}
+
+
+const interactionOptions: Record<string, InteractionOptions> = {
   reset: {
     multiselect: true,
     selectConnectedEdges: false,
     navigationButtons: false
   }
-} as any
+}
 
 export default interactionOptions

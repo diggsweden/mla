@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import configService from '../../services/configurationService'
 import { type IBase } from '../../interfaces/data-models'
 import Table from '../common/Table'
@@ -41,11 +41,13 @@ function TableTool (props: Props) {
     return res
   }, [props.items])
 
-  useEffect(() => {
-    const config = configService.getThingConfiguration(selectedType)
-    setSortColumn(config.Properties[0].TypeId)
+  // Reset the sorting when the items or the selected type change
+  const [sortInputs, setSortInputs] = useState({ items: props.items, selectedType })
+  if (sortInputs.items !== props.items || sortInputs.selectedType !== selectedType) {
+    setSortInputs({ items: props.items, selectedType })
+    setSortColumn(configService.getThingConfiguration(selectedType).Properties[0].TypeId)
     setSortDirection(true)
-  }, [props.items, selectedType])
+  }
 
   const showList = useMemo(() => {
     const newList = props.items.filter(e => e.TypeId === selectedType).sort((a: IBase, b: IBase): number => {
@@ -88,7 +90,7 @@ function TableTool (props: Props) {
     }
   }
 
-  function exportToCsv (e: MouseEvent) {
+  function exportToCsv (e: { preventDefault: () => void }) {
     e.preventDefault()
 
     const config = configService.getThingConfiguration(selectedType)
@@ -128,7 +130,7 @@ function TableTool (props: Props) {
     <section className="m-p-3">
       <Table items={showList} typeId={selectedType} sortFn={setSort} sortConfig={ { property: sortColumn, asc: sortAsc }} />
       <div className="m-flex m-justify-between m-mt-0.5 m-align-top m-text-gray-500 m-text-sm">
-        {props.showExport !== false && <button className="bg-gray-200 mt-1.5 px-2 py-1 font-medium text-gray-800" onClick={(e: any) => { exportToCsv(e) }}>
+        {props.showExport !== false && <button className="bg-gray-200 mt-1.5 px-2 py-1 font-medium text-gray-800" onClick={(e) => { exportToCsv(e) }}>
           <Icon name="ios_share" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1 m-me-1"></Icon>
           {t('export csv')}
         </button>}

@@ -16,8 +16,8 @@ interface Props {
   typeId: string
   items: IBase[]
   sortConfig: SortConfig
-  sortFn: (propertyTypeId: string) => any
-  filterFn?: (propertyTypeId: string, value: string | undefined) => any
+  sortFn: (propertyTypeId: string) => void
+  filterFn?: (propertyTypeId: string, value: string | undefined) => void
   filters?: IEventFilter[]
 }
 

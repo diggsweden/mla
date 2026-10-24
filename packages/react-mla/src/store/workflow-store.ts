@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { create } from 'zustand'
 import { type IEntity, type ILink } from '../interfaces/data-models'
@@ -39,7 +38,7 @@ const useWorkflowStore = create<WorkflowState>((set, get) => ({
   running: false,
   showDialog: false,
   setWorkflow: (workflowId?: string) => {
-    set((state) => ({
+    set(() => ({
       workflow: workflowId,
       entities: [],
       links: [],

@@ -22,7 +22,7 @@ class ConfigurationService {
   private linksConfiguration = {} as Record<string, ILinkConfiguration>
   private eventsConfiguration = {} as Record<string, IEventConfiguration>
 
-  private plugins = {} as any
+  private plugins = {} as Record<string, boolean>
   private publicUrl = ''
 
   public async init_src (configUrl: string, context?: string, publicUrl?: string) {
@@ -42,7 +42,7 @@ class ConfigurationService {
     const config = JSON.parse(configurationJson) as IConfiguration
 
     this.publicUrl = publicUrl ?? ''
-    i18n.changeLanguage(config.Language ?? "en");
+    void i18n.changeLanguage(config.Language ?? "en");
 
     try {
       this.entitiesConfiguration = freeze(config.Domain.EntityTypes.reduce(function (map, obj) {

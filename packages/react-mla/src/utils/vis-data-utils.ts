@@ -14,7 +14,7 @@ import { produce } from 'immer'
 export function setPositions(n: Network, entities: IEntity[], links: ILink[]): IEntity[] {
   const getLinked = (entity: IEntity): IEntity[] => {
     return links.filter(l => isLinked(entity, l))
-      .map(l => entities.find(e => e.Id !== entity.Id && isLinked(e, l))).filter(e => e !== undefined) as IEntity[]
+      .map(l => entities.find(e => e.Id !== entity.Id && isLinked(e, l))).filter((e): e is IEntity => e !== undefined)
   }
 
   const pos = n.getPositions()
@@ -170,7 +170,7 @@ export function isActive(thing: IChartBase, time: ITimeSpan): boolean {
     if (thing.DateFrom.toISO() == thing.DateTo.toISO()) {
       return interval.contains(thing.DateFrom)
     } else {
-      const interval2 = Interval.fromDateTimes(thing.DateFrom!, thing.DateTo!)
+      const interval2 = Interval.fromDateTimes(thing.DateFrom, thing.DateTo)
       if (interval2.isValid) {
         return interval.intersection(interval2) != null
       }

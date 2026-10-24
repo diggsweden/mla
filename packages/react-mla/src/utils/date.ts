@@ -83,7 +83,7 @@ export function fixDate (value: string | undefined | Date | DateTime): DateTime 
   }
 }
 
-export function removeInternals(base: IChartBase) : any {
+export function removeInternals(base: IChartBase) : Partial<IChartBase> {
   return {
     ...base,
     InternalId: undefined,

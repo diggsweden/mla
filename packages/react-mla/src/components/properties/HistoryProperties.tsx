@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { type IChartBase, type IEntity, type ILink } from '../../interfaces/data-models'
 import useMainStore from '../../store/main-store'
 import Accordion from '../common/Accordion'
@@ -37,21 +37,22 @@ function HistoryProperties (props: Props) {
 
   const setDate = useMainStore((state) => state.setDateAndTime)
 
-  const [current, setCurrent] = useState(undefined as IChartBase | undefined)
-
-  const [min, setMin] = useState(undefined as DateTime | undefined)
-  const [max, setMax] = useState(undefined as DateTime | undefined)
-  const [requiredFirst, setRequiredF] = useState(true)
-  const [requiredLast, setRequiredL] = useState(true)
+  // The current item starts as the entity or link and is replaced when its dates are edited, start over when they change
+  const [currentState, setCurrentState] = useState<{ entity: IEntity | undefined, link: ILink | undefined, current: IChartBase | undefined }>({ entity, link, current: entity ?? link })
+  if (currentState.entity !== entity || currentState.link !== link) {
+    setCurrentState({ entity, link, current: entity ?? link ?? currentState.current })
+  }
+  const current = currentState.current
+  function setCurrent (update: IChartBase) {
+    setCurrentState(state => ({ ...state, current: update }))
+  }
 
   const history = useMemo(() => {
     if (entity) {
-      setCurrent(entity)
-      return useMainStore.getState().getEntityHistory(getId(entity))! as IChartBase[]
+      return useMainStore.getState().getEntityHistory(getId(entity))!
     }
     if (link) {
-      setCurrent(link)
-      return useMainStore.getState().getLinkHistory(getId(link))! as IChartBase[]
+      return useMainStore.getState().getLinkHistory(getId(link))!
     }
 
     return []
@@ -64,7 +65,7 @@ function HistoryProperties (props: Props) {
     )
   }, [current, history.length])
 
-  useEffect(() => {
+  const { min, max, requiredFirst, requiredLast } = useMemo(() => {
     let history = [] as IChartBase[] | undefined
     let id = ''
     if (entity) {
@@ -77,33 +78,35 @@ function HistoryProperties (props: Props) {
       id = link.InternalId
     }
 
-    setMin(undefined)
-    setMax(undefined)
-    setRequiredF(true)
-    setRequiredL(true)
+    let min: DateTime | undefined
+    let max: DateTime | undefined
+    let requiredFirst = true
+    let requiredLast = true
     if (history) {
       for (let i = 0; i < history.length; i++) {
         if (history[i].InternalId === id) {
           if (i > 0) {
-            setMin(history[i - 1].DateTo)
+            min = history[i - 1].DateTo
           }
 
           if (i < (history.length - 1)) {
-            setMax(history[i + 1].DateFrom)
+            max = history[i + 1].DateFrom
           }
 
           if (i === 0 && history.length > 1) {
-            setRequiredF(false)
-            setRequiredL(true)
+            requiredFirst = false
+            requiredLast = true
           } else if (i === history.length - 1) {
-            setRequiredF(true)
-            setRequiredL(true)
+            requiredFirst = true
+            requiredLast = true
           }
 
           break
         }
       }
     }
+
+    return { min, max, requiredFirst, requiredLast }
   }, [entity, link])
 
   function formatDate (date: Date | DateTime | undefined | null, dateWithTime: DateTime | undefined, start: boolean) {
@@ -144,7 +147,7 @@ function HistoryProperties (props: Props) {
     })
 
     if (entity) {
-      updateEntity(copy as IEntity)
+      updateEntity(copy)
     }
 
     if (link) {
@@ -175,7 +178,7 @@ function HistoryProperties (props: Props) {
     if (current) {
       let to = current.DateTo
       if (to == null) {
-        to = (current.DateFrom || currentDate.DateFrom)!.plus({ day: 1}).startOf("day")
+        to = (current.DateFrom || currentDate.DateFrom).plus({ day: 1}).startOf("day")
       } else {
         to = to.plus({ second: 1})
       }
@@ -187,7 +190,7 @@ function HistoryProperties (props: Props) {
       })
 
       if (entity) {
-        addEntity(copy as IEntity)
+        addEntity(copy)
       }
 
       if (link) {

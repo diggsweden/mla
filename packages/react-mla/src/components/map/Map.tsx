@@ -8,6 +8,7 @@ import useMainStore from '../../store/main-store'
 import useAppStore from '../../store/app-store'
 import { LatLng, type PM } from 'leaflet'
 import * as L from 'leaflet'
+import { leafletId } from '../../utils/leaflet-utils'
 
 import './Map.scss'
 import '@geoman-io/leaflet-geoman-free'
@@ -17,10 +18,10 @@ import { produce } from 'immer'
 import EntityMarker from './elements/EntityMarker'
 import { getId } from '../../utils/utils'
 import { IEntity } from '../../interfaces/data-models'
-import { TileConfiguration, WmsConfiguration } from '../../interfaces/configuration/map-configuration'
 import { IGeoFeatureBounds } from '../../interfaces/data-models/geo'
 import GeoFeature from './elements/GeoFeature'
 import { useTranslation } from 'react-i18next'
+
 
 interface Props {
   className?: string
@@ -60,7 +61,7 @@ export default function Map(props: Props) {
       const center = new LatLng(57.697909930605185, 12.006280860668483)
       const zoom = 13
 
-      const mapOptions = {
+      const mapOptions: L.MapOptions & { fullscreenControl: boolean, fullscreenControlOptions: { position: string } } = {
         maxBounds: [[-90, -180], [90, 180]],
         center,
         zoom,
@@ -68,7 +69,7 @@ export default function Map(props: Props) {
         fullscreenControlOptions: {
           position: 'topleft'
         }
-      } as any
+      }
 
       try {
         const config = configService.getConfiguration().MapConfiguration!
@@ -78,7 +79,7 @@ export default function Map(props: Props) {
 
         const layers = [] as L.TileLayer[]
         if (config.MapLayers) {
-          (config.MapLayers as TileConfiguration[]).forEach((layer) => {
+          (config.MapLayers).forEach((layer) => {
             const mapLayer = L.tileLayer(layer.Url, {
               attribution: layer.Attribution,
               maxZoom: layer.MaxZoom,
@@ -93,7 +94,7 @@ export default function Map(props: Props) {
         }
 
         if (config.WmsMapLayers) {
-          (config.WmsMapLayers as WmsConfiguration[]).forEach((layer) => {
+          (config.WmsMapLayers).forEach((layer) => {
             const mapLayer = L.tileLayer.wms(layer.Url, {
               layers: layer.Layers,
               format: layer.Format,
@@ -115,7 +116,7 @@ export default function Map(props: Props) {
         layers[0].addTo(lMap)
 
         if (config.Layers != null) {
-          (config.Layers as WmsConfiguration[]).forEach((map) => {
+          (config.Layers).forEach((map) => {
             const overlay = L.tileLayer.wms(map.Url, {
               layers: map.Layers,
               format: map.Format,
@@ -157,11 +158,11 @@ export default function Map(props: Props) {
       switch (e.shape) {
         case 'Circle': {
           const circle = e.layer as L.Circle
-          return { Id: (circle as any)._leaflet_id.toString(), Circle: { Position: { lat: circle.getLatLng().lat, lng: circle.getLatLng().lng }, Radius: circle.getRadius() } }
+          return { Id: leafletId(circle), Circle: { Position: { lat: circle.getLatLng().lat, lng: circle.getLatLng().lng }, Radius: circle.getRadius() } }
         }
         case 'Polygon': {
           const poly = e.layer as L.Polygon
-          return { Id: (poly as any)._leaflet_id.toString(), Polygon: (poly.getLatLngs() as L.LatLng[]) }
+          return { Id: leafletId(poly), Polygon: (poly.getLatLngs() as L.LatLng[]) }
         }
       }
 
@@ -188,10 +189,10 @@ export default function Map(props: Props) {
     }
 
     map.on('contextmenu', (e) => {
-      const container = (map as any)._container
+      const container = (map as unknown as { _container: { _leaflet_id?: number } })._container
 
       // Click was on another layer / feature
-      if (container._leaflet_id !== (e.originalEvent.target as any)?._leaflet_id) {
+      if (container._leaflet_id !== (e.originalEvent.target as { _leaflet_id?: number } | null)?._leaflet_id) {
         return
       }
 
@@ -230,7 +231,7 @@ export default function Map(props: Props) {
   }, [showMap, map])
 
   useEffect(() => {
-    const setPosition = (ev: any) => {
+    const setPosition = (ev: L.LeafletMouseEvent) => {
       if (placeEntityId != null) {
         const ent = getEntity(placeEntityId)
         if (ent) {

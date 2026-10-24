@@ -13,7 +13,7 @@ interface RibbonMenuButtonProps {
   active?: boolean
   visible?: boolean
   iconClassName?: string
-  onClick: (e: any) => void
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
   children?: React.ReactNode
 }
 

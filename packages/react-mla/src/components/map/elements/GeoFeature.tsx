@@ -2,38 +2,38 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import useAppStore from '../../../store/app-store'
 import * as L from 'leaflet'
 import { IGeoFeature } from '../../../interfaces/data-models/geo'
+import { leafletId } from '../../../utils/leaflet-utils'
 
 interface Props {
   geo: IGeoFeature
   map: L.Map
-  click?: (e: any) => void
+  click?: (e: unknown) => void
 }
 
 function GeoFeature (props: Props) {
   const setSelectedGeoFeature = useAppStore(state => state.setSelectedGeoFeature)
   const showContextMenu = useAppStore(state => state.showContextMenu)
   const { geo, map, click } = props
-  const [poly, setPoly] = useState(undefined as L.Circle | L.Polygon | undefined)
-
-  useEffect(() => {
-    if (geo) {
-      if (geo.Circle) {
-        setPoly(new L.Circle(geo.Circle.Position, geo.Circle.Radius))
-      }
-      else if (geo.Polygon) {
-        setPoly(new L.Polygon(geo.Polygon))
-      }
+  const poly = useMemo((): L.Circle | L.Polygon | undefined => {
+    if (geo?.Circle) {
+      return new L.Circle(geo.Circle.Position, geo.Circle.Radius)
     }
+
+    if (geo?.Polygon) {
+      return new L.Polygon(geo.Polygon)
+    }
+
+    return undefined
   }, [geo])
 
   useEffect(() => {
     if (poly && map) {
       map.eachLayer(l => {
-        if ((l as any)._leaflet_id.toString() === geo.Id) {
+        if (leafletId(l) === geo.Id) {
           map.removeLayer(l)
         }
       })

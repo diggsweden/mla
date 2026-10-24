@@ -22,7 +22,7 @@ function ImportTool () {
     if (list && list.length === 1) {
       const file = list[0]
       const reader = new FileReader()
-      reader.onload = async (e) => {
+      reader.onload = (e) => {
         if (e.target?.result == null) {
           throw new Error('Failed to read file')
         }

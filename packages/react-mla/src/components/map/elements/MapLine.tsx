@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import {  useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Polyline } from 'leaflet'
 import * as L from 'leaflet'
 import { IEntity } from '../../../interfaces/data-models'
@@ -21,26 +21,22 @@ function MapLine (props: Props) {
 
   const historyMode = useAppStore(state => state.historyMode)
   const currentDate = useMainStore(state => state.currentDate)
-  const [line, setLine] = useState(undefined as undefined | Polyline)
-
-  useEffect(() => {
+  const line = useMemo(() => {
     if (historyMode || from?.Coordinates == null || to?.Coordinates == null) {
-      setLine(undefined)
-    } else {
-      const newLine = new Polyline(
-        [
-          new L.LatLng(from.Coordinates?.lat, from.Coordinates?.lng),
-          new L.LatLng(to.Coordinates?.lat, to.Coordinates?.lng)
-        ], {
-          color: 'blue',
-          weight: 3,
-          opacity: 0.5,
-          smoothFactor: 1
-        }
-      );
-  
-      setLine(newLine)
+      return undefined
     }
+
+    return new Polyline(
+      [
+        new L.LatLng(from.Coordinates.lat, from.Coordinates.lng),
+        new L.LatLng(to.Coordinates.lat, to.Coordinates.lng)
+      ], {
+        color: 'blue',
+        weight: 3,
+        opacity: 0.5,
+        smoothFactor: 1
+      }
+    )
   }, [from, historyMode, to])
 
   useEffect(() => {

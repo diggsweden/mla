@@ -2,24 +2,25 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useState } from 'react'
-import { type IEntity } from '../../interfaces/data-models'
+import { useState } from 'react'
 import useMainStore from '../../store/main-store'
 import useSearchStore from '../../store/search-state'
 import ItemResultList from '../result/ItemResultList'
 
 function ExploreTool () {
   const selection = useMainStore(state => state.selectedEntities)
-  const [seeds, setSeeds] = useState([] as IEntity[])
+  const [seeds, setSeeds] = useState(selection)
 
   const selectedTool = useSearchStore((state) => state.exploreTool)
   const loading = useSearchStore((state) => state.loading)
   const result = useSearchStore((state) => state.result)
 
-  useEffect(() => {
+  // Seed with the selection each time the result changes, not when the selection changes
+  const [seededFor, setSeededFor] = useState(result)
+  if (seededFor !== result) {
+    setSeededFor(result)
     setSeeds(selection)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result])
+  }
 
   if (selectedTool == null) {
     return null

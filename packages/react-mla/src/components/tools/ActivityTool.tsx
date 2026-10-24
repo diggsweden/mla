@@ -60,20 +60,6 @@ function ActivityTool (props: Props) {
     }
   }
 
-  function setEventTime(event: IPhaseEvent, idx: number) {
-    const start = event.Date
-    let end = maxDate
-
-    for (let i = (idx + 1); i < history.length; i++) {
-      if (history[i].event != null) {
-        end = history[i].event!.Date
-        break
-      }
-    }
-
-    setTimespan( {DateFrom: start, DateTo: end} );
-  }
-
   const getColor = useCallback((e: IChartBase) => {
     if (e.Color) {
       return e.Color
@@ -88,7 +74,7 @@ function ActivityTool (props: Props) {
   }, [viewConfig])
 
   const history = useMemo(() => {
-    const history = [] as History[]
+    const result = [] as History[]
 
     for (const list of [...Object.values(entities), ...Object.values(links)].filter(e => (type != null && !showAll) ? e[0].TypeId === type : true)) {
       if (list.length === 1 && (list[0].DateFrom != null || list[0].DateTo != null)) {
@@ -104,7 +90,7 @@ function ActivityTool (props: Props) {
         }
 
         if (ent.TypeId === type) {
-          history.push({
+          result.push({
             item: ent,
             date,
             rubrik: ent.LabelShort,
@@ -114,7 +100,7 @@ function ActivityTool (props: Props) {
           })
         } else {
           if (isSameDay(ent.DateFrom, ent.DateTo)) {
-            history.push({
+            result.push({
               item: ent,
               date: ent.DateFrom!,
               rubrik: ent.LabelShort,
@@ -124,7 +110,7 @@ function ActivityTool (props: Props) {
             })
           } else {
             if (ent.DateFrom) {
-              history.push({
+              result.push({
                 item: ent,
                 date: ent.DateFrom,
                 rubrik: ent.LabelShort,
@@ -134,7 +120,7 @@ function ActivityTool (props: Props) {
               })
             }
             if (ent.DateTo) {
-              history.push({
+              result.push({
                 item: ent,
                 date: ent.DateTo,
                 rubrik: ent.LabelShort,
@@ -154,7 +140,7 @@ function ActivityTool (props: Props) {
           }
 
           if (ent.TypeId === type) {
-            history.push({
+            result.push({
               item: ent,
               date,
               rubrik: ent.LabelShort,
@@ -164,7 +150,7 @@ function ActivityTool (props: Props) {
             })
           } else {
             if (ent.DateFrom && i === 0) {
-              history.push({
+              result.push({
                 item: ent,
                 date: ent.DateFrom,
                 rubrik: ent.LabelShort,
@@ -173,7 +159,7 @@ function ActivityTool (props: Props) {
                 separator: false
               })
             } else if (ent.DateTo && (i === list.length - 1)) {
-              history.push({
+              result.push({
                 item: ent,
                 date: ent.DateTo,
                 rubrik: ent.LabelShort,
@@ -182,7 +168,7 @@ function ActivityTool (props: Props) {
                 separator: false
               })
             } else {
-              history.push({
+              result.push({
                 item: ent,
                 date,
                 rubrik: ent.LabelShort,
@@ -198,13 +184,27 @@ function ActivityTool (props: Props) {
     }
 
     phaseEvents.forEach(e => {
-      history.push({ date: e.Date, color: '', rubrik: e.Description, text: '', separator: true, event: e })
+      result.push({ date: e.Date, color: '', rubrik: e.Description, text: '', separator: true, event: e })
     })
 
-    history.sort((a, b) => a.date.diff(b.date).milliseconds)
+    result.sort((a, b) => a.date.diff(b.date).milliseconds)
 
-    return history
+    return result
   }, [phaseEvents, entities, links, type, showAll, getColor, t])
+
+  function setEventTime(event: IPhaseEvent, idx: number) {
+    const start = event.Date
+    let end = maxDate
+
+    for (let i = (idx + 1); i < history.length; i++) {
+      if (history[i].event != null) {
+        end = history[i].event!.Date
+        break
+      }
+    }
+
+    setTimespan( {DateFrom: start, DateTo: end} );
+  }
 
   // Add the current date to the correct relative position
   const historyView = useMemo(() => {

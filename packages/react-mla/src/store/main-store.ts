@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { create } from 'zustand'
 
 import type { IEntity, IEvent, IEventLink, ILink, IPhaseEvent, ITimeSpan } from '../interfaces/data-models'
@@ -132,7 +131,7 @@ const useMainStore = create<MainState>((set, get) => ({
   },
   network: undefined,
   setNetwork: (network: Network | undefined) => {
-    set((state) => ({
+    set(() => ({
       network
     }))
   },
@@ -401,7 +400,7 @@ const useMainStore = create<MainState>((set, get) => ({
     get().updateComputedLinks()
   },
   setEventFilter: (filter: Record<string, IEventFilter[] | undefined>) => {
-    set((state) => ({
+    set(() => ({
       eventFilters: filter
     }))
     get().updateComputedLinks()
@@ -467,7 +466,7 @@ const useMainStore = create<MainState>((set, get) => ({
   },
 
   save: () => {
-    set((state) => ({
+    set(() => ({
       dirty: false
     }))
 
@@ -520,14 +519,14 @@ const useMainStore = create<MainState>((set, get) => ({
     useAppStore.getState().setTab('start')
   },
   setDirty: (isDirty: boolean) => {
-    set((state) => ({
+    set(() => ({
       dirty: isDirty
     }))
   },
 
   context: '',
   setContext: (ctx: string) => {
-    set((state) => ({
+    set(() => ({
       context: ctx
     }))
   },
@@ -576,7 +575,7 @@ const useMainStore = create<MainState>((set, get) => ({
         break
     }
 
-    set((state) => ({
+    set(() => ({
       canRedo: nextIdx > 0,
       canUndo: true,
       historyPosition: nextIdx

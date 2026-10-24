@@ -2,7 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-const chartLayouts = {
+export interface ChartLayout {
+  randomSeed: number
+  hierarchical: false | { direction: string, sortMethod: string, nodeSpacing: number }
+}
+
+
+const chartLayouts: Record<string, ChartLayout> = {
   reset: {
     randomSeed: 1,
     hierarchical: false
@@ -48,6 +54,6 @@ const chartLayouts = {
     hierarchical: false
   }
 
-} as Record<string, any>
+}
 
 export default chartLayouts

@@ -4,7 +4,7 @@
 
 import { type DataInterfaceEdges } from 'vis-network'
 import useMainStore from '../../../store/main-store'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useEffectEvent, useMemo, useRef } from 'react'
 import { getLinkCount, isActive, isSelected, mapToEdge } from '../../../utils/vis-data-utils'
 import useAppStore from '../../../store/app-store'
 import type { ILink } from '../../../interfaces/data-models'
@@ -75,7 +75,7 @@ function ChartEdge(props: Props) {
     const dataset = props.data.getDataSet()
     if (created.current) {
       console.debug('[updating]', edge.id)
-      dataset.updateOnly(edge as any)
+      dataset.updateOnly(edge as unknown as Parameters<typeof dataset.updateOnly>[0])
     } else {
       console.debug('[adding]', edge.id)
       dataset.update(edge)
@@ -83,15 +83,16 @@ function ChartEdge(props: Props) {
     }
   }, [edge, props.data])
 
-  useEffect(() => {
-    return () => {
-      if (edge != null) {
-        console.debug('[removing]', edge.id)
-        props.data.getDataSet().remove(edge.id!)
-        created.current = false
-      }
+  // Remove the edge from the chart when unmounting, not each time the edge changes
+  const removeEdge = useEffectEvent(() => {
+    if (edge != null) {
+      console.debug('[removing]', edge.id)
+      props.data.getDataSet().remove(edge.id!)
+      created.current = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  })
+  useEffect(() => {
+    return () => { removeEdge() }
   }, [])
 
   return <></>

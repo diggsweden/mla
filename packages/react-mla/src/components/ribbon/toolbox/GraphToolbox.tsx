@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import useMainStore from '../../../store/main-store'
 import { Dijkstra } from '../../../utils/djikstra'
 import { StronglyConnected } from '../../../utils/strongly-connected'
@@ -10,7 +10,6 @@ import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
 import Modal from '../../common/Modal'
-import Spinner from '../../common/Spinner'
 import configService from '../../../services/configurationService'
 import { findId } from '../../../utils/utils'
 import type { IEntity, ILink } from '../../../interfaces/data-models'
@@ -43,8 +42,6 @@ export default function GraphTools (props: Props) {
   const data = useMainStore((state) => state.data)
 
   const [showJoin, setShowJoin] = useState(false)
-  const [joinLoading, setJoinLoading] = useState(false)
-  const [joinResult, setJoinResult] = useState([] as JoinResult[])
 
   function djikstra () {
     const result = Dijkstra(data.nodes, data.edges, selection[0], selection[1])
@@ -66,11 +63,81 @@ export default function GraphTools (props: Props) {
     setSelected(result)
   }
 
-  function join () {
-    setJoinLoading(true)
+  const joinResult = useMemo(() => {
+    if (!showJoin) {
+      return [] as JoinResult[]
+    }
 
-    internalRemove(true, joinResult.map(r => r.entity).filter(e => e != null) as IEntity[], joinResult.map(e => e.link).filter(e => e != null) as ILink[])
-    internalAdd(true, joinResult.map(r => r.updateEntity).filter(e => e != null) as IEntity[], joinResult.map(e => e.updateLink).filter(e => e != null) as ILink[], true)
+    const idMap = new Map<string, string>()
+    const idRMap = new Map<string, string>()
+    const res = [] as JoinResult[]
+
+    Object.values(entities).flat().forEach(e => {
+      if (idRMap.has(e.Id)) {
+        return
+      }
+
+      const matchRules = configService.getEntityConfiguration(e.TypeId)?.MatchRules
+      if (matchRules != null) {
+        const existingId = findId(e, matchRules, Object.values(entities).flat().filter(x => x.InternalId !== e.InternalId))
+        if (existingId != null) {
+          idMap.set(e.Id, existingId)
+          idRMap.set(existingId, e.Id)
+          res.push({
+            entity: e,
+            show: true,
+            updateEntity: produce(e, draft => {
+              draft.Id = existingId
+            })
+          })
+        }
+      }
+    })
+
+    Object.values(links).flat().forEach(l => {
+      let changed = 0
+      const updateLink = produce(l, draft => {
+        if (idMap.has(l.FromEntityId)) {
+          draft.FromEntityId = idMap.get(l.FromEntityId)!
+          changed = 1
+        }
+
+        if (idMap.has(l.ToEntityId)) {
+          draft.ToEntityId = idMap.get(l.ToEntityId)!
+          changed = 1
+        }
+
+        if (idRMap.has(l.Id)) {
+          return
+        }
+
+        const matchRules = configService.getLinkConfiguration(l.TypeId)?.MatchRules
+        if (matchRules != null) {
+          const existingId = findId(l, matchRules, Object.values(links).flat().filter(x => x.InternalId !== l.InternalId))
+          if (existingId != null) {
+            idMap.set(l.Id, existingId)
+            idRMap.set(existingId, l.Id)
+            draft.Id = existingId
+            changed = 2
+          }
+        }
+      })
+
+      if (changed > 0) {
+        res.push({
+          link: l,
+          show: changed === 2,
+          updateLink
+        })
+      }
+    })
+
+    return res
+  }, [entities, links, showJoin])
+
+  function join () {
+    internalRemove(true, joinResult.map(r => r.entity).filter((e): e is IEntity => e != null), joinResult.map(e => e.link).filter((e): e is ILink => e != null))
+    internalAdd(true, joinResult.map(r => r.updateEntity).filter((e): e is IEntity => e != null), joinResult.map(e => e.updateLink).filter((e): e is ILink => e != null), true)
 
     const eventUpdate = Object.values(events).map(e => {
       return produce(e, draft => {
@@ -91,83 +158,8 @@ export default function GraphTools (props: Props) {
     })
     updateEvents(...eventUpdate)
 
-    setJoinLoading(false)
     setShowJoin(false)
   }
-
-  useEffect(() => {
-    if (showJoin && !joinLoading) {
-      setJoinLoading(true)
-      const idMap = new Map<string, string>()
-      const idRMap = new Map<string, string>()
-      const res = [] as JoinResult[]
-
-      Object.values(entities).flat().forEach(e => {
-        if (idRMap.has(e.Id)) {
-          return
-        }
-
-        const matchRules = configService.getEntityConfiguration(e.TypeId)?.MatchRules
-        if (matchRules != null) {
-          const existingId = findId(e, matchRules, Object.values(entities).flat().filter(x => x.InternalId !== e.InternalId))
-          if (existingId != null) {
-            idMap.set(e.Id, existingId)
-            idRMap.set(existingId, e.Id)
-            res.push({
-              entity: e,
-              show: true,
-              updateEntity: produce(e, draft => {
-                draft.Id = existingId
-              })
-            })
-          }
-        }
-      })
-
-      Object.values(links).flat().forEach(l => {
-        let changed = 0
-        const updateLink = produce(l, draft => {
-          if (idMap.has(l.FromEntityId)) {
-            draft.FromEntityId = idMap.get(l.FromEntityId)!
-            changed = 1
-          }
-
-          if (idMap.has(l.ToEntityId)) {
-            draft.ToEntityId = idMap.get(l.ToEntityId)!
-            changed = 1
-          }
-
-          if (idRMap.has(l.Id)) {
-            return
-          }
-
-          const matchRules = configService.getLinkConfiguration(l.TypeId)?.MatchRules
-          if (matchRules != null) {
-            const existingId = findId(l, matchRules, Object.values(links).flat().filter(x => x.InternalId !== l.InternalId))
-            if (existingId != null) {
-              idMap.set(l.Id, existingId)
-              idRMap.set(existingId, l.Id)
-              draft.Id = existingId
-              changed = 2
-            }
-          }
-        })
-
-        if (changed > 0) {
-          res.push({
-            link: l,
-            show: changed === 2,
-            updateLink
-          })
-        }
-      })
-
-      setJoinResult(res)
-      setJoinLoading(false)
-    } else {
-      setJoinResult([])
-    }
-  }, [entities, joinLoading, links, showJoin])
 
   if (props.show === false) {
     return null
@@ -183,8 +175,7 @@ export default function GraphTools (props: Props) {
 
     { showJoin &&
       <Modal mode={joinResult.length > 0 ? 'accept' : 'ok'} show={showJoin} title={t('merge')} onNegative={() => { setShowJoin(false) }} onPositive={() => { join() }}>
-        { joinLoading && <Spinner />}
-        { !joinLoading && joinResult.length > 0 && <div className="m-text-left m-px-3 m-py-2">
+        { joinResult.length > 0 && <div className="m-text-left m-px-3 m-py-2">
           <p>{t('merge')}</p>
           <ul className="m-list-inside m-list-disc">
             {joinResult.filter(r => r.show).map(r => (<>
@@ -198,7 +189,7 @@ export default function GraphTools (props: Props) {
             ))}
           </ul>
         </div>}
-        { !joinLoading && joinResult.length === 0 && <>
+        { joinResult.length === 0 && <>
           <p className="m-py-3">{t('nothing to merge')}</p>
         </>}
       </Modal>

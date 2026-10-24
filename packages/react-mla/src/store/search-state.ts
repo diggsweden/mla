@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { create } from 'zustand'
 import queryService, { type IQueryResponse } from '../services/queryService'
@@ -10,6 +9,7 @@ import useAppStore from './app-store'
 import configService from '../services/configurationService'
 import type { IImportConfiguration, IQueryIntegration } from '../interfaces/configuration'
 import useMainStore from './main-store'
+import { getPluginFunction } from '../utils/plugin-functions'
 
 interface SearchState {
   searchTool: IQueryIntegration | undefined
@@ -25,7 +25,7 @@ interface SearchState {
   clearSelectedTool: () => void
 
   import: (fileContents: string) => IQueryResponse
-  search: (query: any) => Promise<IQueryResponse>
+  search: (query: unknown) => Promise<IQueryResponse>
   explore: () => Promise<IQueryResponse>
 }
 
@@ -39,7 +39,7 @@ const useSearchStore = create<SearchState>((set, get) => ({
   setSearchTool: (id: string) => {
     if (id !== get().searchTool?.Id) {
       useAppStore.getState().setTool('search')
-      set((state) => ({
+      set(() => ({
         exploreTool: undefined,
         searchTool: configService.getSearchServices().find(x => x.Id === id),
         importTool: undefined,
@@ -52,7 +52,7 @@ const useSearchStore = create<SearchState>((set, get) => ({
   setExploreTool: (id: string) => {
     if (id !== get().exploreTool?.Id) {
       useAppStore.getState().setTool('explore')
-      set((state) => ({
+      set(() => ({
         searchTool: undefined,
         exploreTool: configService.getSearchServices().find(x => x.Id === id),
         importTool: undefined,
@@ -65,7 +65,7 @@ const useSearchStore = create<SearchState>((set, get) => ({
   setImportTool: (id: string) => {
     if (id !== get().importTool?.Id) {
       useAppStore.getState().setTool('import')
-      set((state) => ({
+      set(() => ({
         exploreTool: undefined,
         searchTool: undefined,
         importTool: configService.getImportServices().find(x => x.Id === id),
@@ -76,7 +76,7 @@ const useSearchStore = create<SearchState>((set, get) => ({
   },
 
   clearSelectedTool: () => {
-    set((state) => ({
+    set(() => ({
       exploreTool: undefined,
       searchTool: undefined,
       importTool: undefined,
@@ -85,24 +85,24 @@ const useSearchStore = create<SearchState>((set, get) => ({
     }))
   },
 
-  search: async (query: any) => {
+  search: async (query: unknown) => {
     useAppStore.getState().setTool('search')
 
-    set((state) => ({
+    set(() => ({
       loading: true,
       result: undefined
     }))
 
     try {
       const result = await queryService.QueryForm(get().searchTool!.Id, query)
-      set((state) => ({
+      set(() => ({
         loading: false,
         result
       }))
 
       return result
     } catch (error) {
-      set((state) => ({
+      set(() => ({
         loading: false
       }))
       window.alert(error)
@@ -114,19 +114,19 @@ const useSearchStore = create<SearchState>((set, get) => ({
     const query = useMainStore.getState().selectedEntities
     const shape = useAppStore.getState().selectedGeoFeature
 
-    set((state) => ({
+    set(() => ({
       loading: true,
       exploreResult: undefined
     }))
 
     try {
       const result = await queryService.QueryEntities(get().exploreTool!.Id, query, shape)
-      set((state) => ({
+      set(() => ({
         loading: false,
         result
       }))
 
-      set((state) => ({
+      set(() => ({
         loading: false
       }))
       return result
@@ -138,7 +138,7 @@ const useSearchStore = create<SearchState>((set, get) => ({
   import: (fileContents: string) => {
     useAppStore.getState().setTool('import')
 
-    set((state) => ({
+    set(() => ({
       loading: true,
       result: undefined
     }))
@@ -147,9 +147,9 @@ const useSearchStore = create<SearchState>((set, get) => ({
       let result = undefined as IQueryResponse | undefined
       const transformFunction = get().importTool?.TransformFunction
       if (transformFunction) {
-        result = (window as any)[transformFunction](fileContents)
+        result = getPluginFunction(transformFunction)(fileContents) as IQueryResponse
       } else {
-        result = JSON.parse(fileContents)
+        result = JSON.parse(fileContents) as IQueryResponse
       }
       if (result?.Entities == null) {
         throw new Error('result.Entities is not Entity[]')
@@ -158,14 +158,14 @@ const useSearchStore = create<SearchState>((set, get) => ({
         throw new Error('result.Links is not Link[]')
       }
 
-      set((state) => ({
+      set(() => ({
         loading: false,
         result
       }))
 
       return result
     } catch (error) {
-      set((state) => ({
+      set(() => ({
         loading: false
       }))
       window.alert(error)

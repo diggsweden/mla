@@ -6,7 +6,7 @@ import { type IQueryResponse } from '../../services/queryService'
 import type { IEntity, IEvent, ILink } from '../../interfaces/data-models'
 import ItemResult from './ItemResult'
 import type { IEntityGroup } from './ItemResult'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { generateUUID, getId, isLinked } from '../../utils/utils'
 import useAppStore from '../../store/app-store'
 import { produce } from 'immer'
@@ -35,6 +35,116 @@ interface EventGroup {
 
 const last = 'zzzzzzzzzzzz'
 
+function sortByLinks (a: IEntity, b: IEntity, links: ILink[]): number {
+  const linkCountA = links.filter(l => isLinked(a, l)).length
+  const linkCountB = links.filter(l => isLinked(b, l)).length
+
+  return linkCountB - linkCountA
+}
+
+function buildEntityGroups (result: ItemResultProps['result'], seeds: IEntity[] | undefined): { groups: Record<string, IEntityGroup[]>, count: number } {
+  const res: Record<string, IEntityGroup[]> = {}
+  let count = 0
+
+  if (result && result.Entities.length > 0) {
+    let counter = 0;
+    let usedTotal: Record<string, boolean> = {}
+
+    const addGroup = (groupname: string, entity: IEntity, parentEntity: IEntity | undefined, parentGroup: IEntityGroup | undefined, used: Record<string, boolean>) => {
+      counter++;
+      used[getId(entity)] = true
+      if (res[groupname] === undefined) {
+        res[groupname] = []
+      }
+
+      const group: IEntityGroup = { primary: entity, entities: [], links: [] }
+      if (parentGroup) {
+        parentGroup.entities.push(group)
+      } else {
+        res[groupname].push(group)
+      }
+
+      for (const link of result.Links.filter(l => isLinked(entity, l))) {
+        if (parentEntity && used[getId(link)] == null && isLinked(parentEntity, link)) {
+          used[getId(link)] = true
+          group.links.push(link)
+        }
+        const linkedEntities = result.Entities.filter(e => isLinked(e, link) && getId(e) !== getId(entity))
+        for (const linkedEntity of linkedEntities) {
+          if (used[getId(linkedEntity)] == null) {
+            used[getId(linkedEntity)] = true
+            addGroup(groupname, linkedEntity, entity, group, used)
+          }
+        }
+      }
+    }
+
+    if (seeds && seeds.length > 0) {
+      for (const seed of seeds) {
+        const usedSeeds: Record<string, boolean> = {}
+
+        const same = result.Entities.find(e => getId(e) === getId(seed))
+        if (same) {
+          usedSeeds[getId(seed)] = true
+          res[getId(seed)] = [{ primary: same, entities: [], links: [] }]
+        }
+
+        for (const link of result.Links.filter(l => isLinked(seed, l))) {
+          const linkedEntities = result.Entities.filter(e => (isLinked(e, link)) && getId(e) !== getId(seed))
+          for (const linkedEntity of linkedEntities) {
+            addGroup(getId(seed), linkedEntity, seed, undefined, usedSeeds)
+          }
+        }
+
+        usedTotal = { ...usedTotal, ...usedSeeds }
+      }
+    }
+
+    for (const entity of result.Entities.sort((a, b) => sortByLinks(a, b, result.Links))) {
+      if (usedTotal[getId(entity)]) {
+        continue
+      }
+
+      addGroup(last, entity, undefined, undefined, usedTotal)
+    }
+
+    count = counter
+  }
+
+  return { groups: res, count }
+}
+
+function buildEventGroups (result: ItemResultProps['result']): EventGroup[] {
+  const res = [] as EventGroup[]
+  if (result.Events) {
+    result.Events.sort((a, b) => a.Date.diff(b.Date).milliseconds)
+
+    const grouped = result.Events.reduce<Record<string, IEvent[]>>(
+      (result, currentValue) => {
+        (result[currentValue.TypeId] = result[currentValue.TypeId] || []).push(currentValue)
+        if (result[currentValue.TypeId].length >= 10000) {
+          result[generateUUID()] = result[currentValue.TypeId]
+          result[currentValue.TypeId] = []
+        }
+        return result
+      }, {})
+
+    Object.keys(grouped).forEach(t => {
+      const typeId = grouped[t][0].TypeId
+      const config = configService.getEventConfiguration(typeId)
+      res.push({
+        GroupId: t,
+        TypeId: typeId,
+        Name: config?.Name ?? typeId,
+        Events: grouped[t]
+      })
+    })
+  }
+
+  res.sort((a, b) => a.Events[0].Date.diff(b.Events[0].Date).milliseconds)
+  return res
+}
+
 function ItemResultList (props: ItemResultProps) {
   const { t } = useTranslation();
   const network = useMainStore(state => state.network)
@@ -42,9 +152,25 @@ function ItemResultList (props: ItemResultProps) {
   const setTool = useAppStore((state) => state.setTool)
   const setEvents = useMainStore((state) => state.setEvent)
   const { result, seeds } = props
-  const [mainEntities, setMainEntities] = useState<Record<string, IEntityGroup[]>>({})
-  const [count, setCount] = useState(0)
-  const [eventGroups, setEventGroups] = useState<EventGroup[]>([])
+  // The groups are built from the result and can then be removed by the user, start over when the result (or seeds) change
+  const [entityState, setEntityState] = useState(() => ({ result, seeds, ...buildEntityGroups(result, seeds) }))
+  if (entityState.result !== result || entityState.seeds !== seeds) {
+    setEntityState({ result, seeds, ...buildEntityGroups(result, seeds) })
+  }
+  const mainEntities = entityState.groups
+  const count = entityState.count
+  function setMainEntities (groups: Record<string, IEntityGroup[]>) {
+    setEntityState(state => ({ ...state, groups }))
+  }
+
+  const [eventState, setEventState] = useState(() => ({ result, groups: buildEventGroups(result) }))
+  if (eventState.result !== result) {
+    setEventState({ result, groups: buildEventGroups(result) })
+  }
+  const eventGroups = eventState.groups
+  function setEventGroups (groups: EventGroup[]) {
+    setEventState(state => ({ ...state, groups }))
+  }
   const [showEvents, setShowEvents] = useState<IEvent[]>([])
 
   function add (entities: IEntity[], links: ILink[]) {
@@ -118,115 +244,6 @@ function ItemResultList (props: ItemResultProps) {
       setTool(undefined)
     }
   }
-
-  function sortByLinks (a: IEntity, b: IEntity, links: ILink[]): number {
-    const linkCountA = links.filter(l => isLinked(a, l)).length
-    const linkCountB = links.filter(l => isLinked(b, l)).length
-
-    return linkCountB - linkCountA
-  }
-
-  useEffect(() => {
-    const res: Record<string, IEntityGroup[]> = {}
-
-    if (result && result.Entities.length > 0) {
-      let counter = 0;
-      let usedTotal: Record<string, boolean> = {}
-
-      const addGroup = (groupname: string, entity: IEntity, parentEntity: IEntity | undefined, parentGroup: IEntityGroup | undefined, used: Record<string, boolean>) => {
-        counter++;
-        used[getId(entity)] = true
-        if (res[groupname] === undefined) {
-          res[groupname] = []
-        }
-
-        const group: IEntityGroup = { primary: entity, entities: [], links: [] }
-        if (parentGroup) {
-          parentGroup.entities.push(group)
-        } else {
-          res[groupname].push(group)
-        }
-
-        for (const link of result.Links.filter(l => isLinked(entity, l))) {
-          if (parentEntity && used[getId(link)] == null && isLinked(parentEntity, link)) {
-            used[getId(link)] = true
-            group.links.push(link)
-          }
-          const linkedEntities = result.Entities.filter(e => isLinked(e, link) && getId(e) !== getId(entity))
-          for (const linkedEntity of linkedEntities) {
-            if (used[getId(linkedEntity)] == null) {
-              used[getId(linkedEntity)] = true
-              addGroup(groupname, linkedEntity, entity, group, used)
-            }
-          }
-        }
-      }
-
-      if (seeds && seeds.length > 0) {
-        for (const seed of seeds) {
-          const usedSeeds: Record<string, boolean> = {}
-
-          const same = result.Entities.find(e => getId(e) === getId(seed))
-          if (same) {
-            usedSeeds[getId(seed)] = true
-            res[getId(seed)] = [{ primary: same, entities: [], links: [] }]
-          }
-
-          for (const link of result.Links.filter(l => isLinked(seed, l))) {
-            const linkedEntities = result.Entities.filter(e => (isLinked(e, link)) && getId(e) !== getId(seed))
-            for (const linkedEntity of linkedEntities) {
-              addGroup(getId(seed), linkedEntity, seed, undefined, usedSeeds)
-            }
-          }
-
-          usedTotal = { ...usedTotal, ...usedSeeds }
-        }
-      }
-
-      for (const entity of result.Entities.sort((a, b) => sortByLinks(a, b, result.Links))) {
-        if (usedTotal[getId(entity)]) {
-          continue
-        }
-
-        addGroup(last, entity, undefined, undefined, usedTotal)
-      }
-
-      setCount(counter)
-    }
-
-    setMainEntities(res)
-  }, [result, seeds])
-
-  useEffect(() => {
-    const res = [] as EventGroup[]
-    if (result.Events) {
-      result.Events.sort((a, b) => a.Date.diff(b.Date).milliseconds)
-
-      const grouped = result.Events.reduce<Record<string, IEvent[]>>(
-        (result, currentValue) => {
-          (result[currentValue.TypeId] = result[currentValue.TypeId] || []).push(currentValue)
-          if (result[currentValue.TypeId].length >= 10000) {
-            result[generateUUID()] = result[currentValue.TypeId]
-            result[currentValue.TypeId] = []
-          }
-          return result
-        }, {})
-
-      Object.keys(grouped).forEach(t => {
-        const typeId = grouped[t][0].TypeId
-        const config = configService.getEventConfiguration(typeId)
-        res.push({
-          GroupId: t,
-          TypeId: typeId,
-          Name: config?.Name ?? typeId,
-          Events: grouped[t]
-        })
-      })
-    }
-
-    res.sort((a, b) => a.Events[0].Date.diff(b.Events[0].Date).milliseconds)
-    setEventGroups(res)
-  }, [result])
 
   return <div className={props.className}>
     {result.ErrorMessage && <div className="m-bg-red-100 m-border m-border-red-400 m-text-red-700 m-px-4 m-py-3 m-rounded m-relative m-mb-3" role="alert">
