@@ -34,8 +34,9 @@
     "react-dom": "^19.3.1",
     "react-i18next": "^17.1.8",
     "tailwindcss": "3.4.19",
-    "vis-data": "^7.1.9",
-    "vis-network": "^9.1.9",
+    "vis-data": "^8.0.5",
+    "vis-network": "^10.1.2",
+    "vis-util": "^6.0.2",
     "zustand": "^5.0.16"
   },
   "peerDependencies": {

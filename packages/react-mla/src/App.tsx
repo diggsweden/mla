@@ -21,7 +21,7 @@ import Footer from './components/common/Footer'
 import Map from './components/map/Map'
 import i18n from "i18next";
 
-import 'vis-network/dist/dist/vis-network.min.css'
+import 'vis-network/styles/vis-network.min.css'
 import './App.scss'
 
 export default function App () {
