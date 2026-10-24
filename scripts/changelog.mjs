@@ -19,9 +19,12 @@ Examples:
 // "## Unreleased", "## 1.2.3 - 2026-01-20" and "## [1.2.3] - 2026-01-20" all have the version as first word
 const RELEASE_HEADING = /^## +\[?([^\]\s]+)\]?(?: +- +.*)?\s*$/;
 
+// The version comes from "npm version" with a leading "v" (v1.2.3), but the headings do not have it (## 1.2.3 - 2026-01-20)
+const withoutV = (version) => version.replace(/^v/i, "");
+
 function findRelease(lines, version) {
   return lines.findIndex(
-    (line) => RELEASE_HEADING.exec(line)?.[1].toLowerCase() === version.toLowerCase(),
+    (line) => withoutV(RELEASE_HEADING.exec(line)?.[1] ?? "").toLowerCase() === withoutV(version).toLowerCase(),
   );
 }
 
@@ -39,7 +42,7 @@ export function release(text, version, date) {
   }
 
   // The existing Unreleased heading stays as the new empty section, and its content now belongs to the version
-  lines.splice(unreleased + 1, 0, "", `## ${version} - ${date}`);
+  lines.splice(unreleased + 1, 0, "", `## ${withoutV(version)} - ${date}`);
   return lines.join(eol);
 }
 

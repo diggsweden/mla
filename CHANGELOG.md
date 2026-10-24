@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Fix beta releases in `deploy-release`: the version is now the branch name without `release/` (it turned `v1.3.0-beta.0` into `v1.3.0.0`, so the changelog was not found and the release got a wrong tag), and betas are marked as pre-releases (the `prerelease` input was text and was never evaluated, so every release was a normal release)
 - Replace the `superfaceai/release-changelog-action` GitHub Action (5 stars, unmaintained since 2024, runs on Node 16) with `scripts/changelog.mjs`, which releases the Unreleased section and reads a version for the release notes in `create-release-draft` and `deploy-release`
 - Select many nodes by holding the left mouse button and dragging a rectangle on empty space (it was the right button). Clicking, or holding the button down, on a node or edge selects only it (holding no longer adds to the selection), Ctrl or Cmd plus click still adds, and dragging a node moves it. The view is now moved by dragging with the right mouse button (a right click still opens the context menu), and the new `dragView` interaction option is off
 - **BREAKING:** Remove the Electron desktop app (`apps/desktop`). MLA is now only distributed as the `react-mla` library, the `webcomponent-mla` web component and the web demo. The `windows` platform and the desktop application are removed from `publiccode.yml`
