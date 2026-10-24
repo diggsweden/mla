@@ -11,8 +11,6 @@ import ToolPanel from './components/tools/ToolPanel'
 import Timeline from './components/timeline/Timeline'
 import useMainStore from './store/main-store'
 import configService from './services/configurationService'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import useAppStore from './store/app-store'
 import { getContextValue } from './utils/utils'
 import ErrorBoundary from './components/common/ErrorBoundary'
@@ -32,7 +30,6 @@ export default function App () {
 
   return (
     <AppShortcuts className="m-h-full m-w-full m-max-h-full m-max-w-full m-text-base m-flex m-flex-col">
-      <DndProvider backend={HTML5Backend}>
         <header className="m-h-100 m-flex-none m-w-full m-border-b m-border-gray-300 m-text-white m-bg-primary">
           <h1 className="m-pt-2 m-pb-2 m-pl-4">MLA - {title}</h1>
             <RibbonMenu />
@@ -57,7 +54,6 @@ export default function App () {
         </section>
         
           <Footer />
-      </DndProvider>
     </AppShortcuts>
   )
 }
