@@ -91,6 +91,7 @@ function ChartEdge(props: Props) {
         created.current = false
       }
     }
+    // Only when unmounting, with the dependencies the edge would be removed from the chart on every change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

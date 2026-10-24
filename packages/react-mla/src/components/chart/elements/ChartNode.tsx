@@ -84,6 +84,7 @@ function ChartNode (props: Props) {
         created.current = false
       }
     }
+    // Only when unmounting, with the dependencies the node would be removed from the chart on every change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

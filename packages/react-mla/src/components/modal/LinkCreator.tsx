@@ -48,6 +48,7 @@ function LinkCreator (props: Props) {
 
   useEffect(() => {
     onChange(link)
+    // Only on mount, to report the initial link to the parent
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

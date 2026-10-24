@@ -36,6 +36,7 @@ export const useEffectDebugger = (effectHook: EffectCallback, dependencies: Reac
     console.debug('[use-effect-debugger] ', changedDeps)
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps 
+  // The dependencies are supplied by the caller, so the rule cannot check them
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(effectHook, dependencies)
 }

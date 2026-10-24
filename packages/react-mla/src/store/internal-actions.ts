@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { WritableDraft, produce } from 'immer'
 import type { IChartBase, IEntity, IHistory, ILink } from '../interfaces/data-models'
@@ -250,10 +249,10 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
     return produce(state, draft => {
       if (addHistory) {
         const restoreE = entities.map(e => {
-          return produce(draft.entities[getId(e)].find(x => x.InternalId === e.InternalId), draft => undefined)!
+          return produce(draft.entities[getId(e)].find(x => x.InternalId === e.InternalId), () => undefined)!
         })
         const restoreL = links.map(e => {
-          return produce(draft.links[getId(e)].find(x => x.InternalId === e.InternalId), draft => undefined)!
+          return produce(draft.links[getId(e)].find(x => x.InternalId === e.InternalId), () => undefined)!
         })
 
         for (let s = 0; s < draft.historyPosition; s++) {

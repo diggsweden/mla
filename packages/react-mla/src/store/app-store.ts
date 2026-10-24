@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { create } from 'zustand'
 import chartLayouts from '../utils/chart-layouts'
 import interactionOptions from '../utils/interaction-options'
@@ -54,7 +53,7 @@ interface AppState {
   setHistoryMode: (value: boolean) => void
 }
 
-const useAppStore = create<AppState>((set, get) => ({
+const useAppStore = create<AppState>((set) => ({
   thingViewConfiguration: {},
   currentViewConfiguration: { Id: 'default', Name: 'default', Show: [] },
 
@@ -70,7 +69,7 @@ const useAppStore = create<AppState>((set, get) => ({
       return map
     }, {} as Record<string, IBaseViewConfiguration>)
 
-    set((state) => ({
+    set(() => ({
       view: viewId,
       currentViewConfiguration: v,
       thingViewConfiguration: update
@@ -81,25 +80,25 @@ const useAppStore = create<AppState>((set, get) => ({
 
   contextmenuPosition: undefined,
   showContextMenu: (x: number, y: number) => {
-    set((state) => ({
+    set(() => ({
       contextmenuPosition: { x, y }
     }))
   },
   hideContextMenu: () => {
-    set((state) => ({
+    set(() => ({
       contextmenuPosition: undefined
     }))
   },
 
   selectedGeoFeature: undefined,
   setSelectedGeoFeature: (feature?: IGeoFeatureBounds) => {
-    set((state) => ({
+    set(() => ({
       selectedGeoFeature: feature
     }))
   },
   placeEntityId: undefined,
   setPlaceEntityId: (placeEntityId?: string) => {
-    set((state) => ({
+    set(() => ({
       placeEntityId
     }))
   },
@@ -107,14 +106,14 @@ const useAppStore = create<AppState>((set, get) => ({
   layoutId: 'reset',
   layout: chartLayouts.reset,
   setLayout: (layoutId: string) => {
-    set((state) => ({
+    set(() => ({
       layoutId,
       layout: chartLayouts[layoutId]
     }))
   },
   historyMode: false,
   setHistoryMode: (value: boolean) => {
-    set((state) => ({
+    set(() => ({
       historyMode: value,
       selectedTool: value ? 'activity' : undefined
     }))
@@ -126,19 +125,19 @@ const useAppStore = create<AppState>((set, get) => ({
   },
   interaction: interactionOptions.reset,
   setInteraction: (interactionId: string) => {
-    set((state) => ({
+    set(() => ({
       interaction: interactionOptions[interactionId]
     }))
   },
   setInteractionObject: (interaction: string) => {
-    set((state) => ({
+    set(() => ({
       interaction
     }))
   },
 
   selectedTab: 'start',
   setTab: (tab) => {
-    set((state) => ({
+    set(() => ({
       selectedTab: tab
     }))
   },
@@ -148,7 +147,7 @@ const useAppStore = create<AppState>((set, get) => ({
     if (tool === undefined) {
       useSearchStore.getState().clearSelectedTool()
     }
-    set((state) => ({
+    set(() => ({
       historyMode: false,
       selectedTool: tool
     }))
@@ -156,14 +155,14 @@ const useAppStore = create<AppState>((set, get) => ({
 
   showMap: false,
   setShowMap: (showMap: boolean) => {
-    set((state) => ({
+    set(() => ({
       showMap
     }))
   },
 
   mapLayers: [0],
   setMapLayers: (layers: number[]) => {
-    set((state) => ({
+    set(() => ({
       mapLayers: layers
     }))
   }
