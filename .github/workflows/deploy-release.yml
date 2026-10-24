@@ -44,7 +44,9 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: pnpm
-          registry-url: https://registry.npmjs.org
+          # Writes the user level .npmrc with the token for GitHub Packages, pnpm does not read credentials from the project .npmrc
+          registry-url: https://npm.pkg.github.com
+          scope: "@diggsweden"
 
       # Import GPG key to use for signing
       - name: Import GPG key
