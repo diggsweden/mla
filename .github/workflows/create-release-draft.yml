@@ -143,11 +143,14 @@ jobs:
 
       # Push repository changes
       - name: Create pull request into main
-        uses: thomaseizinger/create-pull-request@955adb4634198898bc24dca0468514c63a8fc98d # 1.4.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
-          head: release/${{ env.NEW_VERSION }}
-          base: main
-          labels: release
-          title: "chore: Release ${{ env.NEW_VERSION }}"
-          body: ${{ steps.get-changelog.outputs.changelog }}
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          CHANGELOG: ${{ steps.get-changelog.outputs.changelog }}
+        run: |
+          gh pr create \
+            --head "release/${NEW_VERSION}" \
+            --base main \
+            --label release \
+            --title "chore: Release ${NEW_VERSION}" \
+            --body "${CHANGELOG}"
