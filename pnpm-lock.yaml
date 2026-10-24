@@ -207,8 +207,8 @@ importers:
         specifier: 3.2.7
         version: 3.2.7(playwright@1.58.2)(vite@7.3.7(@types/node@20.19.43)(jiti@2.7.0)(sass-embedded@1.98.0)(sass@1.98.0))(vitest@3.2.6)
       '@vitest/coverage-v8':
-        specifier: 3.2.4
-        version: 3.2.4(@vitest/browser@3.2.7)(vitest@3.2.6)
+        specifier: 3.2.7
+        version: 3.2.7(@vitest/browser@3.2.7)(vitest@3.2.6)
       autoprefixer:
         specifier: 10.4.27
         version: 10.4.27(postcss@8.5.31)
@@ -1524,11 +1524,11 @@ packages:
       webdriverio:
         optional: true
 
-  '@vitest/coverage-v8@3.2.4':
-    resolution: {integrity: sha512-EyF9SXU6kS5Ku/U82E259WSnvg6c8KTjppUncuNdm5QHpe17mwREHnjDzozC8x9MZ0xfBUFSaLkRv4TMA75ALQ==}
+  '@vitest/coverage-v8@3.2.7':
+    resolution: {integrity: sha512-NEGWJS2XNu2PfRLQwOO3CTKj1tTETxNBdk454vDxVBhxJYhPaA/eS0nAI0c+1El1P7a60z8+i+ZrQoGESweGKg==}
     peerDependencies:
-      '@vitest/browser': 3.2.4
-      vitest: 3.2.4
+      '@vitest/browser': 3.2.7
+      vitest: 3.2.7
     peerDependenciesMeta:
       '@vitest/browser':
         optional: true
@@ -5530,7 +5530,7 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@3.2.4(@vitest/browser@3.2.7)(vitest@3.2.6)':
+  '@vitest/coverage-v8@3.2.7(@vitest/browser@3.2.7)(vitest@3.2.6)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
