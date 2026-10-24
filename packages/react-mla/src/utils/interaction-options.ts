@@ -4,6 +4,7 @@
 
 export interface InteractionOptions {
   multiselect: boolean
+  dragView: boolean
   selectConnectedEdges: boolean
   navigationButtons: boolean
 }
@@ -12,6 +13,8 @@ export interface InteractionOptions {
 const interactionOptions: Record<string, InteractionOptions> = {
   reset: {
     multiselect: true,
+    // The left button draws the selection rectangle instead, the view is moved with the right button
+    dragView: false,
     selectConnectedEdges: false,
     navigationButtons: false
   }
