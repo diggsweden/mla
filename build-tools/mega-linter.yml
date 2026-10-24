@@ -11,6 +11,8 @@ PRINT_ALPACA: false
 APPLY_FIXES: all
 
 DISABLE_ERRORS: false
+# The javascript flavor has every linter we use, a custom flavor would mean building and publishing our own image
+FLAVOR_SUGGESTIONS: false
 SHOW_ELAPSED_TIME: true
 SHOW_SKIPPED_LINTERS: false
 
