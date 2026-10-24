@@ -6,6 +6,7 @@
 name: CI
 
 on: # yamllint disable-line rule:truthy
+  merge_group:
   push:
     branches:
       - main
@@ -26,7 +27,7 @@ jobs:
   lint:
     permissions:
       contents: read
-      security-events: write  
+      security-events: write
     uses: ./.github/workflows/lint.yml
   lintpubliccode:
     uses: ./.github/workflows/lintpubliccode.yml

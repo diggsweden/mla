@@ -1,18 +1,41 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices",
-    ":gitSignOff",
-    ":maintainLockFilesWeekly",
-    ":automergeMinor"
-  ],
+  "extends": ["config:best-practices", ":gitSignOff", ":maintainLockFilesWeekly", ":automergeMinor"],
   "internalChecksAsSuccess": true,
+  "timezone": "Europe/Stockholm",
+  "schedule": ["before 7am on monday"],
+  "rebaseWhen": "conflicted",
+  "prConcurrentLimit": 5,
+  "minimumReleaseAge": "3 days",
+  "lockFileMaintenance": {
+    "automerge": true
+  },
+  "major": {
+    "dependencyDashboardApproval": true
+  },
   "vulnerabilityAlerts": {
     "labels": ["security"],
     "enabled": true,
-    "automerge": true
-  },  
+    "automerge": true,
+    "schedule": ["at any time"],
+    "minimumReleaseAge": null
+  },
   "packageRules": [
+    {
+      "description": "One weekly PR for all npm minor/patch updates, automerged",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "npm non-major dependencies",
+      "groupSlug": "npm-non-major"
+    },
+    {
+      "description": "One weekly PR for GitHub Actions; touches workflows, so it needs code-owner review",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "pinDigest"],
+      "groupName": "github actions",
+      "groupSlug": "github-actions",
+      "automerge": false
+    },
     {
       "matchManagers": ["github-actions"],
       "addLabels": ["actions"]
