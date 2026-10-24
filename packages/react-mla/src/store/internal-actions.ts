@@ -88,7 +88,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           updateEntities.push(entity)
         }
 
-        let update = [] as IEntity[]
+        let update: IEntity[]
         const existing = stateDraft[getId(entity)]
         if (existing == null) {
           update = [entity]
@@ -142,7 +142,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
           updateLinks.push(link)
         }
 
-        let update = [] as ILink[]
+        let update: ILink[]
         const existing = stateDraft[getId(link)]
         if (existing == null) {
           update = [link]

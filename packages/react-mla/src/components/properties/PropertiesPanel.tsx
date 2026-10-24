@@ -69,7 +69,7 @@ function PropertiesPanel (props: Props) {
 
   function previous () {
     const idx = selectedIds.findIndex(f => f === display)
-    let setIdx = 0
+    let setIdx: number
     if (idx === 0) {
       setIdx = selectedIds.length - 1
     } else {
