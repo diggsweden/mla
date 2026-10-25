@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { freeze } from 'immer'
 import { type IQueryIntegration } from '../interfaces/configuration'
 import type { IEntity, IEvent, ILink } from '../interfaces/data-models'
 import { type IGeoFeature } from '../interfaces/data-models/geo'
 import useMainStore from '../store/main-store'
-import { findId, mergeContext } from '../utils/utils'
+import { findId } from '../utils/utils'
+import { mergeContext } from '../utils/context'
 import configService from './configurationService'
 import viewService from './viewService'
 import { fixDate } from '../utils/date'
@@ -20,163 +20,100 @@ interface IQueryResponse {
   ErrorMessage?: string
 }
 
+// What a search service receives, depending on how it is configured
+interface QueryInput {
+  // Sent to the OutTransform function, that creates the request
+  transformInput: unknown
+  // The json body of the request, when there is no OutTransform function
+  body: unknown
+  // Sent to the RequestFunction, that does the request itself
+  functionInput: unknown
+}
+
 class QueryService {
-  public async QueryForm (serviceId: string, query: unknown): Promise<IQueryResponse> {
+  public async queryForm (serviceId: string, query: unknown): Promise<IQueryResponse> {
+    return await this.query(serviceId, { transformInput: query, body: { Form: query }, functionInput: query })
+  }
+
+  public async queryEntities (serviceId: string, entities?: IEntity[], shape?: IGeoFeature): Promise<IQueryResponse> {
+    const input = { Entities: entities, Shape: shape }
+    return await this.query(serviceId, { transformInput: [...(entities ?? [])], body: input, functionInput: input })
+  }
+
+  public async saveFile (data: string): Promise<boolean> {
+    return await this.send(configService.getConfiguration().Save, { method: 'POST', contentType: 'application/json', body: data })
+  }
+
+  public async saveImage (data: string, imageFilename: string): Promise<boolean> {
+    return await this.send(configService.getConfiguration().SaveImage, { method: 'POST', contentType: 'image/png', body: data, headers: { 'X-ImageFilename': imageFilename } })
+  }
+
+  public async openFile (): Promise<string | undefined> {
+    const response = await this.request(configService.getConfiguration().Open, { method: 'GET', contentType: 'application/json' })
+    return response.ok ? await response.text() : undefined
+  }
+
+  private async query (serviceId: string, input: QueryInput): Promise<IQueryResponse> {
     const config = configService.getSearchServices().find(s => s.Id === serviceId)
     if (config == null) {
       throw new Error('No service registed with Id: ' + serviceId)
     }
 
-    let res: IQueryResponse | undefined
+    const context = useMainStore.getState().context
+    let response: IQueryResponse
     if (config.Url) {
-      let req: RequestInit | undefined
-      if (config.OutTransform) {
-        req = getPluginFunction(config.OutTransform)(query, useMainStore.getState().context) as RequestInit
-      } else {
-        req = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Context': useMainStore.getState().context
-          },
-          body: JSON.stringify({ Form: query })
-        }
-      }
+      const init = config.OutTransform
+        ? getPluginFunction(config.OutTransform)(input.transformInput, context) as RequestInit
+        : { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Context': context }, body: JSON.stringify(input.body) }
 
-      const response = await fetch(this.getUrl(config.Url), req)
-      this.saveContextHeader(response)
-
-      res = await this.HandleResponse(config, response)
+      const res = await fetch(configService.resolveUrl(config.Url), init)
+      this.saveContextHeader(res)
+      response = await this.handleResponse(config, res)
     } else if (config.RequestFunction) {
-      res = await getPluginFunction(config.RequestFunction)(query, useMainStore.getState().context) as IQueryResponse
+      response = await getPluginFunction(config.RequestFunction)(input.functionInput, context) as IQueryResponse
     } else {
       throw new Error('No way to create request for service registed with Id: ' + serviceId)
     }
 
-    return this.MapResponse(res)
+    return this.mapResponse(response)
   }
 
-  public async QueryEntities (serviceId: string, entities?: IEntity[], shape?: IGeoFeature): Promise<IQueryResponse> {
-    const config = configService.getSearchServices().find(s => s.Id === serviceId)
-    if (config == null) {
-      throw new Error('No service registed with Id: ' + serviceId)
-    }
-
-    let res: IQueryResponse | undefined
-    if (config.Url) {
-      let req: RequestInit | undefined
-      if (config.OutTransform) {
-        req = getPluginFunction(config.OutTransform)([...(entities ?? [])], useMainStore.getState().context) as RequestInit
-      } else {
-        req = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Context': useMainStore.getState().context
-          },
-          body: JSON.stringify({ Entities: entities, Shape: shape })
-        }
-      }
-
-      const response = await fetch(this.getUrl(config.Url), req)
-      this.saveContextHeader(response)
-
-      res = await this.HandleResponse(config, response)
-    } else if (config.RequestFunction) {
-      res = await getPluginFunction(config.RequestFunction)({ Entities: entities, Shape: shape }, useMainStore.getState().context) as IQueryResponse
-    } else {
-      throw new Error('No way to create request for service registed with Id: ' + serviceId)
-    }
-
-    return this.MapResponse(res)
-  }
-
-  public async SaveFile (data: string): Promise<boolean> {
-    const req = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Context': useMainStore.getState().context
-      },
-      body: data
-    }
-    const saveUrl = this.getUrl(configService.getConfiguration().Save)
-    try {
-      const response = await fetch(saveUrl, req)
-      this.saveContextHeader(response)
-
-      return response.ok
-    } catch (error) {
-      console.error(error)
-      return false
-    }
-  }
-
-  public async SaveImage (data: string, imageFilename: string): Promise<boolean> {
-    const req = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'image/png',
-        'X-Context': useMainStore.getState().context,
-        'X-ImageFilename': imageFilename
-      },
-      body: data
-    }
-    const saveUrl = this.getUrl(configService.getConfiguration().SaveImage)
-    try {
-      const response = await fetch(saveUrl, req)
-      this.saveContextHeader(response)
-
-      return response.ok
-    } catch (error) {
-      console.error(error)
-      return false
-    }
-  }
-
-  public async OpenFile (): Promise<string | undefined> {
-    const req = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Context': useMainStore.getState().context
-      }
-    }
-    const url = this.getUrl(configService.getConfiguration().Open)
-    const response = await fetch(url, req)
+  private async request (url: string, options: { method: string, contentType: string, body?: string, headers?: Record<string, string> }): Promise<Response> {
+    const response = await fetch(configService.resolveUrl(url), {
+      method: options.method,
+      headers: { 'Content-Type': options.contentType, 'X-Context': useMainStore.getState().context, ...options.headers },
+      body: options.body
+    })
     this.saveContextHeader(response)
 
-    if (response.ok) {
-      return await response.text()
-    }
-
-    return undefined
+    return response
   }
 
-  private getUrl (url: string): string {
-    if (url.startsWith('/')) {
-      url = configService.getPublicUrl() + url
+  private async send (url: string, options: { method: string, contentType: string, body: string, headers?: Record<string, string> }): Promise<boolean> {
+    try {
+      return (await this.request(url, options)).ok
+    } catch (error) {
+      console.error(error)
+      return false
     }
-
-    return url
   }
 
   private saveContextHeader (res: Response) {
     const ctx = res.headers.get('X-Context')
     if (ctx && ctx.length > 0) {
-      let update = useMainStore.getState().context
-      update = mergeContext(update, ctx)
-      useMainStore.getState().setContext(update)
+      const main = useMainStore.getState()
+      main.setContext(mergeContext(main.context, ctx))
     }
   }
 
-  private async HandleResponse (config: IQueryIntegration, res: Response): Promise<IQueryResponse> {
+  private async handleResponse (config: IQueryIntegration, res: Response): Promise<IQueryResponse> {
     if (!res.ok) {
       console.error(res.statusText)
       return {
         Entities: [],
         Links: [],
-        Events: []
+        Events: [],
+        ErrorMessage: `${res.status} ${res.statusText}`
       }
     }
 
@@ -192,77 +129,66 @@ class QueryService {
     return json
   }
 
-  private MapResponse (res: IQueryResponse): IQueryResponse {
+  // Services can leave out entities, links and events, but what they send has to be lists
+  private mapResponse (res: IQueryResponse): IQueryResponse {
     const idMap = new Map<string, string>()
-    if (res?.Entities && Array.isArray(res.Entities)) {
-      const entities = Object.values(useMainStore.getState().entities).flat()
-      res.Entities.forEach(e => {
-        e.DateFrom = fixDate(e.DateFrom)
-        e.DateTo = fixDate(e.DateTo)
-        e.LabelShort = viewService.getShortName(e)
-        e.LabelLong = viewService.getLongName(e)
 
-        const matchRules = configService.getEntityConfiguration(e.TypeId)?.MatchRules
-        if (matchRules != null) {
-          const existingId = findId(e, matchRules, entities)
-          if (existingId != null) {
-            idMap.set(e.Id, existingId)
-            e.Id = existingId
-          }
+    const existingEntities = Object.values(useMainStore.getState().entities).flat()
+    this.list(res, 'Entities').forEach(e => {
+      e.DateFrom = fixDate(e.DateFrom)
+      e.DateTo = fixDate(e.DateTo)
+      e.LabelShort = viewService.getShortName(e)
+      e.LabelLong = viewService.getLongName(e)
+
+      const matchRules = configService.getEntityConfiguration(e.TypeId)?.MatchRules
+      if (matchRules != null) {
+        const existingId = findId(e, matchRules, existingEntities)
+        if (existingId != null) {
+          idMap.set(e.Id, existingId)
+          e.Id = existingId
         }
-      })
-    } else if (res?.Entities != null) {
-      throw new Error('result.Entities has to be: Entity[]')
-    } else {
-      res.Entities = []
-    }
+      }
+    })
 
-    if (res?.Links && Array.isArray(res?.Links)) {
-      const links = Object.values(useMainStore.getState().links).flat()
-      res.Links.forEach(l => {
-        l.DateFrom = fixDate(l.DateFrom)
-        l.DateTo = fixDate(l.DateTo)
-        l.LabelShort = viewService.getShortName(l)
-        l.LabelLong = viewService.getLongName(l)
+    const existingLinks = Object.values(useMainStore.getState().links).flat()
+    this.list(res, 'Links').forEach(l => {
+      l.DateFrom = fixDate(l.DateFrom)
+      l.DateTo = fixDate(l.DateTo)
+      l.LabelShort = viewService.getShortName(l)
+      l.LabelLong = viewService.getLongName(l)
 
-        if (idMap.has(l.FromEntityId)) {
-          l.FromEntityId = idMap.get(l.FromEntityId)!
+      l.FromEntityId = idMap.get(l.FromEntityId) ?? l.FromEntityId
+      l.ToEntityId = idMap.get(l.ToEntityId) ?? l.ToEntityId
+
+      const matchRules = configService.getLinkConfiguration(l.TypeId)?.MatchRules
+      if (matchRules != null) {
+        const existingId = findId(l, matchRules, existingLinks)
+        if (existingId != null) {
+          idMap.set(l.Id, existingId)
+          l.Id = existingId
         }
+      }
+    })
 
-        if (idMap.has(l.ToEntityId)) {
-          l.ToEntityId = idMap.get(l.ToEntityId)!
-        }
-
-        const matchRules = configService.getLinkConfiguration(l.TypeId)?.MatchRules
-        if (matchRules != null) {
-          const existingId = findId(l, matchRules, links)
-          if (existingId != null) {
-            idMap.set(l.Id, existingId)
-            l.Id = existingId
-          }
-        }
-      })
-    } else if (res?.Links != null) {
-      throw new Error('result.Links has to be: Link[]')
-    } else {
-      res.Links = []
-    }
-
-    if (res?.Events && Array.isArray(res?.Events)) {
-      res.Events.forEach(e => {
-        e.Date = fixDate(e.Date)!
-      })
-    } else if (res?.Events != null) {
-      throw new Error('result.Events has to be: Event[]')
-    } else {
-      res.Events = []
-    }
+    this.list(res, 'Events').forEach(e => {
+      e.Date = fixDate(e.Date)!
+    })
 
     return res
   }
+
+  private list<K extends 'Entities' | 'Links' | 'Events'> (res: IQueryResponse, name: K): IQueryResponse[K] {
+    if (res[name] == null) {
+      res[name] = [] as IQueryResponse[K]
+    } else if (!Array.isArray(res[name])) {
+      throw new Error(`result.${name} has to be a list`)
+    }
+
+    return res[name]
+  }
 }
 
-const queryService = freeze(new QueryService())
+const queryService = new QueryService()
 
 export default queryService
 export type {

@@ -9,11 +9,24 @@ import { loadScript } from '../utils/script-loader'
 
 import * as global from '../global.json'
 import { isSameType } from '../utils/utils'
-import i18n from 'i18next';
+import i18n from 'i18next'
 
 export interface PropertyAndConfiguration {
   property?: IProperty
   propertyConfiguration: IPropertyConfiguration
+}
+
+// The types can be found by their TypeId and by their GlobalType
+function indexByType<T extends { TypeId: string, GlobalType?: string }> (types: T[]): Record<string, T> {
+  const index: Record<string, T> = {}
+  for (const type of types) {
+    index[type.TypeId] = type
+    if (type.GlobalType) {
+      index[type.GlobalType] = type
+    }
+  }
+
+  return freeze(index)
 }
 
 class ConfigurationService {
@@ -25,84 +38,49 @@ class ConfigurationService {
   private plugins = {} as Record<string, boolean>
   private publicUrl = ''
 
-  public async init_src (configUrl: string, context?: string, publicUrl?: string) {
+  public async initFromUrl (configUrl: string, publicUrl?: string) {
     this.publicUrl = publicUrl ?? ''
 
-    try {
-      const serviceJsonResponse = await fetch(this.getUrl(configUrl))
-      const configurationJson = await serviceJsonResponse.text()
-      await this.init(configurationJson, context, publicUrl)
-    } catch (error) {
-      console.error(error)
-      window.alert('Could not load config: ' + configUrl)
+    const response = await fetch(this.resolveUrl(configUrl))
+    if (!response.ok) {
+      throw new Error(`Could not load the configuration ${configUrl}: ${response.status} ${response.statusText}`)
     }
+
+    await this.init(await response.text(), publicUrl)
   }
 
-  public async init (configurationJson: string, context?: string, publicUrl?: string) {
+  public async init (configurationJson: string, publicUrl?: string) {
     const config = JSON.parse(configurationJson) as IConfiguration
 
     this.publicUrl = publicUrl ?? ''
-    void i18n.changeLanguage(config.Language ?? "en");
+    void i18n.changeLanguage(config.Language ?? 'en')
 
-    try {
-      this.entitiesConfiguration = freeze(config.Domain.EntityTypes.reduce(function (map, obj) {
-        map[obj.TypeId] = obj
+    this.entitiesConfiguration = indexByType(config.Domain.EntityTypes)
+    this.linksConfiguration = indexByType(config.Domain.LinkTypes)
 
-        if (obj.GlobalType) {
-          map[obj.GlobalType] = obj
-        }
-        return map
-      }, {} as Record<string, IEntityConfiguration>))
-
-      this.linksConfiguration = freeze(config.Domain.LinkTypes.reduce(function (map, obj) {
-        map[obj.TypeId] = obj
-
-        if (obj.GlobalType) {
-          map[obj.GlobalType] = obj
-        }
-        return map
-      }, {} as Record<string, ILinkConfiguration>))
-
-      if (config.Domain.EventTypes) {
-        this.eventsConfiguration = freeze(config.Domain.EventTypes.reduce(function (map, obj) {
-          map[obj.TypeId] = obj
-          obj.Generate.forEach(gen => {
-            map[gen.TypeId] = { ...obj, Properties: gen.Properties }
-          })
-          return map
-        }, {} as Record<string, IEventConfiguration>))
+    if (config.Domain.EventTypes) {
+      const events: Record<string, IEventConfiguration> = {}
+      for (const type of config.Domain.EventTypes) {
+        events[type.TypeId] = type
+        type.Generate.forEach(gen => {
+          events[gen.TypeId] = { ...type, Properties: gen.Properties }
+        })
       }
-
-      if (config.Save == null) {
-        config.Save = 'file'
-      }
-
-      if (config.SaveImage == null) {
-        config.SaveImage = 'file'
-      }
-
-      if (config.Open == null) {
-        config.Open = 'file'
-      }
-
-      if (config.Plugins) {
-        for (const importer of config.Plugins) {
-          if (this.plugins[importer]) {
-            continue
-          }
-          const result = await loadScript(this.getUrl(importer))
-          if (!result.status) {
-            throw new Error(result.error ?? 'Error parsing ' + importer)
-          }
-          this.plugins[importer] = true
-        }
-      }
-
-      this.configuration = freeze(config)
-    } catch (error) {
-      console.error(error)
-      window.alert('Error reading configuration')
+      this.eventsConfiguration = freeze(events)
     }
+
+    config.Save ??= 'file'
+    config.SaveImage ??= 'file'
+    config.Open ??= 'file'
+
+    for (const plugin of config.Plugins ?? []) {
+      if (!this.plugins[plugin]) {
+        await loadScript(this.resolveUrl(plugin))
+        this.plugins[plugin] = true
+      }
+    }
+
+    this.configuration = freeze(config)
   }
 
   public isConfigured () {
@@ -126,11 +104,11 @@ class ConfigurationService {
   }
 
   public getEntityConfiguration (TypeId: string, GlobalType?: string): IEntityConfiguration | undefined {
-    return this.entitiesConfiguration[TypeId] ?? this.entitiesConfiguration[GlobalType ?? ""] ?? global.Entities.find(x => x.GlobalType == GlobalType)
+    return this.entitiesConfiguration[TypeId] ?? this.entitiesConfiguration[GlobalType ?? ''] ?? global.Entities.find(x => x.GlobalType === GlobalType)
   }
 
   public getLinkConfiguration (TypeId: string, GlobalType?: string): ILinkConfiguration | undefined {
-    return this.linksConfiguration[TypeId] ?? this.linksConfiguration[GlobalType ?? ""] ?? global.Links.find(x => x.GlobalType == GlobalType)
+    return this.linksConfiguration[TypeId] ?? this.linksConfiguration[GlobalType ?? ''] ?? global.Links.find(x => x.GlobalType === GlobalType)
   }
 
   public getEventConfiguration (TypeId: string): IEventConfiguration | undefined {
@@ -139,8 +117,8 @@ class ConfigurationService {
 
   public getThingConfiguration (TypeId: string, GlobalType?: string): IBaseThing {
     const config = (
-      this.getEntityConfiguration(TypeId, GlobalType) ?? 
-      this.getLinkConfiguration(TypeId, GlobalType) ?? 
+      this.getEntityConfiguration(TypeId, GlobalType) ??
+      this.getLinkConfiguration(TypeId, GlobalType) ??
       this.getEventConfiguration(TypeId)
     )
     if (config == null) {
@@ -151,21 +129,12 @@ class ConfigurationService {
   }
 
   public getTypeName (thing: IBase): string {
-    const config = (this.getEntityConfiguration(thing.TypeId, thing.GlobalType) ?? this.getLinkConfiguration(thing.TypeId, thing.GlobalType) ?? this.getEventConfiguration(thing.TypeId))
-    if (config == null) {
-      throw new Error(thing.TypeId + ' is not mapped in config')
-    }
-
+    const config = this.getThingConfiguration(thing.TypeId, thing.GlobalType)
     return config.Name ?? config.GlobalType ?? config.TypeId
   }
 
   public getProperties (thing: IBase): PropertyAndConfiguration[] {
-    const props = (this.getEntityConfiguration(thing.TypeId, thing.GlobalType) ?? this.getLinkConfiguration(thing.TypeId, thing.GlobalType) ?? this.getEventConfiguration(thing.TypeId))?.Properties
-    if (props == null) {
-      throw new Error(thing.TypeId + ' is not mapped in config')
-    }
-
-    return props.map(e => {
+    return this.getThingConfiguration(thing.TypeId, thing.GlobalType).Properties.map(e => {
       return {
         propertyConfiguration: e,
         property: thing.Properties.find(ee => isSameType(ee, e))
@@ -173,12 +142,8 @@ class ConfigurationService {
     })
   }
 
-  public getPublicUrl () {
-    return this.publicUrl
-  }
-
   public getWorkflow (id: string): IWorkflowConfiguration {
-    const workflow = this.configuration!.Workflows?.find(x => x.Id === id)
+    const workflow = this.getConfiguration().Workflows?.find(x => x.Id === id)
     if (workflow == null) {
       throw Error(`Could not find specified workflow in configuration, ${id}`)
     }
@@ -186,15 +151,12 @@ class ConfigurationService {
     return workflow
   }
 
-  private getUrl (url: string): string {
-    if (url.startsWith('/')) {
-      url = this.publicUrl + url
-    }
-
-    return url
+  // Urls that start with a slash are relative to the public url of the host page
+  public resolveUrl (url: string): string {
+    return url.startsWith('/') ? this.publicUrl + url : url
   }
 }
 
-const configService = freeze(new ConfigurationService())
+const configService = new ConfigurationService()
 
 export default configService

@@ -5,7 +5,7 @@
 import { type ChangeEvent, useRef, useState } from 'react'
 import type { IPhaseEvent } from '../../../interfaces/data-models'
 import useAppStore from '../../../store/app-store'
-import useMainStore from '../../../store/main-store'
+import useMainStore, { type IntervalType } from '../../../store/main-store'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuSection from '../RibbonMenuSection'
 import RibbonMenuDivider from '../RibbonMenuDivider'
@@ -21,8 +21,6 @@ import TableTool from '../../tools/TableTool'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
-type IntervalType = 'day' | 'week' | 'month' | 'custom'
-
 function AnalysisTabPanel () {
   const { t } = useTranslation();
   const config = configService.getConfiguration()
@@ -34,6 +32,7 @@ function AnalysisTabPanel () {
   const min = useMainStore((state) => state.minDate)
   const max = useMainStore((state) => state.maxDate)
   const setDate = useMainStore((state) => state.setDate)
+  const setSelected = useMainStore((state) => state.setSelected)
   const interval = useMainStore((state) => state.interval)
   const setInterval = useMainStore((state) => state.setInterval)
   const setTimespan = useMainStore((state) => state.setTimespan)
@@ -50,6 +49,9 @@ function AnalysisTabPanel () {
 
   function toggleHistory () {
     setHistory(!history)
+    // The timeline starts at the first date, with nothing selected
+    setSelected([])
+    setDate(min)
   }
 
   function addEvent () {

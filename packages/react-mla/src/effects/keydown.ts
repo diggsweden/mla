@@ -4,8 +4,14 @@
 
 import { type RefObject, useEffect } from 'react'
 
-export const useKeyDown = (callback: () => void, ref: RefObject<HTMLElement | null>, keys: string[], requireControl?: boolean) => {
+// Calls the callback when one of the keys is pressed in the element, except when typing in an input
+export default function useKeyDown (callback: () => void, ref: RefObject<HTMLElement | null>, keys: string[], requireControl?: boolean) {
   useEffect(() => {
+    const element = ref.current
+    if (element == null) {
+      return
+    }
+
     const onKeyDown = (event: KeyboardEvent) => {
       const wasAnyKeyPressed = keys.some((key) => event.key === key || event.code === key)
       if (wasAnyKeyPressed && (!requireControl || event.ctrlKey) && (event.target as HTMLElement | null)?.tagName !== 'INPUT') {
@@ -15,18 +21,9 @@ export const useKeyDown = (callback: () => void, ref: RefObject<HTMLElement | nu
       }
     }
 
-    const element = ref.current
-    if (element != null) {
-      const element = ref.current ?? document
-      const ev = (e: Event) => { onKeyDown(e as KeyboardEvent) }
-      element.addEventListener('keydown', ev)
-      return () => {
-        element.removeEventListener('keydown', ev)
-      }
+    element.addEventListener('keydown', onKeyDown)
+    return () => {
+      element.removeEventListener('keydown', onKeyDown)
     }
-
-    return
   }, [callback, keys, ref, requireControl])
 }
-
-export default useKeyDown

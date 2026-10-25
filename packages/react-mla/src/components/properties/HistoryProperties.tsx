@@ -205,14 +205,14 @@ function HistoryProperties (props: Props) {
     if (entity) {
       const remove = getEntity(getId(entity), o.InternalId)
       if (remove) {
-        removeEntity(current as IEntity)
+        removeEntity(remove)
       }
     }
 
     if (link) {
       const remove = getLink(getId(link), o.InternalId)
       if (remove) {
-        removeLink(link)
+        removeLink(remove)
       }
     }
   }
@@ -270,7 +270,7 @@ function HistoryProperties (props: Props) {
         <div className={props.className}>
           <div className="m:pb-3 m:grid m:grid-cols-2 m:gap-2">
             <div className="">
-              <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={('date from')}>{('from')}</span>
+              <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={t('date from')}>{t('from')}</span>
               <input
                 type="date"
                 value={toDateString(current.DateFrom)}
@@ -289,7 +289,7 @@ function HistoryProperties (props: Props) {
               </input>
             </div>
             <div>
-              <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={('date to')}>{('to')}</span>
+              <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={t('date to')}>{t('to')}</span>
               <input
                 type="date"
                 value={toDateString(current.DateTo)}

@@ -9,7 +9,7 @@ import { getDateBetween, isSameDay } from "../../utils/date";
 import { getId } from "../../utils/utils";
 import { IViewConfiguration } from "../../interfaces/configuration/view-configuration";
 
-export const pixelsPerMonth = 96
+const pixelsPerMonth = 96
 
 export function calculatePixelOffset(date: DateTime, startOffset: DateTime) : number {
   const months = Math.floor(date.startOf("month").diff(startOffset, "months").months)

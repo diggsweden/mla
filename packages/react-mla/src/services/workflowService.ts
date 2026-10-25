@@ -9,38 +9,37 @@ import queryService from './queryService'
 import useWorkflowStore from '../store/workflow-store'
 import { delay } from '../utils/utils'
 import { internalAdd } from '../store/internal-actions'
-import { freeze } from 'immer'
 
 class WorkflowService {
-  private progress_handle?: number
+  private progressHandle?: number
 
-  public async Execute (id: string): Promise<void> {
+  public async execute (id: string): Promise<void> {
     const workflowStore = useWorkflowStore.getState()
     const workflow = configService.getWorkflow(id)
     workflowStore.setWorkflow(id)
-    this.UpdateDialog(workflow)
+    this.updateDialog(workflow)
     for (const action of workflow.Actions) {
       workflowStore.setActionRunning(action.Id)
       try {
         switch (action.ActionType) {
           case 'RunQuery':
-            await this.RunQuery(action.ActionParameters as IQueryAction)
+            await this.runQuery(action.ActionParameters as IQueryAction)
             break
           case 'Add':
-            await this.Add()
+            await this.add()
             break
           case 'ChangeLayout':
-            this.ChangeLayout(action.ActionParameters as IChangeLayout)
+            this.changeLayout(action.ActionParameters as IChangeLayout)
             break
           case 'Delay':
             await delay((action.ActionParameters as IDelay).ms)
             break
           case 'CloseDialog':
-            this.Close()
+            this.close()
             break
         }
       } catch (e) {
-        workflowStore.setActionError(action.Id, (e as { message: string }).message)
+        workflowStore.setActionError(action.Id, e instanceof Error ? e.message : String(e))
         return
       } finally {
         workflowStore.setActionCompleted(action.Id)
@@ -48,20 +47,20 @@ class WorkflowService {
     }
   }
 
-  private UpdateDialog (config: IWorkflowConfiguration): void {
-    if (this.progress_handle) {
-      window.clearTimeout(this.progress_handle)
+  private updateDialog (config: IWorkflowConfiguration): void {
+    if (this.progressHandle) {
+      window.clearTimeout(this.progressHandle)
     }
     const showProgress = config.ShowProgress ?? true
     if (showProgress === true || showProgress === 0) {
       useWorkflowStore.getState().setShowDialog(true)
     } else if (showProgress !== false && showProgress > 0) {
-      this.progress_handle = window.setTimeout(() => { useWorkflowStore.getState().setShowDialog(true) }, showProgress)
+      this.progressHandle = window.setTimeout(() => { useWorkflowStore.getState().setShowDialog(true) }, showProgress)
     }
   }
 
-  private async RunQuery (queryParameter: IQueryAction): Promise<void> {
-    const result = await queryService.QueryEntities(queryParameter.QueryId, [])
+  private async runQuery (queryParameter: IQueryAction): Promise<void> {
+    const result = await queryService.queryEntities(queryParameter.QueryId, [])
 
     if (result.Entities) {
       useWorkflowStore.getState().addEntities(result.Entities)
@@ -72,21 +71,20 @@ class WorkflowService {
     }
   }
 
-  private async Add (): Promise<void> {
+  private async add (): Promise<void> {
     internalAdd(false, useWorkflowStore.getState().entities, useWorkflowStore.getState().links)
     await delay(100)
   }
 
-  private ChangeLayout (queryParameter: IChangeLayout): void {
-    const layoutId = queryParameter.LayoutId
-    useAppStore.getState().setLayout(layoutId)
+  private changeLayout (queryParameter: IChangeLayout): void {
+    useAppStore.getState().setLayout(queryParameter.LayoutId)
   }
 
-  private Close (): void {
+  private close (): void {
     useWorkflowStore.getState().setShowDialog(false)
   }
 }
 
-const workflowService = freeze(new WorkflowService())
+const workflowService = new WorkflowService()
 
 export default workflowService

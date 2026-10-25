@@ -7,9 +7,6 @@ import { create } from 'zustand'
 import type { IBaseViewConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
 import { type IGeoFeatureBounds } from '../interfaces/data-models/geo'
 import viewService from '../services/viewService'
-import useSearchStore from './search-state'
-import { internalUpdateLabels } from './internal-actions'
-import useMainStore from './main-store'
 import chartLayouts, { type ChartLayout } from '../utils/chart-layouts'
 import interactionOptions, { type InteractionOptions } from '../utils/interaction-options'
 
@@ -69,13 +66,12 @@ const useAppStore = create<AppState>((set) => ({
       return map
     }, {} as Record<string, IBaseViewConfiguration>)
 
+    viewService.setSelectedViews(update)
     set(() => ({
       view: viewId,
       currentViewConfiguration: v,
       thingViewConfiguration: update
     }))
-
-    internalUpdateLabels()
   },
 
   contextmenuPosition: undefined,
@@ -117,11 +113,6 @@ const useAppStore = create<AppState>((set) => ({
       historyMode: value,
       selectedTool: value ? 'activity' : undefined
     }))
-
-    const main = useMainStore.getState()
-
-    main.setSelected([])
-    main.setDate(main.minDate)
   },
   interaction: interactionOptions.reset,
   setInteraction: (interactionId: string) => {
@@ -144,9 +135,6 @@ const useAppStore = create<AppState>((set) => ({
 
   selectedTool: undefined,
   setTool: (tool) => {
-    if (tool === undefined) {
-      useSearchStore.getState().clearSelectedTool()
-    }
     set(() => ({
       historyMode: false,
       selectedTool: tool

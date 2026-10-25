@@ -2,26 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-export async function loadScript (fileUrl: string): Promise<{ status: boolean, error?: string }> {
-  return await new Promise((resolve, reject) => {
-    try {
-      const scriptEle = document.createElement('script')
-      scriptEle.type = 'text/javascript'
-      scriptEle.async = false
-
-      scriptEle.src = fileUrl
-
-      scriptEle.addEventListener('load', () => {
-        resolve({ status: true })
-      })
-
-      scriptEle.addEventListener('error', (ev: ErrorEvent) => {
-        reject(new Error(ev.message))
-      })
-
-      document.head.appendChild(scriptEle)
-    } catch (error) {
-      reject(error instanceof Error ? error : new Error(String(error)))
-    }
+export async function loadScript (fileUrl: string): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    const script = document.createElement('script')
+    script.async = false
+    script.src = fileUrl
+    script.addEventListener('load', () => { resolve() })
+    script.addEventListener('error', () => { reject(new Error('Could not load ' + fileUrl)) })
+    document.head.appendChild(script)
   })
 }

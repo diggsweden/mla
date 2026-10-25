@@ -96,7 +96,7 @@ function Chart (props: Props) {
     return opts
   }, [layout, interaction])
 
-  function select (startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) {
+  const select = useCallback((startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) => {
     if (network && data) {
       let selection = [] as string[]
       if (ctxMenu) {
@@ -119,7 +119,7 @@ function Chart (props: Props) {
         setSelectedIds([...nodes, ...edges])
       }
     }
-  }
+  }, [network, data, selectedIds, setSelectedIds])
 
   useEffect(() => {
     if (network) {
@@ -212,51 +212,48 @@ function Chart (props: Props) {
       return
     }
 
-    const n = new Network(networkNode.current, data, {})
-    document.body.addEventListener('contextMenuClick', (e) => {
-      if (networkNode.current) {
-        const { detail } = e as CustomEvent<{ x: number, y: number, button: number }>
-        const bounds = networkNode.current.getBoundingClientRect()
-        const event = new CustomEvent('mouseup', {
-          detail: {
-            x: detail.x - bounds.x,
-            y: detail.y - bounds.y,
-            button: detail.button,
-            type: 'customclick'
-          }
-        })
-        networkNode.current.dispatchEvent(event)
-      }
-    })
+    const container = networkNode.current
+    const n = new Network(container, data, {})
+    // The context menu sends its clicks as events on the page, they are passed on to the chart
+    const onContextMenuClick = (e: Event) => {
+      const { detail } = e as CustomEvent<{ x: number, y: number, button: number }>
+      const bounds = container.getBoundingClientRect()
+      container.dispatchEvent(new CustomEvent('mouseup', {
+        detail: {
+          x: detail.x - bounds.x,
+          y: detail.y - bounds.y,
+          button: detail.button,
+          type: 'customclick'
+        }
+      }))
+    }
+    document.body.addEventListener('contextMenuClick', onContextMenuClick)
     setNetwork(n)
+
+    return () => {
+      document.body.removeEventListener('contextMenuClick', onContextMenuClick)
+      setNetwork(undefined)
+      n.destroy()
+    }
   }, [data, networkNode, setNetwork])
 
-  const dragging = useRef(false)
   useLayoutEffect(() => {
     if (network) {
-      network.on('select', (event: { nodes: string[], edges: string[] }) => {
+      const onSelect = (event: { nodes: string[], edges: string[] }) => {
         const { nodes, edges } = event
         setSelectedIds([...nodes, ...edges])
-      })
-      network.on('dragStart', function (params: ClickEvent) {
-        dragging.current = true
-        for (let i = 0; i < params.nodes.length; i++) {
-          const id = params.nodes[i]
-          data.nodes.getDataSet().updateOnly(
-            { id, fixed: false }
-          )
+      }
+      const onDragStart = (params: ClickEvent) => {
+        for (const id of params.nodes) {
+          data.nodes.getDataSet().updateOnly({ id, fixed: false })
         }
-      })
-      network.on('dragEnd', function (params: ClickEvent) {
-        dragging.current = false
+      }
+      const onDragEnd = (params: ClickEvent) => {
         const pos = network.getPositions(params.nodes)
         const positionUpdate = [] as IEntity[]
-        for (let i = 0; i < params.nodes.length; i++) {
-          const id = params.nodes[i]
+        for (const id of params.nodes) {
           const { x, y } = pos[id]
-          data.nodes.getDataSet().updateOnly(
-            { id, fixed: true, x, y }
-          )
+          data.nodes.getDataSet().updateOnly({ id, fixed: true, x, y })
 
           getHistory(id)?.filter(e => e.PosX !== x || e.PosY !== y).forEach(e => {
             positionUpdate.push(produce(e, draft => {
@@ -266,7 +263,16 @@ function Chart (props: Props) {
           })
         }
         update(...positionUpdate)
-      })
+      }
+
+      network.on('select', onSelect)
+      network.on('dragStart', onDragStart)
+      network.on('dragEnd', onDragEnd)
+      return () => {
+        network.off('select', onSelect)
+        network.off('dragStart', onDragStart)
+        network.off('dragEnd', onDragEnd)
+      }
     }
   }, [network, data, setSelectedIds, update, getHistory])
 

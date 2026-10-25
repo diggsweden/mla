@@ -12,11 +12,11 @@ import Timeline from './components/timeline/Timeline'
 import useMainStore from './store/main-store'
 import configService from './services/configurationService'
 import useAppStore from './store/app-store'
-import { getContextValue } from './utils/utils'
+import { getContextValue } from './utils/context'
 import ErrorBoundary from './components/common/ErrorBoundary'
 import AppShortcuts from './components/common/AppShortcuts'
 import Footer from './components/common/Footer'
-import Map from './components/map/Map'
+import MapView from './components/map/Map'
 import i18n from "i18next";
 
 import 'vis-network/styles/vis-network.min.css'
@@ -49,7 +49,7 @@ export default function App () {
 
           {configService.getConfiguration().MapConfiguration && (<ErrorBoundary>
             <div className={(map ? '' : 'm:hidden ') + 'm:h-full m:w-1 m:bg-gray-300 m:z-10 m:hover:cursor-col-resize'} />
-            <Map className={(map ? '' : 'm:hidden ') + 'm:h-full m:w-full m:flex-1'} />
+            <MapView className={(map ? '' : 'm:hidden ') + 'm:h-full m:w-full m:flex-1'} />
           </ErrorBoundary>)}
         </section>
         

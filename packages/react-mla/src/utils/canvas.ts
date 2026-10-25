@@ -31,14 +31,13 @@ export async function toPng (svgString: string, color: string, size: number, svg
     ctx.strokeRect(squareOffset, squareOffset, (size * scale) - (squareOffset * 2), (size * scale) - (squareOffset * 2))
   }
 
-  // Should be in types
   const blob: Blob = await canvas.convertToBlob()
   const pngUrl = URL.createObjectURL(blob)
 
   return pngUrl
 }
 
-export async function drawSvg (svgString: string, color: string, size: number): Promise<OffscreenCanvas> {
+async function drawSvg (svgString: string, color: string, size: number): Promise<OffscreenCanvas> {
   return await new Promise((resolve, reject) => {
     const canvas = new OffscreenCanvas(size, size)
     const ctx = canvas.getContext('2d')
@@ -75,7 +74,7 @@ export async function drawSvg (svgString: string, color: string, size: number): 
   })
 }
 
-export function drawCircle (canvas: OffscreenCanvas, size: number): void {
+function drawCircle (canvas: OffscreenCanvas, size: number): void {
   const ctx = canvas.getContext('2d')
   if (ctx == null) {
     throw new Error('Could not create canvas')

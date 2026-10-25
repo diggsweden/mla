@@ -2,18 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { freeze } from 'immer'
 import icons from '../icons.json'
 import { toPng } from '../utils/canvas'
 import configService from './configurationService'
-import viewService from './viewService'
 
 const size = 100
 class IconService {
   private readonly svgs = new Map<string, string>()
   private readonly pngs = new Map<string, string>()
 
-  public async init (): Promise<void> {
+  public init (): void {
     const config = configService.getConfiguration()
 
     const iconsToImport: Record<string, string> = {
@@ -23,12 +21,6 @@ class IconService {
 
     for (const key of Object.keys(iconsToImport)) {
       this.svgs.set(key, iconsToImport[key])
-    }
-
-    for (const ent of config.Domain.EntityTypes) {
-      const view = viewService.getView(ent.TypeId)
-      await this.getPNG(view.Icon, view.Color, undefined, undefined, false)
-      await this.getPNG(view.Icon, view.Color, undefined, undefined, true)
     }
   }
 
@@ -66,6 +58,6 @@ class IconService {
   }
 }
 
-const iconService = freeze(new IconService())
+const iconService = new IconService()
 
 export default iconService
