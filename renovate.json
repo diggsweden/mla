@@ -55,11 +55,6 @@
       "enabled": false
     },
     {
-      "matchManagers": ["github-actions"],
-      "matchPackageNames": ["slsa-framework/slsa-github-generator"],
-      "pinDigests": false
-    },
-    {
       "description": "Ignore major node versions",
       "matchPackageNames": ["node", "@types/node"],
       "matchUpdateTypes": ["major"],

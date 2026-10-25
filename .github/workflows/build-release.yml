@@ -1,0 +1,201 @@
+# SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+#
+# SPDX-License-Identifier: CC0-1.0
+
+---
+# Builds, publishes and attests a release. This is a reusable workflow on purpose: the attestation is signed
+# with the identity of this file, which is what makes it SLSA Build Level 3.
+# Verify a release with
+#   gh attestation verify mla-component.umd.cjs --repo diggsweden/mla \
+#     --signer-workflow diggsweden/mla/.github/workflows/build-release.yml
+name: Build release
+
+on:
+  workflow_call:
+    inputs:
+      dry-run:
+        description: "Build and attest, but do not publish the packages"
+        type: boolean
+        default: false
+    outputs:
+      changelog:
+        description: "The changelog of the version"
+        value: ${{ jobs.build.outputs.changelog }}
+      version:
+        description: "The version, as in the tag"
+        value: ${{ jobs.build.outputs.version }}
+      branch:
+        description: "The branch the release is made from"
+        value: ${{ jobs.build.outputs.branch }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build release
+    outputs:
+      changelog: ${{ steps.get-changelog.outputs.changelog }}
+      version: ${{ steps.get-version.outputs.version }}
+      branch: ${{ steps.get-branch.outputs.branch }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # Needed to sign the attestation
+      id-token: write
+      attestations: write
+    steps:
+      # Checkout project repository
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          run_install: false
+
+      # Setup Node.js environment
+      - name: Install Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+          # Writes the user level .npmrc with the token for GitHub Packages, pnpm does not read credentials from the project .npmrc
+          registry-url: https://npm.pkg.github.com
+          scope: "@diggsweden"
+
+      # Get branch name
+      - id: get-branch
+        name: Get branch name
+        run: |
+          echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_OUTPUT"
+
+      # Get release tag
+      - name: Bump release version
+        if: contains(env.BRANCH_NAME, 'beta') != true
+        run: |
+          echo "RELEASE_TAG=latest" >> "$GITHUB_ENV"
+
+      # Get release tag if pre release
+      - name: Bump pre-release version
+        if: contains(env.BRANCH_NAME, 'beta')
+        run: |
+          echo "RELEASE_TAG=beta" >> "$GITHUB_ENV"
+
+      # Create semver version
+      - id: get-version
+        name: Get version
+        run: |
+          # The release branch is named after the version tag, release/v1.3.0 or release/v1.3.0-beta.0
+          NEW_VERSION="${BRANCH_NAME#release/}"
+          echo "NEW_VERSION=${NEW_VERSION}" >> "$GITHUB_ENV"
+          echo "NEW_SEMVER_VERSION=${NEW_VERSION#v}" >> "$GITHUB_ENV"
+          echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Build
+      - name: Build
+        run: pnpm run -r build
+
+      # Remove workspace dependencies from package.json when copying them to dist folder
+      - name: Prepare package.json files for publishing
+        run: |
+          for pkg in react-mla webcomponent-mla; do
+            echo "Preparing $pkg package.json for publish"
+
+            jq '
+              (.devDependencies // {}) as $dev
+              | .devDependencies = (
+                  $dev
+                  | with_entries(
+                      select(.value | startswith("workspace:") | not)
+                    )
+                )
+            ' packages/$pkg/package.json \
+            > packages/$pkg/dist/package.json
+          done
+
+      # Everything that can fail is done before publishing, so that a failure leaves nothing half published
+      # Read version changelog. A dry run is made from any branch, which has no version in the changelog, and has no release
+      - id: get-changelog
+        name: Get version changelog
+        if: inputs.dry-run != true
+        run: node scripts/changelog.mjs read "$NEW_VERSION"
+
+      # Create the SLSA provenance of the release file, signed with the identity of this workflow
+      - id: attest
+        name: Attest build provenance
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+
+      # The full bundle is verified with gh attestation verify. The signed provenance statement in it (a DSSE envelope)
+      # is also saved as .intoto.jsonl, the file name used for the provenance of a release, which Scorecard looks for
+      - name: Save attestation
+        shell: bash
+        run: |
+          dist=./packages/webcomponent-mla/dist
+          cp "$BUNDLE_PATH" "$dist/mla-component.umd.cjs.sigstore.json"
+          jq -ce ".dsseEnvelope" "$BUNDLE_PATH" > "$dist/mla-component.umd.cjs.intoto.jsonl"
+
+          # Fail unless it is SLSA provenance of exactly the file that is released
+          sha256="$(sha256sum "$dist/mla-component.umd.cjs" | cut -d " " -f 1)"
+          jq -r ".payload" "$dist/mla-component.umd.cjs.intoto.jsonl" | base64 -d | jq -e --arg sha256 "$sha256" '
+            (.predicateType | startswith("https://slsa.dev/provenance/"))
+            and any(.subject[]; .digest.sha256 == $sha256)
+          ' > /dev/null
+        env:
+          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
+
+      # Publish version to public repository
+      - name: Publish react-mla
+        run: |
+          args=(--tag "$RELEASE_TAG" --no-git-checks)
+          if [ "$DRY_RUN" = "true" ]; then args+=(--dry-run); fi
+          pnpm publish ./packages/react-mla/dist "${args[@]}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ inputs.dry-run }}
+
+      # Publish version to public repository
+      - name: Publish webcomponent-mla
+        run: |
+          args=(--tag "$RELEASE_TAG" --no-git-checks)
+          if [ "$DRY_RUN" = "true" ]; then args+=(--dry-run); fi
+          pnpm publish ./packages/webcomponent-mla/dist "${args[@]}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ inputs.dry-run }}
+
+      # Upload artifact
+      - name: Upload mla-component.umd.cjs
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mla-component.umd.cjs
+          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
+          if-no-files-found: error
+          retention-days: 5
+
+      # Upload attestation
+      - name: Upload mla-component.umd.cjs.sigstore.json
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mla-component.umd.cjs.sigstore.json
+          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.sigstore.json
+          if-no-files-found: error
+          retention-days: 5
+
+      # Upload provenance
+      - name: Upload mla-component.umd.cjs.intoto.jsonl
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mla-component.umd.cjs.intoto.jsonl
+          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.intoto.jsonl
+          if-no-files-found: error
+          retention-days: 5

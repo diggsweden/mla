@@ -7,178 +7,37 @@ name: Deploy release
 
 on:
   workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Dry run: build and attest from this branch, but do not publish the packages or create a release"
+        type: boolean
+        default: false
   pull_request:
     types:
-      - closed       
+      - closed
 
 permissions:
   contents: read
 
 jobs:
+  # Builds, publishes and attests the release in a reusable workflow, see build-release.yml
   build-release:
     if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'release')) )
     name: Build release
-    outputs:
-      hashes: ${{ steps.hash.outputs.hashes }}
-      changelog: ${{ steps.get-changelog.outputs.changelog }}
-      version: ${{ steps.get-version.outputs.version }}
-      branch: ${{ steps.get-branch.outputs.branch }}
-    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    steps:
-      # Checkout project repository
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      # Install pnpm
-      - name: Install pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-        with:
-          run_install: false    
-
-      # Setup Node.js environment
-      - name: Install Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: ".nvmrc"
-          cache: pnpm
-          # Writes the user level .npmrc with the token for GitHub Packages, pnpm does not read credentials from the project .npmrc
-          registry-url: https://npm.pkg.github.com
-          scope: "@diggsweden"
-
-      # Import GPG key to use for signing
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd # v7.0.0
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
-
-      # Configure Git
-      - name: Git configuration
-        run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "GitHub Actions"
-
-      # Get branch name
-      - id: get-branch
-        name: Get branch name
-        run: |
-          echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
-          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_OUTPUT"
-
-      # Get release tag
-      - name: Bump release version
-        if: contains(env.BRANCH_NAME, 'beta') != true
-        run: |
-          echo "RELEASE_TAG=latest" >> "$GITHUB_ENV"
-
-      # Get release tag if pre release
-      - name: Bump pre-release version
-        if: contains(env.BRANCH_NAME, 'beta')
-        run: |
-          echo "RELEASE_TAG=beta" >> "$GITHUB_ENV"
-
-      # Create semver version
-      - id: get-version
-        name: Get version
-        run: |
-          # The release branch is named after the version tag, release/v1.3.0 or release/v1.3.0-beta.0
-          NEW_VERSION="${BRANCH_NAME#release/}"
-          echo "NEW_VERSION=${NEW_VERSION}" >> "$GITHUB_ENV"
-          echo "NEW_SEMVER_VERSION=${NEW_VERSION#v}" >> "$GITHUB_ENV"
-          echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
-
-       # Install dependencies
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile      
-
-        # Build
-      - name: Build
-        run: pnpm run -r build
-
-        # Remove workspace dependencies from package.json when copying them to dist folder
-      - name: Prepare package.json files for publishing
-        run: |
-          for pkg in react-mla webcomponent-mla; do
-            echo "Preparing $pkg package.json for publish"
-
-            jq '
-              (.devDependencies // {}) as $dev
-              | .devDependencies = (
-                  $dev
-                  | with_entries(
-                      select(.value | startswith("workspace:") | not)
-                    )
-                )
-            ' packages/$pkg/package.json \
-            > packages/$pkg/dist/package.json
-          done
-
-      # Publish version to public repository
-      - name: Publish react-mla
-        run: pnpm publish ./packages/react-mla/dist --tag ${{ env.RELEASE_TAG }} --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Publish version to public repository
-      - name: Publish webcomponent-mla
-        run: pnpm publish ./packages/webcomponent-mla/dist --tag ${{ env.RELEASE_TAG }} --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Read version changelog
-      - id: get-changelog
-        name: Get version changelog
-        run: node scripts/changelog.mjs read "$NEW_VERSION"
-
-      # Generate hashes needed for provenance
-      - id: hash
-        name: Generate hashes for release artifacts
-        shell: bash
-        run: |
-          echo "hashes=$(sha256sum ./packages/webcomponent-mla/dist/mla-component.umd.cjs | base64 -w0)" >> "$GITHUB_OUTPUT"
-
-        # Create signature
-      - name: Create signature
-        run: |
-          gpg --armor --detach-sign ./packages/webcomponent-mla/dist/mla-component.umd.cjs
-
-      # Upload artifact
-      - name: Upload mla-component.umd.cjs
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: mla-component.umd.cjs
-          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
-          if-no-files-found: error
-          retention-days: 5
-
-      # Upload signature
-      - name: Upload mla-component.umd.cjs
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: mla-component.umd.cjs.asc
-          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.asc
-          if-no-files-found: error
-          retention-days: 5
-
-  # This step calls the generic workflow to generate provenance.
-  provenance:
-    needs: [build-release]
-    permissions:
-      contents: write
-      actions: read
       id-token: write
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
+      attestations: write
+    uses: ./.github/workflows/build-release.yml
     with:
-      base64-subjects: "${{ needs.build-release.outputs.hashes }}"
-      upload-assets: false
+      dry-run: ${{ inputs.dry-run == true }}
 
   # This step uploads our artifacts to the tagged GitHub release.
   release:
     name: Create release
-    needs: [build-release, provenance]
+    if: inputs.dry-run != true
+    needs: [build-release]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -188,10 +47,10 @@ jobs:
         with:
           name: mla-component.umd.cjs
 
-      - name: Download mla-component.umd.cjs.asc
+      - name: Download mla-component.umd.cjs.sigstore.json
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: mla-component.umd.cjs.asc
+          name: mla-component.umd.cjs.sigstore.json
 
       - name: Download mla-component.umd.cjs.intoto.jsonl
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -207,7 +66,7 @@ jobs:
           prerelease: ${{ contains(needs.build-release.outputs.branch, 'beta') }}
           files: |
             mla-component.umd.cjs
-            mla-component.umd.cjs.asc
+            mla-component.umd.cjs.sigstore.json
             mla-component.umd.cjs.intoto.jsonl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
