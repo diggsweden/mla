@@ -14,8 +14,7 @@
   "scripts": {
     "dev": "vite --open",
     "preview": "vite preview --open",
-    "build": "tsc && vite build",
-    "deploy": "gh-pages -d dist -u \"github-actions-bot <support+actions@github.com>\""
+    "build": "tsc && vite build"
   },
   "browserslist": {
     "production": [
