@@ -246,21 +246,21 @@ function ItemResultList (props: ItemResultProps) {
   }
 
   return <div className={props.className}>
-    {result.ErrorMessage && <div className="m-bg-red-100 m-border m-border-red-400 m-text-red-700 m-px-4 m-py-3 m-rounded m-relative m-mb-3" role="alert">
-      <span className="m-block m-sm:inline">{result.ErrorMessage}</span>
+    {result.ErrorMessage && <div className="m:bg-red-100 m:border m:border-red-400 m:text-red-700 m:px-4 m:py-3 m:rounded m:relative m:mb-3" role="alert">
+      <span className="m:block m-sm:inline">{result.ErrorMessage}</span>
     </div>
     }
     {count > 1 &&
-      <div className="m-relative">
-        <p className="m-leading-normal m-font-sm m-uppercase m-text-center m-mb-2">{t('results')}</p>
-        <Button className="m-right-0 m-top-0" onClick={addAll}>{t('add all')}</Button>
+      <div className="m:relative">
+        <p className="m:leading-normal m-font-sm m:uppercase m:text-center m:mb-2">{t('results')}</p>
+        <Button className="m:right-0 m:top-0" onClick={addAll}>{t('add all')}</Button>
       </div>
     }
     {Object.keys(mainEntities).length > 0 &&
       <div>
         {Object.keys(mainEntities).map(k => <div key={k}>
           {k !== last && seeds &&
-            <div className="m-text-lg m-border-t m-border-gray-400 m-pt-2 m-mb-1 m-font-semibold">
+            <div className="m:text-lg m:border-t m:border-gray-400 m:pt-2 m:mb-1 m:font-semibold">
               <span className=''>{seeds.find(s => getId(s) === k)!.LabelShort}</span>
             </div>
           }
@@ -271,14 +271,14 @@ function ItemResultList (props: ItemResultProps) {
         )}
       </div>
     }
-    {eventGroups.map(e => (<div key={e.GroupId} className="m-w-full m-rounded m-border-solid m-border m-bg-white m-mb-1 m-p-2 m-relative">
-      <span className='m-absolute m-top-4 -m-right-4 -m-translate-y-1/2' onClick={() => { addEvents(e) }}>
-        <button className="m-text-white m-bg-primary m-rounded-full m-text-lg m-px-2 m-m-2 m-h-5 m-w-5 m-leading-5 m-flex m-justify-center">+</button>
+    {eventGroups.map(e => (<div key={e.GroupId} className="m:w-full m:rounded m:border-solid m:border m:bg-white m:mb-1 m:p-2 m:relative">
+      <span className='m:absolute m:top-4 m:-right-4 m:-translate-y-1/2' onClick={() => { addEvents(e) }}>
+        <button className="m:text-white m:bg-primary m:rounded-full m:text-lg m:px-2 m:m-2 m:h-5 m:w-5 m:leading-5 m:flex m:justify-center">+</button>
       </span>
       <div onClick={() => { setShowEvents(e.Events) }}>
         <div>
-          <span className="m-h-5 m-w-5 m-inline-flex" >
-            <Icon name='calendar_view_day' className="m-text-primary m-relative m-mt-1"></Icon>
+          <span className="m:h-5 m:w-5 m:inline-flex" >
+            <Icon name='calendar_view_day' className="m:text-primary m:relative m:mt-1"></Icon>
           </span>
           <span className=''>
             {e.Name} - {e.Events.length} {t('events')}
@@ -292,7 +292,7 @@ function ItemResultList (props: ItemResultProps) {
     ))
     }
     {(Object.keys(mainEntities).length + eventGroups.length) === 0 &&
-      <p className="m-italic">{t('no results')}</p>
+      <p className="m:italic">{t('no results')}</p>
     }
     {showEvents.length > 0 &&
       <Modal mode='ok' wide={true} show={showEvents.length > 0} title={'Tabelldata'} onNegative={() => { setShowEvents([]) }} onPositive={() => { setShowEvents([]) }}>

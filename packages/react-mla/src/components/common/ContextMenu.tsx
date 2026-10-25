@@ -90,38 +90,38 @@ export default function ContextMenu (props: Props) {
       <>
         {geoFeature?.Point != null && <>
           <span>{geoFeature.Point.lat}, {geoFeature.Point.lng}</span>
-          <hr className="m-my-3 m-border-gray-300" />
+          <hr className="m:my-3 m:border-gray-300" />
         </>}
         {availableTools.length > 0 && <>
-          <div className="m-flex m-py-1 m-px-2 m-rounded m-cursor-default">
-            <span className="m-w-3 m-mr-2"><Icon name="content_paste_search" /></span>
+          <div className="m:flex m:py-1 m:px-2 m:rounded m:cursor-default">
+            <span className="m:w-3 m:mr-2"><Icon name="content_paste_search" /></span>
             <div>{t('fetch')}</div>
           </div>
           {availableTools.map(e => (
-            <button key={e.Id} className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { explore(e.Id); hideContextMenu() }}>
+            <button key={e.Id} className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded m:cursor-pointer" onClick={() => { explore(e.Id); hideContextMenu() }}>
               <div>{e.Name}</div>
             </button>
           ))}
-          <hr className="m-my-3 m-border-gray-300" />
+          <hr className="m:my-3 m:border-gray-300" />
         </>}
         {geoFeature?.Bounds && (<>
-          <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { selectGeoFeature(); hideContextMenu() }}>
-            <span className="m-w-3 m-mr-2"><Icon name="select_all" /></span>
+          <button className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded m:cursor-pointer" onClick={() => { selectGeoFeature(); hideContextMenu() }}>
+            <span className="m:w-3 m:mr-2"><Icon name="select_all" /></span>
             <div>{t('select')}</div>
           </button>
-          <hr className="m-my-3 m-border-gray-300" />
+          <hr className="m:my-3 m:border-gray-300" />
         </>
         )}
-        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer disabled:m-opacity-50" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
-          <span className="m-w-3 m-mr-2"><Icon name="content_copy" /></span>
+        <button className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded m:cursor-pointer m:disabled:opacity-50" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
+          <span className="m:w-3 m:mr-2"><Icon name="content_copy" /></span>
           <div>{t('copy')}</div>
         </button>
-        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded m-cursor-pointer" onClick={() => { if (props.paste != null) { props.paste(); hideContextMenu() } }}>
-          <span className="m-w-3 m-mr-2"><Icon name="content_paste" /></span>
+        <button className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded m:cursor-pointer" onClick={() => { if (props.paste != null) { props.paste(); hideContextMenu() } }}>
+          <span className="m:w-3 m:mr-2"><Icon name="content_paste" /></span>
           <div>{t('paste')}</div>
         </button>
-        <button className="m-flex hover:m-bg-gray-100 m-py-1 m-px-2 m-rounded disabled:m-opacity-50 m-cursor-pointer" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
-          <span className="m-w-3 m-mr-2"><Icon name="delete_forever" /></span>
+        <button className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded m:disabled:opacity-50 m:cursor-pointer" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
+          <span className="m:w-3 m:mr-2"><Icon name="delete_forever" /></span>
           <div>{t('delete')}</div>
         </button>
       </>

@@ -44,13 +44,13 @@ function PhaseCreator (props: Props) {
     onChange(update)
   }
 
-  const inputStyle = "m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-w-full m-p-1"
+  const inputStyle = "m:bg-white m:border m:border-gray-300 m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:focus:border-blue-500 m:block m:w-full m:p-1"
   return (
-    <div className="m-grid m-grid-cols-2 m-gap-2 m-text-left m-p-6 m-pb-8 m-w-full">
-      <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('description')}</span>
+    <div className="m:grid m:grid-cols-2 m:gap-2 m:text-left m:p-6 m:pb-8 m:w-full">
+      <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('description')}</span>
       <input autoFocus type="text" value={newEvent.Description} onChange={(e) => { setText(e.target.value) }} className={inputStyle}></input>
 
-      <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('date')}</span>
+      <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('date')}</span>
       <input required type="date" value={newEvent.Date.toISO()!.slice(0, 10)} onChange={(e) => { setDate(e.target.valueAsDate) }} className={inputStyle}></input>
     </div>
   )

@@ -20,7 +20,7 @@ import Map from './components/map/Map'
 import i18n from "i18next";
 
 import 'vis-network/styles/vis-network.min.css'
-import './App.scss'
+import './App.css'
 
 export default function App () {
   const history = useAppStore((state) => state.historyMode)
@@ -29,27 +29,27 @@ export default function App () {
   const title = useMemo(() => getContextValue(context, 'title') ?? i18n.t('name'), [context])
 
   return (
-    <AppShortcuts className="m-h-full m-w-full m-max-h-full m-max-w-full m-text-base m-flex m-flex-col">
-        <header className="m-h-100 m-flex-none m-w-full m-border-b m-border-gray-300 m-text-white m-bg-primary">
-          <h1 className="m-pt-2 m-pb-2 m-pl-4">MLA - {title}</h1>
+    <AppShortcuts className="m:h-full m:w-full m:max-h-full m:max-w-full m:text-base m:flex m:flex-col">
+        <header className="m:flex-none m:w-full m:border-b m:border-gray-300 m:text-white m:bg-primary">
+          <h1 className="m:pt-2 m:pb-2 m:pl-4">MLA - {title}</h1>
             <RibbonMenu />
         </header>
-        <section className="m-flex-1 m-flex m-min-h-0 m-relative">
-          <Chart className="m-h-full m-flex-1 m-relative m-overflow-hidden">
-            <div className="m-h-full m-w-full m-flex m-flex-row m-overflow-hidden">
-              <ToolPanel className="m-w-72 m-flex-none m-h-full m-border-r m-border-gray-300 m-pointer-events-auto" />
-              <div className="m-flex-1 m-flex m-pointer-events-none">
-                {history && <div className="m-w-full m-self-end m-mb-5">
-                  <Timeline className="m-pointer-events-auto" />
+        <section className="m:flex-1 m:flex m:min-h-0 m:relative">
+          <Chart className="m:h-full m:flex-1 m:relative m:overflow-hidden">
+            <div className="m:h-full m:w-full m:flex m:flex-row m:overflow-hidden">
+              <ToolPanel className="m:w-72 m:flex-none m:h-full m:border-r m:border-gray-300 m:pointer-events-auto" />
+              <div className="m:flex-1 m:flex m:pointer-events-none">
+                {history && <div className="m:w-full m:self-end m:mb-5">
+                  <Timeline className="m:pointer-events-auto" />
                 </div>}
               </div>
-              <PropertiesPanel className="m-w-72 m-flex-none m-h-full m-border-l m-border-gray-300 m-pointer-events-auto" />
+              <PropertiesPanel className="m:w-72 m:flex-none m:h-full m:border-l m:border-gray-300 m:pointer-events-auto" />
             </div>
           </Chart>
 
           {configService.getConfiguration().MapConfiguration && (<ErrorBoundary>
-            <div className={(map ? '' : 'm-hidden ') + 'm-h-full m-w-1 m-bg-gray-300 m-z-10 hover:m-cursor-col-resize'} />
-            <Map className={(map ? '' : 'm-hidden ') + 'm-h-full m-w-full m-flex-1'} />
+            <div className={(map ? '' : 'm:hidden ') + 'm:h-full m:w-1 m:bg-gray-300 m:z-10 m:hover:cursor-col-resize'} />
+            <Map className={(map ? '' : 'm:hidden ') + 'm:h-full m:w-full m:flex-1'} />
           </ErrorBoundary>)}
         </section>
         

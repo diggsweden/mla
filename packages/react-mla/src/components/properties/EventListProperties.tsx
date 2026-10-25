@@ -26,7 +26,7 @@ function EventListProperties (props: Props) {
   }
 
   return (
-    <div className="m-px-3 m-mt-3">
+    <div className="m:px-3 m:mt-3">
       {configService.getProperties(eventLink).map(e => (
         <Property key={eventLink.Id + e.propertyConfiguration.TypeId}
           readOnly={true}
@@ -35,7 +35,7 @@ function EventListProperties (props: Props) {
       ))}
       <div>
         <button onClick={() => { setShowModal(true) }} className='w-full text-white bg-primary enabled:hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1 mr-2 my-2 disabled:opacity-50'>
-          <Icon name="table_view" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon>
+          <Icon name="table_view" className="m:w-5 m:h-5 m:inline-block m:-m-0 m:-mb-1" color='#ffffff'></Icon>
           {t('show as table count', { count: eventLink.Events.length})}</button>
       </div>
       {showModal &&

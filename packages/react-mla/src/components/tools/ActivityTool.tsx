@@ -233,48 +233,48 @@ function ActivityTool (props: Props) {
   return (
     <div className={props.className}>
       { type &&
-        <div className="m-w-full m-mb-3">
+        <div className="m:w-full m:mb-3">
           <Toggle title={t('show all')} value={showAll} onChange={() => { setShowAll(!showAll) }} className=''/>
         </div>
       }
-      <div className="m-h-full m-w-full m-border-l m-border-gray-300 m-">
+      <div className="m:h-full m:w-full m:border-l m:border-gray-300 m-">
         <div className='mx-1 columns-1 ml-[-6px]'>
           {historyView.map(function (m, i) {
             if (m.separator && m.rubrik) {
-              return <div key={i} className="m-ml-4 m-pb-3 m-font-semibold m-text-center m-relative m-cursor-pointer" onClick={() => {
+              return <div key={i} className="m:ml-4 m:pb-3 m:font-semibold m:text-center m:relative m:cursor-pointer" onClick={() => {
                 if (m.event != null) {
                   setEventTime(m.event, i)
                 }
               }}>
-                <div className="m-text-white m-w-full m-px-3 m-bg-origin-border m-bg-no-repeat m-ms-auto m-me-auto" style={{ backgroundImage: 'conic-gradient(from 45deg at left center, rgb(68, 105, 149) 25%, rgba(0, 0, 0, 0) 0deg), conic-gradient(from -135deg at right center, rgb(68, 105, 149) 25%, rgba(0, 0, 0, 0) 0deg)', backgroundPositionX: '0px, 100%', backgroundPositionY: '50%, 50%', backgroundSize: '51% 100%', borderImageSource: 'linear-gradient(rgba(0, 0, 0, 0) calc(50% - 2px), rgb(196, 77, 88) 0px, rgb(196, 77, 88) calc(50% + 2px), rgba(0, 0, 0, 0) 0px)' }} title={toDateString(m.date)}>
-                  <div className="m-w-full m-flex m-p-1">
-                    <span className="m-flex-1">{m.rubrik}</span>
-                    <span className="m-ms-2 m-w-4" title={t('edit')} onClick={() => {
+                <div className="m:text-white m:w-full m:px-3 m:bg-origin-border m:bg-no-repeat m:ms-auto m:me-auto" style={{ backgroundImage: 'conic-gradient(from 45deg at left center, rgb(68, 105, 149) 25%, rgba(0, 0, 0, 0) 0deg), conic-gradient(from -135deg at right center, rgb(68, 105, 149) 25%, rgba(0, 0, 0, 0) 0deg)', backgroundPositionX: '0px, 100%', backgroundPositionY: '50%, 50%', backgroundSize: '51% 100%', borderImageSource: 'linear-gradient(rgba(0, 0, 0, 0) calc(50% - 2px), rgb(196, 77, 88) 0px, rgb(196, 77, 88) calc(50% + 2px), rgba(0, 0, 0, 0) 0px)' }} title={toDateString(m.date)}>
+                  <div className="m:w-full m:flex m:p-1">
+                    <span className="m:flex-1">{m.rubrik}</span>
+                    <span className="m:ms-2 m:w-4" title={t('edit')} onClick={() => {
                       if (m.event != null) {
                         setEditevent({ ...m.event })
                       }
                     }}>
-                      <Icon name="edit" className="m-h-4"/>
+                      <Icon name="edit" className="m:h-4"/>
                     </span>
                   </div>
                 </div>
               </div>
             } else if (m.separator) {
-              return <div key={i} ref={ref} className='m-cursor-default m-ml-4 m-mb-3 m-font-semibold m-text-center m-relative before:m-block before:m-absolute before:m-h-1 before:m-bg-primary before:m-left-0 before:m-w-16 before:m-top-1/2 after:m-block after:m-absolute after:m-h-1 after:m-bg-primary after:m-right-0 after:m-w-16 after:m-top-1/2'>
+              return <div key={i} ref={ref} className='m:cursor-default m:ml-4 m:mb-3 m:font-semibold m:text-center m:relative m:before:block m:before:absolute m:before:h-1 m:before:bg-primary m:before:left-0 m:before:w-16 m:before:top-1/2 m:after:block m:after:absolute m:after:h-1 m:after:bg-primary m:after:right-0 m:after:w-16 m:after:top-1/2'>
                 <div>{ toDateString(m.date) }</div>
               </div>
             } else {
-              return <div className="m-w-full m-flex m-pb-3 m-cursor-pointer m-" key={i} onClick={() => { selected(m) }}>
+              return <div className="m:w-full m:flex m:pb-3 m:cursor-pointer m-" key={i} onClick={() => { selected(m) }}>
                 <div>
-                  <div className="m-relative m-z-20 m-h-8 m-pt-2">
-                    <svg className="m-h-3 m-w-3">
+                  <div className="m:relative m:z-20 m:h-8 m:pt-2">
+                    <svg className="m:h-3 m:w-3">
                       <circle cx="5" cy="5" r="5" fill={m.color} />
                     </svg>
                   </div>
                 </div>
-                <div className='m-border m-bg-white m-w-full m-p-2 m-ms-1'>
-                  <div className="m-text-primary m-text-sm m-font-bold">{ toDateAndTimeString(m.date) } - {m.rubrik}</div>
-                  <div className="m-text-sm">{m.text}</div>
+                <div className='m:border m:bg-white m:w-full m:p-2 m:ms-1'>
+                  <div className="m:text-primary m:text-sm m:font-bold">{ toDateAndTimeString(m.date) } - {m.rubrik}</div>
+                  <div className="m:text-sm">{m.text}</div>
                 </div>
               </div>
             }

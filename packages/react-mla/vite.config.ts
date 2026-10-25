@@ -8,11 +8,13 @@ import { defineConfig, esmExternalRequirePlugin } from 'vite'
 
 import dts from 'vite-plugin-dts';
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(),
     dts({ bundleTypes: true }),
     cssInjectedByJsPlugin(),
     // Bundled CJS dependencies (react jsx-runtime, use-sync-external-store) call require("react");

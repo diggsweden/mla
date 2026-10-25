@@ -44,7 +44,7 @@ function MapTabPanel () {
     update(...change)
   }
 
-  return <div className="m-flex m-text-center m-h-full m-p-1">
+  return <div className="m:flex m:text-center m:h-full m:p-1">
     <RibbonMenuSection title={t('map')} >
       <RibbonMenuButton active={showMap} label={t('map mode')} title={t('show map')} onClick={() => { setShowMap(!showMap) }} iconName="public" />
     </RibbonMenuSection>

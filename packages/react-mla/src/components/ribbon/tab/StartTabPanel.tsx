@@ -23,7 +23,7 @@ function StartTabPanel () {
     }
   }
 
-  return <div className="m-flex m-text-center m-h-full m-p-1">
+  return <div className="m:flex m:text-center m:h-full m:p-1">
     <CreateToolbox show={config.Menu?.Start?.Create} />
     <UndoToolbox show={config.Menu?.Start?.Undo} />
     <GraphToolbox show={config.Menu?.Start?.Tools} />

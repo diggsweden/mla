@@ -304,11 +304,11 @@ function Chart (props: Props) {
 
   return (
     <div className={props.className}>
-      <div className="m-h-full m-w-full m-absolute m-pointer-events-none m-z-10">
+      <div className="m:h-full m:w-full m:absolute m:pointer-events-none m:z-10">
         {props.children}
       </div>
-      <div className="m-h-full m-w-full" onDragOver={onDragOver} onDrop={onDrop}>
-        <div className="m-h-full m-w-full m-outline-none" id="m-chart" ref={networkNode}>
+      <div className="m:h-full m:w-full" onDragOver={onDragOver} onDrop={onDrop}>
+        <div className="m:h-full m:w-full m:outline-hidden" id="m-chart" ref={networkNode}>
           <ContentRenderer />
         </div>
       </div>

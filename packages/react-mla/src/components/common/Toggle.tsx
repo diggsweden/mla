@@ -30,25 +30,25 @@ const Toggle = (props: Props) => {
 
   return (
     <>
-      <label className={props.className + ' autoSaverSwitch m-relative m-inline-flex m-cursor-pointer m-select-none m-items-center ' + (readOnly ? 'm-pointer-events-none' : '')} title={props.title}>
+      <label className={props.className + ' autoSaverSwitch m:relative m:inline-flex m:cursor-pointer m:select-none m:items-center ' + (readOnly ? 'm:pointer-events-none' : '')} title={props.title}>
         <input
           type='checkbox'
           name='autoSaver'
-          className="m-sr-only"
+          className="m:sr-only"
           checked={isChecked}
           onChange={handleCheckboxChange}
         />
         <span
-          className={`m-slider m-mr-3 m-flex m-h-[20px] m-w-[44px] m-items-center m-rounded-full m-p-1 m-duration-200 ${isChecked ? 'm-bg-primary' : 'm-bg-secondary'
+          className={`m-slider m:mr-3 m:flex m:h-[20px] m:w-[44px] m:items-center m:rounded-full m:p-1 m:duration-200 ${isChecked ? 'm:bg-primary' : 'm:bg-secondary'
           }`}
         >
           <span
-            className={`m-dot m-h-[12px] m-w-[12px] m-rounded-full m-bg-white m-duration-200 ${isChecked ? 'm-translate-x-6' : ''
+            className={`m-dot m:h-[12px] m:w-[12px] m:rounded-full m:bg-white m:duration-200 ${isChecked ? 'm:translate-x-6' : ''
             }`}
           ></span>
         </span>
-        <span className="m-label m-flex m-items-center m-text-sm m-font-medium m-text-black">
-          {props.title}<span className="m-pl-1"> {isChecked ? (props.yesNo ? (': ' + t('yes'))  : t('on')) : (props.yesNo ? (': ' + t('no')) : t('off'))} </span>
+        <span className="m-label m:flex m:items-center m:text-sm m:font-medium m:text-black">
+          {props.title}<span className="m:pl-1"> {isChecked ? (props.yesNo ? (': ' + t('yes'))  : t('on')) : (props.yesNo ? (': ' + t('no')) : t('off'))} </span>
         </span>
       </label>
     </>
