@@ -3,8 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import type { IBasePropertyConfiguration, IEntityTypeConfiguration, IMatchRule, IQueryIntegration } from '../interfaces/configuration'
-import type { IBase, IChartBase, IEntity, IHistory, ILink, IProperty } from '../interfaces/data-models'
-import { DateTime } from 'luxon'
+import type { IBase, IChartBase, IEntity, ILink, IProperty } from '../interfaces/data-models'
 
 function getId (thing?: IBase): string {
   if (thing) {
@@ -124,33 +123,6 @@ function compareWildcard (a: string, b: string): boolean {
   return a === b || a === '*' || b === '*'
 }
 
-function getContextValue (ctx: string, key: string): string | undefined {
-  const ctxname = ctx.split(',').map(c => c.split(':')).find(c => c[0] === key)
-  return ctxname ? ctxname[1] : undefined
-}
-
-function setContextValue (ctx: string, key: string, value?: string): string {
-  const ctxname = ctx.split(',').filter(s => !s.startsWith(key))
-  if (value != null) {
-    ctxname.push(key + ':' + value)
-  }
-  return ctxname.join(',')
-}
-
-function mergeContext (ctxa: string, ctxb: string): string {
-  const update: Record<string, string> = {}
-
-  ctxa.split(',').map(c => c.split(':')).forEach(c => {
-    update[c[0]] = c[1]
-  })
-  ctxb.split(',').map(c => c.split(':')).forEach(c => {
-    update[c[0]] = c[1]
-  })
-
-  const list = Object.keys(update).map(k => k + ':' + update[k])
-  return list.join(',')
-}
-
 function findId (thing: IChartBase, config: IMatchRule[], things: IChartBase[]): string | undefined {
   for (const conf of config) {
     for (const test of things.filter(t => t.TypeId === thing.TypeId)) {
@@ -214,25 +186,6 @@ async function delay (ms: number): Promise<void> {
   await new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function compareDates (a: IHistory, b: IHistory): boolean {
-  return a.DateFrom == b.DateFrom && a.DateTo == b.DateTo
-}
-
-function hasDate (a: IHistory, from?: DateTime, to?: DateTime): boolean {
-  return a.DateFrom == from && a.DateTo == to
-}
-
-function toDashedCase (camelCase: string): string {
-  return camelCase.replace(
-    /([a-z0-9])([A-Z])/g,
-    (_, a: string, b: string) => `${a}-${b.toLowerCase()}`
-  )
-}
-
-function toCamelCase (dashedCase: string): string {
-  return dashedCase.replace(/[-:]([a-z])/g, (_, b: string) => `${b.toUpperCase()}`)
-}
-
 function mergeProps (oldProps: IProperty[], newProps: IProperty[]): IProperty[] {
   const result = [...newProps] as IProperty[]
   oldProps.forEach(p => {
@@ -243,33 +196,20 @@ function mergeProps (oldProps: IProperty[], newProps: IProperty[]): IProperty[] 
   return result
 }
 
-function find (thing: IHistory, things: IChartBase[]): IChartBase | undefined {
-  return things.find(x => compareDates(x, thing))
-}
-
 export {
   areArraysEqualSets,
   arrayDistinct,
   blobToBase64,
   canvasToBlob,
-  compareDates,
   compareWildcard,
   delay,
   filterEntityIntegrations,
-  find,
   findId,
   generateUUID,
-  getContextValue,
   getId,
-  hasDate,
   isLinked,
-  isLinkedId,
   isSubSetOf,
   isSameType,
-  mergeContext,
   mergeProps,
-  randomNumber,
-  setContextValue,
-  toCamelCase,
-  toDashedCase,
+  randomNumber
 }

@@ -5,12 +5,16 @@
 import { type ReactNode, useMemo, useRef } from 'react'
 import { type IBasePropertyConfiguration } from '../../interfaces/configuration'
 import type { IBase, IEvent } from '../../interfaces/data-models'
-import { type SortConfig } from '../tools/TableTool'
 import viewService from '../../services/viewService'
 import { toDateAndTimeString } from '../../utils/date'
 import configService from '../../services/configurationService'
 import type { IEventFilter } from '../../interfaces/configuration/event-operations'
 import { useTranslation } from 'react-i18next'
+
+interface SortConfig {
+  property: string
+  asc: boolean
+}
 
 interface Props {
   typeId: string

@@ -2,12 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { expect, test } from 'vitest'
-import { render } from "@testing-library/react"
+import { afterEach, expect, test } from 'vitest'
+import { cleanup, render } from "@testing-library/react"
 import { MLA } from "./MLA"
 import * as config from '../../../tools/test/default.json'
 import { page } from 'vitest/browser'
 import React from 'react'
+
+afterEach(cleanup)
 
 test("should render", async () => {
     render(<MLA config={JSON.stringify(config)} />)

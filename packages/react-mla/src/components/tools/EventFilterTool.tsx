@@ -20,11 +20,6 @@ interface Props {
   onChange: (filters: Record<string, IEventFilter[] | undefined>) => void
 }
 
-export interface SortConfig {
-  property: string
-  asc: boolean
-}
-
 function EventFilterTool (props: Props) {
   const { t } = useTranslation();
 

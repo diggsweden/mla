@@ -74,10 +74,8 @@ function ChartEdge(props: Props) {
 
     const dataset = props.data.getDataSet()
     if (created.current) {
-      console.debug('[updating]', edge.id)
       dataset.updateOnly(edge as unknown as Parameters<typeof dataset.updateOnly>[0])
     } else {
-      console.debug('[adding]', edge.id)
       dataset.update(edge)
       created.current = true
     }
@@ -86,7 +84,6 @@ function ChartEdge(props: Props) {
   // Remove the edge from the chart when unmounting, not each time the edge changes
   const removeEdge = useEffectEvent(() => {
     if (edge != null) {
-      console.debug('[removing]', edge.id)
       props.data.getDataSet().remove(edge.id!)
       created.current = false
     }

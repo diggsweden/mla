@@ -7,8 +7,8 @@ import type { IEventFilter, IEventTarget } from '../interfaces/configuration/eve
 import type { IBase, IEntity, IEvent, IEventLink, IProperty, ITimeSpan } from '../interfaces/data-models'
 import configService from '../services/configurationService'
 import viewService from '../services/viewService'
-import { internalAdd } from '../store/internal-actions'
 import { generateUUID } from './utils'
+import { aggregate } from './aggregate'
 import { t } from 'i18next'
 
 const get = (ent: IBase, property: string) => {
@@ -91,39 +91,8 @@ export function computeLinks (events: IEvent[], date: ITimeSpan | undefined): IE
     const group = gr.Events
     const generate = config.Generate.find(c => c.TypeId === gr.TypeId)!
     for (const propConfig of generate.Properties) {
-      let val = undefined as undefined | string | number
-
-      switch (propConfig.Action) {
-        case 'sum': {
-          val = group.filter(e => get(e, propConfig.TargetPropertyTypeId) != null).reduce((prev, current) => {
-            return prev + (get(current, propConfig.TargetPropertyTypeId) as number)
-          }, 0)
-          break
-        }
-        case 'average': {
-          let count = 0
-          val = group.filter(e => get(e, propConfig.TargetPropertyTypeId) != null).reduce((prev, current) => {
-            count++
-            return prev + (get(current, propConfig.TargetPropertyTypeId) as number)
-          }, 0)
-          val = val / count
-          break
-        }
-        case 'join': {
-          val = group.filter(e => get(e, propConfig.TargetPropertyTypeId) != null).reduce((prev, current) => {
-            const text = get(current, propConfig.TargetPropertyTypeId)?.toString() ?? ''
-            if (prev === '' || prev.includes(text)) {
-              return text
-            }
-            return prev + ', ' + text
-          }, '')
-          break
-        }
-        case 'count': {
-          val = group.length
-          break
-        }
-      }
+      const values = group.map(e => get(e, propConfig.TargetPropertyTypeId)).filter(v => v != null)
+      const val = aggregate(propConfig.Action, values, group.length)
 
       props.push({
         TypeId: propConfig.TypeId,
@@ -148,16 +117,15 @@ export function computeLinks (events: IEvent[], date: ITimeSpan | undefined): IE
       Properties: props,
       Direction: 'TO'
     }
-    link.LabelLong = viewService.getLongName(link)
-    link.LabelShort = viewService.getShortName(link)
-    link.LabelChart = viewService.getChartName(link)
+    Object.assign(link, viewService.getLabels(link))
     res.push(link)
   }
 
   return res
 }
 
-export function assignLinks (events: IEvent[], entities: IEntity[]): IEvent[] {
+// Connects the events to the entities they are about. The entities that are missing are created, and returned to be added
+export function assignLinks (events: IEvent[], entities: IEntity[]): { events: IEvent[], created: IEntity[] } {
   const res = [] as IEvent[]
   const entitiesToadd = [] as IEntity[]
 
@@ -215,11 +183,7 @@ export function assignLinks (events: IEvent[], entities: IEntity[]): IEvent[] {
     res.push(ev)
   }
 
-  if (entitiesToadd.length > 0) {
-    internalAdd(false, entitiesToadd, [])
-  }
-
-  return res
+  return { events: res, created: entitiesToadd }
 }
 
 function findEntity (event: IEvent, target: IEventTarget, entities: IEntity[]): IEntity | undefined {
@@ -253,9 +217,7 @@ function createEntity (event: IEvent, target: IEventTarget): IEntity | null {
     Properties: []
   }
 
-  ent.LabelLong = viewService.getLongName(ent)
-  ent.LabelShort = viewService.getShortName(ent)
-  ent.LabelChart = viewService.getChartName(ent)
+  Object.assign(ent, viewService.getLabels(ent))
 
   if (target.EntityPropertyTypeId != null) {
     const value = get(event, target.PropertyTypeId)

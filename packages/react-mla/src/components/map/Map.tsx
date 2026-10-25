@@ -27,7 +27,7 @@ interface Props {
   className?: string
 }
 
-export default function Map(props: Props) {
+export default function MapView(props: Props) {
   const { t } = useTranslation();
   const showContextMenu = useAppStore(state => state.showContextMenu)
   const showMap = useAppStore(state => state.showMap)
@@ -144,7 +144,7 @@ export default function Map(props: Props) {
 
         setMap(lMap)
       } catch (e) {
-        console.debug(e)
+        console.error(e)
       }
     }
   }, [])

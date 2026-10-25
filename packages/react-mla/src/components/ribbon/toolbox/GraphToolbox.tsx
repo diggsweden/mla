@@ -4,8 +4,8 @@
 
 import { useMemo, useState } from 'react'
 import useMainStore from '../../../store/main-store'
-import { Dijkstra } from '../../../utils/djikstra'
-import { StronglyConnected } from '../../../utils/strongly-connected'
+import { shortestPath } from '../../../utils/dijkstra'
+import { findMostCentral } from '../../../utils/most-central'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuSection from '../RibbonMenuSection'
@@ -43,8 +43,8 @@ export default function GraphTools (props: Props) {
 
   const [showJoin, setShowJoin] = useState(false)
 
-  function djikstra () {
-    const result = Dijkstra(data.nodes, data.edges, selection[0], selection[1])
+  function selectShortestPath () {
+    const result = shortestPath(data.edges, selection[0], selection[1])
     for (let i = 0; i < result.length; i++) {
       data.edges.forEach(e => {
         if ((e.from === result[i] && e.to === result[i + 1]) || (e.to === result[i] && e.from === result[i + 1])) {
@@ -58,8 +58,8 @@ export default function GraphTools (props: Props) {
     setSelected(result)
   }
 
-  function stronglyConnected () {
-    const result = StronglyConnected(data.nodes, data.edges)
+  function selectMostCentral () {
+    const result = findMostCentral(data.nodes, data.edges)
     setSelected(result)
   }
 
@@ -167,8 +167,8 @@ export default function GraphTools (props: Props) {
 
   return (<>
     <RibbonMenuSection title={(t('tools'))}>
-      <RibbonMenuButton label={t('find link')} title={t('find link desc')} disabled={selectedEntities.length !== 2} onClick={() => { djikstra() }} iconName="route" />
-      <RibbonMenuButton label={t('break network')} title={t('break network desc')} disabled={data.edges.length === 0} onClick={() => { stronglyConnected() }} iconName="rebase" />
+      <RibbonMenuButton label={t('find link')} title={t('find link desc')} disabled={selectedEntities.length !== 2} onClick={() => { selectShortestPath() }} iconName="route" />
+      <RibbonMenuButton label={t('break network')} title={t('break network desc')} disabled={data.edges.length === 0} onClick={() => { selectMostCentral() }} iconName="rebase" />
       <RibbonMenuButton label={t('merge')} title={t('merge desc')} disabled={(data.nodes.length + data.edges.length) === 0} onClick={() => { setShowJoin(true) }} iconName="join_left" />
     </RibbonMenuSection>
     <RibbonMenuDivider />

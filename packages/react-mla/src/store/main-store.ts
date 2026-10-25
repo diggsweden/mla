@@ -4,23 +4,24 @@
 
 import { create } from 'zustand'
 
-import type { IEntity, IEvent, IEventLink, ILink, IPhaseEvent, ITimeSpan } from '../interfaces/data-models'
-import { generateUUID, mergeContext } from '../utils/utils'
+import type { IEntity, IEvent, IEventLink, IHistory, ILink, IPhaseEvent, ITimeSpan } from '../interfaces/data-models'
+import { generateUUID } from '../utils/utils'
+import { mergeContext } from '../utils/context'
 import useAppStore from './app-store'
 import { type DataInterfaceEdges, type DataInterfaceNodes, type Edge, type Network, type Node } from 'vis-network'
 import { DataSet } from 'vis-data'
 import { produce } from 'immer'
-import { internalAdd, internalRemove, internalUpdate, updateSelected } from './internal-actions'
+import { internalAdd, internalRemove, internalUpdate, internalUpdateLabels, updateSelected } from './internal-actions'
 import { assignLinks, computeLinks, filterEvents } from '../utils/event-utils'
 import type { IEventFilter } from '../interfaces/configuration/event-operations'
 import { DateTime } from 'luxon'
 import { fixDate, removeInternals } from '../utils/date'
-import { IGeoFeature } from '../interfaces/data-models/geo'
+import type { IGeoFeature } from '../interfaces/data-models/geo'
 
 export type IntervalType = 'day' | 'week' | 'month' | 'custom'
 
 type HistoryAction = 'ADD' | 'UPDATE' | 'REMOVE'
-interface IChangeHistory {
+export interface IChangeHistory {
   action: HistoryAction
   from: {
     entities: IEntity[]
@@ -107,6 +108,23 @@ export interface MainState {
   redo: () => void
 }
 
+// The version of a thing that is valid at the date, the versions are sorted by their start date
+function pickCurrent<T extends IHistory> (versions: T[] | undefined, date: DateTime): T | undefined {
+  if (versions == null || versions.length === 0) {
+    return undefined
+  }
+
+  let found = versions[0]
+  for (const version of versions) {
+    if (version.DateFrom == null || version.DateFrom > date) {
+      break
+    }
+    found = version
+  }
+
+  return found
+}
+
 const useMainStore = create<MainState>((set, get) => ({
   entities: {},
   links: {},
@@ -164,8 +182,7 @@ const useMainStore = create<MainState>((set, get) => ({
 
       return ({
         interval,
-        currentDate: result,
-        computedLinks: computeLinks(Object.values(state.events), result)
+        currentDate: result
       })
     })
 
@@ -195,8 +212,7 @@ const useMainStore = create<MainState>((set, get) => ({
         }
       }
       return ({
-        currentDate: result,
-        computedLinks: computeLinks(Object.values(state.events), result)
+        currentDate: result
       })
     })
 
@@ -213,8 +229,7 @@ const useMainStore = create<MainState>((set, get) => ({
         DateTo: toDate
       }
       return ({
-        currentDate: result,
-        computedLinks: computeLinks(Object.values(state.events), result)
+        currentDate: result
       })
     })
 
@@ -227,10 +242,9 @@ const useMainStore = create<MainState>((set, get) => ({
       DateTo: time.DateTo.endOf("day")
     }
 
-    set((state) => ({
+    set(() => ({
       currentDate: result,
-      interval: 'custom',
-      computedLinks: computeLinks(Object.values(state.events), result)
+      interval: 'custom'
     }))
 
     get().updateComputedLinks()
@@ -269,27 +283,7 @@ const useMainStore = create<MainState>((set, get) => ({
     return existing.find(x => x.InternalId === internalId)
   },
   getCurrentEntity: (entityId: string, date?: DateTime): IEntity | undefined => {
-    const existing = get().entities[entityId]
-    if (existing == null) {
-      return undefined
-    }
-
-    try {
-      let found = existing[0]
-      date = date ?? get().currentDate.DateFrom
-      for (const f of existing) {
-        if (f.DateFrom ? f.DateFrom > date : true) {
-          break
-        }
-        found = f
-      }
-
-      return found
-    } catch (e) {
-      console.error(e, existing)
-    }
-
-    return undefined
+    return pickCurrent(get().entities[entityId], date ?? get().currentDate.DateFrom)
   },
   getEntityHistory: (entityId: string): IEntity[] => {
     return get().entities[entityId]
@@ -312,27 +306,7 @@ const useMainStore = create<MainState>((set, get) => ({
     return existing.find(x => x.InternalId === internalId)
   },
   getCurrentLink: (linkId: string, date?: DateTime): ILink | undefined => {
-    const existing = get().links[linkId]
-    if (existing == null || existing.length === 0) {
-      return undefined
-    }
-
-    try {
-      date = date ?? get().currentDate.DateFrom
-      let found = existing[0]
-      for (const f of existing) {
-        if (f.DateFrom ? f.DateFrom > date : true) {
-          break
-        }
-        found = f
-      }
-
-      return found
-    } catch (e) {
-      console.error(e, existing)
-    }
-
-    return undefined
+    return pickCurrent(get().links[linkId], date ?? get().currentDate.DateFrom)
   },
   getLinkHistory: (linkId: string): ILink[] => {
     return get().links[linkId]
@@ -347,12 +321,16 @@ const useMainStore = create<MainState>((set, get) => ({
     internalRemove(true, [], links)
   },
 
-  setEvent: (...events: IEvent[]) => {
+  setEvent: (...newEvents: IEvent[]) => {
+    const { events, created } = assignLinks(newEvents, Object.values(get().entities).flat())
+    if (created.length > 0) {
+      internalAdd(false, created, [])
+    }
+
     set((state) => {
       let minDate = state.minDate
       let maxDate = state.maxDate
       const update = produce(state.events, eventsDraft => {
-        events = assignLinks(events, Object.values(state.entities).flat())
         events.forEach(e => {
           const draft = produce(e, eDraft => {
             eDraft.Date = fixDate(e.Date)!
@@ -454,13 +432,13 @@ const useMainStore = create<MainState>((set, get) => ({
   },
   setGeoFeature: (feature: IGeoFeature) => {
     set((state) => ({
-      geoFeatures: [feature, ...state.geoFeatures.filter(x => x.Id != feature.Id)],
+      geoFeatures: [feature, ...state.geoFeatures.filter(x => x.Id !== feature.Id)],
       dirty: true
     }))
   },
   removeGeoFeature(feature: IGeoFeature) {
     set((state) => ({
-      geoFeatures: state.geoFeatures.filter(x => x.Id != feature.Id),
+      geoFeatures: state.geoFeatures.filter(x => x.Id !== feature.Id),
       dirty: true
     }))
   },
@@ -560,6 +538,10 @@ const useMainStore = create<MainState>((set, get) => ({
     }
   },
   redo: () => {
+    if (!get().canRedo) {
+      return
+    }
+
     const history = get().history[get().historyPosition - 1]
     const nextIdx = get().historyPosition - 1
 
@@ -582,5 +564,12 @@ const useMainStore = create<MainState>((set, get) => ({
     }))
   }
 }))
+
+// The labels of the things depend on the selected view
+useAppStore.subscribe((state, previous) => {
+  if (state.currentViewConfiguration !== previous.currentViewConfiguration) {
+    internalUpdateLabels()
+  }
+})
 
 export default useMainStore

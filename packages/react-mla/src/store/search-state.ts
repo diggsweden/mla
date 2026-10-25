@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-
 import { create } from 'zustand'
 import queryService, { type IQueryResponse } from '../services/queryService'
 import useAppStore from './app-store'
@@ -29,128 +28,84 @@ interface SearchState {
   explore: () => Promise<IQueryResponse>
 }
 
-const useSearchStore = create<SearchState>((set, get) => ({
+const noTool = {
   searchTool: undefined,
   exploreTool: undefined,
   importTool: undefined,
-  result: undefined,
   loading: false,
+  result: undefined
+}
+
+function noResult (error: unknown): IQueryResponse {
+  window.alert(String(error))
+  return { Entities: [], Links: [], Events: [] }
+}
+
+const useSearchStore = create<SearchState>((set, get) => ({
+  ...noTool,
 
   setSearchTool: (id: string) => {
     if (id !== get().searchTool?.Id) {
       useAppStore.getState().setTool('search')
-      set(() => ({
-        exploreTool: undefined,
-        searchTool: configService.getSearchServices().find(x => x.Id === id),
-        importTool: undefined,
-        loading: false,
-        result: undefined
-      }))
+      set(() => ({ ...noTool, searchTool: configService.getSearchServices().find(x => x.Id === id) }))
     }
   },
 
   setExploreTool: (id: string) => {
     if (id !== get().exploreTool?.Id) {
       useAppStore.getState().setTool('explore')
-      set(() => ({
-        searchTool: undefined,
-        exploreTool: configService.getSearchServices().find(x => x.Id === id),
-        importTool: undefined,
-        loading: false,
-        result: undefined
-      }))
+      set(() => ({ ...noTool, exploreTool: configService.getSearchServices().find(x => x.Id === id) }))
     }
   },
 
   setImportTool: (id: string) => {
     if (id !== get().importTool?.Id) {
       useAppStore.getState().setTool('import')
-      set(() => ({
-        exploreTool: undefined,
-        searchTool: undefined,
-        importTool: configService.getImportServices().find(x => x.Id === id),
-        loading: false,
-        result: undefined
-      }))
+      set(() => ({ ...noTool, importTool: configService.getImportServices().find(x => x.Id === id) }))
     }
   },
 
   clearSelectedTool: () => {
-    set(() => ({
-      exploreTool: undefined,
-      searchTool: undefined,
-      importTool: undefined,
-      loading: false,
-      result: undefined
-    }))
+    set(() => noTool)
   },
 
   search: async (query: unknown) => {
     useAppStore.getState().setTool('search')
-
-    set(() => ({
-      loading: true,
-      result: undefined
-    }))
+    set(() => ({ loading: true, result: undefined }))
 
     try {
-      const result = await queryService.QueryForm(get().searchTool!.Id, query)
-      set(() => ({
-        loading: false,
-        result
-      }))
-
+      const result = await queryService.queryForm(get().searchTool!.Id, query)
+      set(() => ({ loading: false, result }))
       return result
     } catch (error) {
-      set(() => ({
-        loading: false
-      }))
-      window.alert(error)
-      return { Entities: [], Links: [], Events: [] }
+      set(() => ({ loading: false }))
+      return noResult(error)
     }
   },
   explore: async () => {
     useAppStore.getState().setTool('explore')
     const query = useMainStore.getState().selectedEntities
     const shape = useAppStore.getState().selectedGeoFeature
-
-    set(() => ({
-      loading: true,
-      exploreResult: undefined
-    }))
+    set(() => ({ loading: true, result: undefined }))
 
     try {
-      const result = await queryService.QueryEntities(get().exploreTool!.Id, query, shape)
-      set(() => ({
-        loading: false,
-        result
-      }))
-
-      set(() => ({
-        loading: false
-      }))
+      const result = await queryService.queryEntities(get().exploreTool!.Id, query, shape)
+      set(() => ({ loading: false, result }))
       return result
     } catch (error) {
-      window.alert(error)
-      return { Entities: [], Links: [], Events: [] }
+      set(() => ({ loading: false }))
+      return noResult(error)
     }
   },
   import: (fileContents: string) => {
     useAppStore.getState().setTool('import')
-
-    set(() => ({
-      loading: true,
-      result: undefined
-    }))
+    set(() => ({ loading: true, result: undefined }))
 
     try {
-      let result = undefined as IQueryResponse | undefined
       const transformFunction = get().importTool?.TransformFunction
-      if (transformFunction) {
-        result = getPluginFunction(transformFunction)(fileContents) as IQueryResponse
-      } else {
-        result = JSON.parse(fileContents) as IQueryResponse
-      }
+      const result = transformFunction
+        ? getPluginFunction(transformFunction)(fileContents) as IQueryResponse
+        : JSON.parse(fileContents) as IQueryResponse
       if (result?.Entities == null) {
         throw new Error('result.Entities is not Entity[]')
       }
@@ -158,21 +113,20 @@ const useSearchStore = create<SearchState>((set, get) => ({
         throw new Error('result.Links is not Link[]')
       }
 
-      set(() => ({
-        loading: false,
-        result
-      }))
-
+      set(() => ({ loading: false, result }))
       return result
     } catch (error) {
-      set(() => ({
-        loading: false
-      }))
-      window.alert(error)
-      return { Entities: [], Links: [], Events: [] }
+      set(() => ({ loading: false }))
+      return noResult(error)
     }
   }
-
 }))
+
+// Closing the tool panel also forgets what was searched for
+useAppStore.subscribe((state, previous) => {
+  if (state.selectedTool === undefined && previous.selectedTool !== undefined) {
+    useSearchStore.getState().clearSelectedTool()
+  }
+})
 
 export default useSearchStore

@@ -65,7 +65,7 @@ export function setPositions(n: Network, entities: IEntity[], links: ILink[]): I
     minx = Math.min(minx, p.x)
     maxx = Math.max(maxx, p.x)
     miny = Math.min(miny, p.y)
-    maxy = Math.min(maxy, p.y)
+    maxy = Math.max(maxy, p.y)
   })
 
   const MIN = 230
@@ -250,7 +250,7 @@ export function mapToEdge(link: ILink, selected: boolean, active: boolean, histo
   }
 }
 
-export function getDashes(link: ILink): boolean | number[] {
+function getDashes(link: ILink): boolean | number[] {
   switch (link.Style) {
     case 'DASHED': return true
     case 'DOTTED': return [2, 5]
@@ -258,7 +258,7 @@ export function getDashes(link: ILink): boolean | number[] {
   }
 }
 
-export function getLinks(fromId: string, fromType: string, toId: string, toType: string, links: ILink[]): ILink[] {
+function getLinks(fromId: string, fromType: string, toId: string, toType: string, links: ILink[]): ILink[] {
   return links.filter(link =>
     ((link.FromEntityId === fromId && link.FromEntityTypeId === fromType) && (link.ToEntityId === toId && link.ToEntityTypeId === toType)) ||
     ((link.FromEntityId === toId && link.FromEntityTypeId === toType) && (link.ToEntityId === fromId && link.ToEntityTypeId === fromType))

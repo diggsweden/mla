@@ -83,7 +83,7 @@ const canvasify = (network: Network, DOMx: number, DOMy: number) => {
 
 const correctRange = (start: number, end: number) => start < end ? [start, end] : [end, start]
 
-export function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: Network | undefined, selectCallback: (startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) => void) {
+function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: Network | undefined, selectCallback: (startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) => void) {
   const drag = useRef(false)
   const pan = useRef<{ x: number, y: number, view: { x: number, y: number }, moved: boolean } | null>(null)
   const DOMRect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0 })

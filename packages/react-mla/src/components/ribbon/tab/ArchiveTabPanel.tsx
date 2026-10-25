@@ -8,12 +8,21 @@ import useMainStore from '../../../store/main-store'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuSection from '../RibbonMenuSection'
 import RibbonMenuDivider from '../RibbonMenuDivider'
-import { blobToBase64, canvasToBlob, getContextValue, setContextValue } from '../../../utils/utils'
+import { blobToBase64, canvasToBlob } from '../../../utils/utils'
+import { getContextValue, setContextValue } from '../../../utils/context'
 import queryService from '../../../services/queryService'
 import Modal from '../../common/Modal'
 import configService from '../../../services/configurationService'
 import ImportToolbox from '../toolbox/ImportToolbox'
 import { useTranslation } from 'react-i18next'
+import type { Network } from 'vis-network'
+
+const fileApiSupported = Boolean(window.File && window.FileReader && window.FileList && window.Blob)
+
+// vis-network does not type its canvas
+function getCanvas (network: Network): HTMLCanvasElement {
+  return (network as unknown as { canvas: { frame: { canvas: HTMLCanvasElement } } }).canvas.frame.canvas
+}
 
 function ArchiveTabPanel () {
   const config = configService.getConfiguration()
@@ -34,18 +43,7 @@ function ArchiveTabPanel () {
 
   const filename = getContextValue(context, 'filename')
 
-  let reader = undefined as FileReader | undefined
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  function checkFileAPI () {
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-      reader = new FileReader()
-      return true
-    } else {
-      alert('The File APIs are not fully supported by your browser. Fallback required.')
-      return false
-    }
-  }
 
   function saveRemote (name?: string) {
     if (loading) {
@@ -58,12 +56,12 @@ function ArchiveTabPanel () {
 
       const json = save()
       const saveAction = async () => {
-        const result = await queryService.SaveFile(json)
+        const result = await queryService.saveFile(json)
         if (result) {
           setDirty(false)
           closeSave()
         } else {
-          window.alert('Failed to save')
+          window.alert(t('save failed'))
         }
         setLoading(false)
         setNewFilename('')
@@ -119,7 +117,7 @@ function ArchiveTabPanel () {
           await writable.close()
           setDirty(false)
         } catch (error) {
-      const err = error as { name?: string, message?: string }
+          const err = error as { name?: string, message?: string }
           // Fail silently if the user has simply canceled the dialog.
           if (err.name !== 'AbortError') {
             console.error(err.name, err.message)
@@ -143,7 +141,7 @@ function ArchiveTabPanel () {
 
   function saveImage () {
     if (network) {
-      const canvas = (network as unknown as { canvas: { frame: { canvas: HTMLCanvasElement } } }).canvas.frame.canvas
+      const canvas = getCanvas(network)
       fillCanvasBackgroundWithColor(canvas, 'white')
       const url = canvas.toDataURL('image/png')
 
@@ -165,19 +163,19 @@ function ArchiveTabPanel () {
       if (name && name.length > 0) {
         setLoading(true)
 
-        const canvas = (network as unknown as { canvas: { frame: { canvas: HTMLCanvasElement } } }).canvas.frame.canvas
+        const canvas = getCanvas(network)
         fillCanvasBackgroundWithColor(canvas, 'white')
 
         const saveAction = async () => {
           const imageBlob = await canvasToBlob(canvas)
           const base64data = await blobToBase64(imageBlob)
 
-          const result = await queryService.SaveImage(base64data, name)
+          const result = await queryService.saveImage(base64data, name)
           if (result) {
             setDirty(false)
             closeImageSave()
           } else {
-            window.alert('Failed to save')
+            window.alert(t('save failed'))
           }
           setLoading(false)
           setNewFilename('')
@@ -206,7 +204,8 @@ function ArchiveTabPanel () {
     if (event.target.files != null && event.target.files.length > 0) {
       const file = event.target.files[0]
 
-      if (file && reader) {
+      if (file) {
+        const reader = new FileReader()
         reader.onload = (e) => {
           const text = e.target?.result as string
 
@@ -217,7 +216,7 @@ function ArchiveTabPanel () {
     }
   }
 
-  const inputClass = (newFilename.length > 0 ? 'm:border-gray-300 ' : 'm:border-red-500 bg-red-200 ') + 'm:p-1 m:mb-3 m:bg-white m:border m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:block m:w-full';
+  const inputClass = (newFilename.length > 0 ? 'm:border-gray-300 ' : 'm:border-red-500 m:bg-red-200 ') + 'm:p-1 m:mb-3 m:bg-white m:border m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:block m:w-full';
   return <div className="m:flex m:text-center m:h-full m:p-1">
     <input
       type="file"
@@ -228,7 +227,7 @@ function ArchiveTabPanel () {
     />
     <RibbonMenuSection title={t('diagram')} >
       {config.Save === 'file' && (
-        <RibbonMenuButton label={t('save')} onClick={saveAsFile} disabled={!checkFileAPI()} iconName="save" />
+        <RibbonMenuButton label={t('save')} onClick={saveAsFile} disabled={!fileApiSupported} iconName="save" />
       )}
       {config.Save && config.Save.length > 0 && config.Save !== 'file' && <div>
         <RibbonMenuButton label={t('save')} disabled={loading} onClick={() => { saveRemote(filename) }} iconName="save" />
@@ -238,7 +237,7 @@ function ArchiveTabPanel () {
       </div>}
 
       {config.Open === 'file' && (
-        <RibbonMenuButton label={t('open')} onClick={() => fileInputRef?.current?.click()} disabled={!checkFileAPI()} iconName="outlined_file_open" />
+        <RibbonMenuButton label={t('open')} onClick={() => fileInputRef?.current?.click()} disabled={!fileApiSupported} iconName="outlined_file_open" />
       )}
     </RibbonMenuSection>
     <RibbonMenuDivider />

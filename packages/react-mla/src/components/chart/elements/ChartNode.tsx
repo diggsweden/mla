@@ -67,10 +67,8 @@ function ChartNode (props: Props) {
 
     const dataset = props.data.getDataSet()
     if (created.current) {
-      console.debug('[updating]', node.id)
       dataset.updateOnly(node as unknown as Parameters<typeof dataset.updateOnly>[0])
     } else {
-      console.debug('[adding]', node.id)
       dataset.update(node)
       created.current = true
     }
@@ -79,7 +77,6 @@ function ChartNode (props: Props) {
   // Remove the node from the chart when unmounting, not each time the node changes
   const removeNode = useEffectEvent(() => {
     if (node != null) {
-      console.debug('[removing]', node.id)
       props.data.getDataSet().remove(node.id!)
       created.current = false
     }

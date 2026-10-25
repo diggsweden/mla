@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-
 import { create } from 'zustand'
 import { type IEntity, type ILink } from '../interfaces/data-models'
 import configService from '../services/configurationService'
@@ -12,7 +11,6 @@ interface WorkflowState {
   entities: IEntity[]
   links: ILink[]
   actions: IActionState[]
-  running: boolean
   showDialog: boolean
 
   setWorkflow: (workflowId?: string) => void
@@ -31,75 +29,52 @@ export interface IActionState {
   completed: boolean
 }
 
-const useWorkflowStore = create<WorkflowState>((set, get) => ({
-  entities: [],
-  links: [],
-  actions: [],
-  running: false,
-  showDialog: false,
-  setWorkflow: (workflowId?: string) => {
-    set(() => ({
-      workflow: workflowId,
-      entities: [],
-      links: [],
-      running: true,
-      showDialog: false,
-      actions: workflowId
-        ? configService.getWorkflow(workflowId).Actions.map((a) => ({
-          id: a.Id,
-          running: false,
-          completed: false
-        } satisfies IActionState))
-        : []
-    }))
-  },
-  setActionRunning: (actionId: string) => {
-    const actionIndex = get().actions.findIndex(x => x.id === actionId)
-    const update = { ...get().actions[actionIndex], running: true }
-    set((state) => ({
-      actions: [
-        ...state.actions.slice(0, actionIndex),
-        update,
-        ...state.actions.slice(actionIndex + 1)]
-    }))
-  },
-  setActionCompleted: (actionId: string) => {
-    const actionIndex = get().actions.findIndex(x => x.id === actionId)
-    const update = { ...get().actions[actionIndex], completed: true, running: false }
-    set((state) => ({
-      running: state.actions.some(x => !x.completed),
-      actions: [
-        ...state.actions.slice(0, actionIndex),
-        update,
-        ...state.actions.slice(actionIndex + 1)]
-    }))
-  },
-  setActionError: (actionId: string, errorMessage: string) => {
-    const actionIndex = get().actions.findIndex(x => x.id === actionId)
-    const update = { ...get().actions[actionIndex], error: errorMessage, running: false }
-    set((state) => ({
-      actions: [
-        ...state.actions.slice(0, actionIndex),
-        update,
-        ...state.actions.slice(actionIndex + 1)]
-    }))
-  },
-  setShowDialog: (show: boolean) => {
-    set((state) => ({
-      showDialog: show && state.workflow != null
-    }))
-  },
-  addLinks: (links: ILink[]) => {
-    set((state) => ({
-      links: [...links, ...state.links]
-    }))
-  },
-  addEntities: (entities: IEntity[]) => {
-    set((state) => ({
-      entities: [...entities, ...state.entities]
-    }))
+const useWorkflowStore = create<WorkflowState>((set) => {
+  const updateAction = (actionId: string, update: Partial<IActionState>) => {
+    set((state) => {
+      return { actions: state.actions.map(a => a.id === actionId ? { ...a, ...update } : a) }
+    })
   }
 
-}))
+  return {
+    entities: [],
+    links: [],
+    actions: [],
+    showDialog: false,
+    setWorkflow: (workflowId?: string) => {
+      set(() => ({
+        workflow: workflowId,
+        entities: [],
+        links: [],
+        showDialog: false,
+        actions: workflowId
+          ? configService.getWorkflow(workflowId).Actions.map((a) => ({
+            id: a.Id,
+            running: false,
+            completed: false
+          } satisfies IActionState))
+          : []
+      }))
+    },
+    setActionRunning: (actionId: string) => { updateAction(actionId, { running: true }) },
+    setActionCompleted: (actionId: string) => { updateAction(actionId, { completed: true, running: false }) },
+    setActionError: (actionId: string, errorMessage: string) => { updateAction(actionId, { error: errorMessage, running: false }) },
+    setShowDialog: (show: boolean) => {
+      set((state) => ({
+        showDialog: show && state.workflow != null
+      }))
+    },
+    addLinks: (links: ILink[]) => {
+      set((state) => ({
+        links: [...links, ...state.links]
+      }))
+    },
+    addEntities: (entities: IEntity[]) => {
+      set((state) => ({
+        entities: [...entities, ...state.entities]
+      }))
+    }
+  }
+})
 
 export default useWorkflowStore

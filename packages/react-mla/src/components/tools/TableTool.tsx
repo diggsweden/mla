@@ -15,9 +15,9 @@ interface Props {
   showExport?: boolean
 }
 
-export interface SortConfig {
-  property: string
-  asc: boolean
+// A quote in a csv value is written as two quotes
+function csvCell (value: string): string {
+  return `"${value.replaceAll('"', '""')}"`
 }
 
 function TableTool (props: Props) {
@@ -103,11 +103,11 @@ function TableTool (props: Props) {
   function getfileContent () {
     const config = configService.getThingConfiguration(selectedType)
     function getHeader (): string {
-      return config.Properties.map(p => `"${p.Name}"`).join(';')
+      return config.Properties.map(p => csvCell(p.Name)).join(';')
     }
     function getBody (): string {
       return showList.map(i => {
-        return config.Properties.map(p => `"${viewService.getPropertyValue(i, p.TypeId) ?? ''}"`).join(';')
+        return config.Properties.map(p => csvCell(viewService.getPropertyValue(i, p.TypeId) ?? '')).join(';')
       }).join('\n')
     }
     return `\uFEFF${getHeader()}${'\n'}${getBody()}`

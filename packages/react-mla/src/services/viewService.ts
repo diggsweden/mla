@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { freeze } from 'immer'
+import { t } from 'i18next'
 import { type IThemeConfiguration } from '../interfaces/configuration/theme-configuration'
 import type { IBaseViewConfiguration, IRuleConfiguration, IViewConfiguration } from '../interfaces/configuration/view-configuration'
 import type { IBase, IChartBase, IEntity } from '../interfaces/data-models'
-import useAppStore from '../store/app-store'
 import configService, { type PropertyAndConfiguration } from './configurationService'
 import iconService from './iconService'
 import { toDateAndTimeString } from '../utils/date'
@@ -27,6 +27,8 @@ class ViewService {
   private defaultViewConfiguration = {} as Record<string, IBaseViewConfiguration>
 
   private theme = defaultTheme
+  // The view of the types that the user has selected, they replace the default view
+  private selectedViews = {} as Record<string, IBaseViewConfiguration>
 
   public init (): void {
     const config = configService.getConfiguration()
@@ -45,7 +47,7 @@ class ViewService {
     // Create configurations
     const defaultConfig = this.configurations.find(c => c.Id === 'default')
     if (defaultConfig == null) {
-      throw new Error('Saknar vykonfiguration med id default')
+      throw new Error('The view configuration with the id default is missing')
     }
 
     defaultConfig.Show.forEach(obj => {
@@ -62,8 +64,19 @@ class ViewService {
       map[obj.TypeId] = obj
       return map
     }, {}))
+  }
 
-    useAppStore.getState().setView('default')
+  public setSelectedViews (views: Record<string, IBaseViewConfiguration>): void {
+    this.selectedViews = views
+  }
+
+  // The icons of the entities are drawn once and kept
+  public async preloadIcons (): Promise<void> {
+    for (const entityType of configService.getConfiguration().Domain.EntityTypes) {
+      const view = this.getView(entityType.TypeId)
+      await iconService.getPNG(view.Icon, view.Color, undefined, undefined, false)
+      await iconService.getPNG(view.Icon, view.Color, undefined, undefined, true)
+    }
   }
 
   public getRule (entity: IChartBase, viewConfiguration: IViewConfiguration): IRuleConfiguration | undefined {
@@ -82,7 +95,7 @@ class ViewService {
   }
 
   public async getIconByRule (entity: IEntity, viewConfiguration: IViewConfiguration): Promise<IIcon | undefined> {
-    const view = viewService.getView(entity.TypeId, entity.GlobalType)
+    const view = this.getView(entity.TypeId, entity.GlobalType)
     const configurationRule = this.getRule(entity, viewConfiguration)
     const icon = configurationRule?.Icon ?? view.Icon
     const shadeColor = entity.Color ?? configurationRule?.Color ?? view.Color
@@ -119,9 +132,15 @@ class ViewService {
   }
 
   public getView (TypeId: string, GlobalType? :string): IBaseViewConfiguration {
-    const selectedView = useAppStore.getState().thingViewConfiguration[TypeId]
+    return { ...this.getDefaultView(TypeId, GlobalType), ...this.selectedViews[TypeId] }
+  }
 
-    return { ...this.getDefaultView(TypeId, GlobalType), ...selectedView }
+  public getLabels (thing: IChartBase): { LabelShort: string, LabelLong: string, LabelChart: string } {
+    return {
+      LabelShort: this.getShortName(thing),
+      LabelLong: this.getLongName(thing),
+      LabelChart: this.getChartName(thing)
+    }
   }
 
   public getLongName (thing: IChartBase): string {
@@ -166,10 +185,6 @@ class ViewService {
   private getLabel (thing: IChartBase, labelType: LabelType) {
     const props = this.getView(thing.TypeId, thing.GlobalType)
     const config = configService.getProperties(thing)
-
-    if (props == null || config == null) {
-      throw new Error('View for ' + thing.TypeId + ' view is not mapped')
-    }
 
     function getTemplate () {
       switch (labelType) {
@@ -263,7 +278,7 @@ class ViewService {
     }
 
     if (conf?.propertyConfiguration.FieldType === 'Boolean') {
-      return conf.property?.Value === true || conf.property?.Value === 'true' ? 'Ja' : 'Nej'
+      return conf.property?.Value === true || conf.property?.Value === 'true' ? t('yes') : t('no')
     }
 
     return conf.property?.Value?.toString()
@@ -276,6 +291,6 @@ const defaultTheme = {
   Icon: '#64748b'
 } satisfies IThemeConfiguration
 
-const viewService = freeze(new ViewService())
+const viewService = new ViewService()
 
 export default viewService
