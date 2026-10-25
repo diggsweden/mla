@@ -28,6 +28,7 @@ export default function ContextMenu (props: Props) {
 
   const selectedEntities = useMainStore((state) => state.selectedEntities)
   const selectedLinks = useMainStore((state) => state.selectedLinks)
+  const selectedShapeIds = useMainStore((state) => state.selectedShapeIds)
   const entities = useMainStore((state) => state.entities)
   const setSelected = useMainStore((state) => state.setSelected)
   const setExploreTool = useSearchStore((state) => state.setExploreTool)
@@ -112,7 +113,7 @@ export default function ContextMenu (props: Props) {
           <hr className="m:my-3 m:border-gray-300" />
         </>
         )}
-        <button className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded-sm m:cursor-pointer m:disabled:opacity-50" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
+        <button className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded-sm m:cursor-pointer m:disabled:opacity-50" disabled={selectedEntities.length === 0 && selectedLinks.length === 0 && selectedShapeIds.length === 0} onClick={() => { if (props.copy != null) { props.copy(); hideContextMenu() } }}>
           <span className="m:w-3 m:mr-2"><Icon name="content_copy" /></span>
           <div>{t('copy')}</div>
         </button>
@@ -120,7 +121,7 @@ export default function ContextMenu (props: Props) {
           <span className="m:w-3 m:mr-2"><Icon name="content_paste" /></span>
           <div>{t('paste')}</div>
         </button>
-        <button className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded-sm m:disabled:opacity-50 m:cursor-pointer" disabled={selectedEntities.length === 0 && selectedLinks.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
+        <button className="m:flex m:hover:bg-gray-100 m:py-1 m:px-2 m:rounded-sm m:disabled:opacity-50 m:cursor-pointer" disabled={selectedEntities.length === 0 && selectedLinks.length === 0 && selectedShapeIds.length === 0} onClick={() => { if (props.delete != null) { props.delete(); hideContextMenu() } }}>
           <span className="m:w-3 m:mr-2"><Icon name="delete_forever" /></span>
           <div>{t('delete')}</div>
         </button>
