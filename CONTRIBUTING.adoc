@@ -92,6 +92,13 @@ A practical example of such a workflow could be:
 4. Open a new pull request to main project.
 5. Project maintainers might comment and give feedback on your Pull Request.
 
+=== Branch names
+
+In your fork you can use any name for your topic branch.
+In this repository, which the maintainers push to, a new branch is named `<type>/<description>`, for example `fix/release-versions`.
+The type is one of the commit types: `feat`, `fix`, `hotfix`, `chore`, `docs`, `perf`, `refactor`, `style`, `test` or `experimental`.
+Release branches (`release/v1.2.3`) are made by the release workflow and not by hand.
+
 [[commit-guideline]]
 == Commit Guideline
 

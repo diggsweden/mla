@@ -11,16 +11,11 @@
     "pack:packages": "pnpm --filter @diggsweden/react-mla --filter @diggsweden/webcomponent-mla pack --pack-destination ./.local-packages",
     "lint": "pnpm --filter ./packages/react-mla run lint"
   },
-  "validate-branch-name": {
-    "pattern": "^(feat|fix|hotfix|release|test|experimental)/.+$",
-    "errorMsg": "Branch name validation failed"
-  },
   "packageManager": "pnpm@12.15.0",
   "version": "1.2.2",
   "devDependencies": {
     "@commitlint/cli": "21.2.4",
     "@commitlint/config-conventional": "21.2.4",
-    "lefthook": "2.2.2",
-    "validate-branch-name": "1.3.2"
+    "lefthook": "2.2.2"
   }
 }
