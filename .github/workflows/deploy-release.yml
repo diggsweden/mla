@@ -32,9 +32,6 @@ jobs:
     uses: ./.github/workflows/build-release.yml
     with:
       dry-run: ${{ inputs.dry-run == true }}
-    secrets:
-      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-      GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
 
   # This step uploads our artifacts to the tagged GitHub release.
   release:
@@ -49,11 +46,6 @@ jobs:
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: mla-component.umd.cjs
-
-      - name: Download mla-component.umd.cjs.asc
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: mla-component.umd.cjs.asc
 
       - name: Download mla-component.umd.cjs.sigstore.json
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -74,7 +66,6 @@ jobs:
           prerelease: ${{ contains(needs.build-release.outputs.branch, 'beta') }}
           files: |
             mla-component.umd.cjs
-            mla-component.umd.cjs.asc
             mla-component.umd.cjs.sigstore.json
             mla-component.umd.cjs.intoto.jsonl
         env:

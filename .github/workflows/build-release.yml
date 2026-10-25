@@ -17,11 +17,6 @@ on:
         description: "Build and attest, but do not publish the packages"
         type: boolean
         default: false
-    secrets:
-      GPG_PRIVATE_KEY:
-        required: true
-      GPG_PRIVATE_KEY_PASSWORD:
-        required: true
     outputs:
       changelog:
         description: "The changelog of the version"
@@ -70,19 +65,6 @@ jobs:
           # Writes the user level .npmrc with the token for GitHub Packages, pnpm does not read credentials from the project .npmrc
           registry-url: https://npm.pkg.github.com
           scope: "@diggsweden"
-
-      # Import GPG key to use for signing
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd # v7.0.0
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
-
-      # Configure Git
-      - name: Git configuration
-        run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "GitHub Actions"
 
       # Get branch name
       - id: get-branch
@@ -146,11 +128,6 @@ jobs:
         if: inputs.dry-run != true
         run: node scripts/changelog.mjs read "$NEW_VERSION"
 
-      # Create signature
-      - name: Create signature
-        run: |
-          gpg --armor --detach-sign ./packages/webcomponent-mla/dist/mla-component.umd.cjs
-
       # Create the SLSA provenance of the release file, signed with the identity of this workflow
       - id: attest
         name: Attest build provenance
@@ -202,15 +179,6 @@ jobs:
         with:
           name: mla-component.umd.cjs
           path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs
-          if-no-files-found: error
-          retention-days: 5
-
-      # Upload signature
-      - name: Upload mla-component.umd.cjs.asc
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: mla-component.umd.cjs.asc
-          path: ./packages/webcomponent-mla/dist/mla-component.umd.cjs.asc
           if-no-files-found: error
           retention-days: 5
 

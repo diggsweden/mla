@@ -96,7 +96,6 @@ The release has these files next to `mla-component.umd.cjs`:
   the attestation from GitHub by adding `--bundle mla-component.umd.cjs.sigstore.json` to the command above.
 - `mla-component.umd.cjs.intoto.jsonl` is the signed SLSA provenance statement of the attestation, as an
   [in-toto](https://in-toto.io/) DSSE envelope. Decode its `payload` (base64) to read it.
-- `mla-component.umd.cjs.asc` is a GPG signature.
 
 ## License
 
