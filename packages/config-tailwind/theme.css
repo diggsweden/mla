@@ -1,0 +1,53 @@
+/*
+ SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+
+ SPDX-License-Identifier: EUPL-1.2
+*/
+
+/* The theme of MLA, imported after Tailwind in the stylesheet that builds the CSS */
+
+/* Animations (animate-in, fade-in, slide-in-from-left and so on) */
+@import 'tw-animate-css';
+
+@theme {
+  /* The default font sizes are replaced, these are the only ones */
+  --text-*: initial;
+  --text-xs: 8px;
+  --text-xs--line-height: 12px;
+  --text-sm: 11px;
+  --text-sm--line-height: 16px;
+  --text-base: 0.8rem;
+  --text-lg: 16px;
+  --text-lg--line-height: 22px;
+  --text-xl: 20px;
+  --text-xl--line-height: 28px;
+}
+
+/* The keyframes get the prefix, like in Tailwind v3, so that they do not collide with those of a page that MLA is embedded in */
+@theme {
+  --animate-spin: m-spin 1s linear infinite;
+  --animate-pulse: m-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes m-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes m-pulse {
+    50% {
+      opacity: 0.5;
+    }
+  }
+}
+
+/* The colors of the theme are set at runtime, on the document, from the configuration */
+@theme inline {
+  --color-primary: var(--color-mla-primary);
+  --color-secondary: var(--color-mla-secondary);
+  --color-icon: var(--color-mla-icon);
+}
+
+@utility w-half-screen {
+  width: 50vw;
+}

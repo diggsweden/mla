@@ -166,13 +166,13 @@ export default function CreateToolbox (props: Props) {
     {typeToAdd &&
       <Modal mode="save" valid={addValid} show={typeToAdd != null} title={t('create') + ": " + typeToAdd?.Name} onNegative={onAbort} onPositive={() => { onAddEntity(entityToAdd) }} sidebar={
         <div>
-          <div className="m-flex m-justify-center">
-            <Icon name={viewService.getView(typeToAdd.TypeId).Icon} className="m-text-primary m-relative m-h-16 m-w-16 m-my-2"></Icon>
+          <div className="m:flex m:justify-center">
+            <Icon name={viewService.getView(typeToAdd.TypeId).Icon} className="m:text-primary m:relative m:h-16 m:w-16 m:my-2"></Icon>
           </div>
-          <p className="m-font-medium">
+          <p className="m:font-medium">
             {typeToAdd.Name}
           </p>
-          <p className="m-m-4">
+          <p className="m:m-4">
             {typeToAdd.Description}
           </p>
         </div>
@@ -186,13 +186,13 @@ export default function CreateToolbox (props: Props) {
     {linkTypeToAdd &&
       <Modal mode="save" valid={addValid} show={linkTypeToAdd != null} title={t('create') + ": " + linkTypeToAdd?.Name} onNegative={onAbort} onPositive={() => { onAddLink() }} sidebar={
         <div>
-          <div className="m-flex m-justify-center">
-            <Icon name='open_in_full' className="m-text-primary m-relative m-h-16 m-w-16 m-my-2"></Icon>
+          <div className="m:flex m:justify-center">
+            <Icon name='open_in_full' className="m:text-primary m:relative m:h-16 m:w-16 m:my-2"></Icon>
           </div>
-          <p className="m-font-medium">
+          <p className="m:font-medium">
             {linkTypeToAdd.Name}
           </p>
-          <p className="m-m-4">
+          <p className="m:m-4">
             {linkTypeToAdd.Description}
           </p>
         </div>

@@ -46,7 +46,7 @@ function LinkProperties (props: Props) {
   }
 
   return (
-    <div className="m-px-3 m-mt-3">
+    <div className="m:px-3 m:mt-3">
       <div>
         {configService.getProperties(link).map(e => (
           <Property key={link.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType + link.DateFrom?.toISO() + link.DateTo?.toISO()}
@@ -56,8 +56,8 @@ function LinkProperties (props: Props) {
         ))}
       </div>
       <div>
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={t('select relation direction')}>{t('arrow')}</span>
-        <select onChange={(e) => { linkDirectionChanged(link, e.target.value as Direction) }} value={link.Direction ?? 'NONE'} className="m-w-full m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-p-1">
+        <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={t('select relation direction')}>{t('arrow')}</span>
+        <select onChange={(e) => { linkDirectionChanged(link, e.target.value as Direction) }} value={link.Direction ?? 'NONE'} className="m:w-full m:bg-white m:border m:border-gray-300 m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:focus:border-blue-500 m:block m:p-1">
           <option value="TO">{t('to')}</option>
           <option value="FROM">{t('from')}</option>
           <option value="BOTH">{t('both')}</option>

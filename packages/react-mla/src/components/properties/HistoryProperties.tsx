@@ -221,13 +221,13 @@ function HistoryProperties (props: Props) {
     return null
   }
 
-  const dateTimeClass = "m-w-full m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-p-1 disabled:m-opacity-50";
+  const dateTimeClass = "m:w-full m:bg-white m:border m:border-gray-300 m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:focus:border-blue-500 m:block m:p-1 m:disabled:opacity-50";
   return <>
     <Accordion key={current.InternalId + isEvent} title={isEvent ? t('activity') : t('history')} expanded={(history.length > 1 || current.DateFrom != null || current.DateTo != null)}>
       {isEvent &&
         <div className={props.className}>
-          <span className="m-mt-1 m-text-sm m-font-medium m-text-gray-900" title={t('activity date time')}>{t('happens')}</span>
-          <div className="m-pb-1 m-grid m-grid-cols-2 m-gap-2">
+          <span className="m:mt-1 m:text-sm m:font-medium m:text-gray-900" title={t('activity date time')}>{t('happens')}</span>
+          <div className="m:pb-1 m:grid m:grid-cols-2 m:gap-2">
             <input
               type="date"
               value={toDateString(current.DateFrom)}
@@ -259,7 +259,7 @@ function HistoryProperties (props: Props) {
               className={dateTimeClass}>
             </input>
           </div>
-          <div className="m-text-sm m-font-medium m-mt-2">
+          <div className="m:text-sm m:font-medium m:mt-2">
             <button onClick={() => { setHistory(current) }} className="hover:font-bold text-green-800">
               {t('change to history')}
             </button>
@@ -268,9 +268,9 @@ function HistoryProperties (props: Props) {
       }
       {!isEvent &&
         <div className={props.className}>
-          <div className="m-pb-3 m-grid m-grid-cols-2 m-gap-2">
+          <div className="m:pb-3 m:grid m:grid-cols-2 m:gap-2">
             <div className="">
-              <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={('date from')}>{('from')}</span>
+              <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={('date from')}>{('from')}</span>
               <input
                 type="date"
                 value={toDateString(current.DateFrom)}
@@ -289,7 +289,7 @@ function HistoryProperties (props: Props) {
               </input>
             </div>
             <div>
-              <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900" title={('date to')}>{('to')}</span>
+              <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={('date to')}>{('to')}</span>
               <input
                 type="date"
                 value={toDateString(current.DateTo)}
@@ -340,29 +340,29 @@ function HistoryProperties (props: Props) {
               </input>
             </div>
           </div>
-          <div className="m-pt-1">
-            <div className="m-text-sm m-font-medium">
-              <div className="m-text-sm m-font-medium">
+          <div className="m:pt-1">
+            <div className="m:text-sm m:font-medium">
+              <div className="m:text-sm m:font-medium">
                 {history.length === 1 &&
-                  <button disabled={current.DateFrom == null} onClick={() => { setEvent(current) }} className="hover:m-font-bold m-text-green-800 disabled:m-opacity-50">
+                  <button disabled={current.DateFrom == null} onClick={() => { setEvent(current) }} className="m:hover:font-bold m:text-green-800 m:disabled:opacity-50">
                     {t('change to activity')}
                   </button>
                 }
               </div>
-              <button onClick={() => { addForDate() }} className="hover:m-font-bold m-text-green-800">
+              <button onClick={() => { addForDate() }} className="m:hover:font-bold m:text-green-800">
                 {t('create new version')}
               </button>
             </div>
-            <div className='m-cursor-default m-font-semibold m-text-center m-relative before:m-block before:m-absolute before:m-h-1 before:m-bg-primary before:m-left-0 before:m-w-16 before:m-top-1/2 after:m-block after:m-absolute after:m-h-1 after:m-bg-primary after:m-right-0 after:m-w-16 after:m-top-1/2'>
+            <div className='m:cursor-default m:font-semibold m:text-center m:relative m:before:block m:before:absolute m:before:h-1 m:before:bg-primary m:before:left-0 m:before:w-16 m:before:top-1/2 m:after:block m:after:absolute m:after:h-1 m:after:bg-primary m:after:right-0 m:after:w-16 m:after:top-1/2'>
               <div>{t('versions')}</div>
             </div>
-            <div className="m-text-sm m-font-medium">
+            <div className="m:text-sm m:font-medium">
               {history.map(h =>
-                <div key={h.InternalId} className="m-flex m-justify-between m-w-full m-my-1">
-                  <button className={(h.InternalId === current.InternalId ? 'm-font-bold' : '') + ' hover:m-font-bold'} onClick={() => { historySelected(h.InternalId) }}>
+                <div key={h.InternalId} className="m:flex m:justify-between m:w-full m:my-1">
+                  <button className={(h.InternalId === current.InternalId ? 'm:font-bold' : '') + ' m:hover:font-bold'} onClick={() => { historySelected(h.InternalId) }}>
                     {textFormatDate(h.DateFrom) + ' - ' + textFormatDate(h.DateTo)}
                   </button>
-                  <button className="hover:m-font-bold m-text-red-800 disabled:m-opacity-50" disabled={history.length == 1} onClick={() => { removeHistory(h) }}>
+                  <button className="m:hover:font-bold m:text-red-800 m:disabled:opacity-50" disabled={history.length == 1} onClick={() => { removeHistory(h) }}>
                     {t('delete')}
                   </button>
                 </div>

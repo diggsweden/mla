@@ -69,24 +69,24 @@ function PropertiesPanel (props: Props) {
   }
 
   return (
-    <aside className={'m-flex m-flex-col m-ease-in-out m-duration-300 m-bg-gray-100 m-overflow-none ' + (display !== '' ? 'm-translate-x-0 ' : 'm-translate-x-full ') + props.className}>
-      <div className="m-flex m-justify-items-stretch m-w-full m-bg-secondary m-text-white m-h-7 m-select-none">
-        <div className={'m-px-3 m-text-xl m-cursor-pointer hover:m-font-extrabold' + (selectedIds.length > 1 ? '' : ' m-hidden')} onClick={previous}>&lt;</div>
-        <div className="m-mt-1 m-grow m-text-center" title={entity?.Id ?? link?.Id ?? ''}>{title}</div>
-        <div className={'m-px-3 m-text-xl m-cursor-pointer hover:m-font-extrabold' + (selectedIds.length > 1 ? '' : ' m-hidden')} onClick={next}>&gt;</div>
+    <aside className={'m:flex m:flex-col m:ease-in-out m:duration-300 m:bg-gray-100 m-overflow-none ' + (display !== '' ? 'm:translate-x-0 ' : 'm:translate-x-full ') + props.className}>
+      <div className="m:flex m:justify-items-stretch m:w-full m:bg-secondary m:text-white m:h-7 m:select-none">
+        <div className={'m:px-3 m:text-xl m:cursor-pointer m:hover:font-extrabold' + (selectedIds.length > 1 ? '' : ' m:hidden')} onClick={previous}>&lt;</div>
+        <div className="m:mt-1 m:grow m:text-center" title={entity?.Id ?? link?.Id ?? ''}>{title}</div>
+        <div className={'m:px-3 m:text-xl m:cursor-pointer m:hover:font-extrabold' + (selectedIds.length > 1 ? '' : ' m:hidden')} onClick={next}>&gt;</div>
       </div>
-      <div className="m-grow m-overflow-y-auto">
+      <div className="m:grow m:overflow-y-auto">
         {computedLink && <EventListProperties eventLink={computedLink} />}
         {entity && <EntityProperties key={entity.InternalId} entity={entity} />}
         {link && <LinkProperties key={link.InternalId} link={link} />}
         {(entity ?? link) && config.TimeAnalysis &&
           <HistoryProperties
-            className="m-w-full"
+            className="m:w-full"
             entityId={entity ? getId(entity) : undefined}
             linkId={link ? getId(link) : undefined} />
         }
       </div>
-      <div className="m-my-1 m-mx-3 m-text-sm m-self-end">
+      <div className="m:my-1 m:mx-3 m:text-sm m:self-end">
         <span>{source}</span>
       </div>
     </aside>

@@ -217,8 +217,8 @@ function ArchiveTabPanel () {
     }
   }
 
-  const inputClass = (newFilename.length > 0 ? 'm-border-gray-300 ' : 'm-border-red-500 bg-red-200 ') + 'm-p-1 m-mb-3 m-bg-white m-border m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 m-block m-w-full';
-  return <div className="m-flex m-text-center m-h-full m-p-1">
+  const inputClass = (newFilename.length > 0 ? 'm:border-gray-300 ' : 'm:border-red-500 bg-red-200 ') + 'm:p-1 m:mb-3 m:bg-white m:border m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:block m:w-full';
+  return <div className="m:flex m:text-center m:h-full m:p-1">
     <input
       type="file"
       accept="application/json"
@@ -254,16 +254,16 @@ function ArchiveTabPanel () {
     <RibbonMenuDivider />
     <ImportToolbox show={config.Menu?.Archive?.Import} />
     <Modal mode="save" show={showSave} title={t('save as')} onNegative={closeSave} onPositive={() => { saveRemote(newFilename) }}>
-      <div className="m-text-start m-px-4 m-py-1">
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('filename')}</span>
+      <div className="m:text-start m:px-4 m:py-1">
+        <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('filename')}</span>
         <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
         {loading && <p>{t('saving')}</p>}
       </div>
     </Modal>
 
     <Modal mode="save" show={showImageSave} title={t('save image as')}  onNegative={closeImageSave} onPositive={() => { saveImageRemote(newFilename) }}>
-      <div className="m-text-start m-px-4 m-py-1">
-        <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('filename')}</span>
+      <div className="m:text-start m:px-4 m:py-1">
+        <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('filename')}</span>
         <input type="text" value={newFilename} onChange={(e) => { setNewFilename(e.target.value) }} className={inputClass}></input>
         {loading && <p>{t('saving')}</p>}
       </div>

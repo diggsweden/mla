@@ -1,0 +1,73 @@
+/*
+ SPDX-FileCopyrightText: 2024 Skatteverket - Swedish Tax Agency
+
+ SPDX-License-Identifier: CC0-1.0
+*/
+
+/* Tailwind with the prefix m, so that it does not collide with the styles of a page that MLA is embedded in. */
+/* Only the components are scanned for classes, not the data files next to them. */
+@import 'tailwindcss' prefix(m) source(none);
+@import '@repo/tailwind-config/theme.css';
+@source './**/*.tsx';
+
+/*
+  Tailwind CSS v4 changed some defaults that the UI relied on in v3. These rules keep the look and the behavior of v3,
+  and each can go when the elements that depend on it are given explicit classes.
+*/
+@layer base {
+  /* The default border color is currentcolor in v4, it was gray-200 */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--m-color-gray-200);
+  }
+
+  /* The buttons no longer get a pointer cursor */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* The margin of every element is 0, which moves a modal dialog to the corner,
+     since the browser centers it with an automatic margin. v3 left the dialogs alone. */
+  dialog {
+    margin: auto;
+  }
+
+  /* The border, the background and the spacing of the button of a file input are removed,
+     v3 left it as the browser draws it. */
+  input[type='file']::file-selector-button {
+    all: revert;
+    font: inherit;
+  }
+
+  /* The padding of the table cells is removed, v3 left the 1px of the browser */
+  td,
+  th {
+    padding: 1px;
+  }
+}
+
+.mla-component {
+  display: block; 
+  width: 100%; 
+  height: 100%;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary) var(--primary);
+
+  & #loader {
+    text-align: center;
+    margin-top: 100px;
+  }
+  
+  & #loader h1 {
+    margin-bottom: 40px;
+  }
+  
+  & #mla-chart .vis-network:focus{
+    outline: none;
+  }
+}

@@ -54,7 +54,7 @@ function RibbonEntityButton (props: Props) {
     endEntityDrag()
   }
 
-  const dragPreview = (isDragging ? 'm-opacity-50' : 'm-opacity-100') + ' m-h-5 m-m-px m-inline-flex m-flex-row m-flex-nowrap m-items-center m-py-0 m-pl-0.5 m-pr-1 m-border m-border-transparent enabled:hover:m-bg-blue-100 enabled:hover:m-border-blue-400 disabled:m-opacity-50 disaled:m-cursor-default'
+  const dragPreview = (isDragging ? 'm:opacity-50' : 'm:opacity-100') + ' m:h-5 m:m-px m:inline-flex m:flex-row m:flex-nowrap m:items-center m:py-0 m:pl-0.5 m:pr-1 m:border m:border-transparent m:enabled:hover:bg-blue-100 m:enabled:hover:border-blue-400 m:disabled:opacity-50 disaled:m-cursor-default'
   if (props.draggable === false) {
     return <button
       type='button'
@@ -62,10 +62,10 @@ function RibbonEntityButton (props: Props) {
       onClick={props.onClick}
       title={props.entity.Name}
       className={dragPreview}>
-      <span className="m-flex m-justify-center m-items-center">
-        <span className="m-leading-4"><Icon color={view.Color} name={view.Icon} className="m-h-5 m-w-5" /></span>
+      <span className="m:flex m:justify-center m:items-center">
+        <span className="m:leading-4"><Icon color={view.Color} name={view.Icon} className="m:h-5 m:w-5" /></span>
       </span>
-      <span className="m-ml-1">{props.entity.Name}</span>
+      <span className="m:ml-1">{props.entity.Name}</span>
     </button>
   }
 
@@ -78,10 +78,10 @@ function RibbonEntityButton (props: Props) {
     onClick={props.onClick}
     title={props.entity.Name}
     className={dragPreview}>
-    <span className="m-flex m-justify-center m-items-center">
-      <span className="m-leading-4"><Icon color={view.Color} name={view.Icon} className="m-h-5 m-w-5" /></span>
+    <span className="m:flex m:justify-center m:items-center">
+      <span className="m:leading-4"><Icon color={view.Color} name={view.Icon} className="m:h-5 m:w-5" /></span>
     </span>
-    <span className="m-ml-1">{props.entity.Name}</span>
+    <span className="m:ml-1">{props.entity.Name}</span>
   </button>
 }
 

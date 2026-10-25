@@ -15,7 +15,7 @@ import Spinner from './components/common/Spinner'
 import ErrorBoundary from './components/common/ErrorBoundary'
 import App from './App'
 
-import './MLA.scss'
+import './MLA.css'
 import { useTranslation } from 'react-i18next'
 
 import i18n from "i18next";
@@ -89,7 +89,7 @@ export function MLA (props: MlaProps) {
       { !ready &&
         <div id="loader">
           <h1>{t('starting')}</h1>
-          <div className="m-h-16 m-w-16 m-m-auto">
+          <div className="m:h-16 m:w-16 m:m-auto">
             <Spinner />
           </div>
         </div>

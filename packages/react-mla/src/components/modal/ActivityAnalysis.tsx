@@ -280,7 +280,7 @@ function ActivityAnalysis (props: Props) {
   function dots (count: number, color: string): ReactElement[] {
     const result = [] as ReactElement[]
     for (let i = 0; i < Math.min(10, count); i++) {
-      result.push(<svg key={i} className={`m-h-3 m-w-3 m-mt-1 m-inline m-z-10 ${i > 0 ? ' m-ml-1' : ''}`}>
+      result.push(<svg key={i} className={`m:h-3 m:w-3 m:mt-1 m:inline m:z-10 ${i > 0 ? ' m:ml-1' : ''}`}>
         <circle cx="5" cy="5" r="5" fill={color} />
       </svg>
       )
@@ -291,7 +291,7 @@ function ActivityAnalysis (props: Props) {
 
   function dot (color?: string) {
     if (color) {
-      return <svg className="m-w-3 m-h-3 m-mr-1 m-inline"><circle cx="4" cy="4" r="4" fill={color} /></svg>
+      return <svg className="m:w-3 m:h-3 m:mr-1 m:inline"><circle cx="4" cy="4" r="4" fill={color} /></svg>
     }
 
     return undefined
@@ -299,32 +299,32 @@ function ActivityAnalysis (props: Props) {
 
   const firstDay = (view.length > 0 && view[0].Description.length > 0) ? view[0].Description[0].Date : DateTime.now()
   return (
-    <div className={('m-bg-stone-400 m-p-5 ' + props.className)}>
+    <div className={('m:bg-stone-400 m:p-5 ' + props.className)}>
       {view.length === 0 &&
         <div>{t('nothing to show')}</div>
       }
       {view.length > 0 &&
-        <div className="m-p-8 m-w-full m-overflow-x m-bg-white m-">
-          <div className="m-w-full -m-mt-5 m-mb-4 -m-ml-4">
-            <button type="button" onClick={(e) => { show(e) }} className='m-float-left m-text-white m-bg-primary enabled:m-hover:bg-blue-800 focus:m-ring-4 focus:m-ring-blue-300 m-font-medium m-rounded m-px-2 m-py-1'>
-              <Icon name="settings" className="m-w-5 m-h-5 m-inline-block m-m-0 -m-mb-1" color='#ffffff'></Icon>{t('settings')}
+        <div className="m:p-8 m:w-full m-overflow-x m:bg-white m-">
+          <div className="m:w-full m:-mt-5 m:mb-4 m:-ml-4">
+            <button type="button" onClick={(e) => { show(e) }} className='m:float-left m:text-white m:bg-primary enabled:m-hover:bg-blue-800 m:focus:ring-4 m:focus:ring-blue-300 m:font-medium m:rounded m:px-2 m:py-1'>
+              <Icon name="settings" className="m:w-5 m:h-5 m:inline-block m:-m-0 m:-mb-1" color='#ffffff'></Icon>{t('settings')}
             </button>
           </div>
 
           {/* Header */}
-          <div className="m-flex m-w-full m-mt-8">
-            <div className="m-flex m-justify-center m-items-center m-w-14"><div className="-m-rotate-90 m-text-xl">{t('phase act')}</div></div>
-            <div className={'m-grow m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
+          <div className="m:flex m:w-full m:mt-8">
+            <div className="m:flex m:justify-center m:items-center m:w-14"><div className="m:-rotate-90 m:text-xl">{t('phase act')}</div></div>
+            <div className={'m:grow m:max-w-7xl m:grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
               {view.map((v, i) =>
-                <div key={i} className="m-h-full">
-                  <div className="m-flex m-h-20 m-items-center m-me-2">
-                    <div className="m-flex m-flex-col m-justify-center m-items-center m-w-full m-h-full m-bg-black m-text-white m-text-lg">
+                <div key={i} className="m:h-full">
+                  <div className="m:flex m:h-20 m:items-center m:me-2">
+                    <div className="m:flex m:flex-col m:justify-center m:items-center m:w-full m:h-full m:bg-black m:text-white m:text-lg">
                       <div>{v.Header}</div>
                       <div>{toDateString(v.From)}</div>
                     </div>
                     {i !== (view.length - 1) &&
-                      <div className="m-w-6">
-                        <span className="m-text-[20px]">&#10132;</span>
+                      <div className="m:w-6">
+                        <span className="m:text-[20px]">&#10132;</span>
                       </div>
                     }
                   </div>
@@ -334,26 +334,26 @@ function ActivityAnalysis (props: Props) {
           </div>
 
           {/* Activities */}
-          <div className="m-flex m-w-full m-min-h-[80px]">
-            <div className="m-flex m-justify-center m-items-center"><div className="-m-rotate-90 m-text-sm">{t('activities')}</div></div>
-            <div className={'m-grow m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
+          <div className="m:flex m:w-full m:min-h-[80px]">
+            <div className="m:flex m:justify-center m:items-center"><div className="m:-rotate-90 m:text-sm">{t('activities')}</div></div>
+            <div className={'m:grow m:max-w-7xl m:grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
               {view.map((v, i) =>
-                <div key={i} className="m-flex m-h-full">
-                  <div className="m-p-2 m-flex m-grow m-">
+                <div key={i} className="m:flex m:h-full">
+                  <div className="m:p-2 m:flex m:grow m-">
                     {v.Description.length === 0 &&
-                      <div className="m-italic">{t('no info')}</div>
+                      <div className="m:italic">{t('no info')}</div>
                     }
 
-                    <div className="m-w-full">
-                      <div className="m-font-semibold m-text-left m-text-sm m-ml-2">{t('day')}</div>
+                    <div className="m:w-full">
+                      <div className="m:font-semibold m:text-left m:text-sm m:ml-2">{t('day')}</div>
                       {v.Description.filter(d => d.Attributes.length === 0 || shouldShowAttribute(...d.Attributes)).map((d, j) => {
                         const previousDay = dateDiff ? (j === 0 ? v.From : v.Description[j - 1].Date) : firstDay
                         const day = daysBetween(previousDay, d.Date)
-                        return <div key={v.Header + j} className={'m-grid m-grid-cols-[36px_1fr] ' + (day > 0 ? 'm-mt-1' : '')}>
-                          <div className="m-text-right m-text-sm m-font-semibold m-w-9 m-border-r m-border-gray-600 m-pr-1 m-pt-px" style={{ borderColor: d.Color, borderRightWidth: (d.Color != null) ? 3 : 1 }} key={'day-' + j}>{((dateDiff && day > 0) ? '+' : '') + ((dateDiff && day === 0) ? '' : day.toString())}</div>
-                          <div className="m-text-left m-pl-1" key={'text-' + j}>
+                        return <div key={v.Header + j} className={'m:grid m:grid-cols-[36px_1fr] ' + (day > 0 ? 'm:mt-1' : '')}>
+                          <div className="m:text-right m:text-sm m:font-semibold m:w-9 m:border-r m:border-gray-600 m:pr-1 m:pt-px" style={{ borderColor: d.Color, borderRightWidth: (d.Color != null) ? 3 : 1 }} key={'day-' + j}>{((dateDiff && day > 0) ? '+' : '') + ((dateDiff && day === 0) ? '' : day.toString())}</div>
+                          <div className="m:text-left m:pl-1" key={'text-' + j}>
                             <div>{d.Title}</div>
-                            {d.SubItems.length > 0 && <ul className={'m-list-none m-list-inside'}>
+                            {d.SubItems.length > 0 && <ul className={'m:list-none m:list-inside'}>
                               {d.SubItems.filter(s => s.Attribute == null || shouldShowAttribute(s.Attribute)).map((sub, z) => <li key={z}>{dot(sub.Color ?? '#000000')}{sub.Text}
                               </li>
                               )}
@@ -365,7 +365,7 @@ function ActivityAnalysis (props: Props) {
                     </div>
                   </div>
                   {i !== (view.length - 1) &&
-                    <div className="m-border-l-2 m-mr-2 m-border-gray-300 m-border-dotted"></div>
+                    <div className="m:border-l-2 m:mr-2 m:border-gray-300 m:border-dotted"></div>
                   }
                 </div>
               )}
@@ -373,29 +373,29 @@ function ActivityAnalysis (props: Props) {
           </div>
 
           {/* Cast */}
-          <div className="m-flex m-w-full">
-            <div className="m-flex m-justify-center m-items-center m-w-[49px]"><div className="-m-rotate-90 m-text">{t('actors')}</div></div>
-            <div className="m-grow m-text-left">
+          <div className="m:flex m:w-full">
+            <div className="m:flex m:justify-center m:items-center m:w-[49px]"><div className="m:-rotate-90 m-text">{t('actors')}</div></div>
+            <div className="m:grow m:text-left">
               {types.map(t =>
-                <div key={t.Name} className={'m-max-w-7xl m-grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
+                <div key={t.Name} className={'m:max-w-7xl m:grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
                   {view.map((v, i) => {
                     const color = config.LinkTypeId != null ? 'black' : viewService.getView(t.TypeId).Color
-                    return <div className="m-flex m-justify-between m-w-full" key={i}>
+                    return <div className="m:flex m:justify-between m:w-full" key={i}>
                       {i === 0 &&
-                        <div className="m-mr-2 m-grow">{t.Name}</div>
+                        <div className="m:mr-2 m:grow">{t.Name}</div>
                       }
-                      <div className={'m-grow m-h-px m-translate-y-3' + (i > intervall.Start[t.TypeId] && i <= intervall.End[t.TypeId] ? ' m-bg-gray-300' : '')}></div>
+                      <div className={'m:grow m:h-px m:translate-y-3' + (i > intervall.Start[t.TypeId] && i <= intervall.End[t.TypeId] ? ' m:bg-gray-300' : '')}></div>
                       <div className="">
-                        <div className="m-relative m-whitespace-nowrap" title={v.Counts[t.TypeId]?.toString()}>
+                        <div className="m:relative m:whitespace-nowrap" title={v.Counts[t.TypeId]?.toString()}>
                           {dots(v.Counts[t.TypeId], color)}
                         </div>
                       </div>
                       {i !== (view.length - 1) &&
-                        <div className={'m-w-2 m-h-px m-translate-y-3' + (i >= intervall.Start[t.TypeId] && i < intervall.End[t.TypeId] ? ' m-bg-gray-300' : '')}></div>
+                        <div className={'m:w-2 m:h-px m:translate-y-3' + (i >= intervall.Start[t.TypeId] && i < intervall.End[t.TypeId] ? ' m:bg-gray-300' : '')}></div>
                       }
                       {i !== (view.length - 1) &&
-                        <div className="m-border-l-2 m-border-gray-300 m-border-dotted">
-                          <div className={'m-w-2 m-h-px m-z-0 m-translate-y-3' + (i >= intervall.Start[t.TypeId] && i < intervall.End[t.TypeId] ? ' m-bg-gray-300' : '')}></div>
+                        <div className="m:border-l-2 m:border-gray-300 m:border-dotted">
+                          <div className={'m:w-2 m:h-px m:z-0 m:translate-y-3' + (i >= intervall.Start[t.TypeId] && i < intervall.End[t.TypeId] ? ' m:bg-gray-300' : '')}></div>
                         </div>
                       }
                     </div>
@@ -409,9 +409,9 @@ function ActivityAnalysis (props: Props) {
 
       }
       <Popover backgroundClass='bg-gray-400/20' show={showSettings !== undefined} hide={() => { setShowSettings(undefined) } } x={showSettings?.x ?? 0} y={showSettings?.y ?? 0}>
-        <Toggle title={t('show as date diff')} value={dateDiff} onChange={() => { setDateDiff(!dateDiff) }} className="m-mx-3 m-my-2" />
+        <Toggle title={t('show as date diff')} value={dateDiff} onChange={() => { setDateDiff(!dateDiff) }} className="m:mx-3 m:my-2" />
         {attributes.map((a) => (
-          <Toggle key={a.Name} title={a.Name + ':'} value={a.Show} onChange={() => { toggleAttribute(a) }} className="m-mx-3 m-mb-2" />
+          <Toggle key={a.Name} title={a.Name + ':'} value={a.Show} onChange={() => { toggleAttribute(a) }} className="m:mx-3 m:mb-2" />
         ))}
       </Popover>
     </div>

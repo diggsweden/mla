@@ -24,7 +24,7 @@ function ToolsTabPanel () {
     setSelected(update)
   }
 
-  return <div className="m-flex m-text-center m-h-full m-p-1">
+  return <div className="m:flex m:text-center m:h-full m:p-1">
     <RibbonMenuSection title={t('select type')}>
       <RibbonMenuButtonGroup>
         {configService.getConfiguration().Domain.EntityTypes.filter(e => e.Internal !== true).map(e => (

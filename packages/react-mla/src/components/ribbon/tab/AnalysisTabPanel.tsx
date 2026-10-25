@@ -81,9 +81,9 @@ function AnalysisTabPanel () {
     setFilter(updatedFilter.current)
   }
 
-  const timePickerClass = "m-bg-white m-border m-border-gray-300 m-text-gray-900 m-rounded-lg focus:m-ring-blue-500 focus:m-border-blue-500 m-block m-w-full m-px-1 m-cursor-pointer"
+  const timePickerClass = "m:bg-white m:border m:border-gray-300 m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:focus:border-blue-500 m:block m:w-full m:px-1 m:cursor-pointer"
   return (<>
-    <div className="m-flex m-text-center m-h-full m-p-1">
+    <div className="m:flex m:text-center m:h-full m:p-1">
       <GraphToolbox />
 
       <RibbonMenuSection title={t('show as table')} >
@@ -103,13 +103,13 @@ function AnalysisTabPanel () {
         </RibbonMenuSection>
 
         <RibbonMenuSection title={t('select time interval')} >
-          <div className="m-text-left m-px-1">
-            <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('from')} - {t('to')}</span>
+          <div className="m:text-left m:px-1">
+            <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('from')} - {t('to')}</span>
             <input type='Date' required min={toDateString(min)} value={toDateString(date.DateFrom)} onChange={dateChanged} className={timePickerClass}></input>
             <input type='Date' min={toDateString(date.DateFrom)} max={toDateString(max)} required readOnly={interval !== 'custom'} value={toDateString(date.DateTo)} onChange={dateToChanged} className={timePickerClass}></input>
           </div>
-          <div className="m-px-1">
-            <span className="m-mb-1 m-text-sm m-font-medium m-text-gray-900">{t('time interval')}</span>
+          <div className="m:px-1">
+            <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('time interval')}</span>
             <select required value={interval} onChange={(e) => { setInterval(e.target.value as IntervalType) }} className={timePickerClass}>
               <option value={'day'}>{t('day')}</option>
               <option value={'week'}>{t('week')}</option>
