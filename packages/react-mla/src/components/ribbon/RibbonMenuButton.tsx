@@ -26,7 +26,7 @@ function RibbonMenuButton (props: RibbonMenuButtonProps) {
 
   return (
     <button
-      className={(props.active ? 'm:border-blue-300 m:bg-blue-100 ' : 'm:border-transparent ') + 'm:min-w-[64px] m:m-1 m:mb-2 m:px-1 m-bb-1 m:text-base m:border m:enabled:hover:bg-blue-100 m:enabled:hover:border-blue-400 m:disabled:opacity-50 m:disabled:cursor-default'}
+      className={(props.active ? 'm:border-blue-300 m:bg-blue-100 ' : 'm:border-transparent ') + 'm:min-w-[64px] m:m-1 m:mb-2 m:px-1 m:text-base m:border m:enabled:hover:bg-blue-100 m:enabled:hover:border-blue-400 m:disabled:opacity-50 m:disabled:cursor-default'}
       onClick={props.onClick}
       title={props.title}
       disabled={props.disabled}

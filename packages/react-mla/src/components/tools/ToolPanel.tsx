@@ -47,7 +47,7 @@ function ToolPanel (props: Props) {
     <aside className={'m:flex m:flex-col m:ease-in-out m:duration-300 ' + (getTool() != null ? 'm:translate-x-0 ' : 'm:-translate-x-full ') + props.className}>
       <div className="m:bg-secondary m:w-full m:flex m:justify-center">
         <div className="m:text-white m:p-1 m:h-7">{getToolName()}</div>
-        <div onClick={() => { setTool(undefined) }} className="m:absolute m:top-0 m:right-3 m:text-xl m:text-white m-align-center m:cursor-pointer m-alert-del">&times;</div>
+        <div onClick={() => { setTool(undefined) }} className="m:absolute m:top-0 m:right-3 m:text-xl m:text-white m:cursor-pointer">&times;</div>
       </div>
 
       <div className="m:flex-1 m:px-3 m:py-4 m:overflow-y-auto m:overflow-x-hidden m:bg-gray-50">

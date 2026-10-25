@@ -53,16 +53,16 @@ function ImportTool () {
       </div>
       <div className="m:mt-2">
         {loading &&
-          <div className="m:animate-in m:fade-in m:duration-500 m:flex m:space-x-4 m:mt-4">
+          <div className="m:animate-in m:fade-in m:duration-500 m:flex m:gap-x-4 m:mt-4">
             <div className="m:animate-pulse m:rounded-full m:bg-slate-200 m:h-10 m:w-10"></div>
-            <div className="m:flex-1 m:space-y-6 m:py-1">
-              <div className="m:h-2 m:bg-slate-200 m:rounded"></div>
-              <div className="m:space-y-3">
+            <div className="m:flex-1 m:grid m:gap-y-6 m:py-1">
+              <div className="m:h-2 m:bg-slate-200 m:rounded-sm"></div>
+              <div className="m:grid m:gap-y-3">
                 <div className="m:grid m:grid-cols-3 m:gap-4">
-                  <div className="m:h-2 m:bg-slate-200 m:rounded m:col-span-2"></div>
-                  <div className="m:h-2 m:bg-slate-200 m:rounded m:col-span-1"></div>
+                  <div className="m:h-2 m:bg-slate-200 m:rounded-sm m:col-span-2"></div>
+                  <div className="m:h-2 m:bg-slate-200 m:rounded-sm m:col-span-1"></div>
                 </div>
-                <div className="m:h-2 m:bg-slate-200 m:rounded"></div>
+                <div className="m:h-2 m:bg-slate-200 m:rounded-sm"></div>
               </div>
             </div>
           </div>

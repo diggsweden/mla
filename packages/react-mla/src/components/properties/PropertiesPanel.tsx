@@ -69,7 +69,7 @@ function PropertiesPanel (props: Props) {
   }
 
   return (
-    <aside className={'m:flex m:flex-col m:ease-in-out m:duration-300 m:bg-gray-100 m-overflow-none ' + (display !== '' ? 'm:translate-x-0 ' : 'm:translate-x-full ') + props.className}>
+    <aside className={'m:flex m:flex-col m:ease-in-out m:duration-300 m:bg-gray-100 ' + (display !== '' ? 'm:translate-x-0 ' : 'm:translate-x-full ') + props.className}>
       <div className="m:flex m:justify-items-stretch m:w-full m:bg-secondary m:text-white m:h-7 m:select-none">
         <div className={'m:px-3 m:text-xl m:cursor-pointer m:hover:font-extrabold' + (selectedIds.length > 1 ? '' : ' m:hidden')} onClick={previous}>&lt;</div>
         <div className="m:mt-1 m:grow m:text-center" title={entity?.Id ?? link?.Id ?? ''}>{title}</div>

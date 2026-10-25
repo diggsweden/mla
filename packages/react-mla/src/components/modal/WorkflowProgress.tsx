@@ -45,7 +45,7 @@ function WorkflowProgress () {
 
   return (
     <div>
-      <ol className="relative text-gray-500 dark:text-gray-400">
+      <ol className="m:relative m:text-gray-500">
         {
           actions.map(a => action(a))
         }

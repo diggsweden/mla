@@ -54,9 +54,9 @@ function InternalResult (props: InternalProps) {
 
   function getLinkDirectionIcon (link: ILink): React.JSX.Element | null {
     switch (link.Direction) {
-      case 'TO': return <Icon name='arrow_forward' className="m:text-primary m:relative m:h-5 m:w-5 m:ml-1 m-" />
-      case 'FROM': return <Icon name='arrow_back' className="m:text-primary m:relative m:h-5 m:w-5 m- m:ml-1 m-" />
-      case 'BOTH': return <Icon name='sync_alt' className="m:text-primary m:relative m:h-5 m:w-5 m- m:ml-1 m-" />
+      case 'TO': return <Icon name='arrow_forward' className="m:text-primary m:relative m:h-5 m:w-5 m:ml-1" />
+      case 'FROM': return <Icon name='arrow_back' className="m:text-primary m:relative m:h-5 m:w-5 m:ml-1" />
+      case 'BOTH': return <Icon name='sync_alt' className="m:text-primary m:relative m:h-5 m:w-5 m:ml-1" />
       case 'NONE': return null
     }
   }
@@ -64,16 +64,16 @@ function InternalResult (props: InternalProps) {
     <div className={props.className}>
       {item.links.length > 0 && item.links.map(l => (
         <div key={`${props.depth}-${l.Id}`} className="m:flex m:flex-nowrap m:w-full">
-          <div className="m-height-f m:flex m:ml-2 m:mr-1">
-            <Icon name={'link'} className="m:text-primary m:relative m:h-5 m:w-5 m-" />
+          <div className="m:flex m:ml-2 m:mr-1">
+            <Icon name={'link'} className="m:text-primary m:relative m:h-5 m:w-5" />
             {getLinkDirectionIcon(l)}
           </div>
           <div className="m:grow m:truncate m:text-left m:text-sm m:font-semibold m:leading-5" key={l.Id}>{getLinkLabel(l)}</div>
         </div>
       ))}
       <div className="m:flex m:flex-nowrap m:w-full m:py-1">
-        <div className="m-height-f m:flex m:mx-2 m:items-center"><Icon name={view.Icon} className="m:text-primary m:relative m:h-5 m:w-5 m-" /></div>
-        <div className="m:grow m:truncate m:text-left m:mr-1 m-text-normal">
+        <div className="m:flex m:mx-2 m:items-center"><Icon name={view.Icon} className="m:text-primary m:relative m:h-5 m:w-5" /></div>
+        <div className="m:grow m:truncate m:text-left m:mr-1">
           { getLabel(item.primary) }
         </div>
       </div>
@@ -118,7 +118,7 @@ function ItemResult (props: Props) {
   }
 
   return (
-    <div draggable onDragStart={onDragStart} onDragEnd={onDragEnd} className={props.className + (isDragging ? ' m:opacity-50' : ' m:opacity-100') + ' m:w-full m:rounded m:border-solid m:border m:bg-white m:mb-1 m:py-1 m:relative'}>
+    <div draggable onDragStart={onDragStart} onDragEnd={onDragEnd} className={props.className + (isDragging ? ' m:opacity-50' : ' m:opacity-100') + ' m:w-full m:rounded-sm m:border-solid m:border m:bg-white m:mb-1 m:py-1 m:relative'}>
       {config && config.Internal !== true && props.onClick != null &&
         <span className='m:absolute m:top-4 m:-right-4 m:-translate-y-1/2' onClick={() => { add() }}>
           <button className="m:text-white m:bg-primary m:rounded-full m:text-lg m:px-2 m:m-2 m:h-5 m:w-5 m:leading-5 m:flex m:justify-center">+</button>

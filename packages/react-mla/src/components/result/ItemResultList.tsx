@@ -246,13 +246,13 @@ function ItemResultList (props: ItemResultProps) {
   }
 
   return <div className={props.className}>
-    {result.ErrorMessage && <div className="m:bg-red-100 m:border m:border-red-400 m:text-red-700 m:px-4 m:py-3 m:rounded m:relative m:mb-3" role="alert">
-      <span className="m:block m-sm:inline">{result.ErrorMessage}</span>
+    {result.ErrorMessage && <div className="m:bg-red-100 m:border m:border-red-400 m:text-red-700 m:px-4 m:py-3 m:rounded-sm m:relative m:mb-3" role="alert">
+      <span className="m:block">{result.ErrorMessage}</span>
     </div>
     }
     {count > 1 &&
       <div className="m:relative">
-        <p className="m:leading-normal m-font-sm m:uppercase m:text-center m:mb-2">{t('results')}</p>
+        <p className="m:leading-normal m:uppercase m:text-center m:mb-2">{t('results')}</p>
         <Button className="m:right-0 m:top-0" onClick={addAll}>{t('add all')}</Button>
       </div>
     }
@@ -271,7 +271,7 @@ function ItemResultList (props: ItemResultProps) {
         )}
       </div>
     }
-    {eventGroups.map(e => (<div key={e.GroupId} className="m:w-full m:rounded m:border-solid m:border m:bg-white m:mb-1 m:p-2 m:relative">
+    {eventGroups.map(e => (<div key={e.GroupId} className="m:w-full m:rounded-sm m:border-solid m:border m:bg-white m:mb-1 m:p-2 m:relative">
       <span className='m:absolute m:top-4 m:-right-4 m:-translate-y-1/2' onClick={() => { addEvents(e) }}>
         <button className="m:text-white m:bg-primary m:rounded-full m:text-lg m:px-2 m:m-2 m:h-5 m:w-5 m:leading-5 m:flex m:justify-center">+</button>
       </span>
