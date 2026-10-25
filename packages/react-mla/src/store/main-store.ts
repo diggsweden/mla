@@ -18,6 +18,7 @@ import { DateTime } from 'luxon'
 import { fixDate, removeInternals } from '../utils/date'
 import type { IGeoFeature } from '../interfaces/data-models/geo'
 import type { IShape } from '../interfaces/data-models/shape'
+import { parseShapes } from '../utils/shape-parse'
 
 export type IntervalType = 'day' | 'week' | 'month' | 'custom'
 
@@ -488,9 +489,9 @@ const useMainStore = create<MainState>((set, get) => ({
     return json
   },
   open: (json: string) => {
-    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], GeoFeatures: IGeoFeature[], Shapes?: IShape[], context: string }
+    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], GeoFeatures: IGeoFeature[], Shapes?: unknown, context: string }
 
-    internalAdd(false, parsed.Entities, parsed.Links, false, parsed.Shapes ?? [])
+    internalAdd(false, parsed.Entities, parsed.Links, false, parseShapes(parsed.Shapes))
 
     if (parsed.Events) {
       // Handle old files where phaseEvents was event

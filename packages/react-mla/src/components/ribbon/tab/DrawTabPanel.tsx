@@ -8,7 +8,7 @@ import viewService from '../../../services/viewService'
 import useAppStore from '../../../store/app-store'
 import useMainStore from '../../../store/main-store'
 import ColorPalette from '../../common/ColorPalette'
-import { DEFAULT_FONT_SIZE, DEFAULT_STROKE_WIDTH, withFillOpacity } from '../../chart/shapes/shape-render'
+import { DEFAULT_FONT_SIZE, DEFAULT_STROKE_WIDTH, fitText } from '../../chart/shapes/shape-render'
 import RibbonMenuButtonGroup from '../RibbonMenuButtonGroup'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuDropDownIconButton from '../RibbonMenuDropDownIconButton'
@@ -68,7 +68,7 @@ function DrawTabPanel () {
           />
         </RibbonMenuDropDownIconButton>
         <RibbonMenuDropDownIconButton disabled={selected.length === 0 || selected.every(s => s.Type === 'line')} label={t('fill color')} icon="format_color_fill">
-          <ColorPalette noReset noneLabel={t('no fill')} colors={config.CustomContourColorPicklist} onSelect={(color) => { change(selected.filter(s => s.Type !== 'line'), s => ({ ...s, FillColor: color != null ? withFillOpacity(color) : undefined })) }} />
+          <ColorPalette noReset noneLabel={t('no fill')} colors={config.CustomContourColorPicklist} onSelect={(color) => { change(selected.filter(s => s.Type !== 'line'), s => ({ ...s, FillColor: color })) }} />
         </RibbonMenuDropDownIconButton>
       </RibbonMenuButtonGroup>
     </RibbonMenuSection>
@@ -80,8 +80,8 @@ function DrawTabPanel () {
         <select
           id="m-shape-font-size"
           disabled={texts.length === 0}
-          value={texts.length > 0 && texts.every(s => (s.FontSize ?? DEFAULT_FONT_SIZE) === (texts[0].FontSize ?? DEFAULT_FONT_SIZE)) ? (texts[0].FontSize ?? DEFAULT_FONT_SIZE) : ''}
-          onChange={(e) => { change(texts, s => ({ ...s, FontSize: Number(e.target.value) })) }}
+          value={commonValue(texts.map(s => s.FontSize ?? DEFAULT_FONT_SIZE))}
+          onChange={(e) => { change(texts, s => fitText({ ...s, FontSize: Number(e.target.value) })) }}
           className="m:bg-white m:border m:border-gray-300 m:text-gray-900 m:rounded-lg m:p-1 m:disabled:opacity-50"
         >
           <option value="" disabled hidden></option>

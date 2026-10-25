@@ -7,7 +7,7 @@ import type { Network } from 'vis-network'
 import useAppStore from '../../../store/app-store'
 import useMainStore from '../../../store/main-store'
 import { bounds } from './shape-geometry'
-import { DEFAULT_FONT_COLOR, DEFAULT_FONT_SIZE, textFont, textHeight } from './shape-render'
+import { DEFAULT_FONT_COLOR, DEFAULT_FONT_SIZE, fitText, shapeFill, textFont } from './shape-render'
 
 interface Props {
   network: Network | undefined
@@ -55,7 +55,7 @@ function ShapeTextEditor (props: Props) {
       removeShapes(shape)
     } else {
       const changed = { ...shape, Text: text }
-      updateShapes({ ...changed, Height: Math.max(shape.Height, textHeight(changed)) })
+      updateShapes(fitText(changed))
     }
   }
 
@@ -93,7 +93,7 @@ function ShapeTextEditor (props: Props) {
         padding: 4 * scale,
         boxSizing: 'border-box',
         color: shape.FontColor ?? DEFAULT_FONT_COLOR,
-        background: shape.FillColor ?? 'transparent'
+        background: shapeFill(shape) ?? 'transparent'
       }}
     />
   )
