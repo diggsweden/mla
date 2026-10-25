@@ -28,7 +28,7 @@ interface Props {
 }
 
 export default function MapView(props: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const showContextMenu = useAppStore(state => state.showContextMenu)
   const showMap = useAppStore(state => state.showMap)
   const setSelectedGeoFeature = useAppStore(state => state.setSelectedGeoFeature)
@@ -209,8 +209,8 @@ export default function MapView(props: Props) {
       polygonRemoved(e)
     })
 
-    map.pm.setLang('sv')
-  }, [map, setSelectedGeoFeature, showContextMenu, addGeo, removeGeo])
+    map.pm.setLang(i18n.language === 'sv' ? 'sv' : 'en')
+  }, [map, setSelectedGeoFeature, showContextMenu, addGeo, removeGeo, i18n.language])
 
   const mapEntities = useMemo(() => {
     const showOnMap = [] as string[]

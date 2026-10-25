@@ -33,11 +33,11 @@ function LayoutTabPanel () {
 
   return <div className="m:flex m:text-center m:h-full m:p-1">
     <RibbonMenuSection title={t('placement')} >
-      <RibbonMenuButton label={(t('up'))} onClick={() => { setLayout('UD') }} iconName="outlined_account_tree" iconClassName="-rotate-90 -scale-x-100"/>
-      <RibbonMenuButton label={(t('down'))} onClick={() => { setLayout('DU') }} iconName="outlined_account_tree" iconClassName="-rotate-90"/>
+      <RibbonMenuButton label={(t('up'))} onClick={() => { setLayout('UD') }} iconName="outlined_account_tree" iconClassName="m:-rotate-90 m:-scale-x-100"/>
+      <RibbonMenuButton label={(t('down'))} onClick={() => { setLayout('DU') }} iconName="outlined_account_tree" iconClassName="m:-rotate-90"/>
       <RibbonMenuButton label={(t('left'))} onClick={() => { setLayout('LR') }} iconName="outlined_account_tree"/>
-      <RibbonMenuButton label={(t('right'))} onClick={() => { setLayout('RL') }} iconName="outlined_account_tree" iconClassName="-rotate-180"/>
-      <RibbonMenuButton label={layoutId === 'Dynamic' ? t('stop') : t('dynamic')} onClick={() => { toggleDynamic() }} iconName="autorenew" iconClassName={layoutId === 'Dynamic' ? 'animate-spin' : ''}/>
+      <RibbonMenuButton label={(t('right'))} onClick={() => { setLayout('RL') }} iconName="outlined_account_tree" iconClassName="m:-rotate-180"/>
+      <RibbonMenuButton label={layoutId === 'Dynamic' ? t('stop') : t('dynamic')} onClick={() => { toggleDynamic() }} iconName="autorenew" iconClassName={layoutId === 'Dynamic' ? 'm:animate-spin' : ''}/>
     </RibbonMenuSection>
     <RibbonMenuDivider />
     <RibbonMenuSection title={t('views')}>
