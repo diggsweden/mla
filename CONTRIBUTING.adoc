@@ -119,11 +119,16 @@ $ git commit --signoff -m 'fix: add fix for superbug x'
 
 ==== Sign
 
-You can also sign the commit with `-S`/`--gpg-sign`.
-Besides extra trust, it also gives your commit a nice verified button in the UI on most Git platforms and further assures trust.
+Your commits must be signed, and the checks of the project reject commits that are not.
+You can sign with either a GPG (PGP) key or an SSH key.
+A signature assures that the commit came from you, and gives your commit the verified badge in the UI on most Git platforms.
 
-Older versions of Git requires that you have a GPG keypair set up, see https://docs.github.com/en/github/authenticating-to-github/signing-commits[Sign commit on GitHub with GPG key].
-For newer versions you can use SSH for signing https://github.blog/changelog/2022-08-23-ssh-commit-verification-now-supported/[Sign commit on GitHub with SSH key].
+Sign a commit with `-S`/`--gpg-sign`.
+The option is named after GPG, but it signs with the kind of key that Git is set up to use, so it works for an SSH key too.
+To sign every commit without the flag, set `git config commit.gpgsign true`.
+
+To sign with a GPG key, see https://docs.github.com/en/github/authenticating-to-github/signing-commits[Sign commit on GitHub with GPG key].
+To sign with an SSH key, which needs Git 2.34 or later, set `git config gpg.format ssh` and `git config user.signingkey <path to your public key>`, see https://github.blog/changelog/2022-08-23-ssh-commit-verification-now-supported/[Sign commit on GitHub with SSH key].
 
 [source,shell]
 ----
@@ -135,8 +140,12 @@ For newer versions you can use SSH for signing https://github.blog/changelog/202
 Aim for a clear human readable commit history:
 
 * Make sure you link:#dco-signoff-and-signing-a-commitsign-off[Sign-Off] your commits.
+* Make sure your commits are link:#sign[signed].
 * In general
     ** Use the https://www.conventionalcommits.org[Conventional Commit standard].
+    *** The type is one of `feat`, `fix`, `chore`, `docs`, `perf`, `refactor`, `style`, `test` or `release`, and the scope is optional.
+    *** The header is at most 90 characters, written in the imperative mood and does not end with a period.
+    ** The commit message, the sign-off and the signatures are checked by Git hooks before you push (they are installed by `pnpm install`), and the same rules are checked again in the pull request.
     ** Group relevant changes in commits, avoid scope creep and keep focus on the relevant issue.
     ** Your commit messages should tell a human reader what will it do when the commit is applied.
     ** Make your commit message/s easily human readable in a expected way: +

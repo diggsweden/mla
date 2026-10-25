@@ -16,8 +16,13 @@ pre-push:
     packages-audit:
       tags: frontend security
       run: pnpm audit
+  scripts:
+    "signed-commits.sh":
+      runner: bash
 commit-msg:
   parallel: true
   scripts:
     "commitlint.sh":
+      runner: bash
+    "signoff.sh":
       runner: bash
