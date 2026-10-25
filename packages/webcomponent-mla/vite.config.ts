@@ -5,7 +5,6 @@
 import { defineConfig } from 'vite'
 
 import react from '@vitejs/plugin-react'
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 import path, { resolve } from 'path'
 
@@ -13,10 +12,7 @@ const isDev1 = process.env
 
 export default defineConfig(({ mode }) => {
   return {
-    plugins: [
-      react(),
-      cssInjectedByJsPlugin()
-    ],
+    plugins: [react()],
     // Only NODE_ENV is needed (React etc). Never inline all of process.env: it would embed the build environment in the bundle
     define: { 'process.env.NODE_ENV': JSON.stringify(mode === 'development' ? 'development' : 'production') },
     build: {
