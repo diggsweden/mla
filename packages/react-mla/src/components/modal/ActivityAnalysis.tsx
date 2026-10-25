@@ -304,9 +304,9 @@ function ActivityAnalysis (props: Props) {
         <div>{t('nothing to show')}</div>
       }
       {view.length > 0 &&
-        <div className="m:p-8 m:w-full m-overflow-x m:bg-white m-">
+        <div className="m:p-8 m:w-full m:bg-white">
           <div className="m:w-full m:-mt-5 m:mb-4 m:-ml-4">
-            <button type="button" onClick={(e) => { show(e) }} className='m:float-left m:text-white m:bg-primary enabled:m-hover:bg-blue-800 m:focus:ring-4 m:focus:ring-blue-300 m:font-medium m:rounded m:px-2 m:py-1'>
+            <button type="button" onClick={(e) => { show(e) }} className='m:float-left m:text-white m:bg-primary m:enabled:hover:bg-blue-800 m:focus:ring-4 m:focus:ring-blue-300 m:font-medium m:rounded-sm m:px-2 m:py-1'>
               <Icon name="settings" className="m:w-5 m:h-5 m:inline-block m:-m-0 m:-mb-1" color='#ffffff'></Icon>{t('settings')}
             </button>
           </div>
@@ -339,7 +339,7 @@ function ActivityAnalysis (props: Props) {
             <div className={'m:grow m:max-w-7xl m:grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>
               {view.map((v, i) =>
                 <div key={i} className="m:flex m:h-full">
-                  <div className="m:p-2 m:flex m:grow m-">
+                  <div className="m:p-2 m:flex m:grow">
                     {v.Description.length === 0 &&
                       <div className="m:italic">{t('no info')}</div>
                     }
@@ -374,7 +374,7 @@ function ActivityAnalysis (props: Props) {
 
           {/* Cast */}
           <div className="m:flex m:w-full">
-            <div className="m:flex m:justify-center m:items-center m:w-[49px]"><div className="m:-rotate-90 m-text">{t('actors')}</div></div>
+            <div className="m:flex m:justify-center m:items-center m:w-[49px]"><div className="m:-rotate-90">{t('actors')}</div></div>
             <div className="m:grow m:text-left">
               {types.map(t =>
                 <div key={t.Name} className={'m:max-w-7xl m:grid'} style={{ gridTemplateColumns: `repeat(${view.length}, minmax(0, 1fr)` }}>

@@ -38,13 +38,13 @@ function RibbonMenuDropDownIconButton (props: RibbonMenuDropDownIconButtonProps)
   return <div className="m:relative m:text-left m:h-5">
     <button type='button' disabled={props.disabled} onClick={handleOpen} title={props.title} className={props.className + ' ' + buttonClass}>
       <span className="m:flex m:justify-center m:items-center">
-        <span className="m:h-4 m:w-4 m:max-h-4 m:max-w-4 m:leading-4"><Icon color={props.color} name={props.icon} className="m:text-primary m:flex m:justify-center m:items-center m:h-4 m:w-4 m-" /></span>
+        <span className="m:h-4 m:w-4 m:max-h-4 m:max-w-4 m:leading-4"><Icon color={props.color} name={props.icon} className="m:text-primary m:flex m:justify-center m:items-center m:h-4 m:w-4" /></span>
       </span>
       <span className="m:ml-1 m:inline-flex m:flex-row m:flex-nowrap m:whitespace-nowrap">{props.label}<Icon name='outlined_arrow_left' className="m:text-primary m:flex m:justify-center m:items-center m:h-4 m:w-4 m:-rotate-90" /></span>
     </button>
     {open
       ? (
-        <div className="m:absolute m:bg-white m:text-sm m:z-50 m:shadow m:border m:border-gray-300" ref={ctxDropDownMenu}>
+        <div className="m:absolute m:bg-white m:text-sm m:z-50 m:shadow-sm m:border m:border-gray-300" ref={ctxDropDownMenu}>
           { props.children }
         </div>
         )

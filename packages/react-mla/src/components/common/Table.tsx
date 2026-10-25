@@ -25,9 +25,9 @@ function Table (props: Props) {
   const { t } = useTranslation();
   const tableTop = useRef<null | HTMLTableElement>(null)
   function sortArrows (property: IBasePropertyConfiguration, sortConfig: SortConfig | undefined): ReactNode {
-    return <span className="m:relative m:text-xl m:leading-none">
-      <span className={`${property.TypeId === sortConfig?.property && props.sortConfig?.asc ? ' m:text-blue-600' : ''} m:absolute m:right-[-2] m:top-[2px]`}>▴</span>
-      <span className={`${property.TypeId === sortConfig?.property && !props.sortConfig?.asc ? ' m:text-blue-600' : ''} m:absolute m:right-[-2] m:top-[10px]`}>▾</span>
+    return <span className="m:relative m:ml-1.5 m:text-xl m:leading-none">
+      <span className={`${property.TypeId === sortConfig?.property && props.sortConfig?.asc ? ' m:text-blue-600' : ''} m:absolute m:left-0 m:top-[2px]`}>▴</span>
+      <span className={`${property.TypeId === sortConfig?.property && !props.sortConfig?.asc ? ' m:text-blue-600' : ''} m:absolute m:left-0 m:top-[10px]`}>▾</span>
     </span>
   }
 
@@ -52,7 +52,7 @@ function Table (props: Props) {
   const isEvent = props.items.some(e => (e as IEvent).Date != null)
 
   return <div className="m:w-full m:max-h-[70vh] m:overflow-y-auto">
-    <table ref={tableTop} className="m:w-full m:text-left m-rtl:text-right">
+    <table ref={tableTop} className="m:w-full m:text-left m:rtl:text-right">
       <thead className="m:sticky m:top-0 m:h-8 m:select-none m:text-gray-900 m:bg-gray-100 m:border m:border-gray-100 m:uppercase">
         <tr>
           {isEvent && <th className="m:cursor-pointer m:pl-1.5 m:text-gray-300 m:hover:text-blue-400">

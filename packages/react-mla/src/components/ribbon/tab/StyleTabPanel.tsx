@@ -73,7 +73,7 @@ function StyleTabPanel () {
               </div>
             </div>
           }
-          <div className="m:bg-gray-200 m:py-1 m:px-2 m:text-sm m:font-semibold">{('default colors')}</div>
+          <div className="m:bg-gray-200 m:py-1 m:px-2 m:text-sm m:font-semibold">{t('default colors')}</div>
           <div className="m:flex m:gap-1 m:p-1">
             <div key={'blue'} title={t('blue')} onClick={() => { setContourColor('#4169E1') } } className={colorClass} style={ { backgroundColor: '#4169E1' } }></div>
             <div key={'green'} title={t('green')} onClick={() => { setContourColor('#008000') } } className={colorClass} style={ { backgroundColor: '#008000' } }></div>
@@ -107,7 +107,7 @@ function StyleTabPanel () {
             <div key={'purple'} title={t('purple')} onClick={() => { setIconColor('#800080') } } className={colorClass} style={ { backgroundColor: '#800080' } }></div>
             <div key={'organge'} title={t('organge')} onClick={() => { setIconColor('#FFA500') } } className={colorClass} style={ { backgroundColor: '#FFA500' } }></div>
           </div>
-          <div className="flex text-sm text-left border-none hover:bg-blue-100 text-gray-700 p-1 whitespace-nowrap" onClick={() => { setIconColor(undefined) } } >
+          <div className="m:flex m:text-sm m:text-left m:border-none m:hover:bg-blue-100 m:text-gray-700 m:p-1 m:whitespace-nowrap" onClick={() => { setIconColor(undefined) } } >
             <div className="m:w-4 m:h-4 m:border m:bg-gray-100 m:border-gray-400 m:mr-2"></div>
             {t('reset color')}
           </div>

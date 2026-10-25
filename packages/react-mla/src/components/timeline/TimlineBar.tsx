@@ -50,10 +50,10 @@ export default function TimelineBar (props: Props) {
   }, [date, play, transitionTime, width, startDate])
 
   return (
-    <div className={'m:border m:overflow-hidden m:rounded m:shadow m:bg-white ' + (width === 0 ? 'm:opacity-0' : '')} ref={resizeRef}>
+    <div className={'m:border m:overflow-hidden m:rounded-sm m:shadow-sm m:bg-white ' + (width === 0 ? 'm:opacity-0' : '')} ref={resizeRef}>
       <div className="m:flex m:flex-row m:flex-nowrap" style={style}>
         {months.map((m, i) => <div className='m:w-[96px] m:shrink-0' key={i}>
-          <div className='m-mh-1/2 m:text-center m:border-r m:border-b'>{m}</div>
+          <div className='m:text-center m:border-r m:border-b'>{m}</div>
         </div>)}
       </div>
       <div className="m:flex m:flex-row m:flex-nowrap" style={style}>

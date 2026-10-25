@@ -54,7 +54,7 @@ function RibbonEntityButton (props: Props) {
     endEntityDrag()
   }
 
-  const dragPreview = (isDragging ? 'm:opacity-50' : 'm:opacity-100') + ' m:h-5 m:m-px m:inline-flex m:flex-row m:flex-nowrap m:items-center m:py-0 m:pl-0.5 m:pr-1 m:border m:border-transparent m:enabled:hover:bg-blue-100 m:enabled:hover:border-blue-400 m:disabled:opacity-50 disaled:m-cursor-default'
+  const dragPreview = (isDragging ? 'm:opacity-50' : 'm:opacity-100') + ' m:h-5 m:m-px m:inline-flex m:flex-row m:flex-nowrap m:items-center m:py-0 m:pl-0.5 m:pr-1 m:border m:border-transparent m:enabled:hover:bg-blue-100 m:enabled:hover:border-blue-400 m:disabled:opacity-50 m:disabled:cursor-default'
   if (props.draggable === false) {
     return <button
       type='button'

@@ -260,7 +260,7 @@ function HistoryProperties (props: Props) {
             </input>
           </div>
           <div className="m:text-sm m:font-medium m:mt-2">
-            <button onClick={() => { setHistory(current) }} className="hover:font-bold text-green-800">
+            <button onClick={() => { setHistory(current) }} className="m:hover:font-bold m:text-green-800">
               {t('change to history')}
             </button>
           </div>

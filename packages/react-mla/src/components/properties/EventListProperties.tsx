@@ -34,7 +34,7 @@ function EventListProperties (props: Props) {
           config={e.propertyConfiguration} />
       ))}
       <div>
-        <button onClick={() => { setShowModal(true) }} className='w-full text-white bg-primary enabled:hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded px-2 py-1 mr-2 my-2 disabled:opacity-50'>
+        <button onClick={() => { setShowModal(true) }} className='m:w-full m:text-white m:bg-primary m:enabled:hover:bg-blue-800 m:focus:ring-4 m:focus:ring-blue-300 m:font-medium m:rounded-sm m:px-2 m:py-1 m:mr-2 m:my-2 m:disabled:opacity-50'>
           <Icon name="table_view" className="m:w-5 m:h-5 m:inline-block m:-m-0 m:-mb-1" color='#ffffff'></Icon>
           {t('show as table count', { count: eventLink.Events.length})}</button>
       </div>

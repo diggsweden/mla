@@ -15,11 +15,11 @@ function Accordion (props: AccordionProps) {
   const contentSpace = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(props.expanded)
   const [height, setHeight] = useState(props.expanded ? '' : '0px')
-  const [rotate, setRotate] = useState(props.expanded ? 'm:transform duration-300 m-ease m:rotate-90' : 'm:transform m-ease')
+  const [rotate, setRotate] = useState(props.expanded ? 'm:rotate-90' : '')
 
   useEffect(() => {
     setHeight(!active ? '0px' : `${contentSpace.current?.scrollHeight ?? 0}px`)
-    setRotate(!active ? 'm:transform m:duration-300 m-ease' : 'm:transform m:duration-300 m-ease m:rotate-90')
+    setRotate(!active ? 'm:duration-300' : 'm:duration-300 m:rotate-90')
   }, [active])
 
   return (
@@ -28,7 +28,7 @@ function Accordion (props: AccordionProps) {
         <Icon color="#000" name="outlined_chevron_right" className={`${rotate} m:inline-block m:text-primary m:h-4 m:w-4`} />
         <div className="m:grow m:pl-1">{props.title}</div>
       </button>
-      <div ref={contentSpace} style={{ maxHeight: `${height}` }} className="m:overflow-hidden m-transition-max-height m:duration-300 m:ease-in-out">
+      <div ref={contentSpace} style={{ maxHeight: `${height}` }} className="m:overflow-hidden m:duration-300 m:ease-in-out">
         <div className="m:pb-2 m:pt-3">{props.children}</div>
       </div>
     </div>

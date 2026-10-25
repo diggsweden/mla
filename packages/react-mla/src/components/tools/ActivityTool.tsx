@@ -237,7 +237,7 @@ function ActivityTool (props: Props) {
           <Toggle title={t('show all')} value={showAll} onChange={() => { setShowAll(!showAll) }} className=''/>
         </div>
       }
-      <div className="m:h-full m:w-full m:border-l m:border-gray-300 m-">
+      <div className="m:h-full m:w-full m:border-l m:border-gray-300">
         <div className='mx-1 columns-1 ml-[-6px]'>
           {historyView.map(function (m, i) {
             if (m.separator && m.rubrik) {
@@ -264,7 +264,7 @@ function ActivityTool (props: Props) {
                 <div>{ toDateString(m.date) }</div>
               </div>
             } else {
-              return <div className="m:w-full m:flex m:pb-3 m:cursor-pointer m-" key={i} onClick={() => { selected(m) }}>
+              return <div className="m:w-full m:flex m:pb-3 m:cursor-pointer" key={i} onClick={() => { selected(m) }}>
                 <div>
                   <div className="m:relative m:z-20 m:h-8 m:pt-2">
                     <svg className="m:h-3 m:w-3">

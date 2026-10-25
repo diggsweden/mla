@@ -54,13 +54,13 @@ function Modal (props: ModalProps) {
   }, [props.show, dialog])
 
   return (
-    <dialog ref={dialog} className={'m:p-0 m:animate-in m:fade-in m:duration-300 m:rounded m:shadow-lg m-backdrop:bg-black/50 ' + (props.wide ? ' m:w-full ' : ' m:w-2/4 m:max-w-2xl ') + props.className}>
+    <dialog ref={dialog} className={'m:p-0 m:animate-in m:fade-in m:duration-300 m:rounded-sm m:shadow-lg m:backdrop:bg-black/50 ' + (props.wide ? ' m:w-full ' : ' m:w-2/4 m:max-w-2xl ') + props.className}>
       {props.show &&
-        <form className="m:w-full m:overflow-x-hidden m:overflow-y-auto m-md:h-full" onSubmit={handleSubmit}>
+        <form className="m:w-full m:overflow-x-hidden m:overflow-y-auto" onSubmit={handleSubmit}>
           <div className="m:relative m:w-full m:h-full m:mx-auto">
             <div className="m:duration-300 m:relative">
               <div className="m:flex m:items-center m:justify-between m:p-4 m:bg-primary">
-                <h3 hidden={props.title == null} className="m:text-xl m:font-semibold m:text-white m:dark:text-white">
+                <h3 hidden={props.title == null} className="m:text-xl m:font-semibold m:text-white">
                   {props.title}
                 </h3>
                 <button type="button" onClick={props.onNegative} className="m:text-white m:bg-transparent m:hover:bg-gray-200 m:hover:text-gray-900 m:rounded-lg m:text-sm m:p-1.5 m:ml-auto m:inline-flex m:items-center" data-modal-hide="defaultModal">
@@ -75,7 +75,7 @@ function Modal (props: ModalProps) {
                 <div className="m:grow m:flex m:flex-col m:justify-between">
                   {props.children}
                   {props.mode !== 'ok' && props.onPositive && props.onNegative &&
-                    <div className="m:flex m:justify-end m:p-3 m:space-x-2 m:border-t m:border-gray-200">
+                    <div className="m:flex m:justify-end m:p-3 m:gap-x-2 m:border-t m:border-gray-200">
                       <Button dataModalHide='defaultModal' disabled={props.valid != null ? !props.valid : false} onClick={props.onPositive}>
                         {props.mode === 'save' ? t('save') : t('yes')}
                       </Button>
@@ -85,8 +85,8 @@ function Modal (props: ModalProps) {
                     </div>
                   }
                   {props.mode === 'ok' &&
-                    <div className="m:flex m:justify-end m:p-3 m:space-x-2 m:border-t m:border-gray-200">
-                      <button data-modal-hide="defaultModal" type="button" onClick={props.onNegative} className="text-white bg-primary enabled:hover:bg-blue-800 disabled:opacity-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center ">
+                    <div className="m:flex m:justify-end m:p-3 m:gap-x-2 m:border-t m:border-gray-200">
+                      <button data-modal-hide="defaultModal" type="button" onClick={props.onNegative} className="m:text-white m:bg-primary m:enabled:hover:bg-blue-800 m:disabled:opacity-50 m:focus:ring-4 m:focus:outline-none m:focus:ring-blue-300 m:font-medium m:rounded-lg m:text-sm m:px-5 m:py-2 m:text-center">
                         {t('ok')}
                       </button>
                     </div>
