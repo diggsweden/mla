@@ -11,6 +11,7 @@ import useMainStore from '../../store/main-store'
 import { internalRemove } from '../../store/internal-actions'
 import type { IShape } from '../../interfaces/data-models/shape'
 import { generateUUID } from '../../utils/utils'
+import { parseShapes } from '../../utils/shape-parse'
 import type { IQueryResponse } from '../../services/queryService'
 import type { IEntity, ILink } from '../../interfaces/data-models'
 import WorkflowProgress from '../modal/WorkflowProgress'
@@ -86,10 +87,12 @@ function AppShortcuts (props: Props) {
     void navigator.clipboard
       .readText()
       .then((jsonData) => {
-        let result: { Entities?: IEntity[], Links?: ILink[], Shapes?: IShape[] } = {}
+        let result: { Entities?: IEntity[], Links?: ILink[] } = {}
+        let shapes: IShape[] = []
         try {
-          const data = JSON.parse(jsonData) as { Entities?: IEntity[], Links?: ILink[], Shapes?: IShape[] } | null
-          if ((data?.Entities == null || data?.Links == null) && (data?.Shapes?.length ?? 0) === 0) {
+          const data = JSON.parse(jsonData) as { Entities?: IEntity[], Links?: ILink[], Shapes?: unknown } | null
+          shapes = parseShapes(data?.Shapes)
+          if ((data?.Entities == null || data?.Links == null) && shapes.length === 0) {
             return
           }
 
@@ -107,8 +110,8 @@ function AppShortcuts (props: Props) {
         }
 
         // A copy of a shape is a little to the side of it, to be seen
-        if (result.Shapes != null && result.Shapes.length > 0) {
-          addShapes(...result.Shapes.map(s => ({ ...s, Id: generateUUID(), X: s.X + 24, Y: s.Y + 24 })))
+        if (shapes.length > 0) {
+          addShapes(...shapes.map(s => ({ ...s, Id: generateUUID(), X: s.X + 24, Y: s.Y + 24 })))
         }
       })
   }

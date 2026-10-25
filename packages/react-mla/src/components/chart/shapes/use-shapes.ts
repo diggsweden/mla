@@ -13,7 +13,7 @@ import useMainStore from '../../../store/main-store'
 import { internalUpdate } from '../../../store/internal-actions'
 import { generateUUID } from '../../../utils/utils'
 import { type Handle, type Point, containsPoint, hitHandle, moveShape, normalise, resizeShape } from './shape-geometry'
-import { drawSelection, drawShape, drawTextOutline, textHeight } from './shape-render'
+import { drawSelection, drawShape, drawTextOutline, fitText, textHeight } from './shape-render'
 
 // How far from a shape, in pixels on the screen, a click still hits it
 const HIT_TOLERANCE = 6
@@ -261,7 +261,7 @@ export function useShapes (containerRef: RefObject<HTMLElement | null>, network:
         // A click puts a shape of the usual size on the chart
         const shape = tiny ? { ...create(m.shape.Type, m.start), Id: m.shape.Id } : normalise(m.shape)
         stop()
-        finishShape(shape.Type === 'text' ? { ...shape, Height: Math.max(shape.Height, textHeight(shape)) } : shape)
+        finishShape(fitText(shape))
         return
       }
 
@@ -287,7 +287,7 @@ export function useShapes (containerRef: RefObject<HTMLElement | null>, network:
       stop()
       if (resized != null) {
         const shape = normalise(resized)
-        updateShapes(shape.Type === 'text' ? { ...shape, Height: Math.max(shape.Height, textHeight(shape)) } : shape)
+        updateShapes(fitText(shape))
       }
     }
 

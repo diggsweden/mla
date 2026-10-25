@@ -28,8 +28,26 @@ function measure (): CanvasRenderingContext2D | null {
   return measureContext
 }
 
+const fillCache = new Map<string, string>()
+
 // The color with the see-through of the default fill. Any color that the canvas understands can be given
-export function withFillOpacity (color: string): string {
+function withFillOpacity (color: string): string {
+  const cached = fillCache.get(color)
+  if (cached != null) {
+    return cached
+  }
+
+  const result = seeThrough(color)
+  fillCache.set(color, result)
+  return result
+}
+
+// The fill of a shape, as it is drawn. The shape keeps the color that was chosen, and the see-through is added here
+export function shapeFill (shape: IShape): string | undefined {
+  return shape.FillColor != null ? withFillOpacity(shape.FillColor) : undefined
+}
+
+function seeThrough (color: string): string {
   const ctx = measure()
   // Transparent stays as it is, and white is kept solid, since it would look like no fill at all if it was see-through
   if (ctx == null || color === 'transparent' || color.toLowerCase() === '#ffffff') {
@@ -67,6 +85,11 @@ export function wrapText (ctx: CanvasRenderingContext2D, text: string, width: nu
   return lines
 }
 
+// The text box is at least as high as its text needs, so that the text stays inside it
+export function fitText (shape: IShape): IShape {
+  return shape.Type === 'text' ? { ...shape, Height: Math.max(shape.Height, textHeight(shape)) } : shape
+}
+
 // The height that a text needs in its shape
 export function textHeight (shape: IShape): number {
   const ctx = measure()
@@ -102,8 +125,9 @@ function drawText (ctx: CanvasRenderingContext2D, shape: IShape) {
   const r = bounds(shape)
   const fontSize = shape.FontSize ?? DEFAULT_FONT_SIZE
   // A text has no background or border, unless it is given one
-  if (shape.FillColor != null) {
-    ctx.fillStyle = shape.FillColor
+  const fill = shapeFill(shape)
+  if (fill != null) {
+    ctx.fillStyle = fill
     ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top)
   }
   if (shape.StrokeColor != null) {
@@ -124,7 +148,7 @@ export function drawShape (ctx: CanvasRenderingContext2D, shape: IShape) {
   ctx.save()
   applyStroke(ctx, shape)
   ctx.strokeStyle = shape.StrokeColor ?? DEFAULT_STROKE_COLOR
-  ctx.fillStyle = shape.FillColor ?? DEFAULT_FILL_COLOR
+  ctx.fillStyle = shapeFill(shape) ?? DEFAULT_FILL_COLOR
   switch (shape.Type) {
     case 'rectangle':
       ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top)
