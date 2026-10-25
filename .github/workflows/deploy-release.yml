@@ -70,3 +70,19 @@ jobs:
             mla-component.umd.cjs.intoto.jsonl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Updates the demo app after a stable release, not after a beta. The workflow is started on main, because the
+  # github-pages environment does not allow deployments from the pull request that started this workflow.
+  demo:
+    name: Deploy demo app
+    if: inputs.dry-run != true && !contains(needs.build-release.outputs.branch, 'beta')
+    needs: [build-release, release]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Start the demo app deployment
+        run: gh workflow run deploy-demo-app.yml --ref main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}

@@ -10,8 +10,7 @@
     "build:packages": "pnpm --filter ./packages/* build",
     "pack:packages": "pnpm --filter @diggsweden/react-mla --filter @diggsweden/webcomponent-mla pack --pack-destination ./.local-packages",
     "lint": "pnpm --filter ./packages/react-mla run lint",
-    "commit": "git-cz --signoff",
-    "deploy:app": "pnpm --filter ./apps/web run deploy"
+    "commit": "git-cz --signoff"
   },
   "validate-branch-name": {
     "pattern": "^(feat|fix|hotfix|release|test|experimental)/.+$",
@@ -30,7 +29,6 @@
     "@commitlint/config-conventional": "21.2.4",
     "@commitlint/cz-commitlint": "21.2.4",
     "commitizen": "4.3.2",
-    "gh-pages": "6.3.0",
     "inquirer": "13.3.2",
     "lefthook": "2.2.2",
     "validate-branch-name": "1.3.2"
