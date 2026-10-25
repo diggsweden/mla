@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import useMainStore from '../../../store/main-store'
 import { shortestPath } from '../../../utils/dijkstra'
 import { findMostCentral } from '../../../utils/most-central'
@@ -72,6 +72,7 @@ export default function GraphTools (props: Props) {
     const idRMap = new Map<string, string>()
     const res = [] as JoinResult[]
 
+    // The versions of one entity have the same id, so only the other entities can be duplicates of it
     Object.values(entities).flat().forEach(e => {
       if (idRMap.has(e.Id)) {
         return
@@ -79,7 +80,7 @@ export default function GraphTools (props: Props) {
 
       const matchRules = configService.getEntityConfiguration(e.TypeId)?.MatchRules
       if (matchRules != null) {
-        const existingId = findId(e, matchRules, Object.values(entities).flat().filter(x => x.InternalId !== e.InternalId))
+        const existingId = findId(e, matchRules, Object.values(entities).flat().filter(x => x.Id !== e.Id))
         if (existingId != null) {
           idMap.set(e.Id, existingId)
           idRMap.set(existingId, e.Id)
@@ -113,7 +114,7 @@ export default function GraphTools (props: Props) {
 
         const matchRules = configService.getLinkConfiguration(l.TypeId)?.MatchRules
         if (matchRules != null) {
-          const existingId = findId(l, matchRules, Object.values(links).flat().filter(x => x.InternalId !== l.InternalId))
+          const existingId = findId(l, matchRules, Object.values(links).flat().filter(x => x.Id !== l.Id))
           if (existingId != null) {
             idMap.set(l.Id, existingId)
             idRMap.set(existingId, l.Id)
@@ -178,14 +179,14 @@ export default function GraphTools (props: Props) {
         { joinResult.length > 0 && <div className="m:text-left m:px-3 m:py-2">
           <p>{t('merge')}</p>
           <ul className="m:list-inside m:list-disc">
-            {joinResult.filter(r => r.show).map(r => (<>
+            {joinResult.filter(r => r.show).map(r => (<Fragment key={(r.entity ?? r.link)!.InternalId}>
               {r.entity &&
-                <li key={r.entity.InternalId}>{configService.getEntityConfiguration(r.entity.TypeId)?.Name}: {r.entity.LabelShort} </li>
+                <li>{configService.getEntityConfiguration(r.entity.TypeId)?.Name}: {r.entity.LabelShort} </li>
               }
               {r.link &&
-                <li key={r.link.InternalId}>{configService.getLinkConfiguration(r.link.TypeId)?.Name}: {r.link.LabelShort} </li>
+                <li>{configService.getLinkConfiguration(r.link.TypeId)?.Name}: {r.link.LabelShort} </li>
               }
-            </>
+            </Fragment>
             ))}
           </ul>
         </div>}

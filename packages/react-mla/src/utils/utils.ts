@@ -14,18 +14,13 @@ function getId (thing?: IBase): string {
 }
 
 function generateUUID (): string {
-  let d = new Date().getTime()
-  let d2 = ((performance?.now && (performance.now() * 1000)) || 0)
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    let r = Math.random() * 1
-    if (d > 0) { 
-      r = (d + r) % 16 | 0
-      d = Math.floor(d / 16)
-    } else { 
-      r = (d2 + r) % 16 | 0
-      d2 = Math.floor(d2 / 16)
-    }
+  // Only pages with a secure context have randomUUID, the others get the same version 4 uuid from random values
+  if (typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
 
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = crypto.getRandomValues(new Uint8Array(1))[0] & 15
     return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
   })
 }
