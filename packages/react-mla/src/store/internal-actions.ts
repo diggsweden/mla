@@ -5,6 +5,7 @@
 import { type WritableDraft, produce } from 'immer'
 import type { DateTime } from 'luxon'
 import type { IChartBase, IEntity, IHistory, ILink } from '../interfaces/data-models'
+import type { IShape } from '../interfaces/data-models/shape'
 import configService from '../services/configurationService'
 import { generateUUID, getId, isLinked, mergeProps } from '../utils/utils'
 import useMainStore, { type IChangeHistory, type MainState } from './main-store'
@@ -87,6 +88,16 @@ function pushHistory (draft: WritableDraft<MainState>, change: IChangeHistory) {
   }
 }
 
+// A shape with an id that is already there replaces it
+function mergeShapes (existing: IShape[], added: IShape[]): IShape[] {
+  const replacements = new Map(added.map(s => [s.Id, s]))
+  const known = new Set(existing.map(s => s.Id))
+  return [
+    ...existing.map(s => replacements.get(s.Id) ?? s),
+    ...added.filter(s => !known.has(s.Id))
+  ]
+}
+
 export const updateSelected = (selectedIds?: string[]) => {
   useMainStore.setState(state => {
     const ids = selectedIds ?? state.selectedIds
@@ -98,7 +109,7 @@ export const updateSelected = (selectedIds?: string[]) => {
   })
 }
 
-export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILink[], setSelected = false) => {
+export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILink[], setSelected = false, shapes: IShape[] = []) => {
   const addedEntities: IEntity[] = []
   const addedLinks: ILink[] = []
   useMainStore.setState(state => {
@@ -168,8 +179,8 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
       if (addHistory) {
         pushHistory(draft, {
           action: 'ADD',
-          from: { entities: [], links: [] },
-          to: { entities: addedEntities, links: addedLinks }
+          from: { entities: [], links: [], shapes: [] },
+          to: { entities: addedEntities, links: addedLinks, shapes }
         })
       }
 
@@ -177,6 +188,12 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
       draft.entities = stateUpEntities
       draft.links = stateUpLinks
       draft.selectedIds = setSelected ? [...entities, ...links].map(x => getId(x)) : draft.selectedIds
+      if (shapes.length > 0) {
+        draft.shapes = mergeShapes(draft.shapes, shapes)
+        if (setSelected) {
+          draft.selectedShapeIds = shapes.map(x => x.Id)
+        }
+      }
 
       draft.minDate = range.min
       draft.maxDate = range.max
@@ -186,7 +203,7 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
   updateSelected()
 }
 
-export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: ILink[]) => {
+export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: ILink[], shapes: IShape[] = []) => {
   useMainStore.setState(state => {
     const range: DateRange = { min: state.minDate, max: state.maxDate }
 
@@ -222,16 +239,21 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
           return produce(draft.links[getId(e)].find(x => x.InternalId === e.InternalId), () => undefined)!
         })
 
+        const restoreS = shapes.map(x => draft.shapes.find(y => y.Id === x.Id)).filter((x): x is WritableDraft<IShape> => x !== undefined).map(x => ({ ...x }))
+
         pushHistory(draft, {
           action: 'UPDATE',
-          from: { entities: restoreE, links: restoreL },
-          to: { entities, links }
+          from: { entities: restoreE, links: restoreL, shapes: restoreS },
+          to: { entities, links, shapes }
         })
       }
 
       draft.dirty = true
       draft.entities = stateUpEntities
       draft.links = stateUpLinks
+      if (shapes.length > 0) {
+        draft.shapes = mergeShapes(draft.shapes, shapes)
+      }
 
       draft.minDate = range.min
       draft.maxDate = range.max
@@ -241,14 +263,14 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
   updateSelected()
 }
 
-export const internalRemove = (addHistory: boolean, entities: IEntity[], links: ILink[]) => {
+export const internalRemove = (addHistory: boolean, entities: IEntity[], links: ILink[], shapes: IShape[] = []) => {
   useMainStore.setState(state => {
     return produce(state, draft => {
       if (addHistory) {
         pushHistory(draft, {
           action: 'REMOVE',
-          from: { entities, links },
-          to: { entities: [], links: [] }
+          from: { entities, links, shapes },
+          to: { entities: [], links: [], shapes: [] }
         })
       }
 
@@ -300,6 +322,13 @@ export const internalRemove = (addHistory: boolean, entities: IEntity[], links: 
           draft.links = { ...draft.links, [getId(link)]: update }
         }
 
+        draft.dirty = true
+      }
+
+      if (shapes.length > 0) {
+        const removed = new Set(shapes.map(x => x.Id))
+        draft.shapes = draft.shapes.filter(x => !removed.has(x.Id))
+        draft.selectedShapeIds = draft.selectedShapeIds.filter(x => !removed.has(x))
         draft.dirty = true
       }
     })
