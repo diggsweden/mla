@@ -11,8 +11,6 @@ pre-commit:
 pre-push:
   parallel: true
   commands:
-    branchName:
-      run: pnpm exec validate-branch-name
     packages-audit:
       tags: frontend security
       run: pnpm audit

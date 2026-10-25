@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Remove the `validate-branch-name` pre-push hook and package, and its 5 dependencies. It blocked the branch names that `CONTRIBUTING.adoc` tells contributors to use, rejected `chore/` and `docs/`, and only governed the maintainers, since contributors work in forks. The branch naming is now a convention described in `CONTRIBUTING.adoc`
 - Make the commit rules the same everywhere: `commitlint.config.js` now has the types and the header length of `.conform.yaml`, a Git hook checks the DCO sign-off and another checks that the commits are signed before a push. `CONTRIBUTING.adoc` now says that signing is required
 - Remove `commitizen`, `@commitlint/cz-commitlint` and `inquirer`, the interactive `pnpm commit` prompt that nothing documented. It also removes the deprecated `glob` 7 and `inflight` and the `inquirer` peer dependency warning
 - Deploy the demo app with the official GitHub Pages actions (`actions/upload-pages-artifact` and `actions/deploy-pages`) instead of the `gh-pages` package and branch, and update it after every stable release. The Pages source setting has to be GitHub Actions, and the `gh-pages` branch is no longer used
