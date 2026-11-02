@@ -11,7 +11,7 @@
     "pack:packages": "pnpm --filter @diggsweden/react-mla --filter @diggsweden/webcomponent-mla pack --pack-destination ./.local-packages",
     "lint": "pnpm --filter ./packages/react-mla run lint"
   },
-  "packageManager": "pnpm@12.15.0",
+  "packageManager": "pnpm@12.16.1",
   "version": "1.2.2",
   "devDependencies": {
     "@commitlint/cli": "21.2.4",
