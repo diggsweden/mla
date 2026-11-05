@@ -9,8 +9,9 @@ import { type IGeoFeatureBounds } from '../interfaces/data-models/geo'
 import viewService from '../services/viewService'
 import chartLayouts, { type ChartLayout } from '../utils/chart-layouts'
 import interactionOptions, { type InteractionOptions } from '../utils/interaction-options'
+import type { ShapeType } from '../interfaces/data-models/shape'
 
-export type Tab = 'archive' | 'start' | 'search find' | 'analysis' | 'select' | 'look feel' | 'show' | 'map'
+export type Tab = 'archive' | 'start' | 'search find' | 'analysis' | 'draw' | 'select' | 'look feel' | 'show' | 'map'
 export type Tool = 'search' | 'explore' | 'import' | 'activity'
 
 interface AppState {
@@ -38,6 +39,12 @@ interface AppState {
 
   mapLayers: number[]
   setMapLayers: (layers: number[]) => void
+
+  // The type of shape that is drawn on the chart next, and the text that is being written
+  shapeTool: ShapeType | undefined
+  setShapeTool: (type?: ShapeType) => void
+  editingShapeId: string | undefined
+  setEditingShapeId: (id?: string) => void
 
   setShowMap: (show: boolean) => void
   setTab: (tab: Tab) => void
@@ -153,6 +160,15 @@ const useAppStore = create<AppState>((set) => ({
     set(() => ({
       mapLayers: layers
     }))
+  },
+
+  shapeTool: undefined,
+  setShapeTool: (type?: ShapeType) => {
+    set(() => ({ shapeTool: type }))
+  },
+  editingShapeId: undefined,
+  setEditingShapeId: (id?: string) => {
+    set(() => ({ editingShapeId: id }))
   }
 }))
 

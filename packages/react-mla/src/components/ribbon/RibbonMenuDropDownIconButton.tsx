@@ -44,7 +44,7 @@ function RibbonMenuDropDownIconButton (props: RibbonMenuDropDownIconButtonProps)
     </button>
     {open
       ? (
-        <div className="m:absolute m:bg-white m:text-sm m:z-50 m:shadow-sm m:border m:border-gray-300" ref={ctxDropDownMenu}>
+        <div className="m:absolute m:bg-white m:text-sm m:z-50 m:shadow-sm m:border m:border-gray-400" ref={ctxDropDownMenu}>
           { props.children }
         </div>
         )

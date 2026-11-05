@@ -6,6 +6,7 @@ interface IMenuConfiguration {
   Start?: IStartMenuConfiguration
   Archive?: IArchiveMenuConfiguration
   Search?: ISearchMenuConfiguration
+  Draw?: IDrawMenuConfiguration
 }
 
 interface IStartMenuConfiguration {
@@ -23,9 +24,15 @@ interface ISearchMenuConfiguration {
   Show?: boolean
 }
 
+// The tab where shapes and texts are drawn on the chart
+interface IDrawMenuConfiguration {
+  Show?: boolean
+}
+
 export type {
   IMenuConfiguration,
   IStartMenuConfiguration,
   IArchiveMenuConfiguration,
-  ISearchMenuConfiguration
+  ISearchMenuConfiguration,
+  IDrawMenuConfiguration
 }

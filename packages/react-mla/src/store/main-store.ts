@@ -17,6 +17,8 @@ import type { IEventFilter } from '../interfaces/configuration/event-operations'
 import { DateTime } from 'luxon'
 import { fixDate, removeInternals } from '../utils/date'
 import type { IGeoFeature } from '../interfaces/data-models/geo'
+import type { IShape } from '../interfaces/data-models/shape'
+import { parseShapes } from '../utils/shape-parse'
 
 export type IntervalType = 'day' | 'week' | 'month' | 'custom'
 
@@ -26,10 +28,12 @@ export interface IChangeHistory {
   from: {
     entities: IEntity[]
     links: ILink[]
+    shapes: IShape[]
   }
   to: {
     entities: IEntity[]
     links: ILink[]
+    shapes: IShape[]
   }
 }
 
@@ -43,6 +47,14 @@ export interface MainState {
 
   phaseEvents: IPhaseEvent[]
   geoFeatures: IGeoFeature[]
+
+  shapes: IShape[]
+  selectedShapeIds: string[]
+  setSelectedShapeIds: (ids: string[]) => void
+  // The shapes that are added are selected
+  addShapes: (...shapes: IShape[]) => void
+  updateShapes: (...shapes: IShape[]) => void
+  removeShapes: (...shapes: IShape[]) => void
 
   dirty: boolean
 
@@ -133,6 +145,8 @@ const useMainStore = create<MainState>((set, get) => ({
   eventFilters: {},
   phaseEvents: [],
   geoFeatures: [],
+  shapes: [],
+  selectedShapeIds: [],
   dirty: false,
 
   interval: 'day',
@@ -408,6 +422,19 @@ const useMainStore = create<MainState>((set, get) => ({
     updateSelected(selectedIds);
   },
 
+  setSelectedShapeIds: (ids: string[]) => {
+    set(() => ({ selectedShapeIds: ids }))
+  },
+  addShapes: (...shapes: IShape[]) => {
+    internalAdd(true, [], [], true, shapes)
+  },
+  updateShapes: (...shapes: IShape[]) => {
+    internalUpdate(true, [], [], shapes)
+  },
+  removeShapes: (...shapes: IShape[]) => {
+    internalRemove(true, [], [], shapes)
+  },
+
   setPhaseEvent: (event: IPhaseEvent) => {
     set((state) => {
       let update = state.phaseEvents.filter(e => e.Id !== event.Id)
@@ -454,6 +481,7 @@ const useMainStore = create<MainState>((set, get) => ({
       Events: Object.values(get().events),
       PhaseEvents: Object.values(get().phaseEvents),
       GeoFeatures: Object.values(get().geoFeatures),
+      Shapes: get().shapes,
       context: get().context
     }
 
@@ -461,9 +489,9 @@ const useMainStore = create<MainState>((set, get) => ({
     return json
   },
   open: (json: string) => {
-    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], GeoFeatures: IGeoFeature[], context: string }
+    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], GeoFeatures: IGeoFeature[], Shapes?: unknown, context: string }
 
-    internalAdd(false, parsed.Entities, parsed.Links)
+    internalAdd(false, parsed.Entities, parsed.Links, false, parseShapes(parsed.Shapes))
 
     if (parsed.Events) {
       // Handle old files where phaseEvents was event
@@ -520,13 +548,13 @@ const useMainStore = create<MainState>((set, get) => ({
 
       switch (history.action) {
         case 'ADD':
-          internalRemove(false, history.to.entities, history.to.links)
+          internalRemove(false, history.to.entities, history.to.links, history.to.shapes)
           break
         case 'UPDATE':
-          internalUpdate(false, history.from.entities, history.from.links)
+          internalUpdate(false, history.from.entities, history.from.links, history.from.shapes)
           break
         case 'REMOVE':
-          internalAdd(false, history.from.entities, history.from.links)
+          internalAdd(false, history.from.entities, history.from.links, false, history.from.shapes)
           break
       }
 
@@ -547,13 +575,13 @@ const useMainStore = create<MainState>((set, get) => ({
 
     switch (history.action) {
       case 'ADD':
-        internalAdd(false, history.to.entities, history.to.links)
+        internalAdd(false, history.to.entities, history.to.links, false, history.to.shapes)
         break
       case 'UPDATE':
-        internalUpdate(false, history.to.entities, history.to.links)
+        internalUpdate(false, history.to.entities, history.to.links, history.to.shapes)
         break
       case 'REMOVE':
-        internalRemove(false, history.from.entities, history.from.links)
+        internalRemove(false, history.from.entities, history.from.links, history.from.shapes)
         break
     }
 

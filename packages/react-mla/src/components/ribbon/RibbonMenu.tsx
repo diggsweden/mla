@@ -12,12 +12,13 @@ import ToolsTabPanel from './tab/ToolsTabPanel'
 import StartTabPanel from './tab/StartTabPanel'
 import StyleTabPanel from './tab/StyleTabPanel'
 import SearchTabPanel from './tab/SearchTabPanel'
+import DrawTabPanel from './tab/DrawTabPanel'
 
 import configService from '../../services/configurationService'
 import useAppStore, { type Tab } from '../../store/app-store'
 import { useTranslation } from 'react-i18next'
 
-const ALL_TABS = ['archive', 'start', 'search find', 'analysis', 'look feel', 'select', 'show', 'map'] as Tab[]
+const ALL_TABS = ['archive', 'start', 'search find', 'analysis', 'draw', 'look feel', 'select', 'show', 'map'] as Tab[]
 
 function RibbonMenu () {
   const { t } = useTranslation();
@@ -26,9 +27,11 @@ function RibbonMenu () {
   const activeTab = useAppStore((state) => state.selectedTab)
   const setActiveTab = useAppStore((state) => state.setTab)
   const setActiveTool = useAppStore((state) => state.setTool)
+  const setShapeTool = useAppStore((state) => state.setShapeTool)
 
   function showTab (tab: Tab) {
     setActiveTool(undefined)
+    setShapeTool(undefined)
     setActiveTab(tab)
   }
 
@@ -42,6 +45,8 @@ function RibbonMenu () {
         return <SearchTabPanel />
       case 'analysis':
         return <AnalysisTabPanel />
+      case 'draw':
+        return <DrawTabPanel />
       case 'look feel':
         return <StyleTabPanel />
       case 'show':
@@ -68,6 +73,10 @@ function RibbonMenu () {
       tabs = tabs.filter(t => t !== 'archive')
     }
 
+    if (configuration.Menu?.Draw?.Show === false) {
+      tabs = tabs.filter(t => t !== 'draw')
+    }
+
     if (configuration.MapConfiguration == null) {
       tabs = tabs.filter(t => t !== 'map')
     }
@@ -77,7 +86,7 @@ function RibbonMenu () {
     }
 
     return tabs
-  }, [configuration.Menu?.Archive?.Show, configuration.MapConfiguration, searchToolsAvailable, exploreToolsAvailable])
+  }, [configuration.Menu?.Archive?.Show, configuration.Menu?.Draw?.Show, configuration.MapConfiguration, searchToolsAvailable, exploreToolsAvailable])
 
   return <div className="m:flex m:flex-col m:select-none">
     <div className="m:w-full m:ml-2 m:leading-6">
