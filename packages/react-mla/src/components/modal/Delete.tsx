@@ -4,11 +4,13 @@
 
 import { useTranslation } from 'react-i18next';
 import { type IEntity, type ILink } from '../../interfaces/data-models'
+import type { IShape } from '../../interfaces/data-models/shape'
 import configService from '../../services/configurationService'
 
 interface Props {
   entities: IEntity[]
   links: ILink[]
+  shapes: IShape[]
 }
 
 function Delete (props: Props) {
@@ -22,6 +24,9 @@ function Delete (props: Props) {
         ))}
         {props.links.map(e => (
           <li key={e.InternalId}>{configService.getLinkConfiguration(e.TypeId)?.Name}: {e.LabelShort} </li>
+        ))}
+        {props.shapes.map(e => (
+          <li key={e.Id}>{t(e.Type === 'text' ? 'textbox' : e.Type)}{e.Type === 'text' && e.Text ? `: ${e.Text.slice(0, 40)}` : ''}</li>
         ))}
       </ul>
       <p className="m:font-medium m:mt-3">{t('delete them?')}</p>
