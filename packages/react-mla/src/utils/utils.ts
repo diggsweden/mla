@@ -124,6 +124,11 @@ function findId (thing: IChartBase, config: IMatchRule[], things: IChartBase[]):
       let a = thing.Properties.find(x => x.TypeId === conf.PropertyTypeId)?.Value ?? ''
       let b = test.Properties.find(x => x.TypeId === conf.PropertyTypeId)?.Value ?? ''
 
+      // Two things that lack the value are not the same thing
+      if (a === '' || b === '') {
+        continue
+      }
+
       if (conf.Regex != null) {
         const regex = new RegExp(conf.Regex)
         a = getText(a.toString(), regex)

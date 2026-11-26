@@ -28,7 +28,7 @@ export function toDateAndTimeString (d?: DateTime): string | undefined {
     return undefined
   }
 
-  return [toDateString(d), toTimeString(d)].join(' ')
+  return [toDateString(d), toTimeString(d)].filter(x => x != null).join(' ')
 }
 
 export function isSameDay (d1?: DateTime, d2?: DateTime) : boolean {
@@ -67,11 +67,15 @@ export function fixDate (value: string | undefined | Date | DateTime): DateTime 
     }
 
     if (typeof value === 'string') {
-      date = DateTime.fromISO(value)
+      // The dates are shown in UTC, so a date without a time zone is read as UTC to be shown as it was sent.
+      // A date with a time zone keeps its point in time. Both are then kept in the time zone of the user, as before
+      date = DateTime.fromISO(value, { zone: 'utc' })
 
       if (!date.isValid) {
-        date = DateTime.fromSQL(value)
+        date = DateTime.fromSQL(value, { zone: 'utc' })
       }
+
+      date = date.toLocal()
     }
 
     if (date == undefined || !date.isValid) {

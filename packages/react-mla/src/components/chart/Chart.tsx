@@ -14,6 +14,11 @@ import useMultiselect from '../../utils/vis-multiselect-hook'
 import type { IEntity } from '../../interfaces/data-models'
 import { produce } from 'immer'
 import ContentRenderer from './elements/ContentRenderer'
+import ShapeTextEditor from './shapes/ShapeTextEditor'
+import { draggedShapeType, isShapeDrag } from './shapes/shape-drag'
+import { intersectsRect } from './shapes/shape-geometry'
+import { useShapes } from './shapes/use-shapes'
+import { internalUpdate } from '../../store/internal-actions'
 
 interface ClickEvent {
   nodes: string[]
@@ -38,6 +43,9 @@ function Chart (props: Props) {
 
   const entities = useMainStore((state) => state.entities)
   const links = useMainStore((state) => state.links)
+
+  const shapes = useMainStore((state) => state.shapes)
+  const setSelectedShapeIds = useMainStore((state) => state.setSelectedShapeIds)
 
   const network = useMainStore((state) => state.network)
   const setNetwork = useMainStore((state) => state.setNetwork)
@@ -117,9 +125,14 @@ function Chart (props: Props) {
         network.selectNodes(toSelect)
         const { nodes, edges } = network.getSelection() as { nodes: string[], edges: string[] }
         setSelectedIds([...nodes, ...edges])
+        // The shapes in the rectangle are selected with the nodes
+        if (!ctxMenu) {
+          const rect = { left: startX, right: endX, top: startY, bottom: endY }
+          setSelectedShapeIds(shapes.filter(shape => intersectsRect(shape, rect)).map(shape => shape.Id))
+        }
       }
     }
-  }, [network, data, selectedIds, setSelectedIds])
+  }, [network, data, selectedIds, setSelectedIds, shapes, setSelectedShapeIds])
 
   useEffect(() => {
     if (network) {
@@ -207,6 +220,7 @@ function Chart (props: Props) {
   }, [options, data, network, storePositions, setLayout, layoutId])
 
   const networkNode = useRef<HTMLDivElement>(null)
+  const { finishNodeDrag, dropShape } = useShapes(networkNode, network, data)
   useLayoutEffect(() => {
     if (networkNode.current == null) {
       return
@@ -262,7 +276,13 @@ function Chart (props: Props) {
             }))
           })
         }
-        update(...positionUpdate)
+        // The shapes that were selected with the nodes have moved with them, and are saved in the same step
+        const shapeUpdates = finishNodeDrag()
+        if (shapeUpdates.length > 0) {
+          internalUpdate(true, positionUpdate, [], shapeUpdates)
+        } else {
+          update(...positionUpdate)
+        }
       }
 
       network.on('select', onSelect)
@@ -274,16 +294,29 @@ function Chart (props: Props) {
         network.off('dragEnd', onDragEnd)
       }
     }
-  }, [network, data, setSelectedIds, update, getHistory])
+  }, [network, data, setSelectedIds, update, getHistory, finishNodeDrag])
 
   const onDragOver = useCallback((event: DragEvent) => {
     if (isEntityDrag(event)) {
       event.preventDefault()
       event.dataTransfer.dropEffect = 'move'
+    } else if (isShapeDrag(event)) {
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'copy'
     }
   }, [])
 
   const onDrop = useCallback((event: DragEvent) => {
+    if (isShapeDrag(event)) {
+      event.preventDefault()
+      const type = draggedShapeType(event)
+      if (type != null && networkNode.current != null && network != null) {
+        const offset = networkNode.current.getBoundingClientRect()
+        dropShape(type, network.DOMtoCanvas({ x: event.clientX - offset.x, y: event.clientY - offset.y }))
+      }
+      return
+    }
+
     if (!isEntityDrag(event)) {
       return
     }
@@ -294,7 +327,7 @@ function Chart (props: Props) {
     }
     const offset = networkNode.current.getBoundingClientRect()
     dropEntity(network?.DOMtoCanvas({ x: event.clientX - offset.x, y: event.clientY - offset.y }) ?? null)
-  }, [network])
+  }, [network, dropShape])
 
   useMultiselect(networkNode, network, select)
 
@@ -306,6 +339,7 @@ function Chart (props: Props) {
 
   useKeyDown(() => {
     setSelectedIds([...Object.keys(entities), ...Object.keys(links)])
+    setSelectedShapeIds(shapes.map(shape => shape.Id))
   }, networkNode, ['KeyA'], true)
 
   return (
@@ -313,10 +347,11 @@ function Chart (props: Props) {
       <div className="m:h-full m:w-full m:absolute m:pointer-events-none m:z-10">
         {props.children}
       </div>
-      <div className="m:h-full m:w-full" onDragOver={onDragOver} onDrop={onDrop}>
-        <div className="m:h-full m:w-full m:outline-hidden" id="m-chart" ref={networkNode}>
+      <div className="m:h-full m:w-full m:relative" onDragOver={onDragOver} onDrop={onDrop}>
+        <div className="m:h-full m:w-full m:outline-hidden m:[&_.vis-network]:outline-hidden" id="m-chart" ref={networkNode}>
           <ContentRenderer />
         </div>
+        <ShapeTextEditor network={network} />
       </div>
     </div>
   )

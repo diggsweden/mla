@@ -81,6 +81,9 @@ class WorkflowService {
   }
 
   private close (): void {
+    // A dialog that is waiting to be shown is not shown once the workflow has closed it
+    window.clearTimeout(this.progressHandle)
+    this.progressHandle = undefined
     useWorkflowStore.getState().setShowDialog(false)
   }
 }

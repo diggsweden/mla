@@ -6,7 +6,6 @@ import { useState } from 'react'
 import { type IPhaseEvent } from '../../interfaces/data-models'
 import { generateUUID } from '../../utils/utils'
 import { DateTime } from 'luxon'
-import { fixDate } from '../../utils/date'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
@@ -23,13 +22,15 @@ function PhaseCreator (props: Props) {
     Date: DateTime.now()
   } satisfies IPhaseEvent)
 
-  function setDate (date: Date | null): void {
-    if (date == null) {
+  // The value of the date input is the day that is chosen, yyyy-MM-dd, and the phase starts that day where the user is
+  function setDate (value: string): void {
+    const date = DateTime.fromISO(value)
+    if (value === '' || !date.isValid) {
       return
     }
     const update = {
       ...newEvent,
-      Date: fixDate(date)!
+      Date: date
     }
     setEvent(update)
     onChange(update)
@@ -51,7 +52,7 @@ function PhaseCreator (props: Props) {
       <input autoFocus type="text" value={newEvent.Description} onChange={(e) => { setText(e.target.value) }} className={inputStyle}></input>
 
       <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('date')}</span>
-      <input required type="date" value={newEvent.Date.toISO()!.slice(0, 10)} onChange={(e) => { setDate(e.target.valueAsDate) }} className={inputStyle}></input>
+      <input required type="date" value={newEvent.Date.toISODate() ?? ''} onChange={(e) => { setDate(e.target.value) }} className={inputStyle}></input>
     </div>
   )
 }
