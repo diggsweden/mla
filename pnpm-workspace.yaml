@@ -11,3 +11,8 @@ allowBuilds:
   "@parcel/watcher": false
   esbuild: false
   lefthook: false
+
+# minimatch before 11.0.1 has a denial of service (GHSA-g3hv-75wg-m249). @microsoft/api-extractor, which builds the types, pins 10.2.3.
+# Remove this when it uses a version that is patched
+overrides:
+  "minimatch@>=7.0.0 <11.0.1": "^11.0.1"
