@@ -93,6 +93,18 @@ function ArchiveTabPanel () {
     setShowImageSave(false)
   }
 
+  function downloadBlob (blob: Blob, name: string) {
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.download = name
+    link.href = url
+
+    link.click()
+    link.remove()
+    setTimeout(() => { URL.revokeObjectURL(url) }, 0)
+  }
+
   function saveAsFile () {
     const json = save()
     const blob = new Blob([json], { type: 'application/json' })
@@ -119,23 +131,26 @@ function ArchiveTabPanel () {
         } catch (error) {
           const err = error as { name?: string, message?: string }
           // Fail silently if the user has simply canceled the dialog.
-          if (err.name !== 'AbortError') {
-            console.error(err.name, err.message)
+          if (err.name === 'AbortError') {
+            setDirty(true)
+            return
           }
+
+          // The picker exists but is not allowed in this context (e.g. cross-origin
+          // or sandboxed iframe, or lost user activation). Fall back to a download link.
+          if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
+            downloadBlob(blob, t('default_filename'))
+            return
+          }
+
+          console.error(err.name, err.message)
           setDirty(true)
         }
       }
 
       void saveAction()
     } else {
-      const url = URL.createObjectURL(blob)
-
-      const link = document.createElement('a')
-      link.download = t('default_filename')
-      link.href = url
-
-      link.click()
-      link.remove()
+      downloadBlob(blob, t('default_filename'))
     }
   }
 
