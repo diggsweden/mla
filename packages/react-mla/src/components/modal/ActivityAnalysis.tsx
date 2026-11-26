@@ -67,10 +67,29 @@ interface Attribute {
   Show: boolean
 }
 
-function within (period: TimePeriod, thing: IChartBase): boolean {
-  const interval = Interval.fromDateTimes(period.From, period.To)
+// The date of an activity, an activity can have only one of the dates
+function activityDate (thing: IChartBase): DateTime | undefined {
+  return thing.DateFrom ?? thing.DateTo
+}
 
-  return interval.contains(thing.DateFrom!) && interval.contains(thing.DateTo!)
+function within (period: TimePeriod, thing: IChartBase): boolean {
+  const from = thing.DateFrom ?? thing.DateTo
+  const to = thing.DateTo ?? thing.DateFrom
+  if (from == null || to == null) {
+    return false
+  }
+
+  const interval = Interval.fromDateTimes(period.From, period.To)
+  return interval.contains(from) && interval.contains(to)
+}
+
+// Only a link of the configured type has the property that tells the role of the actor
+function hasLinkProperty (link: ILink, linkTypeId: string | undefined, linkPropertyId: string): boolean {
+  if (linkTypeId != null && link.TypeId !== linkTypeId) {
+    return false
+  }
+
+  return configService.getProperties(link).some(p => p.propertyConfiguration.TypeId === linkPropertyId)
 }
 
 function ActivityAnalysis (props: Props) {
@@ -132,7 +151,7 @@ function ActivityAnalysis (props: Props) {
       const result = [] as Link[]
 
       let propValue = undefined as string | undefined
-      if (config.LinkPropertyId != null) {
+      if (config.LinkPropertyId != null && hasLinkProperty(link, config.LinkTypeId, config.LinkPropertyId)) {
         propValue = viewService.getPropertyValue(link, config.LinkPropertyId)
       }
 
@@ -199,13 +218,17 @@ function ActivityAnalysis (props: Props) {
         })
         return {
           Title: e.LabelLong,
-          Date: e.DateFrom!,
+          Date: activityDate(e)!,
           Attributes: entAttrs,
           Color: getColor(e, viewConfig),
           SubItems: linkMap[getId(e)]?.length > 0
             ? linkMap[getId(e)].flatMap(l => {
               const entityId = l.FromEntityTypeId === config.EntityTypeId ? l.ToEntityId + l.ToEntityTypeId : l.FromEntityId + l.FromEntityTypeId
-              const entity = entities[entityId][0]
+              // A link can go to an entity that is not in the chart
+              const entity = entities[entityId]?.[0]
+              if (entity == null) {
+                return []
+              }
 
               const attrs = viewService.getAttributes(entity)
               if (attrs.length > 0) {
@@ -248,7 +271,7 @@ function ActivityAnalysis (props: Props) {
     const typeList = Object.keys(typeMap).map(t => ({ TypeId: t, Name: typeMap[t] } satisfies Type))
     typeList.sort((a, b) => a.Name.localeCompare(b.Name))
     return { view: result, types: typeList, intervall: inter, attributes: attributesUpdate }
-  }, [entities, events, maxDate, config.EntityTypeId, config.LinkPropertyId, getEntity, links, viewConfig])
+  }, [entities, events, maxDate, config.EntityTypeId, config.LinkTypeId, config.LinkPropertyId, getEntity, links, viewConfig])
 
   const { view, types, intervall } = analysis
 
