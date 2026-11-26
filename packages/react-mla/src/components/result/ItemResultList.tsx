@@ -7,11 +7,10 @@ import type { IEntity, IEvent, ILink } from '../../interfaces/data-models'
 import ItemResult from './ItemResult'
 import type { IEntityGroup } from './ItemResult'
 import { useState } from 'react'
-import { generateUUID, getId, isLinked } from '../../utils/utils'
+import { getId, isLinked } from '../../utils/utils'
 import useAppStore from '../../store/app-store'
 import { produce } from 'immer'
 import useMainStore from '../../store/main-store'
-import configService from '../../services/configurationService'
 import Icon from '../common/Icon'
 import Modal from '../common/Modal'
 import TableTool from '../tools/TableTool'
@@ -19,18 +18,12 @@ import { toDateString } from '../../utils/date'
 import { internalAdd } from '../../store/internal-actions'
 import Button from '../common/Button'
 import { useTranslation } from 'react-i18next'
+import { type EventGroup, buildEventGroups } from './event-groups'
 
 interface ItemResultProps {
   result: IQueryResponse
   seeds?: IEntity[]
   className?: string
-}
-
-interface EventGroup {
-  GroupId: string
-  TypeId: string
-  Name: string
-  Events: IEvent[]
 }
 
 const last = 'zzzzzzzzzzzz'
@@ -112,37 +105,6 @@ function buildEntityGroups (result: ItemResultProps['result'], seeds: IEntity[] 
   }
 
   return { groups: res, count }
-}
-
-function buildEventGroups (result: ItemResultProps['result']): EventGroup[] {
-  const res = [] as EventGroup[]
-  if (result.Events) {
-    result.Events.sort((a, b) => a.Date.diff(b.Date).milliseconds)
-
-    const grouped = result.Events.reduce<Record<string, IEvent[]>>(
-      (result, currentValue) => {
-        (result[currentValue.TypeId] = result[currentValue.TypeId] || []).push(currentValue)
-        if (result[currentValue.TypeId].length >= 10000) {
-          result[generateUUID()] = result[currentValue.TypeId]
-          result[currentValue.TypeId] = []
-        }
-        return result
-      }, {})
-
-    Object.keys(grouped).forEach(t => {
-      const typeId = grouped[t][0].TypeId
-      const config = configService.getEventConfiguration(typeId)
-      res.push({
-        GroupId: t,
-        TypeId: typeId,
-        Name: config?.Name ?? typeId,
-        Events: grouped[t]
-      })
-    })
-  }
-
-  res.sort((a, b) => a.Events[0].Date.diff(b.Events[0].Date).milliseconds)
-  return res
 }
 
 function ItemResultList (props: ItemResultProps) {
