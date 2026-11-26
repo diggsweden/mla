@@ -353,11 +353,11 @@ const useMainStore = create<MainState>((set, get) => ({
             }
           })
           
-          if (draft.Date < state.minDate) {
+          if (draft.Date < minDate) {
             minDate = draft.Date
           }
 
-          if (draft.Date > state.maxDate) {
+          if (draft.Date > maxDate) {
             maxDate = draft.Date
           }
 
@@ -551,7 +551,7 @@ const useMainStore = create<MainState>((set, get) => ({
           internalRemove(false, history.to.entities, history.to.links, history.to.shapes)
           break
         case 'UPDATE':
-          internalUpdate(false, history.from.entities, history.from.links, history.from.shapes)
+          internalUpdate(false, history.from.entities, history.from.links, history.from.shapes, false)
           break
         case 'REMOVE':
           internalAdd(false, history.from.entities, history.from.links, false, history.from.shapes)

@@ -4,17 +4,20 @@
 
 // The context is a list of key:value pairs separated by commas, for example "title:Case 12,fileId:7".
 // The value can contain colons, only the first one separates the key.
+// A comma in a value is written as %2C, so that it does not separate the entries.
+const COMMA = '%2C'
+
 function parse (ctx: string): Array<[string, string]> {
   return ctx.split(',')
     .filter(entry => entry !== '')
     .map(entry => {
       const at = entry.indexOf(':')
-      return at === -1 ? [entry, ''] : [entry.slice(0, at), entry.slice(at + 1)]
+      return at === -1 ? [entry, ''] : [entry.slice(0, at), entry.slice(at + 1).replaceAll(COMMA, ',')]
     })
 }
 
 function stringify (entries: Array<[string, string]>): string {
-  return entries.map(([key, value]) => key + ':' + value).join(',')
+  return entries.map(([key, value]) => key + ':' + value.replaceAll(',', COMMA)).join(',')
 }
 
 export function getContextValue (ctx: string, key: string): string | undefined {

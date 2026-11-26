@@ -68,7 +68,7 @@ function addVersion<T extends IChartBase> (existing: T[] | undefined, version: T
     draft.Properties = mergeProps(found.Properties, version.Properties)
     updateProps(draft)
   })
-  return [replacement, ...existing.filter(x => x.InternalId !== replacement.InternalId)]
+  return [replacement, ...existing.filter(x => x.InternalId !== replacement.InternalId)].sort(sortByDate)
 }
 
 function replaceVersion<T extends IChartBase> (existing: T[], version: T): T[] {
@@ -203,14 +203,17 @@ export const internalAdd = (addHistory: boolean, entities: IEntity[], links: ILi
   updateSelected()
 }
 
-export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: ILink[], shapes: IShape[] = []) => {
+// A change is marked as modified, unless it puts back what was there before, as undo does
+export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: ILink[], shapes: IShape[] = [], markModified = true) => {
   useMainStore.setState(state => {
     const range: DateRange = { min: state.minDate, max: state.maxDate }
 
     const stateUpEntities = produce(state.entities, stateDraft => {
       for (let entity of entities) {
         entity = produce(entity, draft => {
-          draft.SourceSystemId = i18n.t('modified')
+          if (markModified) {
+            draft.SourceSystemId = i18n.t('modified')
+          }
           updateProps(draft)
         })
         stateDraft[getId(entity)] = replaceVersion(stateDraft[getId(entity)], entity)
@@ -221,7 +224,9 @@ export const internalUpdate = (addHistory: boolean, entities: IEntity[], links: 
     const stateUpLinks = produce(state.links, stateDraft => {
       for (let link of links) {
         link = produce(link, draft => {
-          draft.SourceSystemId = i18n.t('modified')
+          if (markModified) {
+            draft.SourceSystemId = i18n.t('modified')
+          }
           updateProps(draft)
         })
         stateDraft[getId(link)] = replaceVersion(stateDraft[getId(link)], link)
