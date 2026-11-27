@@ -29,6 +29,7 @@ interface Props {
 // What an item in the chart is called, and what it is, as the panel and its list show it
 interface Described {
   id: string
+  kind: 'entity' | 'link' | 'event'
   name: string
   type: string
   icon: string
@@ -43,18 +44,24 @@ function describe (id: string, t: (key: string) => string): Described | undefine
     // The icon and color the chart gives it, also by the rules of the view
     const view = viewService.getView(entity.TypeId, entity.GlobalType)
     const rule = viewService.getRule(entity, useAppStore.getState().currentViewConfiguration)
-    return { id, name: nameOf(entity), type: configService.getTypeName(entity), icon: rule?.Icon ?? view.Icon, color: entity.Color ?? rule?.Color ?? view.Color, source: entity.SourceSystemId }
+    return { id, kind: 'entity', name: nameOf(entity), type: configService.getTypeName(entity), icon: rule?.Icon ?? view.Icon, color: entity.Color ?? rule?.Color ?? view.Color, source: entity.SourceSystemId }
   }
   const link = state.getCurrentLink(id)
   if (link != null) {
     const from = state.getCurrentEntity(link.FromEntityId + link.FromEntityTypeId)
     const to = state.getCurrentEntity(link.ToEntityId + link.ToEntityTypeId)
-    const name = from != null && to != null ? nameOf(from) + ' – ' + nameOf(to) : configService.getTypeName(link)
-    return { id, name, type: configService.getTypeName(link), icon: 'link', source: link.SourceSystemId }
+    // A relation is named by its own label, or its type, and the line below tells which entities it is between and which way it points,
+    // so that it is not taken for one of them
+    const typeName = configService.getTypeName(link)
+    const own = link.LabelShort?.trim()
+    const name = own ? own : typeName
+    const arrow = link.Direction === 'TO' ? ' → ' : link.Direction === 'FROM' ? ' ← ' : link.Direction === 'BOTH' ? ' ↔ ' : ' – '
+    const between = from != null && to != null ? nameOf(from) + arrow + nameOf(to) : typeName
+    return { id, kind: 'link', name, type: own && own !== typeName ? typeName + ' · ' + between : between, icon: 'link', source: link.SourceSystemId }
   }
   const computed = state.computedLinks.find(l => getId(l) === id)
   if (computed != null) {
-    return { id, name: configService.getEventConfiguration(computed.EventTypeId)?.Name ?? t('event'), type: t('event'), icon: 'date_range' }
+    return { id, kind: 'event', name: configService.getEventConfiguration(computed.EventTypeId)?.Name ?? t('event'), type: t('event'), icon: 'date_range' }
   }
   return undefined
 }
@@ -156,6 +163,14 @@ function PropertiesPanel (props: Props) {
   const older = item != null ? olderVersion(item, history, t('yes'), t('no')) : undefined
   const index = display ? selectedIds.indexOf(display) : -1
 
+  // The selected, entities first and then relations and events, each with a heading when there is more than one kind
+  const describedAll = showList ? selectedIds.map(id => describe(id, t)).filter((d): d is Described => d != null) : []
+  const listGroups = ([
+    { kind: 'entity', title: t('n entities', { count: describedAll.filter(d => d.kind === 'entity').length }) },
+    { kind: 'link', title: t('n relations', { count: describedAll.filter(d => d.kind === 'link').length }) },
+    { kind: 'event', title: t('n events', { count: describedAll.filter(d => d.kind === 'event').length }) }
+  ] as const).map(g => ({ ...g, items: describedAll.filter(d => d.kind === g.kind) })).filter(g => g.items.length > 0)
+
   const step = (by: number) => {
     setOpened(selectedIds[(index + by + selectedIds.length) % selectedIds.length])
   }
@@ -183,7 +198,10 @@ function PropertiesPanel (props: Props) {
       {described.source && <span title={t('source system')} className="m:text-[11px] m:font-semibold m:text-gray-600 m:bg-gray-100 m:rounded-full m:px-2 m:py-0.5 m:max-w-24 m:truncate">{described.source}</span>}
     </>
   } else if (showList) {
-    header = <span className="m:text-[15px] m:font-bold m:flex-1">{t('n selected', { count: selectedIds.length })}</span>
+    header = <div className="m:flex m:flex-col m:min-w-0 m:flex-1">
+      <span className="m:text-[15px] m:font-bold m:leading-tight">{t('n selected', { count: selectedIds.length })}</span>
+      <span className="m:text-[12px] m:text-gray-600 m:truncate">{listGroups.map(g => g.title).join(' · ')}</span>
+    </div>
   } else {
     header = <span className="m:text-[15px] m:font-bold m:flex-1">{t('properties panel')}</span>
   }
@@ -222,27 +240,28 @@ function PropertiesPanel (props: Props) {
 
       <div className="mla-form-fields m:grow m:overflow-y-auto">
         {showList && (
-          <ul aria-label={t('n selected', { count: selectedIds.length })} className="m:flex m:flex-col m:gap-0.5 m:p-2">
-            {selectedIds.map(id => {
-              const d = describe(id, t)
-              if (d == null) return null
-              return (
-                <li key={id}>
-                  <button type="button" onClick={() => { setOpened(id); setHovered(undefined) }}
-                    onMouseEnter={() => { setHovered(id) }} onMouseLeave={() => { setHovered(undefined) }}
-                    onFocus={() => { setHovered(id) }} onBlur={() => { setHovered(undefined) }}
-                    className="m:w-full m:flex m:items-center m:gap-2.5 m:text-left m:px-2 m:py-1.5 m:rounded-md m:border m:border-transparent m:hover:border-blue-200 m:hover:bg-blue-50 m:focus-visible:border-blue-300 m:cursor-pointer">
-                    <Badge icon={d.icon} color={d.color} />
-                    <span className="m:flex m:flex-col m:min-w-0 m:flex-1">
-                      <span className="m:text-[14px] m:font-semibold m:truncate">{d.name}</span>
-                      <span className="m:text-[12px] m:text-gray-600 m:truncate">{d.type}</span>
-                    </span>
-                    <span className="m:text-gray-400"><Chevron /></span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+          <div aria-label={t('n selected', { count: selectedIds.length })} role="list" className="m:flex m:flex-col m:gap-2 m:p-2">
+            {listGroups.map(group => (
+              <div key={group.kind} role="group" aria-label={group.title} className="m:flex m:flex-col m:gap-0.5">
+                {listGroups.length > 1 && <span className="m:text-[12px] m:font-bold m:tracking-wider m:uppercase m:text-gray-600 m:px-2 m:pt-1">{group.title}</span>}
+                {group.items.map(d => (
+                  <div key={d.id} role="listitem">
+                    <button type="button" onClick={() => { setOpened(d.id); setHovered(undefined) }}
+                      onMouseEnter={() => { setHovered(d.id) }} onMouseLeave={() => { setHovered(undefined) }}
+                      onFocus={() => { setHovered(d.id) }} onBlur={() => { setHovered(undefined) }}
+                      className="m:w-full m:flex m:items-center m:gap-2.5 m:text-left m:px-2 m:py-1.5 m:rounded-md m:border m:border-transparent m:hover:border-blue-200 m:hover:bg-blue-50 m:focus-visible:border-blue-300 m:cursor-pointer">
+                      <Badge icon={d.icon} color={d.color} />
+                      <span className="m:flex m:flex-col m:min-w-0 m:flex-1">
+                        <span className="m:text-[14px] m:font-semibold m:truncate">{d.name}</span>
+                        <span className="m:text-[12px] m:text-gray-600 m:truncate" title={d.type}>{d.type}</span>
+                      </span>
+                      <span className="m:text-gray-400"><Chevron /></span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         )}
         {showList && <p className="m:mx-4 m:text-[12px] m:text-gray-600">{t('open from list')}</p>}
 
