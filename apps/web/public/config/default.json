@@ -451,7 +451,7 @@
                     {
                         "TypeId": "LT1E1",
                         "Name": "Engagemangstyp",
-                        "Description": "Description av den relation personen har till bolaget, text styrelseledarmot",
+                        "Description": "Personens roll i bolaget, t.ex. styrelseledamot, VD eller verklig huvudman",
                         "FieldType": "String"
                     }
                 ]
@@ -474,7 +474,7 @@
                     {
                         "TypeId": "LT3E1",
                         "Name": "Typ",
-                        "Description": "Beskriver typen av relation",
+                        "Description": "Hur entiteten hör till adressen, t.ex. folkbokföring, säte eller besöksadress",
                         "FieldType": "String"
                     }
                 ]
@@ -501,7 +501,7 @@
                     {
                         "TypeId": "LT4E1",
                         "Name": "Typ",
-                        "Description": "Beskriver typen av förhållande",
+                        "Description": "Hur kontot eller bilen hör till ägaren, t.ex. ägare, kontohavare eller brukare",
                         "FieldType": "String"
                     }
                 ]
@@ -536,7 +536,7 @@
                     {
                         "TypeId": "LT6E1",
                         "Name": "Roll",
-                        "Description": "Beskriver vilken roll relationen har",
+                        "Description": "Entitetens roll i händelsen, t.ex. ringer, deltar, gärningsman eller plats",
                         "FieldType": "String"
                     }
                 ]
@@ -544,7 +544,7 @@
             {
                 "TypeId": "relation",
                 "Name": "Relation",
-                "Description": "En generell relation som kan används för att länka samman alla olika entitetstyper",
+                "Description": "En generell relation som kan användas för att länka samman alla olika entitetstyper",
                 "AllowedRelations": [
                     {
                         "FromEntityTypeId": "*",
@@ -555,7 +555,7 @@
                     {
                         "TypeId": "relationslank",
                         "Name": "Relation",
-                        "Description": "Beskriver relationen",
+                        "Description": "Vad relationen är, t.ex. bekant, släkt eller affärskontakt",
                         "FieldType": "String"
                     }
                 ]
