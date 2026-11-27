@@ -96,3 +96,9 @@ export function removeInternals(base: IChartBase) : Partial<IChartBase> {
     LabelShort: undefined
   }
 }
+
+// A date with its time only when it says something: not at the start of a day or at its end, as for a period of whole days
+export function shortDate (date: DateTime): string {
+  const time = toTimeString(date)
+  return (time === '00:00' || time === '23:59' ? toDateString(date) : toDateAndTimeString(date)) ?? ''
+}

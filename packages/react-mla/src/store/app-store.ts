@@ -43,6 +43,14 @@ interface AppState {
   // The type of shape that is drawn on the chart next, and the text that is being written
   shapeTool: ShapeType | undefined
   setShapeTool: (type?: ShapeType) => void
+  // The panel of properties: fastened open also when nothing is selected, or closed until something else is selected
+  propertiesPinned: boolean
+  setPropertiesPinned: (pinned: boolean) => void
+  propertiesClosed: boolean
+  setPropertiesClosed: (closed: boolean) => void
+  // The one of the selected items that the panel shows, or that the pointer is on in its list, which the chart shows more clearly
+  focusedId: string | undefined
+  setFocusedId: (id?: string) => void
   // A relation is drawn by dragging from one entity to another
   linkTool: boolean
   setLinkTool: (on: boolean) => void
@@ -61,6 +69,16 @@ interface AppState {
   setView: (viewId: string) => void
   setTool: (tool?: Tool) => void
   setHistoryMode: (value: boolean) => void
+}
+
+// Whether the panel of properties is fastened is the user's own choice on this computer
+const PINNED_KEY = 'mla.properties.pinned'
+function readPinned (): boolean {
+  try {
+    return window.localStorage.getItem(PINNED_KEY) === 'true'
+  } catch {
+    return false
+  }
 }
 
 const useAppStore = create<AppState>((set) => ({
@@ -172,6 +190,19 @@ const useAppStore = create<AppState>((set) => ({
   setShapeTool: (type?: ShapeType) => {
     // One tool at a time takes the mouse in the chart
     set(() => (type != null ? { shapeTool: type, linkTool: false } : { shapeTool: type }))
+  },
+  propertiesPinned: readPinned(),
+  setPropertiesPinned: (pinned: boolean) => {
+    try { window.localStorage.setItem(PINNED_KEY, String(pinned)) } catch { /* only kept until the page is closed */ }
+    set(() => ({ propertiesPinned: pinned }))
+  },
+  propertiesClosed: false,
+  setPropertiesClosed: (closed: boolean) => {
+    set(() => ({ propertiesClosed: closed }))
+  },
+  focusedId: undefined,
+  setFocusedId: (id?: string) => {
+    set(() => ({ focusedId: id }))
   },
   linkTool: false,
   setLinkTool: (on: boolean) => {

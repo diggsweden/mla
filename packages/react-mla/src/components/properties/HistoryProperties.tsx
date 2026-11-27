@@ -5,8 +5,9 @@
 import { useMemo, useState } from 'react'
 import { type IChartBase, type IEntity, type ILink } from '../../interfaces/data-models'
 import useMainStore from '../../store/main-store'
-import Accordion from '../common/Accordion'
-import { fixDate, toDateAndTimeString, toDateString, toTimeString } from '../../utils/date'
+import configService from '../../services/configurationService'
+import { changesBetween } from '../../utils/properties'
+import { fixDate, shortDate, toDateAndTimeString, toDateString, toTimeString } from '../../utils/date'
 import { produce } from 'immer'
 import { generateUUID, getId } from '../../utils/utils'
 import { DateTime } from 'luxon'
@@ -217,172 +218,174 @@ function HistoryProperties (props: Props) {
     }
   }
 
+  // Open from the start when there is a time or more than one version, and the period is changed on request
+  const [open, setOpen] = useState(history.length > 1 || current?.DateFrom != null || current?.DateTo != null)
+  const [editing, setEditing] = useState(history.length === 1 && current?.DateFrom == null && current?.DateTo == null)
+
   if (current == null) {
     return null
   }
 
-  const dateTimeClass = "m:w-full m:bg-white m:border m:border-gray-300 m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:focus:border-blue-500 m:block m:p-1 m:disabled:opacity-50";
-  return <>
-    <Accordion key={current.InternalId + isEvent} title={isEvent ? t('activity') : t('history')} expanded={(history.length > 1 || current.DateFrom != null || current.DateTo != null)}>
-      {isEvent &&
-        <div className={props.className}>
-          <span className="m:mt-1 m:text-sm m:font-medium m:text-gray-900" title={t('activity date time')}>{t('happens')}</span>
-          <div className="m:pb-1 m:grid m:grid-cols-2 m:gap-2">
-            <input
-              type="date"
-              value={toDateString(current.DateFrom)}
-              min={toDateString(min)}
-              max={toDateString(max)}
-              onChange={(e) => {
-                if (e.target.valueAsDate == null) {
-                  dateChanged(current, undefined, undefined)
-                } else {
-                  const validDate = formatDate(e.target.valueAsDate, current.DateFrom, true)
-                  dateChanged(current, validDate, validDate)
-                }
-              }}
-              className={dateTimeClass}>
-            </input>
-            <input
-              type="time"
-              disabled={current.DateFrom == null}
-              value={current.DateFrom ? toTimeString(current.DateFrom) : ''}
-              max={toTimeString(current.DateTo) ?? '23:59'}
-              onChange={(e) => {
-                const val = e.target.value === '' ? '00:00' : e.target.value
-                const sp = val.split(':').map(s => Number.parseInt(s))
-                if (sp.length === 2) {
-                  const validDate = current.DateFrom!.set({ hour: sp[0], minute: sp[1] })
-                  dateChanged(current, validDate, validDate)
-                }
-              }}
-              className={dateTimeClass}>
-            </input>
-          </div>
-          <div className="m:text-sm m:font-medium m:mt-2">
-            <button onClick={() => { setHistory(current) }} className="m:hover:font-bold m:text-green-800">
-              {t('change to history')}
-            </button>
-          </div>
-        </div>
-      }
-      {!isEvent &&
-        <div className={props.className}>
-          <div className="m:pb-3 m:grid m:grid-cols-2 m:gap-2">
-            <div className="">
-              <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={t('date from')}>{t('from')}</span>
-              <input
-                type="date"
-                value={toDateString(current.DateFrom)}
-                min={toDateString(min)}
-                max={toDateString(current.DateTo ?? max)}
-                required={requiredFirst}
-                onChange={(e) => {
-                  if (e.target.valueAsDate == null) {
-                    dateChanged(current, undefined, current.DateTo)
-                  } else {
-                    const validDate = formatDate(e.target.valueAsDate, current.DateFrom, true)
-                    dateChanged(current, validDate, current.DateTo)
-                  }
-                }}
-                className={dateTimeClass}>
-              </input>
-            </div>
-            <div>
-              <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={t('date to')}>{t('to')}</span>
-              <input
-                type="date"
-                value={toDateString(current.DateTo)}
-                min={toDateString(current.DateFrom ?? min)}
-                max={toDateString(max)}
-                required={requiredLast}
-                onChange={(e) => {
-                  if (e.target.valueAsDate == null) {
-                    dateChanged(current, current.DateFrom, undefined)
-                  } else {
-                    const validDate = formatDate(e.target.valueAsDate, current.DateFrom, false)
-                    dateChanged(current, current.DateFrom, validDate)
-                  }
-                }}
-                className={dateTimeClass}>
-              </input>
-            </div>
-            <input
-              type="time"
-              disabled={current.DateFrom == null}
-              value={current.DateFrom ? toTimeString(current.DateFrom) : ''}
-              max={toTimeString(current.DateTo) ?? '23:59'}
-              onChange={(e) => {
-                const val = e.target.value === '' ? '00:00' : e.target.value
-                const sp = val.split(':').map(s => Number.parseInt(s))
-                if (sp.length === 2) {
-                  const validDate = current.DateFrom!.set({ hour: sp[0], minute: sp[1] })
-                  dateChanged(current, validDate, current.DateTo)
-                }
-              }}
-              className={dateTimeClass}>
-            </input>
-            <div>
-              <input
-                type="time"
-                disabled={current.DateTo == null}
-                value={current.DateTo ? toTimeString(current.DateTo) : ''}
-                min={toTimeString(current.DateFrom) ?? '00:00'}
-                onChange={(e) => {
-                  const val = e.target.value === '' ? '23:59' : e.target.value
-                  const sp = val.split(':').map(s => Number.parseInt(s))
-                  if (sp.length === 2) {
-                    const validDate = current.DateTo!.set({ hour: sp[0], minute: sp[1] })
-                    dateChanged(current, current.DateFrom, validDate)
-                  }
-                }}
-                className={dateTimeClass}>
-              </input>
-            </div>
-          </div>
-          <div className="m:pt-1">
-            <div className="m:text-sm m:font-medium">
-              <div className="m:text-sm m:font-medium">
-                {history.length === 1 &&
-                  <button disabled={current.DateFrom == null} onClick={() => { setEvent(current) }} className="m:hover:font-bold m:text-green-800 m:disabled:opacity-50">
-                    {t('change to activity')}
-                  </button>
-                }
-              </div>
-              <button onClick={() => { addForDate() }} className="m:hover:font-bold m:text-green-800">
-                {t('create new version')}
-              </button>
-            </div>
-            <div className='m:cursor-default m:font-semibold m:text-center m:relative m:before:block m:before:absolute m:before:h-1 m:before:bg-primary m:before:left-0 m:before:w-16 m:before:top-1/2 m:after:block m:after:absolute m:after:h-1 m:after:bg-primary m:after:right-0 m:after:w-16 m:after:top-1/2'>
-              <div>{t('versions')}</div>
-            </div>
-            <div className="m:text-sm m:font-medium">
-              {history.map(h =>
-                <div key={h.InternalId} className="m:flex m:justify-between m:w-full m:my-1">
-                  <button className={(h.InternalId === current.InternalId ? 'm:font-bold' : '') + ' m:hover:font-bold'} onClick={() => { historySelected(h.InternalId) }}>
-                    {textFormatDate(h.DateFrom) + ' - ' + textFormatDate(h.DateTo)}
-                  </button>
-                  <button className="m:hover:font-bold m:text-red-800 m:disabled:opacity-50" disabled={history.length == 1} onClick={() => { removeHistory(h) }}>
-                    {t('delete')}
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      }
-    </Accordion>
+  const field = 'm:w-full m:box-border m:bg-white m:border m:border-gray-300 m:text-gray-900 m:text-[13px] m:rounded-md m:px-2 m:h-8 m:disabled:opacity-50'
+  const label = 'm:text-[12px] m:font-semibold m:text-gray-900'
+  const configs = configService.getProperties(current).map(p => p.propertyConfiguration)
+  // Newest first, as the latest is the one that holds now
+  const versions = [...history].reverse()
+  const latest = history.at(-1)
+  const canBeMoment = history.length === 1 && current.DateFrom != null
 
-  </>
-}
-
-function textFormatDate (date?: DateTime): string | undefined {
-  if (date) {
-    return toDateAndTimeString(date)
-  } else {
-    // Looks OK....
-    return '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0'
+  function changeOf (version: IChartBase): string {
+    const i = history.findIndex(h => h.InternalId === version.InternalId)
+    if (i <= 0) return t('first version')
+    const changes = changesBetween(history[i - 1], version, configs, t('yes'), t('no'))
+    if (changes.length === 0) return t('no changes')
+    const first = changes[0]
+    const text = first.config.Name + ': ' + (first.before || t('empty value')) + ' → ' + (first.after || t('empty value'))
+    return changes.length > 1 ? t('and n more', { text, count: changes.length - 1 }) : text
   }
+
+  const periodText = (version: IChartBase) => (version.DateFrom != null ? shortDate(version.DateFrom) : '…') + ' – ' +
+    (version.DateTo != null ? shortDate(version.DateTo) : t('until further notice'))
+
+  let summary = t('no time')
+  if (isEvent && current.DateFrom != null) {
+    summary = t('moment at', { date: toDateAndTimeString(current.DateFrom) })
+  } else if (history.length > 1 && latest != null) {
+    summary = t('n versions latest from', { count: history.length, date: toDateString(latest.DateFrom ?? latest.DateTo) })
+  } else if (!isEvent && (current.DateFrom != null || current.DateTo != null)) {
+    summary = t('valid during', { period: periodText(current) })
+  }
+
+  const dateInput = (value: DateTime | undefined, onChange: (date: Date | null) => void, extra: { min?: string, max?: string, required?: boolean, label: string }) => (
+    <input type="date" aria-label={extra.label} value={toDateString(value) ?? ''} min={extra.min} max={extra.max} required={extra.required}
+      onChange={(e) => { onChange(e.target.valueAsDate) }} className={field} />
+  )
+  const timeInput = (value: DateTime | undefined, onChange: (value: string) => void, extra: { min?: string, max?: string, label: string }) => (
+    <input type="time" aria-label={extra.label} disabled={value == null} value={value ? toTimeString(value) : ''} min={extra.min} max={extra.max}
+      onChange={(e) => { onChange(e.target.value) }} className={field} />
+  )
+  const setTime = (date: DateTime, value: string, fallback: string) => {
+    const sp = (value === '' ? fallback : value).split(':').map(x => Number.parseInt(x))
+    return sp.length === 2 ? date.set({ hour: sp[0], minute: sp[1] }) : undefined
+  }
+
+  return (
+    <section aria-label={t('time and history')} className={'m:px-3 m:mt-4 m:mb-3 ' + (props.className ?? '')}>
+      <div className="m:border m:border-gray-300 m:rounded-lg">
+        <button type="button" aria-expanded={open} onClick={() => { setOpen(!open) }}
+          className="m:w-full m:flex m:items-center m:gap-2 m:px-3 m:py-2.5 m:text-left m:cursor-pointer m:rounded-lg m:hover:bg-gray-50">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={'m:text-gray-600 m:shrink-0 m:transition-transform ' + (open ? 'm:rotate-90' : '')}><path d="M9 6l6 6-6 6" /></svg>
+          <span className="m:text-[13px] m:font-bold">{t('time and history')}</span>
+          <span className="m:ml-auto m:text-[12px] m:text-gray-600 m:truncate">{open ? (isEvent ? t('moment') : t('validity')) : summary}</span>
+        </button>
+
+        {open && (
+          <div className="m:flex m:flex-col m:gap-3 m:px-3 m:pb-3 m:pt-1 m:border-t m:border-gray-200">
+            <div role="radiogroup" aria-label={t('kind of time')} className="m:grid m:grid-cols-2 m:mt-2 m:border m:border-gray-300 m:rounded-md m:overflow-hidden">
+              <button type="button" role="radio" aria-checked={isEvent} disabled={!isEvent && !canBeMoment} title={!isEvent && !canBeMoment ? t('moment needs one version') : undefined}
+                onClick={() => { if (!isEvent) setEvent(current) }}
+                className={'m:text-[12px] m:font-semibold m:py-1.5 m:cursor-pointer m:disabled:opacity-40 m:disabled:cursor-default ' + (isEvent ? 'm:bg-primary m:text-white' : 'm:bg-white m:text-gray-700 m:enabled:hover:bg-gray-100')}>{t('moment')}</button>
+              <button type="button" role="radio" aria-checked={!isEvent} onClick={() => { if (isEvent) setHistory(current) }}
+                className={'m:text-[12px] m:font-semibold m:py-1.5 m:border-l m:border-gray-300 m:cursor-pointer ' + (!isEvent ? 'm:bg-primary m:text-white' : 'm:bg-white m:text-gray-700 m:hover:bg-gray-100')}>{t('validity')}</button>
+            </div>
+            <p className="m:-mt-1 m:text-[12px] m:text-gray-600">{isEvent ? t('moment help') : t('validity help')}</p>
+
+            {isEvent && (
+              <div className="m:flex m:flex-col m:gap-1">
+                <span className={label}>{t('happens')}</span>
+                <div className="m:grid m:grid-cols-[minmax(0,1fr)_88px] m:gap-2">
+                  {dateInput(current.DateFrom, (date) => {
+                    if (date == null) {
+                      dateChanged(current, undefined, undefined)
+                    } else {
+                      const valid = formatDate(date, current.DateFrom, true)
+                      dateChanged(current, valid, valid)
+                    }
+                  }, { min: toDateString(min), max: toDateString(max), label: t('date') })}
+                  {timeInput(current.DateFrom, (value) => {
+                    const valid = setTime(current.DateFrom!, value, '00:00')
+                    if (valid) dateChanged(current, valid, valid)
+                  }, { max: toTimeString(current.DateTo) ?? '23:59', label: t('time') })}
+                </div>
+                {current.DateFrom != null && (
+                  <button type="button" onClick={() => { dateChanged(current, undefined, undefined) }} className="m:self-start m:text-[12px] m:text-blue-700 m:cursor-pointer m:hover:underline">{t('remove time')}</button>
+                )}
+              </div>
+            )}
+
+            {!isEvent && (
+              <div className="m:flex m:flex-col m:gap-2">
+                <span className="m:text-[12px] m:font-bold m:tracking-wider m:uppercase m:text-gray-600">{t('versions')}</span>
+                <ol className="m:flex m:flex-col">
+                  {versions.map((v, i) => {
+                    const selected = v.InternalId === current.InternalId
+                    const isLatest = v.InternalId === latest?.InternalId
+                    return (
+                      <li key={v.InternalId} className="m:grid m:grid-cols-[12px_minmax(0,1fr)] m:gap-2">
+                        <div className="m:flex m:flex-col m:items-center">
+                          <span className={'m:w-2.5 m:h-2.5 m:mt-3 m:rounded-full m:border-2 m:border-primary m:box-border ' + (isLatest ? 'm:bg-primary' : 'm:bg-white')} />
+                          {i < versions.length - 1 && <span className="m:w-0.5 m:flex-1 m:mt-0.5 m:bg-gray-300" />}
+                        </div>
+                        <button type="button" aria-current={selected} onClick={() => { historySelected(v.InternalId) }}
+                          className={'m:flex m:flex-col m:gap-0.5 m:text-left m:mb-1.5 m:px-2.5 m:py-1.5 m:rounded-md m:border m:cursor-pointer ' + (selected ? 'm:border-primary m:bg-blue-50' : 'm:border-gray-200 m:hover:bg-gray-50')}>
+                          <span className="m:flex m:items-baseline m:justify-between m:gap-2">
+                            <span className="m:text-[12px] m:font-semibold">{periodText(v)}</span>
+                            {isLatest && <span className="m:text-[10px] m:font-semibold m:text-white m:bg-primary m:rounded-full m:px-1.5 m:whitespace-nowrap">{t('latest')}</span>}
+                          </span>
+                          <span className="m:text-[11px] m:text-gray-600">{changeOf(v)}</span>
+                        </button>
+                      </li>
+                    )
+                  })}
+                </ol>
+                <div className="m:grid m:grid-cols-2 m:gap-2">
+                  <button type="button" onClick={() => { addForDate() }}
+                    className="m:text-[12px] m:font-semibold m:px-2 m:py-1.5 m:rounded-md m:border m:border-dashed m:border-blue-300 m:bg-white m:text-blue-700 m:hover:bg-blue-50 m:cursor-pointer">+ {t('new version')}</button>
+                  <button type="button" aria-expanded={editing} onClick={() => { setEditing(!editing) }}
+                    className={'m:text-[12px] m:font-semibold m:px-2 m:py-1.5 m:rounded-md m:border m:cursor-pointer ' + (editing ? 'm:border-primary m:bg-blue-50 m:text-primary' : 'm:border-gray-300 m:bg-white m:text-gray-900 m:hover:bg-gray-100')}>{t('change period')}</button>
+                </div>
+
+                {editing && (
+                  <div className="m:flex m:flex-col m:gap-2 m:mt-1 m:p-2.5 m:rounded-md m:bg-gray-50 m:border m:border-gray-200">
+                    <div className="m:flex m:flex-col m:gap-1">
+                      <span className={label}>{t('from')}</span>
+                      <div className="m:grid m:grid-cols-[minmax(0,1fr)_88px] m:gap-2">
+                        {dateInput(current.DateFrom, (date) => {
+                          dateChanged(current, date == null ? undefined : formatDate(date, current.DateFrom, true), current.DateTo)
+                        }, { min: toDateString(min), max: toDateString(current.DateTo ?? max), required: requiredFirst, label: t('date from') })}
+                        {timeInput(current.DateFrom, (value) => {
+                          const valid = setTime(current.DateFrom!, value, '00:00')
+                          if (valid) dateChanged(current, valid, current.DateTo)
+                        }, { max: toTimeString(current.DateTo) ?? '23:59', label: t('time from') })}
+                      </div>
+                    </div>
+                    <div className="m:flex m:flex-col m:gap-1">
+                      <span className={label}>{t('to')}</span>
+                      <div className="m:grid m:grid-cols-[minmax(0,1fr)_88px] m:gap-2">
+                        {dateInput(current.DateTo, (date) => {
+                          dateChanged(current, current.DateFrom, date == null ? undefined : formatDate(date, current.DateFrom, false))
+                        }, { min: toDateString(current.DateFrom ?? min), max: toDateString(max), required: requiredLast, label: t('date to') })}
+                        {timeInput(current.DateTo, (value) => {
+                          const valid = setTime(current.DateTo!, value, '23:59')
+                          if (valid) dateChanged(current, current.DateFrom, valid)
+                        }, { min: toTimeString(current.DateFrom) ?? '00:00', label: t('time to') })}
+                      </div>
+                      <span className="m:text-[12px] m:text-gray-600">{t('empty to help')}</span>
+                    </div>
+                    <div className="m:flex m:items-center m:justify-between m:pt-1">
+                      <span className="m:text-[12px] m:text-gray-600">{t('version n of m', { n: history.findIndex(h => h.InternalId === current.InternalId) + 1, m: history.length })}</span>
+                      <button type="button" disabled={history.length === 1} onClick={() => { removeHistory(current); setEditing(false) }}
+                        className="m:text-[12px] m:px-2.5 m:py-1 m:rounded m:border m:border-red-200 m:bg-white m:text-red-700 m:enabled:hover:bg-red-50 m:cursor-pointer m:disabled:opacity-40 m:disabled:cursor-default">{t('delete version')}</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  )
 }
 
 export default HistoryProperties

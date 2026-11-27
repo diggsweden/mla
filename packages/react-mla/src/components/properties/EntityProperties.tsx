@@ -7,6 +7,7 @@ import { type IEntity } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
 import useMainStore from '../../store/main-store'
 import Property from '../common/Property'
+import LaterValue from './LaterValue'
 import { useEffect, useState } from 'react'
 import Icon from '../common/Icon'
 import useAppStore from '../../store/app-store'
@@ -17,6 +18,8 @@ import { useTranslation } from 'react-i18next'
 
 interface Props {
   entity: IEntity
+  // When an older version is shown: what the latest version has instead, by the field
+  later?: Record<string, string>
 }
 
 function EntityProperties (props: Props) {
@@ -96,12 +99,15 @@ function EntityProperties (props: Props) {
 
   return (
     <div className="m:px-3 m:mt-3">
-      <div>
+      <div className="m:flex m:flex-col m:gap-2">
         {configService.getProperties(entity).map(e => (
-          <Property key={entity.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
-            value={e.property?.Value}
-            config={e.propertyConfiguration}
-            onChange={(newValue) => { entityChanged(entity, newValue, e.propertyConfiguration) }} />
+          <LaterValue key={entity.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
+            later={props.later?.[e.propertyConfiguration.TypeId]}>
+            <Property
+              value={e.property?.Value}
+              config={e.propertyConfiguration}
+              onChange={(newValue) => { entityChanged(entity, newValue, e.propertyConfiguration) }} />
+          </LaterValue>
         ))}
       </div>
       { usingMap && <div>

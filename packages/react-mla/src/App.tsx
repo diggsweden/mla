@@ -43,7 +43,7 @@ export default function App () {
                   <Timeline className="m:pointer-events-auto" />
                 </div>}
               </div>
-              <PropertiesPanel className="m:w-72 m:flex-none m:h-full m:border-l m:border-gray-300 m:pointer-events-auto" />
+              <PropertiesPanel className="m:w-[340px] m:flex-none m:h-full m:border-l m:border-gray-300 m:pointer-events-auto" />
             </div>
           </Chart>
 
