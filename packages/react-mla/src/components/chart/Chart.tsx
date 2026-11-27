@@ -21,6 +21,7 @@ import { useShapes } from './shapes/use-shapes'
 import { useLinkDrawing } from './links/use-link-drawing'
 import { useFocusHighlight } from './links/use-focus-highlight'
 import { internalUpdate } from '../../store/internal-actions'
+import { alignLabelBackgrounds } from '../../utils/vis-label-background'
 
 interface ClickEvent {
   nodes: string[]
@@ -67,7 +68,7 @@ function Chart (props: Props) {
       interaction,
       layout,
       edges: {
-        arrowStrikethrough: true,
+        arrowStrikethrough: false,
         physics: true,
         length: 100,
         font: {
@@ -81,7 +82,7 @@ function Chart (props: Props) {
           multi: 'html',
           background: 'white',
           strokeWidth: 0,
-          vadjust: -10
+          vadjust: -18
         }
       },
       physics: {
@@ -232,6 +233,7 @@ function Chart (props: Props) {
 
     const container = networkNode.current
     const n = new Network(container, data, {})
+    alignLabelBackgrounds(n)
     // The context menu sends its clicks as events on the page, they are passed on to the chart
     const onContextMenuClick = (e: Event) => {
       const { detail } = e as CustomEvent<{ x: number, y: number, button: number }>
