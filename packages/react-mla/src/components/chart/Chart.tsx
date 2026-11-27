@@ -18,6 +18,7 @@ import ShapeTextEditor from './shapes/ShapeTextEditor'
 import { draggedShapeType, isShapeDrag } from './shapes/shape-drag'
 import { intersectsRect } from './shapes/shape-geometry'
 import { useShapes } from './shapes/use-shapes'
+import { useLinkDrawing } from './links/use-link-drawing'
 import { internalUpdate } from '../../store/internal-actions'
 
 interface ClickEvent {
@@ -221,6 +222,7 @@ function Chart (props: Props) {
 
   const networkNode = useRef<HTMLDivElement>(null)
   const { finishNodeDrag, dropShape } = useShapes(networkNode, network, data)
+  useLinkDrawing(networkNode, network, data)
   useLayoutEffect(() => {
     if (networkNode.current == null) {
       return

@@ -2,21 +2,23 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { type IEntityConfiguration, type ILinkConfiguration } from '../../../interfaces/configuration'
 import { type IEntity, type ILink } from '../../../interfaces/data-models'
 import configService from '../../../services/configurationService'
 import viewService from '../../../services/viewService'
 import useMainStore from '../../../store/main-store'
+import useAppStore from '../../../store/app-store'
 import Modal from '../../common/Modal'
 import EntityCreator from '../../modal/EntityCreator'
-import LinkCreator from '../../modal/LinkCreator'
+import LinkDialog from '../../modal/LinkDialog'
+import { type LinkDirection, allows } from '../../modal/link-utils'
 import RibbonEntityButton from '../RibbonEntityButton'
 import RibbonMenuButtonGroup from '../RibbonMenuButtonGroup'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuIconButton from '../RibbonMenuIconButton'
 import RibbonMenuSection from '../RibbonMenuSection'
-import { compareWildcard, generateUUID, getId } from '../../../utils/utils'
+import { generateUUID, getId } from '../../../utils/utils'
 import Icon from '../../common/Icon'
 import { useTranslation } from 'react-i18next'
 
@@ -38,10 +40,15 @@ export default function CreateToolbox (props: Props) {
   const [typeToAdd, setTypeToAdd] = useState(undefined as undefined | IEntityConfiguration)
   const [entityToAdd, setEntityToAdd] = useState(undefined as undefined | IEntity)
 
-  const [linkTypeToAdd, setLinkTypeToAdd] = useState(undefined as undefined | ILinkConfiguration)
-  const [linkToAdd, setLinkToAdd] = useState(undefined as undefined | ILink)
+  // The relation being made: between which two entities, in the order the user gave them, of which types, and which way it points
+  const [linkToMake, setLinkToMake] = useState<{ first: IEntity, second: IEntity, types: ILinkConfiguration[], direction?: LinkDirection } | undefined>()
 
   const [addValid, setAddValid] = useState(false)
+
+  const linkTool = useAppStore((state) => state.linkTool)
+  const setLinkTool = useAppStore((state) => state.setLinkTool)
+  // Two entities that no type of relation can be between
+  const [noLinkTypes, setNoLinkTypes] = useState<{ from: IEntity, to: IEntity } | undefined>()
 
   function createEntity (type: IEntityConfiguration): IEntity {
     return {
@@ -57,25 +64,6 @@ export default function CreateToolbox (props: Props) {
     }
   }
 
-  function createLink (from: IEntity, to: IEntity, type: ILinkConfiguration): ILink {
-    return {
-      Id: generateUUID(),
-      InternalId: generateUUID(),
-      TypeId: type.TypeId,
-      GlobalType: type.GlobalType,
-      LabelLong: '',
-      LabelShort: '',
-      LabelChart: '',
-      SourceSystemId: 'Egenskapad',
-      FromEntityId: from.Id,
-      FromEntityTypeId: from.TypeId,
-      ToEntityId: to.Id,
-      ToEntityTypeId: to.TypeId,
-      Direction: from.TypeId === to.TypeId ? 'BOTH' : 'TO',
-      Properties: []
-    }
-  }
-
   function addEntityOnPosition (x: number, y: number, config: IEntityConfiguration) {
     const ent = createEntity(config)
     ent.PosX = x
@@ -86,18 +74,6 @@ export default function CreateToolbox (props: Props) {
   function addEntityClick(type: IEntityConfiguration) {
     setTypeToAdd(type)
     setEntityToAdd(createEntity(type))
-  }
-
-  function addLinkClick(entity1: IEntity, entity2: IEntity, config: ILinkConfiguration) {
-    setLinkTypeToAdd(config)
-
-    let from = entity1
-    let to = entity2;
-    if (config.AllowedRelations.some(r => compareWildcard(r.FromEntityTypeId, entity2.TypeId) && compareWildcard(r.ToEntityTypeId, entity1.TypeId))) {
-      from = entity2
-      to = entity1
-    }
-    setLinkToAdd(createLink(from, to, config))
   }
 
   function onAddEntity (entity?: IEntity) {
@@ -112,32 +88,50 @@ export default function CreateToolbox (props: Props) {
   function onAbort () {
     setEntityToAdd(undefined)
     setTypeToAdd(undefined)
-
-    setLinkToAdd(undefined)
-    setLinkTypeToAdd(undefined)
   }
 
-  function onAddLink () {
-    if (linkToAdd != null) {
-      addLink(linkToAdd)
-      window.setTimeout(() => { setSelected([getId(linkToAdd)]) }, 100)
-    }
-    setLinkToAdd(undefined)
-    setLinkTypeToAdd(undefined)
+  function onAddLink (link: ILink) {
+    addLink(link)
+    window.setTimeout(() => { setSelected([getId(link)]) }, 100)
+    setLinkToMake(undefined)
+    // A relation is drawn, so the tool is done. A cancelled one leaves it on, to draw it again
+    setLinkTool(false)
   }
 
   function isLinkAvailable (link: ILinkConfiguration) {
-    if (selectedLinks.length === 0 && selectedEntities.length === 2) {
-      const tf = [selectedEntities[0].TypeId, selectedEntities[1].TypeId]
+    return selectedLinks.length === 0 && selectedEntities.length === 2 && allows(link, selectedEntities[0], selectedEntities[1])
+  }
 
-      const result = (
-        link.AllowedRelations.some(r => compareWildcard(r.FromEntityTypeId, tf[0]) && compareWildcard(r.ToEntityTypeId, tf[1])) ||
-        link.AllowedRelations.some(r => compareWildcard(r.ToEntityTypeId, tf[0]) && compareWildcard(r.FromEntityTypeId, tf[1]))
-      )
-
-      return result
+  // A relation drawn in the chart opens the dialog with the first type it can be, and the others to choose from
+  const onDrawn = useEffectEvent((ids: { from: string, to: string }) => {
+    useAppStore.getState().setDrawnLink(undefined)
+    const entities = useMainStore.getState().entities
+    const from = entities[ids.from]?.[0]
+    const to = entities[ids.to]?.[0]
+    if (from == null || to == null) {
+      return
     }
-    return false
+    const types = config.Domain.LinkTypes.filter(l => allows(l, from, to))
+    if (types.length === 0) {
+      setNoLinkTypes({ from, to })
+      return
+    }
+    // A drawn relation points to the entity it ended on, until the user chooses otherwise
+    setLinkToMake({ first: from, second: to, types, direction: 'end' })
+  })
+  useEffect(() => useAppStore.subscribe((state, previous) => {
+    if (state.drawnLink != null && state.drawnLink !== previous.drawnLink) {
+      onDrawn(state.drawnLink)
+    }
+  }), [])
+
+  // Drawing a relation starts from nothing selected, so that what was selected is not taken for part of it
+  function toggleLinkTool () {
+    if (!linkTool) {
+      setSelected([])
+      useMainStore.getState().setSelectedShapeIds([])
+    }
+    setLinkTool(!linkTool)
   }
 
   if (props.show === false) {
@@ -156,8 +150,9 @@ export default function CreateToolbox (props: Props) {
 
     <RibbonMenuSection title={t('link')} >
       <RibbonMenuButtonGroup>
+        <RibbonMenuIconButton active={linkTool} onClick={toggleLinkTool} label={t('draw link')} title={t('draw link help')} icon="conversion_path"></RibbonMenuIconButton>
         {config.Domain.LinkTypes.map(e => (
-          <RibbonMenuIconButton key={e.TypeId} disabled={!isLinkAvailable(e)} onClick={() => { addLinkClick(selectedEntities[0], selectedEntities[1], e) }} label={e.Name} title={e.Description} icon="add_link"></RibbonMenuIconButton>
+          <RibbonMenuIconButton key={e.TypeId} disabled={!isLinkAvailable(e)} onClick={() => { setLinkToMake({ first: selectedEntities[0], second: selectedEntities[1], types: [e] }) }} label={e.Name} title={e.Description} icon="add_link"></RibbonMenuIconButton>
         ))}
       </RibbonMenuButtonGroup>
     </RibbonMenuSection>
@@ -183,23 +178,14 @@ export default function CreateToolbox (props: Props) {
       </Modal>
     }
 
-    {linkTypeToAdd &&
-      <Modal mode="save" valid={addValid} show={linkTypeToAdd != null} title={t('create') + ": " + linkTypeToAdd?.Name} onNegative={onAbort} onPositive={() => { onAddLink() }} sidebar={
-        <div>
-          <div className="m:flex m:justify-center">
-            <Icon name='open_in_full' className="m:text-primary m:relative m:h-16 m:w-16 m:my-2"></Icon>
-          </div>
-          <p className="m:font-medium">
-            {linkTypeToAdd.Name}
-          </p>
-          <p className="m:m-4">
-            {linkTypeToAdd.Description}
-          </p>
-        </div>
-      }>
-        {linkToAdd != null && (
-          <LinkCreator link={linkToAdd} validChanged={e => { setAddValid(e) }} onChange={(e) => { setLinkToAdd(e) }} />
-        )}
+    {linkToMake != null &&
+      <LinkDialog first={linkToMake.first} second={linkToMake.second} types={linkToMake.types} direction={linkToMake.direction}
+        onSave={onAddLink} onCancel={() => { setLinkToMake(undefined) }} />
+    }
+
+    {noLinkTypes != null &&
+      <Modal mode="ok" show={true} title={t('draw link')} onNegative={() => { setNoLinkTypes(undefined) }} onPositive={() => { setNoLinkTypes(undefined) }}>
+        <p className="m:p-6 m:text-left">{t('no link types between', { from: configService.getTypeName(noLinkTypes.from), to: configService.getTypeName(noLinkTypes.to) })}</p>
       </Modal>
     }
   </>

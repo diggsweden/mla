@@ -305,7 +305,8 @@ export function useShapes (containerRef: RefObject<HTMLElement | null>, network:
     // The click is taken before the chart gets it, when it is for a shape. In other cases the chart selects, and moves the nodes
     const onPointerDown = (e: PointerEvent) => {
       const state = current.current
-      if (state.editingShapeId != null) {
+      // The link tool has the mouse while it is on
+      if (state.editingShapeId != null || useAppStore.getState().linkTool) {
         return
       }
 
@@ -406,7 +407,7 @@ export function useShapes (containerRef: RefObject<HTMLElement | null>, network:
 
     // What the mouse is over decides how it looks
     const onHover = (e: PointerEvent) => {
-      if (mode.current != null) {
+      if (mode.current != null || useAppStore.getState().linkTool) {
         return
       }
 

@@ -6,6 +6,7 @@ import '../i18n'
 import * as defaultConfig from '../../../../tools/test/default.json'
 import configService from '../services/configurationService'
 import viewService from '../services/viewService'
+import iconService from '../services/iconService'
 import useAppStore from '../store/app-store'
 import type { IEntity } from '../interfaces/data-models'
 
@@ -15,6 +16,8 @@ export async function initServices (change?: (config: Record<string, unknown>) =
   change?.(config)
   await configService.init(JSON.stringify(config))
   viewService.init()
+  // The icons, which the buttons of the entity types draw
+  iconService.init()
   useAppStore.getState().setView('default')
 }
 

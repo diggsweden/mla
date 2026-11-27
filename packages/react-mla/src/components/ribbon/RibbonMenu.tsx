@@ -32,6 +32,7 @@ function RibbonMenu () {
   function showTab (tab: Tab) {
     setActiveTool(undefined)
     setShapeTool(undefined)
+    useAppStore.getState().setLinkTool(false)
     setActiveTab(tab)
   }
 

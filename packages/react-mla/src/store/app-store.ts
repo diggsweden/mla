@@ -43,6 +43,12 @@ interface AppState {
   // The type of shape that is drawn on the chart next, and the text that is being written
   shapeTool: ShapeType | undefined
   setShapeTool: (type?: ShapeType) => void
+  // A relation is drawn by dragging from one entity to another
+  linkTool: boolean
+  setLinkTool: (on: boolean) => void
+  // The entities a relation was drawn between, by their ids in the chart, until it is made or cancelled
+  drawnLink: { from: string, to: string } | undefined
+  setDrawnLink: (link?: { from: string, to: string }) => void
   editingShapeId: string | undefined
   setEditingShapeId: (id?: string) => void
 
@@ -164,7 +170,16 @@ const useAppStore = create<AppState>((set) => ({
 
   shapeTool: undefined,
   setShapeTool: (type?: ShapeType) => {
-    set(() => ({ shapeTool: type }))
+    // One tool at a time takes the mouse in the chart
+    set(() => (type != null ? { shapeTool: type, linkTool: false } : { shapeTool: type }))
+  },
+  linkTool: false,
+  setLinkTool: (on: boolean) => {
+    set(() => (on ? { linkTool: true, shapeTool: undefined } : { linkTool: false }))
+  },
+  drawnLink: undefined,
+  setDrawnLink: (link?: { from: string, to: string }) => {
+    set(() => ({ drawnLink: link }))
   },
   editingShapeId: undefined,
   setEditingShapeId: (id?: string) => {
