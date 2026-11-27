@@ -74,7 +74,8 @@ function PhaseDocument (props: Props) {
       <div className="m:sticky m:top-0 m:z-[3] m:flex m:bg-white m:border-b m:border-gray-300">
         <div className={rowLabel + ' m:z-[4] m:flex m:items-center m:pl-4 ' + sectionLabel} style={{ width: LABEL_W }}>{setup.PhaseLabel ?? t('phase')}</div>
         {phases.map((p, i) => (
-          <div key={p.id} className="m:relative m:shrink-0 m:py-2.5 m:pr-3.5 m:pl-2.5" style={{ width: PHASE_W }}>
+          // The band is in the middle of its cell, so that the arrow, in the middle of the cell, is in the middle of the band also when another band is taller
+          <div key={p.id} className="m:relative m:shrink-0 m:py-2.5 m:pr-3.5 m:pl-2.5 m:flex m:flex-col m:justify-center" style={{ width: PHASE_W }}>
             <div className={'m:flex m:justify-between m:items-baseline m:gap-2 m:px-3 m:py-2.5 m:rounded' + (p.color ? '' : ' m:bg-blue-50 m:text-blue-950')}
               style={p.color ? phaseStyle(p.color) : undefined}>
               <span className="m:text-[14px] m:font-bold">{p.name}</span>
