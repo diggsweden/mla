@@ -6,6 +6,7 @@ import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { type ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
 import Property from '../common/Property'
+import { helpOf } from '../../utils/properties'
 import { produce } from 'immer'
 import { IPropertyConfiguration } from '../../interfaces/configuration'
 
@@ -94,14 +95,6 @@ function LinkCreator (props: Props) {
       })}
     </div>
   )
-}
-
-// The description of a field, shown below it, when it says more than the name of the field does
-function helpOf (name: string, description?: string): string | undefined {
-  const text = description?.trim()
-  if (!text) return undefined
-  const plain = (value: string) => value.toLowerCase().replace(/[^a-zåäöæø0-9]/g, '')
-  return plain(text) === plain(name) ? undefined : text
 }
 
 export default LinkCreator
