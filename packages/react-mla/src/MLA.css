@@ -71,3 +71,25 @@
     outline: none;
   }
 }
+
+/*
+  A list looks like a text field everywhere in MLA. A list has the look of the browser, which on a Mac has another height,
+  background and arrow than a text field: it gets the border and background its classes give, like a text field, and an arrow of its own.
+*/
+.mla-component select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5l3 3 3-3' fill='none' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.4rem center;
+  padding-right: 1.6rem;
+}
+
+/* In the dialog for a new relation, all the fields have one height */
+.mla-form-fields select,
+.mla-form-fields input[type='text'],
+.mla-form-fields input[type='date'],
+.mla-form-fields input[type='number'] {
+  box-sizing: border-box;
+  height: 2rem;
+  padding-left: 0.5rem;
+}
