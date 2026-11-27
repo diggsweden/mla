@@ -6,6 +6,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, test } from 'vitest'
 import { render } from 'vitest-browser-react'
 import React from 'react'
 import CreateToolbox from './CreateToolbox'
+import LinkMaker from '../../modal/LinkMaker'
 import useAppStore from '../../../store/app-store'
 import useMainStore from '../../../store/main-store'
 import { initServices, person } from '../../../test-utils/setup'
@@ -21,7 +22,7 @@ afterAll(async () => {
 
 beforeEach(() => {
   useMainStore.setState({ entities: {}, links: {} })
-  useAppStore.setState({ linkTool: false, drawnLink: undefined })
+  useAppStore.setState({ linkTool: false, linkFrom: undefined, drawnLink: undefined })
   useMainStore.getState().addEntity(
     person('anna', { personE2: 'Anna' }),
     person('bo', { personE2: 'Bo' }),
@@ -29,11 +30,14 @@ beforeEach(() => {
   )
 })
 
+// The ribbon asks for relations, and LinkMaker, which is always there in the app, opens the dialog for them
+const Ribbon = () => <><CreateToolbox /><LinkMaker /></>
+
 const linkTypes = () => Object.values(useMainStore.getState().links).map(v => v[0].TypeId)
 
 describe('the button to draw a relation', () => {
   test('can always be chosen, turns the tool on and off, and unselects what was selected', async () => {
-    const screen = await render(<CreateToolbox />)
+    const screen = await render(<Ribbon />)
     useMainStore.getState().setSelected(['annaperson'])
     useMainStore.getState().setSelectedShapeIds(['shape'])
     const button = screen.getByRole('button', { name: 'Draw relation' })
@@ -50,8 +54,8 @@ describe('the button to draw a relation', () => {
 
 describe('a relation drawn between two entities', () => {
   test('opens the dialog with who it is between and the types of relation there can be, and makes the one chosen', async () => {
-    const screen = await render(<CreateToolbox />)
-    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse' })
+    const screen = await render(<Ribbon />)
+    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse', drawn: true })
 
     await expect.element(screen.getByRole('heading', { name: 'New relation' })).toBeInTheDocument()
     await expect.element(screen.getByRole('region', { name: 'Between' }).getByText('Anna', { exact: true })).toBeInTheDocument()
@@ -75,20 +79,20 @@ describe('a relation drawn between two entities', () => {
     const direction = (name: string | RegExp) => screen.getByRole('radiogroup', { name: 'Direction' }).getByRole('radio', { name })
 
     // The type of relation has the event as its start, also when it is drawn from the person
-    const screen = await render(<CreateToolbox />)
-    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse' })
+    const screen = await render(<Ribbon />)
+    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse', drawn: true })
     await expect.element(direction(/^Toward/).first()).toHaveAttribute('aria-checked', 'true')
     await screen.getByRole('button', { name: 'Create relation' }).click()
     expect(pointsTo()).toBe('mote')
 
     useMainStore.setState({ links: {} })
-    useAppStore.getState().setDrawnLink({ from: 'motehandelse', to: 'annaperson' })
+    useAppStore.getState().setDrawnLink({ from: 'motehandelse', to: 'annaperson', drawn: true })
     await expect.element(direction('Toward Anna')).toHaveAttribute('aria-checked', 'true')
     await screen.getByRole('button', { name: 'Create relation' }).click()
     expect(pointsTo()).toBe('anna')
 
     useMainStore.setState({ links: {} })
-    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse' })
+    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse', drawn: true })
     await direction('Both ways').click()
     // The direction is kept when another type of relation is chosen
     await screen.getByRole('radio', { name: /^Relation/ }).click()
@@ -97,8 +101,8 @@ describe('a relation drawn between two entities', () => {
   })
 
   test('between two of a kind has no choice of type when there is only one', async () => {
-    const screen = await render(<CreateToolbox />)
-    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'boperson' })
+    const screen = await render(<Ribbon />)
+    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'boperson', drawn: true })
     await expect.element(screen.getByRole('heading', { name: 'New relation' })).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: /^Relation/ }).elements()).toHaveLength(0)
     await expect.element(screen.getByRole('region', { name: 'Between' }).getByText('Relation', { exact: true })).toBeInTheDocument()
@@ -109,8 +113,8 @@ describe('a relation drawn between two entities', () => {
       const domain = config.Domain as { LinkTypes: Array<{ TypeId: string }> }
       domain.LinkTypes = domain.LinkTypes.filter(l => l.TypeId !== 'relation')
     })
-    const screen = await render(<CreateToolbox />)
-    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'boperson' })
+    const screen = await render(<Ribbon />)
+    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'boperson', drawn: true })
     await expect.element(screen.getByText('There is no type of relation between Person and Person.')).toBeInTheDocument()
     await screen.getByRole('button', { name: /ok/i }).click()
     expect(linkTypes()).toEqual([])
@@ -120,14 +124,14 @@ describe('a relation drawn between two entities', () => {
 
 describe('the tool to draw a relation', () => {
   test('is turned off when a relation is made, and stays on when it is cancelled', async () => {
-    const screen = await render(<CreateToolbox />)
+    const screen = await render(<Ribbon />)
     useAppStore.getState().setLinkTool(true)
 
-    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse' })
+    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse', drawn: true })
     await screen.getByRole('button', { name: 'Cancel' }).click()
     expect(useAppStore.getState().linkTool).toBe(true)
 
-    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse' })
+    useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'motehandelse', drawn: true })
     await screen.getByRole('button', { name: 'Create relation' }).click()
     expect(useAppStore.getState().linkTool).toBe(false)
   })
@@ -135,7 +139,7 @@ describe('the tool to draw a relation', () => {
 
 describe('a relation made with a button of its type', () => {
   test('opens the same dialog for the two chosen entities, and can always be cancelled', async () => {
-    const screen = await render(<CreateToolbox />)
+    const screen = await render(<Ribbon />)
     useMainStore.getState().setSelected(['annaperson', 'motehandelse'])
     // The buttons of the types of relation can be chosen when two entities are
     const button = screen.getByRole('button', { name: 'Händelserelation' })

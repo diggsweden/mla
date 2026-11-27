@@ -18,6 +18,7 @@ import WorkflowProgress from '../modal/WorkflowProgress'
 import configService from '../../services/configurationService'
 
 import ContextMenu from "./ContextMenu"
+import LinkMaker from "../modal/LinkMaker"
 import { useTranslation } from 'react-i18next'
 
 interface Props {
@@ -117,9 +118,10 @@ function AppShortcuts (props: Props) {
   }
 
   const appRef = useRef<HTMLDivElement>(null)
+  // Backspace is the key that deletes on a Mac
   useKeyDown(() => {
     onDelete()
-  }, appRef, ['Delete'])
+  }, appRef, ['Delete', 'Backspace'])
 
   useKeyDown(() => {
     copy()
@@ -140,6 +142,7 @@ function AppShortcuts (props: Props) {
   return (
     <>
       <ContextMenu copy={copy} paste={paste} delete={() => { setDelete(true) }}></ContextMenu>
+      <LinkMaker />
       <Modal mode="accept" show={showDelete} title={t('delete')} onNegative={() => { setDelete(false) }} onPositive={performDelete}>
         <Delete entities={selectedEntities} links={selectedLinks} shapes={selectedShapes} />
       </Modal>

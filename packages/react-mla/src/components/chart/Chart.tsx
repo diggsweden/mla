@@ -9,14 +9,14 @@ import useAppStore from '../../store/app-store'
 import useMainStore from '../../store/main-store'
 import useKeyDown from '../../effects/keydown'
 import { areArraysEqualSets, isSubSetOf } from '../../utils/utils'
-import useMultiselect from '../../utils/vis-multiselect-hook'
+import useMultiselect, { type PointCallback } from '../../utils/vis-multiselect-hook'
 
 import type { IEntity } from '../../interfaces/data-models'
 import { produce } from 'immer'
 import ContentRenderer from './elements/ContentRenderer'
 import ShapeTextEditor from './shapes/ShapeTextEditor'
 import { draggedShapeType, isShapeDrag } from './shapes/shape-drag'
-import { intersectsRect } from './shapes/shape-geometry'
+import { containsPoint, intersectsRect } from './shapes/shape-geometry'
 import { useShapes } from './shapes/use-shapes'
 import { useLinkDrawing } from './links/use-link-drawing'
 import { useFocusHighlight } from './links/use-focus-highlight'
@@ -337,7 +337,25 @@ function Chart (props: Props) {
     dropEntity(network?.DOMtoCanvas({ x: event.clientX - offset.x, y: event.clientY - offset.y }) ?? null)
   }, [network, dropShape])
 
-  useMultiselect(networkNode, network, select)
+  // A right click on something that is not selected selects only it, and keeps the selection when it is part of it.
+  // On a shape, the shape was selected when the button was pressed. Elsewhere, nothing is selected
+  const selectAt = useCallback<PointCallback>((id, point) => {
+    if (id != null) {
+      if (!selectedIds.includes(id)) {
+        setSelectedIds([id])
+        setSelectedShapeIds([])
+      }
+      return
+    }
+    const scale = network?.getScale() ?? 1
+    if (shapes.some(shape => containsPoint(shape, point, 6 / scale))) {
+      return
+    }
+    setSelectedIds([])
+    setSelectedShapeIds([])
+  }, [network, selectedIds, setSelectedIds, setSelectedShapeIds, shapes])
+
+  useMultiselect(networkNode, network, select, selectAt)
 
   useLayoutEffect(() => {
     if (network) {

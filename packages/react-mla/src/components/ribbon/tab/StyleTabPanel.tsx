@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { produce } from 'immer'
 import useMainStore from '../../../store/main-store'
 import viewService from '../../../services/viewService'
 import RibbonMenuSection from '../RibbonMenuSection'
@@ -13,6 +12,7 @@ import RibbonMenuDropDownIconButton from '../RibbonMenuDropDownIconButton'
 import ColorPalette from '../../common/ColorPalette'
 import { type LinkDashStyle } from '../../../interfaces/data-models'
 import { useTranslation } from 'react-i18next'
+import { setIconColor as setColor, setContourColor as setContour, setLinkStyle as setStyle } from '../../../utils/chart-actions'
 
 function StyleTabPanel () {
   const { t } = useTranslation();
@@ -21,42 +21,16 @@ function StyleTabPanel () {
   const selectedEntities = useMainStore((state) => state.selectedEntities)
   const selectedLinks = useMainStore((state) => state.selectedLinks)
 
-  const updateEntity = useMainStore((state) => state.updateEntity)
-  const updateLink = useMainStore((state) => state.updateLink)
-
   function setIconColor (color: string | undefined) {
-    updateEntity(
-      ...selectedEntities.map(e => produce(e, draft => {
-        draft.Color = color
-      }))
-    )
-    updateLink(
-      ...selectedLinks.map(e => produce(e, draft => {
-        draft.Color = color
-      }))
-    )
+    setColor(selectedEntities, selectedLinks, color)
   }
 
   function setContourColor (color: string | undefined) {
-    updateEntity(
-      ...selectedEntities.map(e => produce(e, draft => {
-        draft.MarkColor = color
-        draft.MarkIcon = color !== undefined ? 'outlined_circle' : undefined
-      }))
-    )
-    updateLink(
-      ...selectedLinks.map(e => produce(e, draft => {
-        draft.MarkColor = color
-      }))
-    )
+    setContour(selectedEntities, selectedLinks, color)
   }
 
   function setLinkStyle (style: LinkDashStyle | undefined) {
-    updateLink(
-      ...selectedLinks.map(e => produce(e, draft => {
-        draft.Style = style
-      }))
-    )
+    setStyle(selectedLinks, style)
   }
 
   return <div className="m:flex m:text-center m:h-full m:p-1">

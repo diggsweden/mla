@@ -18,11 +18,13 @@ interface ChartData {
 }
 
 // While the link tool is on, a relation is drawn by pressing on an entity, dragging and letting go on another.
-// The line follows the mouse and snaps to the entity it is over. Letting go elsewhere, or Escape, cancels it
+// The line follows the mouse and snaps to the entity it is over. Letting go elsewhere, or Escape, cancels it.
+// Started from the menu of an entity, the line starts there and follows the mouse until another entity is clicked
 export function useLinkDrawing (containerRef: RefObject<HTMLElement | null>, network: Network | undefined, data: ChartData) {
   const linkTool = useAppStore((state) => state.linkTool)
   const setLinkTool = useAppStore((state) => state.setLinkTool)
   const setDrawnLink = useAppStore((state) => state.setDrawnLink)
+  const linkFrom = useAppStore((state) => state.linkFrom)
   const drag = useRef<{ from: string, to?: string, point: Point } | undefined>(undefined)
 
   // While it is dragged, the entity it starts from, and the one it would end on, get a light blue background,
@@ -111,6 +113,8 @@ export function useLinkDrawing (containerRef: RefObject<HTMLElement | null>, net
         chart.redraw()
       }
     }
+    // Started from the menu: the line is drawn from the entity until a click
+    let clicked = false
     const onMove = (e: PointerEvent) => {
       if (drag.current == null) return
       const p = dom(e)
@@ -123,7 +127,7 @@ export function useLinkDrawing (containerRef: RefObject<HTMLElement | null>, net
       const to = nodeAt(dom(e))
       stop()
       if (current != null && to != null && to !== current.from) {
-        setDrawnLink({ from: current.from, to })
+        setDrawnLink({ from: current.from, to, drawn: true })
       }
     }
 
@@ -135,6 +139,21 @@ export function useLinkDrawing (containerRef: RefObject<HTMLElement | null>, net
       e.preventDefault()
       e.stopPropagation()
       const p = dom(e)
+      // A click ends the line that was started from the menu: on another entity it is made, elsewhere the tool is done
+      if (clicked) {
+        const current = drag.current
+        const to = nodeAt(p)
+        clicked = false
+        stop()
+        if (current != null && to != null && to !== current.from) {
+          // The tool stays on, as for a drawn relation, but no longer starts from the entity of the menu
+          useAppStore.setState({ linkFrom: undefined })
+          setDrawnLink({ from: current.from, to, drawn: true })
+        } else {
+          setLinkTool(false)
+        }
+        return
+      }
       const from = nodeAt(p)
       if (from == null) {
         return
@@ -152,7 +171,7 @@ export function useLinkDrawing (containerRef: RefObject<HTMLElement | null>, net
     }
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (drag.current != null) {
+        if (drag.current != null && !clicked) {
           stop()
         } else {
           setLinkTool(false)
@@ -163,6 +182,12 @@ export function useLinkDrawing (containerRef: RefObject<HTMLElement | null>, net
     container.addEventListener('pointerdown', onPointerDown, true)
     container.addEventListener('pointermove', onHover)
     window.addEventListener('keydown', onKeyDown)
+    if (linkFrom != null && data.nodes.get(linkFrom) != null) {
+      clicked = true
+      drag.current = { from: linkFrom, point: chart.getPosition(linkFrom) }
+      window.addEventListener('pointermove', onMove)
+      chart.redraw()
+    }
     return () => {
       container.removeEventListener('pointerdown', onPointerDown, true)
       container.removeEventListener('pointermove', onHover)
@@ -170,5 +195,5 @@ export function useLinkDrawing (containerRef: RefObject<HTMLElement | null>, net
       container.style.cursor = ''
       stop()
     }
-  }, [containerRef, network, data, linkTool, setLinkTool, setDrawnLink])
+  }, [containerRef, network, data, linkTool, linkFrom, setLinkTool, setDrawnLink])
 }

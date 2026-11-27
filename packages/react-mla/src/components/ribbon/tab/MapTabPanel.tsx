@@ -9,8 +9,7 @@ import RibbonMenuSection from '../RibbonMenuSection'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import { type IEntity } from '../../../interfaces/data-models'
 import configService from '../../../services/configurationService'
-import { getId } from '../../../utils/utils'
-import { produce } from 'immer'
+import { setShownOnMap } from '../../../utils/chart-actions'
 import { useTranslation } from 'react-i18next'
 
 function MapTabPanel () {
@@ -19,7 +18,6 @@ function MapTabPanel () {
 
   const selectedEntities = useMainStore((state) => state.selectedEntities)
   const entities = useMainStore((state) => state.entities)
-  const update = useMainStore((state) => state.updateEntity)
 
   const setShowMap = useAppStore((state) => state.setShowMap)
   const showMap = useAppStore((state) => state.showMap)
@@ -29,19 +27,7 @@ function MapTabPanel () {
   }
 
   function set (ids: IEntity[], show: boolean) {
-    const change = [] as IEntity[]
-
-    for (const list of ids.map(e => entities[getId(e)])) {
-      for (const e of list) {
-        if (e.Coordinates && e.ShowOnMap !== show) {
-          change.push(produce(e, draft => {
-            draft.ShowOnMap = show
-          }))
-        }
-      }
-    }
-
-    update(...change)
+    setShownOnMap(ids, show)
   }
 
   return <div className="m:flex m:text-center m:h-full m:p-1">

@@ -7,23 +7,12 @@ import RibbonMenuDivider from '../RibbonMenuDivider'
 import RibbonMenuButtonGroup from '../RibbonMenuButtonGroup'
 import RibbonMenuIconButton from '../RibbonMenuIconButton'
 import configService from '../../../services/configurationService'
-import useMainStore from '../../../store/main-store'
-import { arrayDistinct, getId } from '../../../utils/utils'
+import { selectType } from '../../../utils/chart-actions'
 import SelectToolbox from '../toolbox/SelectToolbox'
 import { useTranslation } from 'react-i18next'
 
 function ToolsTabPanel () {
   const { t } = useTranslation();
-  const selection = useMainStore((state) => state.selectedIds)
-  const setSelected = useMainStore((state) => state.setSelected)
-  const entities = useMainStore((state) => state.entities)
-
-  function selectType (typeId: string) {
-    const ids = Object.values(entities).filter(e => e[0].TypeId === typeId).map(e => getId(e[0]))
-    const update = arrayDistinct([...ids, ...selection])
-    setSelected(update)
-  }
-
   return <div className="m:flex m:text-center m:h-full m:p-1">
     <RibbonMenuSection title={t('select type')}>
       <RibbonMenuButtonGroup>

@@ -83,7 +83,10 @@ const canvasify = (network: Network, DOMx: number, DOMy: number) => {
 
 const correctRange = (start: number, end: number) => start < end ? [start, end] : [end, start]
 
-function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: Network | undefined, selectCallback: (startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) => void) {
+// A right click selects what is under the mouse, by its id in the chart, or nothing. The point is where it is in the chart
+export type PointCallback = (id: string | undefined, point: { x: number, y: number }) => void
+
+function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: Network | undefined, selectCallback: (startX: number, endX: number, startY: number, endY: number, ctxMenu: boolean) => void, pointCallback: PointCallback) {
   const drag = useRef(false)
   const pan = useRef<{ x: number, y: number, view: { x: number, y: number }, moved: boolean } | null>(null)
   const DOMRect = useRef({ startX: 0, endX: 0, startY: 0, endY: 0 })
@@ -106,17 +109,15 @@ function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: N
       selectCallback(startX - 5, endX + 5, startY - 5, endY + 5, false)
     }
 
+    // The entity under the mouse, or else the relation. Only that is selected, not the relations of the entity too
     const selectPoint = () => {
       const rect = DOMRect.current
-      const [x, y] = canvasify(network, rect.startX, rect.startY)
-
-      // Size of icon is 40
-      const [xi] = canvasify(network, 0, 0)
-      const [xi2] = canvasify(network, 40, 0)
-      const iSize = Math.round(Math.abs((xi2 - xi)))
-
-      selectCallback(x - iSize, x + iSize, y - iSize, y + iSize, true)
+      const dom = { x: rect.startX, y: rect.startY }
+      const node = network.getNodeAt(dom) as string | undefined
+      const edge = node == null ? network.getEdgeAt(dom) as string | undefined : undefined
+      pointCallback(node ?? edge, network.DOMtoCanvas(dom))
     }
+    const chartPoint = () => network.DOMtoCanvas({ x: DOMRect.current.startX, y: DOMRect.current.startY })
 
     // The right button moves the view when dragged and opens the context menu when clicked, see down and up
     const contextMenu = (e: MouseEvent) => {
@@ -201,7 +202,8 @@ function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: N
 
         if (button === RIGHT_CLICK) {
           selectPoint()
-          showContextMenu(x, y)
+          const bounds = container.getBoundingClientRect()
+          showContextMenu(x + bounds.x, y + bounds.y, chartPoint())
         }
       } else {
         const { button } = e
@@ -212,7 +214,7 @@ function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: N
             selectPoint()
 
             setGeo()
-            showContextMenu(e.clientX, e.clientY)
+            showContextMenu(e.clientX, e.clientY, chartPoint())
           }
         } else if (button === LEFT_CLICK && drag.current) {
           // When mouseup, select the nodes in the rectangle. A click is left to vis-network, which selects or deselects
@@ -237,7 +239,7 @@ function useMultiselect (containerRef: RefObject<HTMLElement | null>, network: N
       container.removeEventListener('mousemove', move)
       container.removeEventListener('mouseup', up)
     }
-  }, [containerRef, network, selectCallback, setGeo, showContextMenu])
+  }, [containerRef, network, selectCallback, pointCallback, setGeo, showContextMenu])
 
   useEffect(() => {
     const container = containerRef.current

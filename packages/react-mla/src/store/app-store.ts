@@ -14,9 +14,15 @@ import type { ShapeType } from '../interfaces/data-models/shape'
 export type Tab = 'archive' | 'start' | 'search find' | 'analysis' | 'draw' | 'select' | 'look feel' | 'show' | 'map'
 export type Tool = 'search' | 'explore' | 'import' | 'activity'
 
+// A relation to be made between two entities, by their ids in the chart. A drawn one points to the entity it ended on,
+// and it can be of the types given, or else of any type that can be between the two
+export interface LinkRequest { from: string, to: string, typeIds?: string[], drawn?: boolean }
+
 interface AppState {
   contextmenuPosition: { x: number, y: number } | undefined
-  showContextMenu: (x: number, y: number) => void
+  // Where in the chart the menu was opened, for what is made there
+  contextmenuChartPosition: { x: number, y: number } | undefined
+  showContextMenu: (x: number, y: number, chart?: { x: number, y: number }) => void
   hideContextMenu: () => void
 
   selectedGeoFeature: IGeoFeatureBounds | undefined
@@ -54,9 +60,12 @@ interface AppState {
   // A relation is drawn by dragging from one entity to another
   linkTool: boolean
   setLinkTool: (on: boolean) => void
-  // The entities a relation was drawn between, by their ids in the chart, until it is made or cancelled
-  drawnLink: { from: string, to: string } | undefined
-  setDrawnLink: (link?: { from: string, to: string }) => void
+  // The entity a relation is drawn from when it was started from the menu: the line follows the mouse until another entity is clicked
+  linkFrom: string | undefined
+  startLinkFrom: (id: string) => void
+  // The entities a relation is to be made between, by their ids in the chart, until it is made or cancelled
+  drawnLink: LinkRequest | undefined
+  setDrawnLink: (link?: LinkRequest) => void
   editingShapeId: string | undefined
   setEditingShapeId: (id?: string) => void
 
@@ -106,14 +115,17 @@ const useAppStore = create<AppState>((set) => ({
   },
 
   contextmenuPosition: undefined,
-  showContextMenu: (x: number, y: number) => {
+  contextmenuChartPosition: undefined,
+  showContextMenu: (x: number, y: number, chart?: { x: number, y: number }) => {
     set(() => ({
-      contextmenuPosition: { x, y }
+      contextmenuPosition: { x, y },
+      contextmenuChartPosition: chart
     }))
   },
   hideContextMenu: () => {
     set(() => ({
-      contextmenuPosition: undefined
+      contextmenuPosition: undefined,
+      contextmenuChartPosition: undefined
     }))
   },
 
@@ -206,10 +218,14 @@ const useAppStore = create<AppState>((set) => ({
   },
   linkTool: false,
   setLinkTool: (on: boolean) => {
-    set(() => (on ? { linkTool: true, shapeTool: undefined } : { linkTool: false }))
+    set(() => (on ? { linkTool: true, shapeTool: undefined } : { linkTool: false, linkFrom: undefined }))
+  },
+  linkFrom: undefined,
+  startLinkFrom: (id: string) => {
+    set(() => ({ linkTool: true, shapeTool: undefined, linkFrom: id }))
   },
   drawnLink: undefined,
-  setDrawnLink: (link?: { from: string, to: string }) => {
+  setDrawnLink: (link?: LinkRequest) => {
     set(() => ({ drawnLink: link }))
   },
   editingShapeId: undefined,
