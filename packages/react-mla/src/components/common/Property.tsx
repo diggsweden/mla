@@ -7,6 +7,7 @@ import type { ChangeEvent } from 'react'
 import { type IPropertyConfiguration } from '../../interfaces/configuration'
 import Toggle from './Toggle'
 import { DateTime } from 'luxon'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   config: IPropertyConfiguration
@@ -19,6 +20,7 @@ interface Props {
 }
 
 function Property (props: Props) {
+  const { t } = useTranslation()
   const inputRef = createRef<HTMLInputElement>()
   const textRef = createRef<HTMLTextAreaElement>()
   const selectRef = createRef<HTMLSelectElement>()
@@ -124,10 +126,13 @@ function Property (props: Props) {
     }, 250)
   }
 
+  // A value that is filled in but does not match the format of the field, which is told below it. An empty field that must be filled in is only marked
+  const mismatch = !valid && value != null && value !== '' && config.FieldType !== 'File'
+
   function getInput () {
     const inputClass = (valid ? 'm:border-gray-300 ' : 'm:border-red-500 m:bg-red-200 ') + 'm:bg-white m:border m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:block m:w-full m:p-1'
     switch (config.FieldType) {
-      case 'String': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="text" required={config.Required} pattern={config.FieldValidation} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass}></input>
+      case 'String': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="text" required={config.Required} pattern={config.FieldValidation} aria-invalid={mismatch} aria-describedby={mismatch ? key + '-error' : undefined} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass}></input>
       case 'Multiline': return <textarea id={key} ref={textRef} readOnly={readOnly ?? false} required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + ' min-h-[48px] max-h-[200px] overflow-y-auto'}></textarea>
       case 'Date': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="date" required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChangeDate(e.target.valueAsDate ?? undefined) }} className={inputClass}></input>
       case 'Number': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="number" required={config.Required} value={value != null && value !== '' ? Number(value) : ''} onChange={(e) => { handleChange(e.target.value ? Number(e.target.value) : undefined) }} className={inputClass}></input>
@@ -151,6 +156,12 @@ function Property (props: Props) {
         <label htmlFor={key} className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={config.Description}>{config.Name ?? config.GlobalType}</label>
       }
       {getInput()}
+      {mismatch &&
+        <p id={key + '-error'} className="m:mt-1 m:flex m:items-center m:gap-1 m:text-[12px] m:text-red-700">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true" className="m:shrink-0"><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 16h.01" /></svg>
+          {config.FieldValidationMessage || t('invalid format')}
+        </p>
+      }
     </div>
   )
 }

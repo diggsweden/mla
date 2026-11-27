@@ -16,7 +16,7 @@ import Modal from '../common/Modal'
 import TableTool from '../tools/TableTool'
 import { toDateString } from '../../utils/date'
 import { internalAdd } from '../../store/internal-actions'
-import Button from '../common/Button'
+import { NoResults, ResultError, ResultNotice, secondaryButton, sectionLabel } from '../tools/ToolParts'
 import { useTranslation } from 'react-i18next'
 import { type EventGroup, buildEventGroups } from './event-groups'
 
@@ -24,6 +24,8 @@ interface ItemResultProps {
   result: IQueryResponse
   seeds?: IEntity[]
   className?: string
+  // Asks the service again, when it failed
+  onRetry?: () => void
 }
 
 const last = 'zzzzzzzzzzzz'
@@ -207,24 +209,31 @@ function ItemResultList (props: ItemResultProps) {
     }
   }
 
+  const groupKeys = Object.keys(mainEntities)
+  const empty = (groupKeys.length + eventGroups.length) === 0
+  // What the service found, before any of it was added: a text with it is a message, and a text without it is an error
+  const found = result.Entities.length > 0 || (result.Events?.length ?? 0) > 0
+  const hasSeedGroups = groupKeys.some(k => k !== last)
+  // The cards that are shown, also an entity that was fetched for and is in the result again
+  const shown = Object.values(mainEntities).reduce((n, groups) => n + groups.length, 0) + eventGroups.length
+
   return <div className={props.className}>
-    {result.ErrorMessage && <div className="m:bg-red-100 m:border m:border-red-400 m:text-red-700 m:px-4 m:py-3 m:rounded-sm m:relative m:mb-3" role="alert">
-      <span className="m:block">{result.ErrorMessage}</span>
-    </div>
-    }
-    {count > 1 &&
-      <div className="m:relative">
-        <p className="m:leading-normal m:uppercase m:text-center m:mb-2">{t('results')}</p>
-        <Button className="m:right-0 m:top-0" onClick={addAll}>{t('add all')}</Button>
+    {/* A service may tell something with what it found, which is then a message and not an error */}
+    {result.ErrorMessage && (found ? <ResultNotice message={result.ErrorMessage} /> : <ResultError message={result.ErrorMessage} onRetry={props.onRetry} />)}
+    {!empty &&
+      <div className="m:flex m:items-center m:justify-between m:px-3 m:pt-3 m:pb-1.5">
+        <span className={sectionLabel}>{t('n hits', { count: shown })}</span>
+        {count > 1 && <button type="button" onClick={addAll} className={secondaryButton}>{t('add all')}</button>}
       </div>
     }
-    {Object.keys(mainEntities).length > 0 &&
-      <div>
-        {Object.keys(mainEntities).map(k => <div key={k}>
+    {groupKeys.length > 0 &&
+      <div className="m:flex m:flex-col m:gap-3 m:px-2.5 m:pb-2">
+        {groupKeys.map(k => <div key={k} className="m:flex m:flex-col m:gap-1.5">
           {k !== last && seeds &&
-            <div className="m:text-lg m:border-t m:border-gray-400 m:pt-2 m:mb-1 m:font-semibold">
-              <span className=''>{seeds.find(s => getId(s) === k)!.LabelShort}</span>
-            </div>
+            <span className="m:text-[13px] m:font-bold m:px-1">{t('linked to', { name: seeds.find(s => getId(s) === k)?.LabelShort })}</span>
+          }
+          {k === last && hasSeedGroups &&
+            <span className="m:text-[13px] m:font-bold m:px-1">{t('not linked to selected')}</span>
           }
           {mainEntities[k].map(e => (
             <ItemResult key={getId(e.primary)} item={e} onClick={() => { addGroup(e, k) }} />
@@ -233,31 +242,30 @@ function ItemResultList (props: ItemResultProps) {
         )}
       </div>
     }
-    {eventGroups.map(e => (<div key={e.GroupId} className="m:w-full m:rounded-sm m:border-solid m:border m:bg-white m:mb-1 m:p-2 m:relative">
-      <span className='m:absolute m:top-4 m:-right-4 m:-translate-y-1/2' onClick={() => { addEvents(e) }}>
-        <button className="m:text-white m:bg-primary m:rounded-full m:text-lg m:px-2 m:m-2 m:h-5 m:w-5 m:leading-5 m:flex m:justify-center">+</button>
-      </span>
-      <div onClick={() => { setShowEvents(e.Events) }}>
-        <div>
-          <span className="m:h-5 m:w-5 m:inline-flex" >
-            <Icon name='calendar_view_day' className="m:text-primary m:relative m:mt-1"></Icon>
-          </span>
-          <span className=''>
-            {e.Name} - {e.Events.length} {t('events')}
-          </span>
-        </div>
-        <div>
-          {toDateString(e.Events[e.Events.length - 1].Date)} - {toDateString(e.Events[0].Date)}
-        </div>
+    {eventGroups.length > 0 &&
+      <div className="m:flex m:flex-col m:gap-1.5 m:px-2.5 m:pb-2">
+        {eventGroups.map(e => (
+          <div key={e.GroupId} className="m:flex m:items-center m:gap-2 m:rounded-md m:border m:border-gray-300 m:bg-white m:p-2">
+            <span className="m:w-[26px] m:h-[26px] m:shrink-0 m:rounded-full m:bg-gray-100 m:flex m:items-center m:justify-center">
+              <Icon name='calendar_view_day' className="m:h-3.5 m:w-3.5 m:text-primary" />
+            </span>
+            <span className="m:flex m:flex-col m:min-w-0 m:flex-1">
+              <span className="m:text-[13px] m:font-semibold m:truncate">{e.Name} · {t('n events', { count: e.Events.length })}</span>
+              <span className="m:text-[11px] m:text-gray-600">
+                {toDateString(e.Events[e.Events.length - 1].Date)} – {toDateString(e.Events[0].Date)} · <button type="button" onClick={() => { setShowEvents(e.Events) }} className="m:text-blue-700 m:hover:underline m:cursor-pointer">{t('show as table')}</button>
+              </span>
+            </span>
+            <button type="button" aria-label={t('add events', { name: e.Name })} title={t('add events', { name: e.Name })} onClick={() => { addEvents(e) }}
+              className="m:w-[26px] m:h-[26px] m:shrink-0 m:rounded m:border m:border-blue-300 m:bg-blue-50 m:text-blue-700 m:text-[16px] m:font-semibold m:leading-none m:hover:bg-blue-100 m:cursor-pointer">+</button>
+          </div>
+        ))}
       </div>
-    </div>
-    ))
     }
-    {(Object.keys(mainEntities).length + eventGroups.length) === 0 &&
-      <p className="m:italic">{t('no results')}</p>
-    }
+    {!empty && <p className="m:text-[11px] m:text-gray-600 m:text-center m:px-3 m:pb-3">{t('drag to chart help')}</p>}
+    {empty && found && <p role="status" className="m:text-[13px] m:text-gray-600 m:text-center m:px-4 m:py-6">{t('all hits added')}</p>}
+    {empty && !found && !result.ErrorMessage && <NoResults />}
     {showEvents.length > 0 &&
-      <Modal mode='ok' wide={true} show={showEvents.length > 0} title={'Tabelldata'} onNegative={() => { setShowEvents([]) }} onPositive={() => { setShowEvents([]) }}>
+      <Modal mode='ok' wide={true} show={showEvents.length > 0} title={t('table data')} onNegative={() => { setShowEvents([]) }} onPositive={() => { setShowEvents([]) }}>
         <TableTool items={showEvents} showExport={false} />
       </Modal>
     }

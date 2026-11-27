@@ -30,6 +30,8 @@ interface IBasePropertyConfiguration {
 interface IPropertyConfiguration extends IBasePropertyConfiguration {
   FieldOptions?: IPropertyValueSelect[]
   FieldValidation?: string
+  // What is shown when a value does not match FieldValidation. Without it, a general text is shown
+  FieldValidationMessage?: string
   Required?: boolean
 }
 

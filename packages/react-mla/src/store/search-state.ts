@@ -36,9 +36,10 @@ const noTool = {
   result: undefined
 }
 
+// A search that failed is a result with its error, which the panel shows with a way to try again
 function noResult (error: unknown): IQueryResponse {
-  window.alert(String(error))
-  return { Entities: [], Links: [], Events: [] }
+  console.error(error)
+  return { Entities: [], Links: [], Events: [], ErrorMessage: error instanceof Error ? error.message : String(error) }
 }
 
 const useSearchStore = create<SearchState>((set, get) => ({
@@ -78,8 +79,9 @@ const useSearchStore = create<SearchState>((set, get) => ({
       set(() => ({ loading: false, result }))
       return result
     } catch (error) {
-      set(() => ({ loading: false }))
-      return noResult(error)
+      const result = noResult(error)
+      set(() => ({ loading: false, result }))
+      return result
     }
   },
   explore: async () => {
@@ -96,8 +98,9 @@ const useSearchStore = create<SearchState>((set, get) => ({
       set(() => ({ loading: false, result }))
       return result
     } catch (error) {
-      set(() => ({ loading: false }))
-      return noResult(error)
+      const result = noResult(error)
+      set(() => ({ loading: false, result }))
+      return result
     }
   },
   import: (fileContents: string) => {
@@ -119,8 +122,9 @@ const useSearchStore = create<SearchState>((set, get) => ({
       set(() => ({ loading: false, result }))
       return result
     } catch (error) {
-      set(() => ({ loading: false }))
-      return noResult(error)
+      const result = noResult(error)
+      set(() => ({ loading: false, result }))
+      return result
     }
   }
 }))

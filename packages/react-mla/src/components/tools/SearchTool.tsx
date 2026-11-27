@@ -2,23 +2,27 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { useEffect, useMemo, useState } from 'react'
+import { type FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import useSearchStore from '../../store/search-state'
 import ItemResultList from '../result/ItemResultList'
 import Property from '../common/Property'
-import Button from '../common/Button'
 import { useTranslation } from 'react-i18next'
+import { helpOf } from '../../utils/properties'
+import { LoadingResults, primaryButton } from './ToolParts'
 
+// A search of a service of the configuration: its form, and what it found
 function SearchTool () {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const selectedTool = useSearchStore((state) => state.searchTool)
   const loading = useSearchStore((state) => state.loading)
   const result = useSearchStore((state) => state.result)
+  const performSearch = useSearchStore((state) => state.search)
 
   const [params, setParams] = useState({} as Record<string, string | number | boolean | undefined>)
-  const [valid, setValid] = useState(true)
-
-  const performSearch = useSearchStore((state) => state.search)
+  // The fields that are not filled in as they must be, by their type
+  const [invalid, setInvalid] = useState<string[]>([])
+  // The last query, which is asked again when the service failed
+  const lastQuery = useRef<unknown>(undefined)
 
   function setParamValue (id: string, value?: string | number | boolean) {
     setParams({
@@ -27,27 +31,28 @@ function SearchTool () {
     })
   }
 
-  let validMap = {}
   function setValidity (id: string, validity: boolean) {
-    validMap = {
-      ...validMap,
-      [id]: validity
-    }
-    setValid(!Object.values(validMap).some(v => !v))
+    setInvalid(current => {
+      const without = current.filter(x => x !== id)
+      return validity ? (without.length === current.length ? current : without) : (current.includes(id) ? current : [...current, id])
+    })
   }
 
   const noForm = useMemo(() => {
     return selectedTool?.Parameters?.Form == null || selectedTool.Parameters.Form.Fields.length === 0
   }, [selectedTool])
 
+  // A service without a form searches as soon as it is chosen
   useEffect(() => {
     if (noForm) {
-      void performSearch({ Params: undefined })
+      lastQuery.current = { Params: undefined }
+      void performSearch(lastQuery.current)
     }
   }, [noForm, performSearch])
 
-  function search () {
-    if (!valid) {
+  function search (e?: FormEvent) {
+    e?.preventDefault()
+    if (invalid.length > 0) {
       return
     }
 
@@ -58,51 +63,44 @@ function SearchTool () {
       }
     })
 
-    void performSearch({ Params: query })
+    lastQuery.current = { Params: query }
+    void performSearch(lastQuery.current)
   }
 
   if (selectedTool == null) {
     return null
   }
 
+  const fields = selectedTool.Parameters.Form?.Fields ?? []
+  const invalidNames = fields.filter(f => invalid.includes(f.TypeId)).map(f => f.Name)
+
   return (
-    <div className="m:animate-in m:slide-in-from-left">
-      <div className="m-search-tools m:animate-in m:slide-in-from-left">
-        <p className="m:text-sm m:p-1">{selectedTool.Description}</p>
-        {!noForm &&
-          <div className="m:pt-2">
-            {selectedTool.Parameters.Form?.Fields.map((prop, index) => (
-              <Property key={prop.TypeId}
-                autofocus={index === 0}
-                value={params[prop.TypeId]}
-                config={prop}
-                validChanged={(validity) => { setValidity(prop.TypeId, validity) }}
-                onChange={(newValue) => { setParamValue(prop.TypeId, newValue) }} />
-            ))}
-            <Button onClick={search} disabled={!valid} className='m:w-full'>{t('search')}</Button>
-          </div>
-        }
-      </div>
-      <div className="m:mt-2">
-        {loading &&
-          <div className="m:animate-in m:fade-in m:duration-500 m:flex m:gap-x-4 m:mt-4">
-            <div className="m:animate-pulse m:rounded-full m:bg-slate-200 m:h-10 m:w-10"></div>
-            <div className="m:flex-1 m:grid m:gap-y-6 m:py-1">
-              <div className="m:h-2 m:bg-slate-200 m:rounded-sm"></div>
-              <div className="m:grid m:gap-y-3">
-                <div className="m:grid m:grid-cols-3 m:gap-4">
-                  <div className="m:h-2 m:bg-slate-200 m:rounded-sm m:col-span-2"></div>
-                  <div className="m:h-2 m:bg-slate-200 m:rounded-sm m:col-span-1"></div>
-                </div>
-                <div className="m:h-2 m:bg-slate-200 m:rounded-sm"></div>
+    <div>
+      {/* A service without fields has no form, and searches as soon as it is chosen */}
+      {!noForm && <form onSubmit={search} className="m:flex m:flex-col m:gap-2.5 m:px-3 m:py-3 m:border-b m:border-gray-200">
+        <>
+          {fields.map((prop, index) => {
+            const help = helpOf(prop.Name, prop.Description)
+            return (
+              <div key={prop.TypeId}>
+                <Property
+                  autofocus={index === 0}
+                  value={params[prop.TypeId]}
+                  config={prop}
+                  validChanged={(validity) => { setValidity(prop.TypeId, validity) }}
+                  onChange={(newValue) => { setParamValue(prop.TypeId, newValue) }} />
+                {help && <p className="m:mt-1 m:text-[12px] m:text-gray-600">{help}</p>}
               </div>
-            </div>
-          </div>
-        }
-        {!loading && result &&
-          <ItemResultList className="m:animate-in m:slide-in-from-bottom m:border-t m:border-gray-400 m:pt-2" result={result} />
-        }
-      </div>
+            )
+          })}
+          <button type="submit" disabled={invalidNames.length > 0} className={primaryButton + ' m:mt-1'}>{t('search')}</button>
+          {invalidNames.length > 0 && <p className="m:text-[12px] m:text-red-700 m:text-center">{t('correct to search', { names: invalidNames.join(', ') })}</p>}
+        </>
+      </form>}
+      {loading && <LoadingResults />}
+      {!loading && result &&
+        <ItemResultList result={result} onRetry={() => { void performSearch(lastQuery.current) }} />
+      }
     </div>
   )
 }

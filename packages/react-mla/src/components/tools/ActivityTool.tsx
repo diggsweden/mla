@@ -11,7 +11,6 @@ import { getId } from '../../utils/utils'
 import Modal from '../common/Modal'
 import PhaseCreator from '../modal/PhaseCreator'
 import { getDateBetween, isSameDay, toDateAndTimeString, toDateString } from '../../utils/date'
-import Toggle from '../common/Toggle'
 import useAppStore from '../../store/app-store'
 import Icon from '../common/Icon'
 import { DateTime } from 'luxon'
@@ -34,7 +33,7 @@ interface History {
 
 function ActivityTool (props: Props) {
   const { t } = useTranslation();
-  const ref = createRef<HTMLDivElement>()
+  const ref = createRef<HTMLLIElement>()
   const viewConfig = useAppStore(state => state.currentViewConfiguration)
 
   const entities = useMainStore((state) => state.entities)
@@ -232,56 +231,56 @@ function ActivityTool (props: Props) {
 
   return (
     <div className={props.className}>
-      { type &&
-        <div className="m:w-full m:mb-3">
-          <Toggle title={t('show all')} value={showAll} onChange={() => { setShowAll(!showAll) }} className=''/>
-        </div>
+      {/* With an activity type, the flow shows its activities, and the changes of the other entities and relations when asked to */}
+      {type &&
+        <label className="m:flex m:items-center m:gap-2 m:px-3 m:py-2.5 m:border-b m:border-gray-200 m:text-[12px] m:cursor-pointer">
+          <input type="checkbox" checked={showAll} onChange={() => { setShowAll(!showAll) }} className="m:w-4 m:h-4 m:accent-primary" />
+          {t('show all changes')}
+        </label>
       }
-      <div className="m:h-full m:w-full m:border-l m:border-gray-300">
-        <div className='mx-1 columns-1 ml-[-6px]'>
-          {historyView.map(function (m, i) {
-            if (m.separator && m.rubrik) {
-              return <div key={i} className="m:ml-4 m:pb-3 m:font-semibold m:text-center m:relative m:cursor-pointer" onClick={() => {
-                if (m.event != null) {
-                  setEventTime(m.event, i)
-                }
-              }}>
-                <div className="m:text-white m:w-full m:px-3 m:bg-origin-border m:bg-no-repeat m:ms-auto m:me-auto" style={{ backgroundImage: 'conic-gradient(from 45deg at left center, rgb(68, 105, 149) 25%, rgba(0, 0, 0, 0) 0deg), conic-gradient(from -135deg at right center, rgb(68, 105, 149) 25%, rgba(0, 0, 0, 0) 0deg)', backgroundPositionX: '0px, 100%', backgroundPositionY: '50%, 50%', backgroundSize: '51% 100%', borderImageSource: 'linear-gradient(rgba(0, 0, 0, 0) calc(50% - 2px), rgb(196, 77, 88) 0px, rgb(196, 77, 88) calc(50% + 2px), rgba(0, 0, 0, 0) 0px)' }} title={toDateString(m.date)}>
-                  <div className="m:w-full m:flex m:p-1">
-                    <span className="m:flex-1">{m.rubrik}</span>
-                    <span className="m:ms-2 m:w-4" title={t('edit')} onClick={() => {
-                      if (m.event != null) {
-                        setEditevent({ ...m.event })
-                      }
-                    }}>
-                      <Icon name="edit" className="m:h-4"/>
-                    </span>
-                  </div>
+      <ol className="m:flex m:flex-col m:px-3 m:py-3">
+        {historyView.map(function (m, i) {
+          if (m.separator && m.rubrik) {
+            return (
+              <li key={i} className="m:flex m:items-center m:gap-2 m:mb-2 m:mt-1 m:rounded-md m:bg-blue-50 m:text-blue-950">
+                <button type="button" title={t('show phase')} onClick={() => { if (m.event != null) setEventTime(m.event, i) }}
+                  className="m:flex m:flex-1 m:items-baseline m:justify-between m:gap-2 m:min-w-0 m:pl-2.5 m:py-1.5 m:text-left m:cursor-pointer">
+                  <span className="m:text-[12px] m:font-bold m:truncate">{m.rubrik}</span>
+                  <span className="m:text-[11px] m:whitespace-nowrap">{toDateString(m.date)}</span>
+                </button>
+                <button type="button" aria-label={t('edit phase')} title={t('edit phase')} onClick={() => { if (m.event != null) setEditevent({ ...m.event }) }}
+                  className="m:w-7 m:h-7 m:mr-1 m:shrink-0 m:flex m:items-center m:justify-center m:rounded m:hover:bg-blue-100 m:cursor-pointer">
+                  <Icon name="edit" className="m:h-3.5 m:w-3.5" />
+                </button>
+              </li>
+            )
+          } else if (m.separator) {
+            // The date the chart shows now
+            return (
+              <li key={i} ref={ref} className="m:flex m:items-center m:gap-2 m:my-1.5 m:cursor-default">
+                <span className="m:flex-1 m:h-0.5 m:bg-primary" />
+                <span className="m:text-[11px] m:font-bold m:text-primary">{toDateString(m.date)}</span>
+                <span className="m:flex-1 m:h-0.5 m:bg-primary" />
+              </li>
+            )
+          } else {
+            return (
+              <li key={i} className="m:grid m:grid-cols-[12px_minmax(0,1fr)] m:gap-2">
+                <div className="m:flex m:flex-col m:items-center">
+                  <span className="m:w-2.5 m:h-2.5 m:mt-2.5 m:rounded-full m:shrink-0" style={{ background: m.color }} />
+                  <span className="m:w-0.5 m:flex-1 m:bg-gray-200" />
                 </div>
-              </div>
-            } else if (m.separator) {
-              return <div key={i} ref={ref} className='m:cursor-default m:ml-4 m:mb-3 m:font-semibold m:text-center m:relative m:before:block m:before:absolute m:before:h-1 m:before:bg-primary m:before:left-0 m:before:w-16 m:before:top-1/2 m:after:block m:after:absolute m:after:h-1 m:after:bg-primary m:after:right-0 m:after:w-16 m:after:top-1/2'>
-                <div>{ toDateString(m.date) }</div>
-              </div>
-            } else {
-              return <div className="m:w-full m:flex m:pb-3 m:cursor-pointer" key={i} onClick={() => { selected(m) }}>
-                <div>
-                  <div className="m:relative m:z-20 m:h-8 m:pt-2">
-                    <svg className="m:h-3 m:w-3">
-                      <circle cx="5" cy="5" r="5" fill={m.color} />
-                    </svg>
-                  </div>
-                </div>
-                <div className='m:border m:bg-white m:w-full m:p-2 m:ms-1'>
-                  <div className="m:text-primary m:text-sm m:font-bold">{ toDateAndTimeString(m.date) } - {m.rubrik}</div>
-                  <div className="m:text-sm">{m.text}</div>
-                </div>
-              </div>
-            }
-          })}
-        </div>
-
-      </div>
+                <button type="button" onClick={() => { selected(m) }}
+                  className="m:flex m:flex-col m:gap-0.5 m:text-left m:mb-1.5 m:px-2.5 m:py-1.5 m:rounded-md m:border m:border-gray-200 m:hover:bg-gray-50 m:cursor-pointer m:min-w-0">
+                  <span className="m:text-[11px] m:text-gray-600">{toDateAndTimeString(m.date)}</span>
+                  <span className="m:text-[13px] m:font-semibold">{m.rubrik}</span>
+                  {m.text && <span className="m:text-[12px] m:text-gray-700 m:whitespace-pre-line">{m.text}</span>}
+                </button>
+              </li>
+            )
+          }
+        })}
+      </ol>
       {editEvent &&
         <Modal mode="save" show={editEvent !== null} title={t('edit phase')} onNegative={() => { setEditevent(undefined) }} onPositive={() => { setEvent(editEvent); setEditevent(undefined) }}>
           <PhaseCreator value={editEvent} onChange={(e) => { setEditevent(e) }} />

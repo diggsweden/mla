@@ -37,7 +37,7 @@ export default function App () {
         <section className="m:flex-1 m:flex m:min-h-0 m:relative">
           <Chart className="m:h-full m:flex-1 m:relative m:overflow-hidden">
             <div className="m:h-full m:w-full m:flex m:flex-row m:overflow-hidden">
-              <ToolPanel className="m:w-72 m:flex-none m:h-full m:border-r m:border-gray-300 m:pointer-events-auto" />
+              <ToolPanel className="m:w-[320px] m:flex-none m:h-full m:border-r m:border-gray-300 m:pointer-events-auto" />
               <div className="m:flex-1 m:flex m:pointer-events-none">
                 {history && <div className="m:w-full m:self-end m:mb-5">
                   <Timeline className="m:pointer-events-auto" />
