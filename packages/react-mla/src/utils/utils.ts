@@ -53,7 +53,9 @@ function filterEntityIntegrations (integrations: IQueryIntegration[], selectedTy
     }
 
     if (integration.Parameters.EntityConfiguration === 'OR') {
-      return integration.Parameters.EntityTypes.some(c => configFulfilled(selectedTypes, c))
+      // Exactly one of the types the service takes is selected, in a number it takes. Other types are not sent to it and do not matter
+      const present = integration.Parameters.EntityTypes.filter(c => selectedTypes.includes(c.TypeId))
+      return present.length === 1 && configFulfilled(selectedTypes, present[0])
     } else {
       return !(integration.Parameters.EntityTypes.some(c => !configFulfilled(selectedTypes, c)))
     }

@@ -84,7 +84,10 @@ const useSearchStore = create<SearchState>((set, get) => ({
   },
   explore: async () => {
     useAppStore.getState().setTool('explore')
-    const query = useMainStore.getState().selectedEntities
+    // The service gets only the selected of the types it takes, so that it never gets what it is not meant to see.
+    // A service of an area of the map takes no entities
+    const types = get().exploreTool?.Parameters.EntityTypes ?? []
+    const query = useMainStore.getState().selectedEntities.filter(e => types.some(t => t.TypeId === e.TypeId))
     const shape = useAppStore.getState().selectedGeoFeature
     set(() => ({ loading: true, result: undefined }))
 
