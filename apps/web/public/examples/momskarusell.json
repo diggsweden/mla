@@ -1,0 +1,2198 @@
+{
+  "Entities": [
+    {
+      "Id": "p_lars",
+      "TypeId": "person",
+      "Properties": [
+        {
+          "TypeId": "personE2",
+          "Value": "Lars"
+        },
+        {
+          "TypeId": "personE3",
+          "Value": "Ekdahl"
+        },
+        {
+          "TypeId": "personE4",
+          "Value": "1971-03-14"
+        },
+        {
+          "TypeId": "personE5",
+          "Value": "Man"
+        }
+      ]
+    },
+    {
+      "Id": "p_mikael",
+      "TypeId": "person",
+      "Properties": [
+        {
+          "TypeId": "personE2",
+          "Value": "Mikael"
+        },
+        {
+          "TypeId": "personE3",
+          "Value": "Holm"
+        },
+        {
+          "TypeId": "personE4",
+          "Value": "1994-08-02"
+        },
+        {
+          "TypeId": "personE5",
+          "Value": "Man"
+        }
+      ]
+    },
+    {
+      "Id": "p_sara",
+      "TypeId": "person",
+      "Properties": [
+        {
+          "TypeId": "personE2",
+          "Value": "Sara"
+        },
+        {
+          "TypeId": "personE3",
+          "Value": "Lindqvist"
+        },
+        {
+          "TypeId": "personE4",
+          "Value": "1983-11-20"
+        },
+        {
+          "TypeId": "personE5",
+          "Value": "Kvinna"
+        }
+      ]
+    },
+    {
+      "Id": "p_jens",
+      "TypeId": "person",
+      "Properties": [
+        {
+          "TypeId": "personE2",
+          "Value": "Jens"
+        },
+        {
+          "TypeId": "personE3",
+          "Value": "Mørkholt"
+        },
+        {
+          "TypeId": "personE4",
+          "Value": "1979-05-09"
+        },
+        {
+          "TypeId": "personE5",
+          "Value": "Man"
+        }
+      ]
+    },
+    {
+      "Id": "p_klaus",
+      "TypeId": "person",
+      "Properties": [
+        {
+          "TypeId": "personE2",
+          "Value": "Klaus"
+        },
+        {
+          "TypeId": "personE3",
+          "Value": "Brenner"
+        },
+        {
+          "TypeId": "personE4",
+          "Value": "1968-01-27"
+        },
+        {
+          "TypeId": "personE5",
+          "Value": "Man"
+        }
+      ]
+    },
+    {
+      "Id": "o_kestrel",
+      "TypeId": "organisation",
+      "Properties": [
+        {
+          "TypeId": "organisationE1",
+          "Value": "DE999000001"
+        },
+        {
+          "TypeId": "organisationE2",
+          "Value": "Kestrelwerk Komponenten GmbH"
+        }
+      ]
+    },
+    {
+      "Id": "o_tellvik",
+      "TypeId": "organisation",
+      "Properties": [
+        {
+          "TypeId": "organisationE1",
+          "Value": "999000-0001"
+        },
+        {
+          "TypeId": "organisationE2",
+          "Value": "Tellvik Mobilgross AB"
+        }
+      ]
+    },
+    {
+      "Id": "o_vardalen",
+      "TypeId": "organisation",
+      "Properties": [
+        {
+          "TypeId": "organisationE1",
+          "Value": "999000-0002"
+        },
+        {
+          "TypeId": "organisationE2",
+          "Value": "Vardalen Elektronikhandel AB"
+        }
+      ]
+    },
+    {
+      "Id": "o_norrstrom",
+      "TypeId": "organisation",
+      "Properties": [
+        {
+          "TypeId": "organisationE1",
+          "Value": "999000-0003"
+        },
+        {
+          "TypeId": "organisationE2",
+          "Value": "Norrsjö Distribution AB"
+        }
+      ]
+    },
+    {
+      "Id": "o_sando",
+      "TypeId": "organisation",
+      "Properties": [
+        {
+          "TypeId": "organisationE1",
+          "Value": "999000-0004"
+        },
+        {
+          "TypeId": "organisationE2",
+          "Value": "Sandövik Data AB"
+        }
+      ]
+    },
+    {
+      "Id": "o_brandholm",
+      "TypeId": "organisation",
+      "Properties": [
+        {
+          "TypeId": "organisationE1",
+          "Value": "DK99900001"
+        },
+        {
+          "TypeId": "organisationE2",
+          "Value": "Brandholt Trading ApS"
+        }
+      ]
+    },
+    {
+      "Id": "o_harlow",
+      "TypeId": "organisation",
+      "Properties": [
+        {
+          "TypeId": "organisationE1",
+          "Value": "CY99900001"
+        },
+        {
+          "TypeId": "organisationE2",
+          "Value": "Harrowmere Holdings Ltd"
+        }
+      ]
+    },
+    {
+      "Id": "k_tellvik",
+      "TypeId": "konto",
+      "Properties": [
+        {
+          "TypeId": "kontoE1",
+          "Value": "SE00 9999 0000 0000 0001"
+        },
+        {
+          "TypeId": "kontoE2",
+          "Value": "Företagskonto"
+        },
+        {
+          "TypeId": "kontoE3",
+          "Value": "Sverige"
+        },
+        {
+          "TypeId": "kontoE4",
+          "Value": "Exempelbanken"
+        }
+      ]
+    },
+    {
+      "Id": "k_vardalen",
+      "TypeId": "konto",
+      "Properties": [
+        {
+          "TypeId": "kontoE1",
+          "Value": "SE00 9999 0000 0000 0002"
+        },
+        {
+          "TypeId": "kontoE2",
+          "Value": "Företagskonto"
+        },
+        {
+          "TypeId": "kontoE3",
+          "Value": "Sverige"
+        },
+        {
+          "TypeId": "kontoE4",
+          "Value": "Exempelbanken"
+        }
+      ]
+    },
+    {
+      "Id": "k_norrstrom",
+      "TypeId": "konto",
+      "Properties": [
+        {
+          "TypeId": "kontoE1",
+          "Value": "SE00 9999 0000 0000 0003"
+        },
+        {
+          "TypeId": "kontoE2",
+          "Value": "Företagskonto"
+        },
+        {
+          "TypeId": "kontoE3",
+          "Value": "Sverige"
+        },
+        {
+          "TypeId": "kontoE4",
+          "Value": "Provbanken"
+        }
+      ]
+    },
+    {
+      "Id": "k_sando",
+      "TypeId": "konto",
+      "Properties": [
+        {
+          "TypeId": "kontoE1",
+          "Value": "SE00 9999 0000 0000 0004"
+        },
+        {
+          "TypeId": "kontoE2",
+          "Value": "Företagskonto"
+        },
+        {
+          "TypeId": "kontoE3",
+          "Value": "Sverige"
+        },
+        {
+          "TypeId": "kontoE4",
+          "Value": "Provbanken"
+        }
+      ]
+    },
+    {
+      "Id": "k_brandholm",
+      "TypeId": "konto",
+      "Properties": [
+        {
+          "TypeId": "kontoE1",
+          "Value": "DK00 9999 0000 0000 01"
+        },
+        {
+          "TypeId": "kontoE2",
+          "Value": "Företagskonto"
+        },
+        {
+          "TypeId": "kontoE3",
+          "Value": "Danmark"
+        },
+        {
+          "TypeId": "kontoE4",
+          "Value": "Demobank A/S"
+        }
+      ]
+    },
+    {
+      "Id": "k_kestrel",
+      "TypeId": "konto",
+      "Properties": [
+        {
+          "TypeId": "kontoE1",
+          "Value": "DE00 9999 0000 0000 0000 01"
+        },
+        {
+          "TypeId": "kontoE2",
+          "Value": "Företagskonto"
+        },
+        {
+          "TypeId": "kontoE3",
+          "Value": "Tyskland"
+        },
+        {
+          "TypeId": "kontoE4",
+          "Value": "Musterbank AG"
+        }
+      ]
+    },
+    {
+      "Id": "k_harlow",
+      "TypeId": "konto",
+      "Properties": [
+        {
+          "TypeId": "kontoE1",
+          "Value": "CY00 9999 0000 0000 0000 0000 0001"
+        },
+        {
+          "TypeId": "kontoE2",
+          "Value": "Företagskonto"
+        },
+        {
+          "TypeId": "kontoE3",
+          "Value": "Cypern"
+        },
+        {
+          "TypeId": "kontoE4",
+          "Value": "Sample Bank Ltd"
+        }
+      ]
+    },
+    {
+      "Id": "k_mikael",
+      "TypeId": "konto",
+      "Properties": [
+        {
+          "TypeId": "kontoE1",
+          "Value": "9999-00 000 01"
+        },
+        {
+          "TypeId": "kontoE2",
+          "Value": "Privatkonto"
+        },
+        {
+          "TypeId": "kontoE3",
+          "Value": "Sverige"
+        },
+        {
+          "TypeId": "kontoE4",
+          "Value": "Exempelbanken"
+        }
+      ]
+    },
+    {
+      "Id": "a_kontorshotell",
+      "TypeId": "adress",
+      "Properties": [
+        {
+          "TypeId": "adressE1",
+          "Value": "Exempelgatan 10"
+        },
+        {
+          "TypeId": "adressE2",
+          "Value": "c/o Kontorshotellet"
+        },
+        {
+          "TypeId": "adressE3",
+          "Value": "999 01"
+        },
+        {
+          "TypeId": "adressE4",
+          "Value": "Stockholm"
+        },
+        {
+          "TypeId": "adressE5",
+          "Value": "Sverige"
+        }
+      ]
+    },
+    {
+      "Id": "a_sando",
+      "TypeId": "adress",
+      "Properties": [
+        {
+          "TypeId": "adressE1",
+          "Value": "Provvägen 4"
+        },
+        {
+          "TypeId": "adressE3",
+          "Value": "999 02"
+        },
+        {
+          "TypeId": "adressE4",
+          "Value": "Göteborg"
+        },
+        {
+          "TypeId": "adressE5",
+          "Value": "Sverige"
+        }
+      ]
+    },
+    {
+      "Id": "a_kbh",
+      "TypeId": "adress",
+      "Properties": [
+        {
+          "TypeId": "adressE1",
+          "Value": "Prøvevej 7"
+        },
+        {
+          "TypeId": "adressE3",
+          "Value": "9990"
+        },
+        {
+          "TypeId": "adressE4",
+          "Value": "København"
+        },
+        {
+          "TypeId": "adressE5",
+          "Value": "Danmark"
+        }
+      ]
+    },
+    {
+      "Id": "a_lars",
+      "TypeId": "adress",
+      "Properties": [
+        {
+          "TypeId": "adressE1",
+          "Value": "Fiktivgränd 3"
+        },
+        {
+          "TypeId": "adressE3",
+          "Value": "999 03"
+        },
+        {
+          "TypeId": "adressE4",
+          "Value": "Malmö"
+        },
+        {
+          "TypeId": "adressE5",
+          "Value": "Sverige"
+        }
+      ]
+    },
+    {
+      "Id": "e01",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Bolagsköp"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Lagerbolag köps och blir Tellvik Mobilgross AB"
+        }
+      ],
+      "DateFrom": "2025-01-08T11:30:00+01:00",
+      "DateTo": "2025-01-08T11:30:00+01:00"
+    },
+    {
+      "Id": "e02",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Momsregistrering"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Tellvik registreras för moms med säte på kontorshotell"
+        }
+      ],
+      "DateFrom": "2025-01-15T09:00:00+01:00",
+      "DateTo": "2025-01-15T09:00:00+01:00"
+    },
+    {
+      "Id": "e03",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Bankkonto"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Mikael öppnar företagskonto åt Tellvik"
+        }
+      ],
+      "DateFrom": "2025-01-20T13:15:00+01:00",
+      "DateTo": "2025-01-20T13:15:00+01:00"
+    },
+    {
+      "Id": "e04",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Möte"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Lars, Mikael och Jens ses på kontorshotellet"
+        }
+      ],
+      "DateFrom": "2025-01-24T18:00:00+01:00",
+      "DateTo": "2025-01-24T18:00:00+01:00"
+    },
+    {
+      "Id": "e05",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "EU-förvärv"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "5 000 mobiltelefoner, 12,5 mkr utan moms"
+        }
+      ],
+      "DateFrom": "2025-02-03T09:12:00+01:00",
+      "DateTo": "2025-02-03T09:12:00+01:00",
+      "Color": "#446995"
+    },
+    {
+      "Id": "e06",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Faktura"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Tellvik säljer telefonerna, 12,6 mkr + 3,15 mkr moms"
+        }
+      ],
+      "DateFrom": "2025-02-04T10:40:00+01:00",
+      "DateTo": "2025-02-04T10:40:00+01:00",
+      "Color": "#446995"
+    },
+    {
+      "Id": "e07",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Faktura"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Buffert 1 säljer vidare, 12,7 mkr + moms"
+        }
+      ],
+      "DateFrom": "2025-02-05T11:05:00+01:00",
+      "DateTo": "2025-02-05T11:05:00+01:00",
+      "Color": "#446995"
+    },
+    {
+      "Id": "e08",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Faktura"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Buffert 2 säljer till broker, 12,8 mkr + moms"
+        }
+      ],
+      "DateFrom": "2025-02-06T14:20:00+01:00",
+      "DateTo": "2025-02-06T14:20:00+01:00",
+      "Color": "#446995"
+    },
+    {
+      "Id": "e09",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Export"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Sandövik säljer momsfritt till Danmark, 12,9 mkr"
+        }
+      ],
+      "DateFrom": "2025-02-07T08:30:00+01:00",
+      "DateTo": "2025-02-07T08:30:00+01:00",
+      "Color": "#446995"
+    },
+    {
+      "Id": "e10",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Betalning"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Brandholt betalar Sandövik 12,9 mkr"
+        }
+      ],
+      "DateFrom": "2025-02-07T15:45:00+01:00",
+      "DateTo": "2025-02-07T15:45:00+01:00",
+      "Color": "#008000"
+    },
+    {
+      "Id": "e11",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Betalningskedja"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Pengarna går samma dag Sandövik → Norrsjö → Vardalen → Tellvik"
+        }
+      ],
+      "DateFrom": "2025-02-10T09:30:00+01:00",
+      "DateTo": "2025-02-10T09:30:00+01:00",
+      "Color": "#008000"
+    },
+    {
+      "Id": "e12",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Utlandsbetalning"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Tellvik betalar Kestrelwerk 12,5 mkr"
+        }
+      ],
+      "DateFrom": "2025-02-11T10:10:00+01:00",
+      "DateTo": "2025-02-11T10:10:00+01:00",
+      "Color": "#008000"
+    },
+    {
+      "Id": "e13",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Utlandsbetalning"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Kestrelwerk betalar Brandholt, cirkeln sluts"
+        }
+      ],
+      "DateFrom": "2025-02-12T16:00:00+01:00",
+      "DateTo": "2025-02-12T16:00:00+01:00",
+      "Color": "#008000"
+    },
+    {
+      "Id": "e14",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Andra varvet"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Samma 5 000 telefoner säljs igen, IMEI-nummer återkommer"
+        }
+      ],
+      "DateFrom": "2025-02-24T09:00:00+01:00",
+      "DateTo": "2025-02-24T09:00:00+01:00",
+      "Color": "#446995"
+    },
+    {
+      "Id": "e15",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Tredje varvet"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Ett tredje varv på tio dagar, 13,1 mkr per led"
+        }
+      ],
+      "DateFrom": "2025-03-10T09:00:00+01:00",
+      "DateTo": "2025-03-10T09:00:00+01:00",
+      "Color": "#446995"
+    },
+    {
+      "Id": "e16",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Begäran om återbetalning"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Sandövik begär tillbaka 9,6 mkr i ingående moms"
+        }
+      ],
+      "DateFrom": "2025-03-12T11:00:00+01:00",
+      "DateTo": "2025-03-12T11:00:00+01:00",
+      "Color": "#800080"
+    },
+    {
+      "Id": "e17",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Överföring"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Tellvik för 3,0 mkr till Cypern som konsultarvode"
+        }
+      ],
+      "DateFrom": "2025-02-14T13:30:00+01:00",
+      "DateTo": "2025-02-14T13:30:00+01:00",
+      "Color": "#C00000"
+    },
+    {
+      "Id": "e18",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Överföring"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Tellvik för 6,1 mkr till Cypern"
+        }
+      ],
+      "DateFrom": "2025-03-14T10:20:00+01:00",
+      "DateTo": "2025-03-14T10:20:00+01:00",
+      "Color": "#C00000"
+    },
+    {
+      "Id": "e19",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Arvode"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Mikael får 150 000 kr som lön"
+        }
+      ],
+      "DateFrom": "2025-03-17T12:00:00+01:00",
+      "DateTo": "2025-03-17T12:00:00+01:00",
+      "Color": "#C00000"
+    },
+    {
+      "Id": "e20",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Möte"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Lars och Jens ses i Köpenhamn"
+        }
+      ],
+      "DateFrom": "2025-03-20T19:00:00+01:00",
+      "DateTo": "2025-03-20T19:00:00+01:00"
+    },
+    {
+      "Id": "e21",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Ingen momsdeklaration"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Tellvik redovisar inte 9,45 mkr i utgående moms"
+        }
+      ],
+      "DateFrom": "2025-04-14T09:00:00+01:00",
+      "DateTo": "2025-04-14T09:00:00+01:00",
+      "Color": "#800080"
+    },
+    {
+      "Id": "e22",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Styrelsebyte"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Mikael avgår, bolaget överlåts till okänd köpare utomlands"
+        }
+      ],
+      "DateFrom": "2025-04-16T15:00:00+01:00",
+      "DateTo": "2025-04-16T15:00:00+01:00"
+    },
+    {
+      "Id": "e23",
+      "TypeId": "handelse",
+      "Properties": [
+        {
+          "TypeId": "handelseE1",
+          "Value": "Kontroll"
+        },
+        {
+          "TypeId": "handelseE2",
+          "Value": "Återbetalningen till Sandövik stoppas och en kontroll inleds"
+        }
+      ],
+      "DateFrom": "2025-04-22T10:00:00+01:00",
+      "DateTo": "2025-04-22T10:00:00+01:00",
+      "Color": "#800080"
+    }
+  ],
+  "Links": [
+    {
+      "Id": "l1",
+      "TypeId": "LT1",
+      "FromEntityId": "p_mikael",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT1E1",
+          "Value": "Styrelseledamot"
+        }
+      ]
+    },
+    {
+      "Id": "l2",
+      "TypeId": "LT1",
+      "FromEntityId": "p_lars",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "o_vardalen",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT1E1",
+          "Value": "Styrelseledamot"
+        }
+      ]
+    },
+    {
+      "Id": "l3",
+      "TypeId": "LT1",
+      "FromEntityId": "p_lars",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "o_norrstrom",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT1E1",
+          "Value": "Verklig huvudman"
+        }
+      ]
+    },
+    {
+      "Id": "l4",
+      "TypeId": "LT1",
+      "FromEntityId": "p_sara",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "o_sando",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT1E1",
+          "Value": "VD"
+        }
+      ]
+    },
+    {
+      "Id": "l5",
+      "TypeId": "LT1",
+      "FromEntityId": "p_jens",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "o_brandholm",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT1E1",
+          "Value": "Direktør"
+        }
+      ]
+    },
+    {
+      "Id": "l6",
+      "TypeId": "LT1",
+      "FromEntityId": "p_klaus",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "o_kestrel",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT1E1",
+          "Value": "Geschäftsführer"
+        }
+      ]
+    },
+    {
+      "Id": "l7",
+      "TypeId": "LT1",
+      "FromEntityId": "p_lars",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "o_harlow",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT1E1",
+          "Value": "Verklig huvudman"
+        }
+      ]
+    },
+    {
+      "Id": "l8",
+      "TypeId": "LT4",
+      "FromEntityId": "k_tellvik",
+      "FromEntityTypeId": "konto",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT4E1",
+          "Value": "Kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l9",
+      "TypeId": "LT4",
+      "FromEntityId": "k_vardalen",
+      "FromEntityTypeId": "konto",
+      "ToEntityId": "o_vardalen",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT4E1",
+          "Value": "Kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l10",
+      "TypeId": "LT4",
+      "FromEntityId": "k_norrstrom",
+      "FromEntityTypeId": "konto",
+      "ToEntityId": "o_norrstrom",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT4E1",
+          "Value": "Kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l11",
+      "TypeId": "LT4",
+      "FromEntityId": "k_sando",
+      "FromEntityTypeId": "konto",
+      "ToEntityId": "o_sando",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT4E1",
+          "Value": "Kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l12",
+      "TypeId": "LT4",
+      "FromEntityId": "k_brandholm",
+      "FromEntityTypeId": "konto",
+      "ToEntityId": "o_brandholm",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT4E1",
+          "Value": "Kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l13",
+      "TypeId": "LT4",
+      "FromEntityId": "k_kestrel",
+      "FromEntityTypeId": "konto",
+      "ToEntityId": "o_kestrel",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT4E1",
+          "Value": "Kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l14",
+      "TypeId": "LT4",
+      "FromEntityId": "k_harlow",
+      "FromEntityTypeId": "konto",
+      "ToEntityId": "o_harlow",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT4E1",
+          "Value": "Kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l15",
+      "TypeId": "LT4",
+      "FromEntityId": "k_mikael",
+      "FromEntityTypeId": "konto",
+      "ToEntityId": "p_mikael",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT4E1",
+          "Value": "Kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l16",
+      "TypeId": "LT3",
+      "FromEntityId": "o_tellvik",
+      "FromEntityTypeId": "organisation",
+      "ToEntityId": "a_kontorshotell",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT3E1",
+          "Value": "Säte"
+        }
+      ]
+    },
+    {
+      "Id": "l17",
+      "TypeId": "LT3",
+      "FromEntityId": "o_vardalen",
+      "FromEntityTypeId": "organisation",
+      "ToEntityId": "a_kontorshotell",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT3E1",
+          "Value": "Säte"
+        }
+      ]
+    },
+    {
+      "Id": "l18",
+      "TypeId": "LT3",
+      "FromEntityId": "o_norrstrom",
+      "FromEntityTypeId": "organisation",
+      "ToEntityId": "a_kontorshotell",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT3E1",
+          "Value": "Säte"
+        }
+      ]
+    },
+    {
+      "Id": "l19",
+      "TypeId": "LT3",
+      "FromEntityId": "o_sando",
+      "FromEntityTypeId": "organisation",
+      "ToEntityId": "a_sando",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT3E1",
+          "Value": "Säte"
+        }
+      ]
+    },
+    {
+      "Id": "l20",
+      "TypeId": "LT3",
+      "FromEntityId": "o_brandholm",
+      "FromEntityTypeId": "organisation",
+      "ToEntityId": "a_kbh",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT3E1",
+          "Value": "Säte"
+        }
+      ]
+    },
+    {
+      "Id": "l21",
+      "TypeId": "LT3",
+      "FromEntityId": "p_lars",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "a_lars",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT3E1",
+          "Value": "Folkbokföring"
+        }
+      ]
+    },
+    {
+      "Id": "l22",
+      "TypeId": "relation",
+      "FromEntityId": "p_lars",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "p_mikael",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "relationslank",
+          "Value": "Bekant"
+        }
+      ]
+    },
+    {
+      "Id": "l23",
+      "TypeId": "relation",
+      "FromEntityId": "p_lars",
+      "FromEntityTypeId": "person",
+      "ToEntityId": "p_jens",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "relationslank",
+          "Value": "Affärskontakt"
+        }
+      ]
+    },
+    {
+      "Id": "l24",
+      "TypeId": "LT6",
+      "FromEntityId": "e01",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_mikael",
+      "ToEntityTypeId": "person",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "köpare"
+        }
+      ]
+    },
+    {
+      "Id": "l25",
+      "TypeId": "LT6",
+      "FromEntityId": "e01",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "bolag"
+        }
+      ]
+    },
+    {
+      "Id": "l26",
+      "TypeId": "LT6",
+      "FromEntityId": "e01",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_lars",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "initiativtagare"
+        }
+      ]
+    },
+    {
+      "Id": "l27",
+      "TypeId": "LT6",
+      "FromEntityId": "e02",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "registreras"
+        }
+      ]
+    },
+    {
+      "Id": "l28",
+      "TypeId": "LT6",
+      "FromEntityId": "e02",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "a_kontorshotell",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "säte"
+        }
+      ]
+    },
+    {
+      "Id": "l29",
+      "TypeId": "LT6",
+      "FromEntityId": "e03",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_mikael",
+      "ToEntityTypeId": "person",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "öppnar"
+        }
+      ]
+    },
+    {
+      "Id": "l30",
+      "TypeId": "LT6",
+      "FromEntityId": "e03",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_tellvik",
+      "ToEntityTypeId": "konto",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "konto"
+        }
+      ]
+    },
+    {
+      "Id": "l31",
+      "TypeId": "LT6",
+      "FromEntityId": "e03",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "kontohavare"
+        }
+      ]
+    },
+    {
+      "Id": "l32",
+      "TypeId": "LT6",
+      "FromEntityId": "e04",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_lars",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "deltar"
+        }
+      ]
+    },
+    {
+      "Id": "l33",
+      "TypeId": "LT6",
+      "FromEntityId": "e04",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_mikael",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "deltar"
+        }
+      ]
+    },
+    {
+      "Id": "l34",
+      "TypeId": "LT6",
+      "FromEntityId": "e04",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_jens",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "deltar"
+        }
+      ]
+    },
+    {
+      "Id": "l35",
+      "TypeId": "LT6",
+      "FromEntityId": "e04",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "a_kontorshotell",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "plats"
+        }
+      ]
+    },
+    {
+      "Id": "l36",
+      "TypeId": "LT6",
+      "FromEntityId": "e05",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_kestrel",
+      "ToEntityTypeId": "organisation",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "säljare"
+        }
+      ]
+    },
+    {
+      "Id": "l37",
+      "TypeId": "LT6",
+      "FromEntityId": "e05",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "köpare"
+        }
+      ]
+    },
+    {
+      "Id": "l38",
+      "TypeId": "LT6",
+      "FromEntityId": "e06",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "säljare"
+        }
+      ]
+    },
+    {
+      "Id": "l39",
+      "TypeId": "LT6",
+      "FromEntityId": "e06",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_vardalen",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "köpare"
+        }
+      ]
+    },
+    {
+      "Id": "l40",
+      "TypeId": "LT6",
+      "FromEntityId": "e07",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_vardalen",
+      "ToEntityTypeId": "organisation",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "säljare"
+        }
+      ]
+    },
+    {
+      "Id": "l41",
+      "TypeId": "LT6",
+      "FromEntityId": "e07",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_norrstrom",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "köpare"
+        }
+      ]
+    },
+    {
+      "Id": "l42",
+      "TypeId": "LT6",
+      "FromEntityId": "e08",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_norrstrom",
+      "ToEntityTypeId": "organisation",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "säljare"
+        }
+      ]
+    },
+    {
+      "Id": "l43",
+      "TypeId": "LT6",
+      "FromEntityId": "e08",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_sando",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "köpare"
+        }
+      ]
+    },
+    {
+      "Id": "l44",
+      "TypeId": "LT6",
+      "FromEntityId": "e09",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_sando",
+      "ToEntityTypeId": "organisation",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "säljare"
+        }
+      ]
+    },
+    {
+      "Id": "l45",
+      "TypeId": "LT6",
+      "FromEntityId": "e09",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_brandholm",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "köpare"
+        }
+      ]
+    },
+    {
+      "Id": "l46",
+      "TypeId": "LT6",
+      "FromEntityId": "e10",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_brandholm",
+      "ToEntityTypeId": "konto",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "betalar"
+        }
+      ]
+    },
+    {
+      "Id": "l47",
+      "TypeId": "LT6",
+      "FromEntityId": "e10",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_sando",
+      "ToEntityTypeId": "konto",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "tar emot"
+        }
+      ]
+    },
+    {
+      "Id": "l48",
+      "TypeId": "LT6",
+      "FromEntityId": "e11",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_sando",
+      "ToEntityTypeId": "konto",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "betalar"
+        }
+      ]
+    },
+    {
+      "Id": "l49",
+      "TypeId": "LT6",
+      "FromEntityId": "e11",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_norrstrom",
+      "ToEntityTypeId": "konto",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "mellanled"
+        }
+      ]
+    },
+    {
+      "Id": "l50",
+      "TypeId": "LT6",
+      "FromEntityId": "e11",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_vardalen",
+      "ToEntityTypeId": "konto",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "mellanled"
+        }
+      ]
+    },
+    {
+      "Id": "l51",
+      "TypeId": "LT6",
+      "FromEntityId": "e11",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_tellvik",
+      "ToEntityTypeId": "konto",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "tar emot"
+        }
+      ]
+    },
+    {
+      "Id": "l52",
+      "TypeId": "LT6",
+      "FromEntityId": "e12",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_tellvik",
+      "ToEntityTypeId": "konto",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "betalar"
+        }
+      ]
+    },
+    {
+      "Id": "l53",
+      "TypeId": "LT6",
+      "FromEntityId": "e12",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_kestrel",
+      "ToEntityTypeId": "konto",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "tar emot"
+        }
+      ]
+    },
+    {
+      "Id": "l54",
+      "TypeId": "LT6",
+      "FromEntityId": "e13",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_kestrel",
+      "ToEntityTypeId": "konto",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "betalar"
+        }
+      ]
+    },
+    {
+      "Id": "l55",
+      "TypeId": "LT6",
+      "FromEntityId": "e13",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_brandholm",
+      "ToEntityTypeId": "konto",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "tar emot"
+        }
+      ]
+    },
+    {
+      "Id": "l56",
+      "TypeId": "LT6",
+      "FromEntityId": "e14",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_kestrel",
+      "ToEntityTypeId": "organisation",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "säljare"
+        }
+      ]
+    },
+    {
+      "Id": "l57",
+      "TypeId": "LT6",
+      "FromEntityId": "e14",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "missing trader"
+        }
+      ]
+    },
+    {
+      "Id": "l58",
+      "TypeId": "LT6",
+      "FromEntityId": "e14",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_vardalen",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "buffert"
+        }
+      ]
+    },
+    {
+      "Id": "l59",
+      "TypeId": "LT6",
+      "FromEntityId": "e14",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_norrstrom",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "buffert"
+        }
+      ]
+    },
+    {
+      "Id": "l60",
+      "TypeId": "LT6",
+      "FromEntityId": "e14",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_sando",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "broker"
+        }
+      ]
+    },
+    {
+      "Id": "l61",
+      "TypeId": "LT6",
+      "FromEntityId": "e14",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_brandholm",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "köpare"
+        }
+      ]
+    },
+    {
+      "Id": "l62",
+      "TypeId": "LT6",
+      "FromEntityId": "e15",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_kestrel",
+      "ToEntityTypeId": "organisation",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "säljare"
+        }
+      ]
+    },
+    {
+      "Id": "l63",
+      "TypeId": "LT6",
+      "FromEntityId": "e15",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "missing trader"
+        }
+      ]
+    },
+    {
+      "Id": "l64",
+      "TypeId": "LT6",
+      "FromEntityId": "e15",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_vardalen",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "buffert"
+        }
+      ]
+    },
+    {
+      "Id": "l65",
+      "TypeId": "LT6",
+      "FromEntityId": "e15",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_norrstrom",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "buffert"
+        }
+      ]
+    },
+    {
+      "Id": "l66",
+      "TypeId": "LT6",
+      "FromEntityId": "e15",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_sando",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "broker"
+        }
+      ]
+    },
+    {
+      "Id": "l67",
+      "TypeId": "LT6",
+      "FromEntityId": "e15",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_brandholm",
+      "ToEntityTypeId": "organisation",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "köpare"
+        }
+      ]
+    },
+    {
+      "Id": "l68",
+      "TypeId": "LT6",
+      "FromEntityId": "e16",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_sando",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "begär"
+        }
+      ]
+    },
+    {
+      "Id": "l69",
+      "TypeId": "LT6",
+      "FromEntityId": "e16",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_sara",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "undertecknar"
+        }
+      ]
+    },
+    {
+      "Id": "l70",
+      "TypeId": "LT6",
+      "FromEntityId": "e17",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_tellvik",
+      "ToEntityTypeId": "konto",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "betalar"
+        }
+      ]
+    },
+    {
+      "Id": "l71",
+      "TypeId": "LT6",
+      "FromEntityId": "e17",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_harlow",
+      "ToEntityTypeId": "konto",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "tar emot"
+        }
+      ]
+    },
+    {
+      "Id": "l72",
+      "TypeId": "LT6",
+      "FromEntityId": "e18",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_tellvik",
+      "ToEntityTypeId": "konto",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "betalar"
+        }
+      ]
+    },
+    {
+      "Id": "l73",
+      "TypeId": "LT6",
+      "FromEntityId": "e18",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_harlow",
+      "ToEntityTypeId": "konto",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "tar emot"
+        }
+      ]
+    },
+    {
+      "Id": "l74",
+      "TypeId": "LT6",
+      "FromEntityId": "e19",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_tellvik",
+      "ToEntityTypeId": "konto",
+      "Direction": "FROM",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "betalar"
+        }
+      ]
+    },
+    {
+      "Id": "l75",
+      "TypeId": "LT6",
+      "FromEntityId": "e19",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "k_mikael",
+      "ToEntityTypeId": "konto",
+      "Direction": "TO",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "tar emot"
+        }
+      ]
+    },
+    {
+      "Id": "l76",
+      "TypeId": "LT6",
+      "FromEntityId": "e19",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_mikael",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "mottagare"
+        }
+      ]
+    },
+    {
+      "Id": "l77",
+      "TypeId": "LT6",
+      "FromEntityId": "e20",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_lars",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "deltar"
+        }
+      ]
+    },
+    {
+      "Id": "l78",
+      "TypeId": "LT6",
+      "FromEntityId": "e20",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_jens",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "deltar"
+        }
+      ]
+    },
+    {
+      "Id": "l79",
+      "TypeId": "LT6",
+      "FromEntityId": "e20",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "a_kbh",
+      "ToEntityTypeId": "adress",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "plats"
+        }
+      ]
+    },
+    {
+      "Id": "l80",
+      "TypeId": "LT6",
+      "FromEntityId": "e21",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "redovisar inte"
+        }
+      ]
+    },
+    {
+      "Id": "l81",
+      "TypeId": "LT6",
+      "FromEntityId": "e22",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_mikael",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "avgår"
+        }
+      ]
+    },
+    {
+      "Id": "l82",
+      "TypeId": "LT6",
+      "FromEntityId": "e22",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_tellvik",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "överlåts"
+        }
+      ]
+    },
+    {
+      "Id": "l83",
+      "TypeId": "LT6",
+      "FromEntityId": "e23",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "o_sando",
+      "ToEntityTypeId": "organisation",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "kontrolleras"
+        }
+      ]
+    },
+    {
+      "Id": "l84",
+      "TypeId": "LT6",
+      "FromEntityId": "e23",
+      "FromEntityTypeId": "handelse",
+      "ToEntityId": "p_sara",
+      "ToEntityTypeId": "person",
+      "Direction": "NONE",
+      "Properties": [
+        {
+          "TypeId": "LT6E1",
+          "Value": "företrädare"
+        }
+      ]
+    }
+  ],
+  "Events": [],
+  "PhaseEvents": [
+    {
+      "Id": "ph1",
+      "Description": "Förberedelse",
+      "Date": "2025-01-06T00:00:00+01:00",
+      "Color": "#4169E1"
+    },
+    {
+      "Id": "ph2",
+      "Description": "Första varvet",
+      "Date": "2025-02-03T00:00:00+01:00",
+      "Color": "#FFA500"
+    },
+    {
+      "Id": "ph3",
+      "Description": "Fler varv",
+      "Date": "2025-02-24T00:00:00+01:00",
+      "Color": "#FF4040"
+    },
+    {
+      "Id": "ph4",
+      "Description": "Uttag",
+      "Date": "2025-03-12T00:00:00+01:00",
+      "Color": "#800080"
+    },
+    {
+      "Id": "ph5",
+      "Description": "Avveckling och upptäckt",
+      "Date": "2025-04-14T00:00:00+01:00",
+      "Color": "#008000"
+    }
+  ],
+  "GeoFeatures": [],
+  "Analysis": {
+    "Timeline": {
+      "Settings": {
+        "Title": "Momskarusell – händelseförlopp (fiktivt exempel)",
+        "DayWidth": 90,
+        "ShowTicks": false
+      }
+    },
+    "Phase": {
+      "Settings": {
+        "Title": "Momskarusell – fasanalys (fiktivt exempel)"
+      }
+    },
+    "Notes": {
+      "ph1": {
+        "Möjliggörande förhållanden": "Lagerbolag finns att köpa färdiga. Momsregistrering beviljas utan att verksamheten prövas. Kontorshotell ger adress utan närvaro.",
+        "Ingripandepunkter": "Kontroll vid momsregistrering: ny bolagsledning, ingen historik, adress på kontorshotell."
+      },
+      "ph2": {
+        "Möjliggörande förhållanden": "Gemenskapsinterna förvärv är momsfria, så den första säljaren tar inte ut moms.",
+        "Hinder och misstag": "Samma IMEI-serier i alla led. Alla betalningar sker inom två dagar.",
+        "Ingripandepunkter": "Snabb ökning av omsättning hos nyregistrerat bolag. Export till bolag med samma kontaktperson som leverantören."
+      },
+      "ph3": {
+        "Hinder och misstag": "Varorna flyttas aldrig fysiskt, bara fakturor och pengar.",
+        "Ingripandepunkter": "Begäran om stor återbetalning hos broker kan hållas inne."
+      },
+      "ph4": {
+        "Möjliggörande förhållanden": "Pengarna förs ut innan momsen ska redovisas.",
+        "Ingripandepunkter": "Stora utlandsbetalningar från nytt bolag till lågskatteland."
+      },
+      "ph5": {
+        "Hinder och misstag": "Bulvanen är lätt att hitta, men saknar tillgångar."
+      }
+    }
+  },
+  "context": ""
+}
