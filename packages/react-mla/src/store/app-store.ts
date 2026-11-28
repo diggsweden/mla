@@ -54,6 +54,9 @@ interface AppState {
   setPropertiesPinned: (pinned: boolean) => void
   propertiesClosed: boolean
   setPropertiesClosed: (closed: boolean) => void
+  // The explanations of the fields in the panel, all shown or each opened by itself. Kept on the computer
+  fieldHelp: boolean
+  setFieldHelp: (shown: boolean) => void
   // The one of the selected items that the panel shows, or that the pointer is on in its list, which the chart shows more clearly
   focusedId: string | undefined
   setFocusedId: (id?: string) => void
@@ -82,13 +85,15 @@ interface AppState {
 
 // Whether the panel of properties is fastened is the user's own choice on this computer
 const PINNED_KEY = 'mla.properties.pinned'
-function readPinned (): boolean {
+const HELP_KEY = 'mla.properties.help'
+function readFlag (key: string): boolean {
   try {
-    return window.localStorage.getItem(PINNED_KEY) === 'true'
+    return window.localStorage.getItem(key) === 'true'
   } catch {
     return false
   }
 }
+const readPinned = () => readFlag(PINNED_KEY)
 
 const useAppStore = create<AppState>((set) => ({
   thingViewConfiguration: {},
@@ -211,6 +216,11 @@ const useAppStore = create<AppState>((set) => ({
   propertiesClosed: false,
   setPropertiesClosed: (closed: boolean) => {
     set(() => ({ propertiesClosed: closed }))
+  },
+  fieldHelp: readFlag(HELP_KEY),
+  setFieldHelp: (shown: boolean) => {
+    try { window.localStorage.setItem(HELP_KEY, String(shown)) } catch { /* only kept until the page is closed */ }
+    set(() => ({ fieldHelp: shown }))
   },
   focusedId: undefined,
   setFocusedId: (id?: string) => {

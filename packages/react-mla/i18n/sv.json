@@ -302,5 +302,7 @@
   "types or": " eller ",
   "line type": "Strecktyp",
   "open entity": "Öppna {{name}}",
-  "a relation": "Relation"
+  "a relation": "Relation",
+  "explain field": "Förklaring av {{name}}",
+  "show explanations": "Visa förklaringar"
 }

@@ -16,6 +16,7 @@ import { type IPropertyConfiguration } from '../../interfaces/configuration'
 import { getId, isSameType } from '../../utils/utils'
 import { type LinkDirection, nameOf } from '../modal/link-utils'
 import LaterValue from './LaterValue'
+import DetailsHeading, { sectionLabel } from './DetailsHeading'
 
 interface Props {
   link: ILink
@@ -26,8 +27,6 @@ interface Props {
 // The way a link points, seen from its start and its end, and back
 const toChoice: Record<Direction, LinkDirection> = { TO: 'end', FROM: 'start', BOTH: 'both', NONE: 'none' }
 const toDirection: Record<LinkDirection, Direction> = { end: 'TO', start: 'FROM', both: 'BOTH', none: 'NONE' }
-
-export const sectionLabel = 'm:text-[12px] m:font-bold m:tracking-wider m:uppercase m:text-gray-600'
 
 // One of the two entities of the relation: a click opens it in the panel, and the chart shows which it is while the pointer is on it
 function End (props: { entity: IEntity, linkId: string }) {
@@ -115,6 +114,7 @@ function LinkProperties (props: Props) {
     updateLink(update)
   }
 
+  const fieldHelp = useAppStore((state) => state.fieldHelp)
   const direction = toChoice[link.Direction ?? 'NONE']
   const properties = configService.getProperties(link)
 
@@ -133,13 +133,14 @@ function LinkProperties (props: Props) {
       )}
       {properties.length > 0 && (
         <section aria-label={t('details')} className="m:px-4 m:pt-3 m:pb-1 m:flex m:flex-col m:gap-2">
-          <h3 className={sectionLabel}>{t('details')}</h3>
+          <DetailsHeading configs={properties.map(e => e.propertyConfiguration)} />
           {properties.map(e => (
             <LaterValue key={link.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType + link.DateFrom?.toISO() + link.DateTo?.toISO()}
               later={props.later?.[e.propertyConfiguration.TypeId]}>
               <Property
                 value={e.property?.Value}
                 config={e.propertyConfiguration}
+                helpOpen={fieldHelp}
                 onChange={(value) => { linkChanged(link, value, e.propertyConfiguration) }} />
             </LaterValue>
           ))}

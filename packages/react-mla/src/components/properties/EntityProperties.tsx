@@ -8,7 +8,7 @@ import configService from '../../services/configurationService'
 import useMainStore from '../../store/main-store'
 import Property from '../common/Property'
 import LaterValue from './LaterValue'
-import { sectionLabel } from './LinkProperties'
+import DetailsHeading from './DetailsHeading'
 import { useEffect, useState } from 'react'
 import Icon from '../common/Icon'
 import useAppStore from '../../store/app-store'
@@ -25,6 +25,7 @@ interface Props {
 
 function EntityProperties (props: Props) {
   const { t } = useTranslation();
+  const fieldHelp = useAppStore((state) => state.fieldHelp)
   const { entity } = props
   const updateEntity = useMainStore((state) => state.updateEntity)
   const placeEntity = useAppStore((state) => state.setPlaceEntityId)
@@ -101,13 +102,14 @@ function EntityProperties (props: Props) {
   return (
     <div className="m:px-4 m:pt-3">
       <div className="m:flex m:flex-col m:gap-2">
-        <h3 className={sectionLabel}>{t('details')}</h3>
+        <DetailsHeading configs={configService.getProperties(entity).map(e => e.propertyConfiguration)} />
         {configService.getProperties(entity).map(e => (
           <LaterValue key={entity.Id + e.propertyConfiguration.TypeId + e.propertyConfiguration.GlobalType + entity.DateFrom?.toISO() + entity.DateTo?.toISO()}
             later={props.later?.[e.propertyConfiguration.TypeId]}>
             <Property
               value={e.property?.Value}
               config={e.propertyConfiguration}
+              helpOpen={fieldHelp}
               onChange={(newValue) => { entityChanged(entity, newValue, e.propertyConfiguration) }} />
           </LaterValue>
         ))}

@@ -7,12 +7,14 @@ import useSearchStore from '../../store/search-state'
 import ItemResultList from '../result/ItemResultList'
 import Property from '../common/Property'
 import { useTranslation } from 'react-i18next'
-import { helpOf } from '../../utils/properties'
 import { LoadingResults, primaryButton } from './ToolParts'
+import useAppStore from '../../store/app-store'
 
 // A search of a service of the configuration: its form, and what it found
 function SearchTool () {
   const { t } = useTranslation()
+  // The explanations of the fields are shown as the panel shows them
+  const fieldHelp = useAppStore((state) => state.fieldHelp)
   const selectedTool = useSearchStore((state) => state.searchTool)
   const loading = useSearchStore((state) => state.loading)
   const result = useSearchStore((state) => state.result)
@@ -80,16 +82,15 @@ function SearchTool () {
       {!noForm && <form onSubmit={search} className="m:flex m:flex-col m:gap-2.5 m:px-3 m:py-3 m:border-b m:border-gray-200">
         <>
           {fields.map((prop, index) => {
-            const help = helpOf(prop.Name, prop.Description)
             return (
               <div key={prop.TypeId}>
                 <Property
                   autofocus={index === 0}
+                  helpOpen={fieldHelp}
                   value={params[prop.TypeId]}
                   config={prop}
                   validChanged={(validity) => { setValidity(prop.TypeId, validity) }}
                   onChange={(newValue) => { setParamValue(prop.TypeId, newValue) }} />
-                {help && <p className="m:mt-1 m:text-[12px] m:text-gray-600">{help}</p>}
               </div>
             )
           })}

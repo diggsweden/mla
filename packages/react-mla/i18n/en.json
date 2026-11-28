@@ -302,5 +302,7 @@
   "types or": " or ",
   "line type": "Line type",
   "open entity": "Open {{name}}",
-  "a relation": "Relation"
+  "a relation": "Relation",
+  "explain field": "Explanation of {{name}}",
+  "show explanations": "Show explanations"
 }

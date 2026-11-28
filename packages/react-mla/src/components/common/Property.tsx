@@ -8,6 +8,7 @@ import { type IPropertyConfiguration } from '../../interfaces/configuration'
 import Toggle from './Toggle'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
+import { helpOf } from '../../utils/properties'
 
 interface Props {
   config: IPropertyConfiguration
@@ -17,6 +18,12 @@ interface Props {
   readOnly?: boolean
   onChange?: (newValue: string | number | boolean | undefined) => void
   validChanged?: (newValue: boolean) => void
+  // Whether the explanation of the field is shown, until the user opens or closes it with its button. It follows when it changes
+  helpOpen?: boolean
+  // The explanation under the field instead of under its name, so that fields side by side stay level
+  helpBelow?: boolean
+  // The classes of the name and the field, without the explanation under it, like a width
+  fieldClassName?: string
 }
 
 function Property (props: Props) {
@@ -31,6 +38,15 @@ function Property (props: Props) {
 
   const { config, className, autofocus, readOnly, onChange, validChanged } = props
   const key = "prop-" + config.TypeId
+
+  // The explanation of the field, from its description, unless it only says its name again
+  const help = helpOf(config.Name, config.Description)
+  const [helpShown, setHelpShown] = useState(props.helpOpen ?? false)
+  const [helpOpen, setHelpOpen] = useState(props.helpOpen)
+  if (helpOpen !== props.helpOpen) {
+    setHelpOpen(props.helpOpen)
+    setHelpShown(props.helpOpen ?? false)
+  }
 
   useLayoutEffect(() => {
     const test = inputRef.current?.validity.valid ?? true
@@ -129,15 +145,18 @@ function Property (props: Props) {
   // A value that is filled in but does not match the format of the field, which is told below it. An empty field that must be filled in is only marked
   const mismatch = !valid && value != null && value !== '' && config.FieldType !== 'File'
 
+  // A screen reader reads the explanation when the field gets the focus, also when it is not shown
+  const describedBy = [help != null ? key + '-help' : undefined, mismatch ? key + '-error' : undefined].filter(x => x != null).join(' ') || undefined
+
   function getInput () {
     const inputClass = (valid ? 'm:border-gray-300 ' : 'm:border-red-500 m:bg-red-200 ') + 'm:bg-white m:border m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:block m:w-full m:p-1'
     switch (config.FieldType) {
-      case 'String': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="text" required={config.Required} pattern={config.FieldValidation} aria-invalid={mismatch} aria-describedby={mismatch ? key + '-error' : undefined} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass}></input>
-      case 'Multiline': return <textarea id={key} ref={textRef} readOnly={readOnly ?? false} required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + ' min-h-[48px] max-h-[200px] overflow-y-auto'}></textarea>
-      case 'Date': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="date" required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChangeDate(e.target.valueAsDate ?? undefined) }} className={inputClass}></input>
-      case 'Number': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="number" required={config.Required} value={value != null && value !== '' ? Number(value) : ''} onChange={(e) => { handleChange(e.target.value ? Number(e.target.value) : undefined) }} className={inputClass}></input>
+      case 'String': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="text" required={config.Required} pattern={config.FieldValidation} aria-invalid={mismatch} aria-describedby={describedBy} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass}></input>
+      case 'Multiline': return <textarea id={key} ref={textRef} aria-describedby={describedBy} readOnly={readOnly ?? false} required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + ' min-h-[48px] max-h-[200px] overflow-y-auto'}></textarea>
+      case 'Date': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="date" aria-describedby={describedBy} required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChangeDate(e.target.valueAsDate ?? undefined) }} className={inputClass}></input>
+      case 'Number': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="number" aria-describedby={describedBy} required={config.Required} value={value != null && value !== '' ? Number(value) : ''} onChange={(e) => { handleChange(e.target.value ? Number(e.target.value) : undefined) }} className={inputClass}></input>
       case 'Boolean': return <Toggle title={config.Name} readOnly={readOnly ?? false} value={value === true} onChange={(e) => { handleChange(e) }} yesNo className="m:mt-2" />
-      case 'Select': return <select id={key} ref={selectRef} required={config.Required} value={value?.toString() ?? (config.Required ? undefined : '0')} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + (readOnly ?? false ? ' pointer-events-none' : '')}>
+      case 'Select': return <select id={key} ref={selectRef} aria-describedby={describedBy} required={config.Required} value={value?.toString() ?? (config.Required ? undefined : '0')} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + (readOnly ?? false ? ' pointer-events-none' : '')}>
         {!config.Required && !config.FieldOptions?.some(x => x.Value === '0') &&
           <option value={undefined}></option>
         }
@@ -150,12 +169,35 @@ function Property (props: Props) {
     }
   }
 
+  const name = config.Name ?? config.GlobalType
+  const helpButton = help != null && (
+    <button type="button" aria-expanded={helpShown} aria-controls={key + '-help'} aria-label={t('explain field', { name })} title={t('explain field', { name })}
+      onClick={() => { setHelpShown(!helpShown) }}
+      className={'m:w-5 m:h-5 m:shrink-0 m:flex m:items-center m:justify-center m:rounded-full m:cursor-pointer ' + (helpShown ? 'm:bg-blue-50 m:text-primary' : 'm:text-gray-500 m:hover:text-primary m:hover:bg-blue-50')}>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></svg>
+    </button>
+  )
+  // Kept in the page also when it is hidden, so that the field is still described by it
+  const helpText = help != null && (
+    <p id={key + '-help'} hidden={!helpShown} className={'m:text-[12px] m:leading-snug m:text-gray-600 ' + (props.helpBelow ? 'm:mt-1' : 'm:mb-1.5')}>{help}</p>
+  )
+
   return (
     <div className={className}>
-      {config.FieldType !== 'Boolean' &&
-        <label htmlFor={key} className="m:mb-1 m:text-sm m:font-medium m:text-gray-900" title={config.Description}>{config.Name ?? config.GlobalType}</label>
-      }
-      {getInput()}
+      <div className={props.fieldClassName}>
+        {config.FieldType !== 'Boolean' &&
+          // The button of the explanation is at the right end of the row of the name, so that the names stay a calm column
+          <div className="m:flex m:items-center m:gap-2 m:mb-1">
+            <label htmlFor={key} className="m:text-sm m:font-medium m:text-gray-900">{name}</label>
+            {helpButton !== false && <span className="m:ml-auto">{helpButton}</span>}
+          </div>
+        }
+        {!props.helpBelow && helpText}
+        {config.FieldType === 'Boolean' && help != null
+          ? <div className="m:flex m:items-center m:gap-2">{getInput()}<span className="m:mt-2 m:ml-auto">{helpButton}</span></div>
+          : getInput()}
+      </div>
+      {props.helpBelow && helpText}
       {mismatch &&
         <p id={key + '-error'} className="m:mt-1 m:flex m:items-center m:gap-1 m:text-[12px] m:text-red-700">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true" className="m:shrink-0"><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 16h.01" /></svg>
