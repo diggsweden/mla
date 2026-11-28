@@ -15,6 +15,7 @@ import { PhaseSettingsPanel, TimelineSettingsPanel } from './SettingsPanels'
 import PhaseDocument from './PhaseDocument'
 import TimelineDocument from './TimelineDocument'
 import { CollapsedPanel, Warnings } from './PanelParts'
+import DateField from '../common/DateField'
 
 // The time line and the phase analysis, shown instead of the chart: the choice to the left, the document, and the settings to the right
 function AnalysisView (props: { className?: string }) {
@@ -142,7 +143,7 @@ function AnalysisView (props: { className?: string }) {
     if (view === 'timeline') setTimeline(patch); else setPhase(patch)
   }
   const whole = periodOf(undefined, undefined, allActivities, rangePhases)
-  const dayField = 'm:w-full m:box-border m:bg-white m:border m:border-gray-300 m:text-gray-900 m:text-[13px] m:rounded m:px-1.5 m:py-1'
+  const dayField = 'm:w-full m:box-border m:bg-white m:border m:border-gray-300 m:text-gray-900 m:text-[14px] m:rounded m:px-1.5 m:py-1'
   const periodFields = (
     <section aria-label={t('period')} className="m:flex m:flex-col m:gap-1.5 m:px-4 m:py-3 m:border-b m:border-gray-200">
       <div className="m:flex m:items-baseline m:justify-between">
@@ -153,12 +154,13 @@ function AnalysisView (props: { className?: string }) {
       </div>
       <div className="m:grid m:grid-cols-2 m:gap-2">
         <label className="m:flex m:flex-col m:gap-0.5 m:text-[12px] m:font-semibold m:text-gray-700">{t('from')}
-          <input type="date" value={periodFrom ?? whole.first?.toISODate() ?? ''} max={periodTo} className={dayField}
-            onChange={(e) => { setPeriod({ From: e.target.value || undefined }) }} />
+          {/* Without a date of its own, it shows the first date there is, and has nothing to empty */}
+          <DateField name={t('from')} label={false} value={periodFrom ?? whole.first?.toISODate() ?? ''} max={periodTo} className={dayField} clearable={periodFrom != null}
+            onChange={(value) => { setPeriod({ From: value || undefined }) }} />
         </label>
         <label className="m:flex m:flex-col m:gap-0.5 m:text-[12px] m:font-semibold m:text-gray-700">{t('to')}
-          <input type="date" value={periodTo ?? whole.last?.toISODate() ?? ''} min={periodFrom} className={dayField}
-            onChange={(e) => { setPeriod({ To: e.target.value || undefined }) }} />
+          <DateField name={t('to')} label={false} value={periodTo ?? whole.last?.toISODate() ?? ''} min={periodFrom} className={dayField} clearable={periodTo != null}
+            onChange={(value) => { setPeriod({ To: value || undefined }) }} />
         </label>
       </div>
     </section>

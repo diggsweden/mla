@@ -14,6 +14,7 @@ import { phaseStyle } from '../../utils/color'
 import ColorPalette from '../common/ColorPalette'
 import Icon from '../common/Icon'
 import Modal from '../common/Modal'
+import DateField from '../common/DateField'
 
 interface Props {
   onClose: () => void
@@ -133,8 +134,8 @@ function PhaseDialog (props: Props) {
               <input type="text" value={p.Description} autoFocus={p.Id === props.focusId} aria-label={t('description')} aria-invalid={p.Description.trim() === ''}
                 onChange={(e) => { update(p.Id, { Description: e.target.value }) }}
                 className={inputClass + (p.Description.trim() === '' ? ' m:border-red-500!' : '')} />
-              <input type="date" required value={p.Date.toISODate() ?? ''} aria-label={t('starts') + ', ' + p.Description}
-                onChange={(e) => { const d = dateOf(e.target.value); if (d) update(p.Id, { Date: d }) }} className={inputClass} />
+              <DateField name={t('starts') + ', ' + p.Description} label={false} required value={p.Date.toISODate() ?? ''}
+                onChange={(value) => { const d = dateOf(value); if (d) update(p.Id, { Date: d }) }} className={inputClass} />
               <button type="button" aria-label={t('delete phase', { name: p.Description })} title={t('delete')}
                 onClick={() => { setPhases(list => list.filter(x => x.Id !== p.Id)) }}
                 className="m:w-8 m:h-8 m:flex m:items-center m:justify-center m:rounded m:text-gray-600 m:hover:bg-red-50 m:hover:text-red-700 m:cursor-pointer">
@@ -160,8 +161,8 @@ function PhaseDialog (props: Props) {
             <input type="text" value={template !== '' ? t('phases of template', { count: templates.find(x => x.Name === template)?.Phases.length ?? 0 }) : name}
               disabled={template !== ''} placeholder={t('name of the phase')} aria-label={t('name of the phase')} autoFocus={props.focusId == null}
               onChange={(e) => { setName(e.target.value) }} onKeyDown={addOnEnter} className={inputClass + ' m:disabled:bg-gray-100'} />
-            <input type="date" required value={date.toISODate() ?? ''} aria-label={template !== '' ? t('first phase starts') : t('starts')}
-              onChange={(e) => { const d = dateOf(e.target.value); if (d) setDate(d) }} onKeyDown={addOnEnter} className={inputClass} />
+            <DateField name={template !== '' ? t('first phase starts') : t('starts')} label={false} required value={date.toISODate() ?? ''}
+              onChange={(value) => { const d = dateOf(value); if (d) setDate(d) }} onKeyDown={addOnEnter} className={inputClass} />
             <button type="button" onClick={add} disabled={template === '' && name.trim() === ''}
               className="m:text-[13px] m:px-3 m:py-1.5 m:border m:border-gray-300 m:rounded m:bg-white m:hover:bg-gray-100 m:disabled:opacity-50 m:cursor-pointer m:disabled:cursor-default">{t('add')}</button>
             {colorFor === 'new' && <ColorChoice label={t('color of new phase')} onSelect={(c) => { setColor(c); setColorFor(undefined) }} />}

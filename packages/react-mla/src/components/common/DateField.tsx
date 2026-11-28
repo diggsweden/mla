@@ -25,6 +25,10 @@ interface Props {
   className?: string
   // What is said under a half typed date
   invalidMessage?: string
+  // Whether the button that empties it is there, when it is not only when there is a date. A field that shows a date it falls back to
+  // has nothing to empty when it shows that one
+  clearable?: boolean
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void
 }
 
 // A small button at the right end of a field, after its own buttons, that empties it
@@ -70,7 +74,7 @@ export default function DateField (props: Props) {
   }
 
   const empty = (props.value == null || props.value === '') && !half
-  const clearable = !empty && !props.readOnly && !props.required
+  const clearable = (props.clearable ?? !empty) && !props.readOnly && !props.required
   const describedBy = [props.describedBy, half ? id + '-invalid' : undefined].filter(x => x != null).join(' ') || undefined
 
   return (
@@ -80,7 +84,7 @@ export default function DateField (props: Props) {
           aria-label={props.label === false ? props.name : undefined} aria-invalid={half || undefined} aria-describedby={describedBy}
           data-empty={empty ? true : undefined}
           onChange={(e) => { check(e); props.onChange(e.target.value) }}
-          onKeyUp={check} onBlur={check}
+          onKeyUp={check} onBlur={check} onKeyDown={props.onKeyDown}
           // Room at the right end for the button that empties it, so that the one of the calendar is beside it
           className={props.className + (clearable ? ' m:pr-7' : '')} />
         {clearable &&
