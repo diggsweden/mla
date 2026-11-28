@@ -6,7 +6,7 @@ import { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import { type IPropertyConfiguration } from '../../interfaces/configuration'
 import Toggle from './Toggle'
-import { DateTime } from 'luxon'
+import DateField from './DateField'
 import { useTranslation } from 'react-i18next'
 import { helpOf } from '../../utils/properties'
 
@@ -107,13 +107,13 @@ function Property (props: Props) {
     }
   }
 
-  function handleChangeDate (date?: Date) {
-    const dateString = date != undefined ? DateTime.fromJSDate(date).toFormat("yyyy-MM-dd") : ''
-    setValue(dateString)
+  // A date as the field holds it, like 2025-02-12, or nothing when it was emptied
+  function handleChangeDate (date: string) {
+    setValue(date)
     const test = inputRef.current?.validity.valid ?? true
     setValid(test)
     if (test && onChange) {
-      onChange(dateString)
+      onChange(date)
     }
   }
 
@@ -143,17 +143,24 @@ function Property (props: Props) {
   }
 
   // A value that is filled in but does not match the format of the field, which is told below it. An empty field that must be filled in is only marked
-  const mismatch = !valid && value != null && value !== '' && config.FieldType !== 'File'
+  // A date says itself when it is half typed
+  const mismatch = !valid && value != null && value !== '' && config.FieldType !== 'File' && config.FieldType !== 'Date'
 
   // A screen reader reads the explanation when the field gets the focus, also when it is not shown
   const describedBy = [help != null ? key + '-help' : undefined, mismatch ? key + '-error' : undefined].filter(x => x != null).join(' ') || undefined
 
   function getInput () {
-    const inputClass = (valid ? 'm:border-gray-300 ' : 'm:border-red-500 m:bg-red-200 ') + 'm:bg-white m:border m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:block m:w-full m:p-1'
+    // The fields have their own size of text, as they take the size of where they are, which is larger in a dialog than in the panels
+    const inputClass = (valid ? 'm:border-gray-300 ' : 'm:border-red-500 m:bg-red-200 ') + 'm:bg-white m:border m:text-gray-900 m:text-[14px] m:rounded-lg m:focus:ring-blue-500 m:block m:w-full m:p-1'
     switch (config.FieldType) {
       case 'String': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="text" required={config.Required} pattern={config.FieldValidation} aria-invalid={mismatch} aria-describedby={describedBy} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass}></input>
       case 'Multiline': return <textarea id={key} ref={textRef} aria-describedby={describedBy} readOnly={readOnly ?? false} required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + ' min-h-[48px] max-h-[200px] overflow-y-auto'}></textarea>
-      case 'Date': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="date" aria-describedby={describedBy} required={config.Required} value={value?.toString() ?? ''} onChange={(e) => { handleChangeDate(e.target.valueAsDate ?? undefined) }} className={inputClass}></input>
+      // A date that is half typed, or cleared, does not change the value, so its validity is checked as it is typed and when it is left.
+      // An empty date that is valid hides the format the browser shows, which looked like a date that was already chosen
+      // The same field of a date as everywhere: it says itself when a date is half typed
+      case 'Date': return <DateField id={key} ref={inputRef} name={config.Name} value={value?.toString()} required={config.Required} readOnly={readOnly}
+        describedBy={describedBy} invalidMessage={config.FieldValidationMessage || undefined} className={inputClass}
+        onValidity={setValid} onChange={(date) => { handleChangeDate(date) }} />
       case 'Number': return <input id={key} ref={inputRef} readOnly={readOnly ?? false} type="number" aria-describedby={describedBy} required={config.Required} value={value != null && value !== '' ? Number(value) : ''} onChange={(e) => { handleChange(e.target.value ? Number(e.target.value) : undefined) }} className={inputClass}></input>
       case 'Boolean': return <Toggle title={config.Name} readOnly={readOnly ?? false} value={value === true} onChange={(e) => { handleChange(e) }} yesNo className="m:mt-2" />
       case 'Select': return <select id={key} ref={selectRef} aria-describedby={describedBy} required={config.Required} value={value?.toString() ?? (config.Required ? undefined : '0')} onChange={(e) => { handleChange(e.target.value) }} className={inputClass + (readOnly ?? false ? ' pointer-events-none' : '')}>

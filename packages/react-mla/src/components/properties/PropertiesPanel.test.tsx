@@ -34,6 +34,20 @@ afterEach(() => {
 })
 
 describe('the panel of properties', () => {
+  test('switches the kind of time also before a date is given, and back', async () => {
+    const screen = await render(<PropertiesPanel />)
+    useMainStore.getState().setSelected(['annaperson'])
+    await screen.getByRole('button', { name: /Time and history/ }).click()
+    const moment = screen.getByRole('radio', { name: 'Moment' })
+    const validity = screen.getByRole('radio', { name: 'Validity' })
+    await expect.element(moment).toHaveAttribute('aria-checked', 'true')
+
+    await validity.click()
+    await expect.element(validity).toHaveAttribute('aria-checked', 'true')
+    await moment.click()
+    await expect.element(moment).toHaveAttribute('aria-checked', 'true')
+  })
+
   test('shows who is selected in its heading', async () => {
     const screen = await render(<PropertiesPanel />)
     useMainStore.getState().setSelected(['annaperson'])

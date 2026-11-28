@@ -46,3 +46,19 @@ describe('the explanation of a field', () => {
     expect(screen.getByRole('button').elements()).toHaveLength(0)
   })
 })
+
+describe('a date', () => {
+  const birth: IPropertyConfiguration = { TypeId: 'birth', Name: 'Born', Description: '', FieldType: 'Date' }
+
+  test('is cleared with its button, which is there only when there is a date', async () => {
+    const changes: unknown[] = []
+    const screen = await render(<Property config={birth} value="1980-05-17" onChange={(value) => { changes.push(value) }} />)
+    const field = screen.getByLabelText('Born', { exact: true })
+    await expect.element(field).toHaveValue('1980-05-17')
+
+    await screen.getByRole('button', { name: 'Clear Born' }).click()
+    await expect.element(field).toHaveValue('')
+    expect(changes).toEqual([''])
+    expect(screen.getByRole('button', { name: 'Clear Born' }).elements()).toHaveLength(0)
+  })
+})

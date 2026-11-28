@@ -7,6 +7,7 @@ import { type IPhaseEvent } from '../../interfaces/data-models'
 import { generateUUID } from '../../utils/utils'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
+import DateField from '../common/DateField'
 
 interface Props {
   onChange: (event: IPhaseEvent) => void
@@ -52,7 +53,7 @@ function PhaseCreator (props: Props) {
       <input autoFocus type="text" value={newEvent.Description} onChange={(e) => { setText(e.target.value) }} className={inputStyle}></input>
 
       <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('date')}</span>
-      <input required type="date" value={newEvent.Date.toISODate() ?? ''} onChange={(e) => { setDate(e.target.value) }} className={inputStyle}></input>
+      <DateField name={t('date')} label={false} required value={newEvent.Date.toISODate() ?? ''} onChange={setDate} className={inputStyle} />
     </div>
   )
 }

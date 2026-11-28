@@ -93,3 +93,10 @@
   height: 2rem;
   padding-left: 0.5rem;
 }
+
+/* An empty date or time that does not have the focus is empty, without the format the browser shows in it, which looked like
+   a value that was already chosen. The format is seen as soon as the field is used */
+.mla-component input[type='date'][data-empty]:not(:focus),
+.mla-component input[type='time'][data-empty]:not(:focus) {
+  color: transparent;
+}

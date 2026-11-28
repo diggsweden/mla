@@ -12,6 +12,7 @@ import { produce } from 'immer'
 import { generateUUID, getId } from '../../utils/utils'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
+import DateField from '../common/DateField'
 
 interface Props {
   className?: string
@@ -59,12 +60,15 @@ function HistoryProperties (props: Props) {
     return []
   }, [entity, link])
 
+  // The kind of time is known from the dates: the same date from and to is a moment, and other dates a validity.
+  // Without dates there is nothing to tell it by, so the kind the user chose is kept until a date is given
+  const noDates = current != null && current.DateFrom == null && current.DateTo == null
+  const [chosenKind, setChosenKind] = useState<'moment' | 'validity'>('moment')
   const isEvent = useMemo(() => {
     return current != null && history.length == 1 && (
-      (current.DateFrom == null && current.DateTo == null) ||
-      (current.DateFrom == current.DateTo)
+      noDates ? chosenKind === 'moment' : current.DateFrom == current.DateTo
     )
-  }, [current, history.length])
+  }, [current, history.length, noDates, chosenKind])
 
   const { min, max, requiredFirst, requiredLast } = useMemo(() => {
     let history = [] as IChartBase[] | undefined
@@ -94,13 +98,10 @@ function HistoryProperties (props: Props) {
             max = history[i + 1].DateFrom
           }
 
-          if (i === 0 && history.length > 1) {
-            requiredFirst = false
-            requiredLast = true
-          } else if (i === history.length - 1) {
-            requiredFirst = true
-            requiredLast = true
-          }
+          // A date is needed only where the version meets another one: the start, when there is one before it, and the end,
+          // when there is one after it. The first version can have begun at any time, and the latest holds until further notice
+          requiredFirst = i > 0
+          requiredLast = i < history.length - 1
 
           break
         }
@@ -226,13 +227,14 @@ function HistoryProperties (props: Props) {
     return null
   }
 
-  const field = 'm:w-full m:box-border m:bg-white m:border m:border-gray-300 m:text-gray-900 m:text-[13px] m:rounded-md m:px-2 m:h-8 m:disabled:bg-gray-50 m:disabled:text-gray-400'
+  const field = 'm:w-full m:box-border m:bg-white m:border m:border-gray-300 m:text-gray-900 m:text-[14px] m:rounded-md m:px-2 m:h-8 m:disabled:bg-gray-50 m:disabled:text-gray-400'
   const label = 'm:text-[12px] m:font-semibold m:text-gray-900'
   const configs = configService.getProperties(current).map(p => p.propertyConfiguration)
   // Newest first, as the latest is the one that holds now
   const versions = [...history].reverse()
   const latest = history.at(-1)
-  const canBeMoment = history.length === 1 && current.DateFrom != null
+  // A moment is one version, with a date or none yet
+  const canBeMoment = history.length === 1 && (current.DateFrom != null || noDates)
 
   function changeOf (version: IChartBase): string {
     const i = history.findIndex(h => h.InternalId === version.InternalId)
@@ -256,14 +258,21 @@ function HistoryProperties (props: Props) {
     summary = t('valid during', { period: periodText(current) })
   }
 
+  // The same field of a date as everywhere. It gives the date as the browser does, at midnight UTC, as the dates are made from it
   const dateInput = (value: DateTime | undefined, onChange: (date: Date | null) => void, extra: { min?: string, max?: string, required?: boolean, label: string }) => (
-    <input type="date" aria-label={extra.label} value={toDateString(value) ?? ''} min={extra.min} max={extra.max} required={extra.required}
-      onChange={(e) => { onChange(e.target.valueAsDate) }} className={field} />
+    <DateField name={extra.label} label={false} value={toDateString(value) ?? ''} min={extra.min} max={extra.max} required={extra.required} className={field}
+      onChange={(date) => { onChange(date === '' ? null : new Date(date)) }} />
   )
-  const timeInput = (value: DateTime | undefined, onChange: (value: string) => void, extra: { min?: string, max?: string, label: string }) => (
-    <input type="time" aria-label={extra.label} disabled={value == null} value={value ? toTimeString(value) : ''} min={extra.min} max={extra.max}
-      onChange={(e) => { onChange(e.target.value) }} className={field} />
-  )
+  // A day without a time is kept at the start of the day, or at its end for the last one, as the summaries take it.
+  // The field is then empty, instead of showing a time that looks chosen
+  const timeInput = (value: DateTime | undefined, onChange: (value: string) => void, extra: { min?: string, max?: string, label: string, noTime: string }) => {
+    const time = value != null ? toTimeString(value) : undefined
+    const shown = time != null && time !== extra.noTime ? time : ''
+    return (
+      <input type="time" aria-label={extra.label} disabled={value == null} value={shown} min={extra.min} max={extra.max} data-empty={shown === '' ? true : undefined}
+        onChange={(e) => { onChange(e.target.value) }} className={field} />
+    )
+  }
   const setTime = (date: DateTime, value: string, fallback: string) => {
     const sp = (value === '' ? fallback : value).split(':').map(x => Number.parseInt(x))
     return sp.length === 2 ? date.set({ hour: sp[0], minute: sp[1] }) : undefined
@@ -284,9 +293,9 @@ function HistoryProperties (props: Props) {
             {/* A calm choice, so that the direction of a relation is the only strong color in the panel */}
             <div role="radiogroup" aria-label={t('kind of time')} className="m:grid m:grid-cols-2 m:gap-1 m:p-[3px] m:bg-gray-100 m:rounded-md">
               <button type="button" role="radio" aria-checked={isEvent} disabled={!isEvent && !canBeMoment} title={!isEvent && !canBeMoment ? t('moment needs one version') : undefined}
-                onClick={() => { if (!isEvent) setEvent(current) }}
+                onClick={() => { if (!isEvent) { setChosenKind('moment'); if (!noDates) setEvent(current) } }}
                 className={'m:text-[12px] m:font-semibold m:py-1 m:rounded m:cursor-pointer m:disabled:opacity-40 m:disabled:cursor-default ' + (isEvent ? 'm:bg-white m:text-gray-900 m:shadow-sm' : 'm:text-gray-600 m:enabled:hover:text-gray-900')}>{t('moment')}</button>
-              <button type="button" role="radio" aria-checked={!isEvent} onClick={() => { if (isEvent) setHistory(current) }}
+              <button type="button" role="radio" aria-checked={!isEvent} onClick={() => { if (isEvent) { setChosenKind('validity'); if (!noDates) setHistory(current) } }}
                 className={'m:text-[12px] m:font-semibold m:py-1 m:rounded m:cursor-pointer ' + (!isEvent ? 'm:bg-white m:text-gray-900 m:shadow-sm' : 'm:text-gray-600 m:hover:text-gray-900')}>{t('validity')}</button>
             </div>
             <p className="m:-mt-1 m:text-[12px] m:text-gray-600">{isEvent ? t('moment help') : t('validity help')}</p>
@@ -294,7 +303,7 @@ function HistoryProperties (props: Props) {
             {isEvent && (
               <div className="m:flex m:flex-col m:gap-1">
                 <span className={label}>{t('happens')}</span>
-                <div className="m:grid m:grid-cols-[minmax(0,1fr)_88px] m:gap-2">
+                <div className="m:grid m:grid-cols-[minmax(0,1fr)_116px] m:gap-2">
                   {dateInput(current.DateFrom, (date) => {
                     if (date == null) {
                       dateChanged(current, undefined, undefined)
@@ -306,7 +315,7 @@ function HistoryProperties (props: Props) {
                   {timeInput(current.DateFrom, (value) => {
                     const valid = setTime(current.DateFrom!, value, '00:00')
                     if (valid) dateChanged(current, valid, valid)
-                  }, { max: toTimeString(current.DateTo) ?? '23:59', label: t('time') })}
+                  }, { max: toTimeString(current.DateTo) ?? '23:59', label: t('time'), noTime: '00:00' })}
                 </div>
                 {current.DateFrom != null && (
                   <button type="button" onClick={() => { dateChanged(current, undefined, undefined) }} className="m:self-start m:text-[12px] m:text-blue-700 m:cursor-pointer m:hover:underline">{t('remove time')}</button>
@@ -350,26 +359,26 @@ function HistoryProperties (props: Props) {
                   <div className="m:flex m:flex-col m:gap-2 m:mt-1 m:p-2.5 m:rounded-md m:bg-gray-50 m:border m:border-gray-200">
                     <div className="m:flex m:flex-col m:gap-1">
                       <span className={label}>{t('from')}</span>
-                      <div className="m:grid m:grid-cols-[minmax(0,1fr)_88px] m:gap-2">
+                      <div className="m:grid m:grid-cols-[minmax(0,1fr)_116px] m:gap-2">
                         {dateInput(current.DateFrom, (date) => {
                           dateChanged(current, date == null ? undefined : formatDate(date, current.DateFrom, true), current.DateTo)
                         }, { min: toDateString(min), max: toDateString(current.DateTo ?? max), required: requiredFirst, label: t('date from') })}
                         {timeInput(current.DateFrom, (value) => {
                           const valid = setTime(current.DateFrom!, value, '00:00')
                           if (valid) dateChanged(current, valid, current.DateTo)
-                        }, { max: toTimeString(current.DateTo) ?? '23:59', label: t('time from') })}
+                        }, { max: toTimeString(current.DateTo) ?? '23:59', label: t('time from'), noTime: '00:00' })}
                       </div>
                     </div>
                     <div className="m:flex m:flex-col m:gap-1">
                       <span className={label}>{t('to')}</span>
-                      <div className="m:grid m:grid-cols-[minmax(0,1fr)_88px] m:gap-2">
+                      <div className="m:grid m:grid-cols-[minmax(0,1fr)_116px] m:gap-2">
                         {dateInput(current.DateTo, (date) => {
                           dateChanged(current, current.DateFrom, date == null ? undefined : formatDate(date, current.DateFrom, false))
                         }, { min: toDateString(current.DateFrom ?? min), max: toDateString(max), required: requiredLast, label: t('date to') })}
                         {timeInput(current.DateTo, (value) => {
                           const valid = setTime(current.DateTo!, value, '23:59')
                           if (valid) dateChanged(current, current.DateFrom, valid)
-                        }, { min: toTimeString(current.DateFrom) ?? '00:00', label: t('time to') })}
+                        }, { min: toTimeString(current.DateFrom) ?? '00:00', label: t('time to'), noTime: '23:59' })}
                       </div>
                       <span className="m:text-[12px] m:text-gray-600">{t('empty to help')}</span>
                     </div>
