@@ -116,7 +116,7 @@ function HistoryProperties (props: Props) {
       return undefined
     }
 
-    let newDate = fixDate(date)!.toUTC()
+    let newDate = fixDate(date)!
     if (dateWithTime == null) {
       if (start) {
         newDate = newDate.startOf("day")

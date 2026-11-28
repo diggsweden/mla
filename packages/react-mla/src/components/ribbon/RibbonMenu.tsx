@@ -16,6 +16,7 @@ import DrawTabPanel from './tab/DrawTabPanel'
 
 import configService from '../../services/configurationService'
 import useAppStore, { type Tab } from '../../store/app-store'
+import useAnalysisStore from '../../store/analysis-store'
 import { useTranslation } from 'react-i18next'
 
 const ALL_TABS = ['archive', 'start', 'search find', 'analysis', 'draw', 'look feel', 'select', 'show', 'map'] as Tab[]
@@ -30,6 +31,10 @@ function RibbonMenu () {
   const setShapeTool = useAppStore((state) => state.setShapeTool)
 
   function showTab (tab: Tab) {
+    // The phase analysis and the event flow belong to the analysis tab: another tab shows the chart again
+    if (tab !== 'analysis') {
+      useAnalysisStore.getState().close()
+    }
     setActiveTool(undefined)
     setShapeTool(undefined)
     useAppStore.getState().setLinkTool(false)

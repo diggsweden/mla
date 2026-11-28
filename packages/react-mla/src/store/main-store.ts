@@ -19,6 +19,7 @@ import { fixDate, removeInternals } from '../utils/date'
 import type { IGeoFeature } from '../interfaces/data-models/geo'
 import type { IShape } from '../interfaces/data-models/shape'
 import { parseShapes } from '../utils/shape-parse'
+import useAnalysisStore, { type AnalysisFile } from './analysis-store'
 
 export type IntervalType = 'day' | 'week' | 'month' | 'custom'
 
@@ -482,6 +483,8 @@ const useMainStore = create<MainState>((set, get) => ({
       PhaseEvents: Object.values(get().phaseEvents),
       GeoFeatures: Object.values(get().geoFeatures),
       Shapes: get().shapes,
+      // The time line and the phase analysis; left out when they have not been used, so that the file is the same as before
+      Analysis: useAnalysisStore.getState().serialize(),
       context: get().context
     }
 
@@ -489,7 +492,7 @@ const useMainStore = create<MainState>((set, get) => ({
     return json
   },
   open: (json: string) => {
-    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], GeoFeatures: IGeoFeature[], Shapes?: unknown, context: string }
+    const parsed = JSON.parse(json) as { Entities: IEntity[], Links: ILink[], PhaseEvents: IPhaseEvent[], Events: IPhaseEvent[] | IEvent[], GeoFeatures: IGeoFeature[], Shapes?: unknown, Analysis?: AnalysisFile, context: string }
 
     internalAdd(false, parsed.Entities, parsed.Links, false, parseShapes(parsed.Shapes))
 
@@ -507,7 +510,8 @@ const useMainStore = create<MainState>((set, get) => ({
         get().setPhaseEvent({
           Id: f.Id,
           Description: f.Description,
-          Date: f.Date
+          Date: f.Date,
+          Color: typeof f.Color === 'string' ? f.Color : undefined
         })
       })
     }
@@ -516,6 +520,11 @@ const useMainStore = create<MainState>((set, get) => ({
       parsed.GeoFeatures.forEach(f => {
         get().setGeoFeature(f)
       })
+    }
+
+    // Files from before the time line and the phase analysis have no Analysis, and keep the setup there is
+    if (parsed.Analysis != null && typeof parsed.Analysis === 'object') {
+      useAnalysisStore.getState().load(parsed.Analysis)
     }
 
     set((state) => ({

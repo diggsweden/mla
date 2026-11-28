@@ -2,23 +2,20 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { type ChangeEvent, useRef, useState } from 'react'
-import type { IPhaseEvent } from '../../../interfaces/data-models'
+import { useRef, useState } from 'react'
 import useAppStore from '../../../store/app-store'
-import useMainStore, { type IntervalType } from '../../../store/main-store'
+import useMainStore from '../../../store/main-store'
 import RibbonMenuButton from '../RibbonMenuButton'
 import RibbonMenuSection from '../RibbonMenuSection'
 import RibbonMenuDivider from '../RibbonMenuDivider'
 import Modal from '../../common/Modal'
-import ActivityAnalysis from '../../modal/ActivityAnalysis'
-import PhaseCreator from '../../modal/PhaseCreator'
+import useAnalysisStore from '../../../store/analysis-store'
+import PhaseDialog from '../../modal/PhaseDialog'
 import GraphToolbox from '../toolbox/GraphToolbox'
 import configService from '../../../services/configurationService'
-import { toDateString } from '../../../utils/date'
 import EventFilterTool from '../../tools/EventFilterTool'
 import type { IEventFilter } from '../../../interfaces/configuration/event-operations'
 import TableTool from '../../tools/TableTool'
-import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
 function AnalysisTabPanel () {
@@ -28,50 +25,34 @@ function AnalysisTabPanel () {
   const selectedEntities = useMainStore((state) => state.selectedEntities)
   const selectedLinks = useMainStore((state) => state.selectedLinks)
   const setHistory = useAppStore((state) => state.setHistoryMode)
-  const date = useMainStore((state) => state.currentDate)
   const min = useMainStore((state) => state.minDate)
-  const max = useMainStore((state) => state.maxDate)
   const setDate = useMainStore((state) => state.setDate)
   const setSelected = useMainStore((state) => state.setSelected)
-  const interval = useMainStore((state) => state.interval)
-  const setInterval = useMainStore((state) => state.setInterval)
-  const setTimespan = useMainStore((state) => state.setTimespan)
   const events = useMainStore((state) => state.events)
   const setFilter = useMainStore((state) => state.setEventFilter)
 
-  const [showAnalysisModal, setShowAnalysisModal] = useState(false)
+  const analysisView = useAnalysisStore((state) => state.view)
+  const openView = useAnalysisStore((state) => state.open)
+  const closeView = useAnalysisStore((state) => state.close)
+  // The time line, the phase analysis and the event flow are shown one at a time
+  const toggleView = (view: 'phase' | 'timeline') => {
+    if (analysisView === view) {
+      closeView()
+    } else {
+      if (history) setHistory(false)
+      openView(view)
+    }
+  }
   const [showPhaseEventModal, setShowModal] = useState(false)
   const [showEventModal, setShowEventModal] = useState(false)
   const [showTableTool, setShowTableTool] = useState(false)
 
-  const setEvent = useMainStore((state) => state.setPhaseEvent)
-  const [updateEvent, setUpdateEvent] = useState(undefined as undefined | IPhaseEvent)
-
   function toggleHistory () {
+    if (!history) closeView()
     setHistory(!history)
     // The timeline starts at the first date, with nothing selected
     setSelected([])
     setDate(min)
-  }
-
-  function addEvent () {
-    if (updateEvent) {
-      setEvent(updateEvent)
-    }
-    setUpdateEvent(undefined)
-    setShowModal(false)
-  }
-
-  function dateChanged (e: ChangeEvent<HTMLInputElement>) {
-    if (e.target.valueAsDate != null) {
-      setDate(DateTime.fromJSDate(e.target.valueAsDate))
-    }
-  }
-
-  function dateToChanged (e: ChangeEvent<HTMLInputElement>) {
-    if (e.target.valueAsDate != null) {
-      setTimespan({ DateFrom: date.DateFrom, DateTo: DateTime.fromJSDate(e.target.valueAsDate) })
-    }
   }
 
   const updatedFilter = useRef<Record<string, IEventFilter[] | undefined>>({})
@@ -83,7 +64,6 @@ function AnalysisTabPanel () {
     setFilter(updatedFilter.current)
   }
 
-  const timePickerClass = "m:bg-white m:border m:border-gray-300 m:text-gray-900 m:rounded-lg m:focus:ring-blue-500 m:focus:border-blue-500 m:block m:w-full m:px-1 m:cursor-pointer"
   return (<>
     <div className="m:flex m:text-center m:h-full m:p-1">
       <GraphToolbox />
@@ -97,45 +77,15 @@ function AnalysisTabPanel () {
       {config.TimeAnalysis != null && <>
         <RibbonMenuSection title={t('time analysis')} >
           <RibbonMenuButton label={t('timeline')} active={history} onClick={() => { toggleHistory() }} iconName="straighten" />
-          {config.TimeAnalysis.PhaseAnalysis && <>
-            <RibbonMenuButton label={t('add phase')} onClick={() => { setShowModal(true) }} iconName="add_column_right" />
-            <RibbonMenuButton label={t('phase analysis')} onClick={() => { setShowAnalysisModal(true) }} iconName="outlined_view_week" />
-          </>
-          }
+          <RibbonMenuButton label={t('phases')} onClick={() => { setShowModal(true) }} iconName="add_column_right" />
+          <RibbonMenuButton label={t('phase analysis')} active={analysisView === 'phase'} onClick={() => { toggleView('phase') }} iconName="outlined_view_week" />
+          <RibbonMenuButton label={t('event flow')} active={analysisView === 'timeline'} onClick={() => { toggleView('timeline') }} iconName="view_timeline" />
         </RibbonMenuSection>
 
-        <RibbonMenuSection title={t('select time interval')} >
-          <div className="m:text-left m:px-1">
-            <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('from')} - {t('to')}</span>
-            <input type='Date' required min={toDateString(min)} value={toDateString(date.DateFrom)} onChange={dateChanged} className={timePickerClass}></input>
-            <input type='Date' min={toDateString(date.DateFrom)} max={toDateString(max)} required readOnly={interval !== 'custom'} value={toDateString(date.DateTo)} onChange={dateToChanged} className={timePickerClass}></input>
-          </div>
-          <div className="m:px-1">
-            <span className="m:mb-1 m:text-sm m:font-medium m:text-gray-900">{t('time interval')}</span>
-            <select required value={interval} onChange={(e) => { setInterval(e.target.value as IntervalType) }} className={timePickerClass}>
-              <option value={'day'}>{t('day')}</option>
-              <option value={'week'}>{t('week')}</option>
-              <option value={'month'}>{t('month')}</option>
-              <option value={'custom'}>{t('custom')}</option>
-            </select>
-          </div>
-        </RibbonMenuSection>
         <RibbonMenuDivider />
       </>}
 
-      {showAnalysisModal && config.TimeAnalysis?.PhaseAnalysis != null &&
-        <Modal mode="accept" wide show={showAnalysisModal} title={t('phase analysis')} onNegative={() => { setShowAnalysisModal(false) }}>
-          <ActivityAnalysis config={config.TimeAnalysis.PhaseAnalysis} />
-        </Modal>
-      }
-      {showPhaseEventModal &&
-        <Modal mode="save" show={showPhaseEventModal} title={t('add phase')} onNegative={() => {
-          setShowModal(false)
-          setUpdateEvent(undefined)
-        }} onPositive={addEvent}>
-          <PhaseCreator onChange={(e) => { setUpdateEvent(e) }} />
-        </Modal>
-      }
+      {showPhaseEventModal && <PhaseDialog onClose={() => { setShowModal(false) }} />}
       {showEventModal &&
         <Modal mode='save' wide={true} show={showEventModal} title={t('events')} onNegative={() => { setShowEventModal(false) }} onPositive={() => { saveFilter(); setShowEventModal(false) }}>
           <EventFilterTool items={Object.values(events).flat()} onChange={filterChanged} />

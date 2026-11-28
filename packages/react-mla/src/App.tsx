@@ -17,6 +17,7 @@ import ErrorBoundary from './components/common/ErrorBoundary'
 import AppShortcuts from './components/common/AppShortcuts'
 import Footer from './components/common/Footer'
 import MapView from './components/map/Map'
+import AnalysisView from './components/analysis/AnalysisView'
 import i18n from "i18next";
 
 import 'vis-network/styles/vis-network.min.css'
@@ -51,6 +52,11 @@ export default function App () {
             <div className={(map ? '' : 'm:hidden ') + 'm:h-full m:w-1 m:bg-gray-300 m:z-10 m:hover:cursor-col-resize'} />
             <MapView className={(map ? '' : 'm:hidden ') + 'm:h-full m:w-full m:flex-1'} />
           </ErrorBoundary>)}
+
+          {/* The time line and the phase analysis cover the chart, which keeps its state underneath */}
+          <ErrorBoundary>
+            <AnalysisView className="m:absolute m:inset-0 m:z-20" />
+          </ErrorBoundary>
         </section>
         
           <Footer />

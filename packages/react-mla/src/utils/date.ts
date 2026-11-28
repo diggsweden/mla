@@ -5,8 +5,9 @@
 import { IChartBase, IHistory, ITimeSpan } from "../interfaces/data-models"
 import { DateTime } from 'luxon'
 
+// Dates and times are always shown in the local time of the user
 export function toDateString (d?: DateTime): string | undefined {
-  d = d?.toUTC()
+  d = d?.toLocal()
   if (d == null) {
     return undefined
   }
@@ -15,7 +16,7 @@ export function toDateString (d?: DateTime): string | undefined {
 }
 
 export function toTimeString (d?: DateTime): string | undefined {
-  d = d?.toUTC()
+  d = d?.toLocal()
   if (d == null || (d.hour == 23 && d.minute == 59) || (d.hour == 0 && d.minute == 0)) {
     return undefined
   }
@@ -67,12 +68,12 @@ export function fixDate (value: string | undefined | Date | DateTime): DateTime 
     }
 
     if (typeof value === 'string') {
-      // The dates are shown in UTC, so a date without a time zone is read as UTC to be shown as it was sent.
-      // A date with a time zone keeps its point in time. Both are then kept in the time zone of the user, as before
-      date = DateTime.fromISO(value, { zone: 'utc' })
+      // A date without a time zone is a local time, as it is shown in local time.
+      // A date with a time zone keeps its point in time, in the time zone of the user
+      date = DateTime.fromISO(value)
 
       if (!date.isValid) {
-        date = DateTime.fromSQL(value, { zone: 'utc' })
+        date = DateTime.fromSQL(value)
       }
 
       date = date.toLocal()

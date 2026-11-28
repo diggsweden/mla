@@ -8,11 +8,12 @@ import viewService from '../../services/viewService'
 import configService from '../../services/configurationService'
 import type { IChartBase, ILink, IPhaseEvent } from '../../interfaces/data-models'
 import { getId } from '../../utils/utils'
-import Modal from '../common/Modal'
-import PhaseCreator from '../modal/PhaseCreator'
+import PhaseDialog from '../modal/PhaseDialog'
 import { getDateBetween, isSameDay, toDateAndTimeString, toDateString } from '../../utils/date'
 import useAppStore from '../../store/app-store'
 import Icon from '../common/Icon'
+import TimeIntervalPicker from './TimeIntervalPicker'
+import { phaseStyle } from '../../utils/color'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
@@ -31,6 +32,9 @@ interface History {
   event?: IPhaseEvent
 }
 
+// The background and text of a phase: its own color, softened, or the one phases have always had
+const phaseColors = (event?: IPhaseEvent) => (event?.Color != null ? phaseStyle(event.Color) : { background: 'rgb(68, 105, 149)', color: '#ffffff' })
+
 function ActivityTool (props: Props) {
   const { t } = useTranslation();
   const ref = createRef<HTMLLIElement>()
@@ -46,7 +50,6 @@ function ActivityTool (props: Props) {
   const setSelected = useMainStore((state) => state.setSelected)
   const maxDate = useMainStore((state) => state.maxDate)
 
-  const setEvent = useMainStore((state) => state.setPhaseEvent)
   const [editEvent, setEditevent] = useState(undefined as undefined | IPhaseEvent)
   const type = configService.getConfiguration().TimeAnalysis?.PhaseAnalysis?.EntityTypeId
 
@@ -231,6 +234,8 @@ function ActivityTool (props: Props) {
 
   return (
     <div className={props.className}>
+      {/* The time interval of the timeline, which this flow follows */}
+      <TimeIntervalPicker />
       {/* With an activity type, the flow shows its activities, and the changes of the other entities and relations when asked to */}
       {type &&
         <label className="m:flex m:items-center m:gap-2 m:px-3 m:py-2.5 m:border-b m:border-gray-200 m:text-[12px] m:cursor-pointer">
@@ -242,14 +247,15 @@ function ActivityTool (props: Props) {
         {historyView.map(function (m, i) {
           if (m.separator && m.rubrik) {
             return (
-              <li key={i} className="m:flex m:items-center m:gap-2 m:mb-2 m:mt-1 m:rounded-md m:bg-blue-50 m:text-blue-950">
+              // A phase has its own color, or the one of the theme
+              <li key={i} className="m:flex m:items-center m:gap-2 m:mb-2 m:mt-1 m:rounded-md" style={{ background: phaseColors(m.event).background, color: phaseColors(m.event).color }}>
                 <button type="button" title={t('show phase')} onClick={() => { if (m.event != null) setEventTime(m.event, i) }}
                   className="m:flex m:flex-1 m:items-baseline m:justify-between m:gap-2 m:min-w-0 m:pl-2.5 m:py-1.5 m:text-left m:cursor-pointer">
                   <span className="m:text-[12px] m:font-bold m:truncate">{m.rubrik}</span>
                   <span className="m:text-[11px] m:whitespace-nowrap">{toDateString(m.date)}</span>
                 </button>
                 <button type="button" aria-label={t('edit phase')} title={t('edit phase')} onClick={() => { if (m.event != null) setEditevent({ ...m.event }) }}
-                  className="m:w-7 m:h-7 m:mr-1 m:shrink-0 m:flex m:items-center m:justify-center m:rounded m:hover:bg-blue-100 m:cursor-pointer">
+                  className="m:w-7 m:h-7 m:mr-1 m:shrink-0 m:flex m:items-center m:justify-center m:rounded m:hover:bg-black/10 m:cursor-pointer">
                   <Icon name="edit" className="m:h-3.5 m:w-3.5" />
                 </button>
               </li>
@@ -282,9 +288,7 @@ function ActivityTool (props: Props) {
         })}
       </ol>
       {editEvent &&
-        <Modal mode="save" show={editEvent !== null} title={t('edit phase')} onNegative={() => { setEditevent(undefined) }} onPositive={() => { setEvent(editEvent); setEditevent(undefined) }}>
-          <PhaseCreator value={editEvent} onChange={(e) => { setEditevent(e) }} />
-        </Modal>
+        <PhaseDialog focusId={editEvent.Id} onClose={() => { setEditevent(undefined) }} />
 
       }
     </div>

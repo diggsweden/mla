@@ -274,8 +274,8 @@ class ViewService {
     }
 
     if (conf?.propertyConfiguration.FieldType === 'Date') {
-      // The dates are shown in UTC, so a date without a time zone is read as UTC to keep the same day
-      return conf.property?.Value ? toDateAndTimeString(DateTime.fromISO(conf.property?.Value?.toString(), { zone: 'utc' })) : ''
+      // A date without a time zone is a local date, and it is shown in local time
+      return conf.property?.Value ? toDateAndTimeString(DateTime.fromISO(conf.property?.Value?.toString())) : ''
     }
 
     if (conf?.propertyConfiguration.FieldType === 'Boolean') {

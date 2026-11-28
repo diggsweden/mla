@@ -224,7 +224,28 @@
         "PhaseAnalysis": {
             "EntityTypeId": "handelse",
             "LinkTypeId": "LT6",
-            "LinkPropertyId": "LT6E1"
+            "LinkPropertyId": "LT6E1",
+            "Presets": [
+                {
+                    "Name": "Crime scripting",
+                    "Labels": {
+                        "Phase": "Akt",
+                        "EmptyPhase": "Kunskapslucka"
+                    },
+                    "Groups": [
+                        { "Name": "Aktörer", "EntityTypeIds": ["person", "organisation"] },
+                        { "Name": "Rekvisita", "EntityTypeIds": ["fordon", "konto"] },
+                        { "Name": "Platser", "EntityTypeIds": ["adress"] }
+                    ],
+                    "NoteRows": ["Möjliggörande förhållanden", "Hinder och misstag", "Ingripandepunkter"]
+                }
+            ],
+            "PhaseTemplates": [
+                {
+                    "Name": "Brottsskript (Cornish)",
+                    "Phases": ["Förberedelse", "Inträde", "Förutsättning", "Instrumentell förutsättning", "Instrumentell initiering", "Instrumentellt genomförande", "Genomförande", "Efterförhållande", "Utträde"]
+                }
+            ]
         }
     },
     "Domain": {

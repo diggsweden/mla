@@ -8,6 +8,8 @@ interface IPhaseEvent {
   Id: string
   Date: DateTime
   Description: string
+  // The background of the phase, where it is shown. Without it the phase has the color of the theme
+  Color?: string
 }
 
 export type {
