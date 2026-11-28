@@ -54,3 +54,24 @@ export function alignArrowEnds (network: Network) {
     }
   })
 }
+
+interface Renderer {
+  _drawEdges?: (ctx: CanvasRenderingContext2D) => void
+  _drawArrows?: (ctx: CanvasRenderingContext2D) => void
+}
+
+// vis-network draws the lines, then the entities with their names, and the arrows last, so that an arrow was drawn over the name
+// of an entity that its line went under. The arrows are drawn with their lines instead, under the entities
+export function drawArrowsWithLines (network: Network) {
+  const renderer = (network as unknown as { renderer?: Renderer }).renderer
+  const drawEdges = renderer?._drawEdges
+  const drawArrows = renderer?._drawArrows
+  if (renderer == null || drawEdges == null || drawArrows == null) {
+    return
+  }
+  renderer._drawEdges = (ctx) => {
+    drawEdges.call(renderer, ctx)
+    drawArrows.call(renderer, ctx)
+  }
+  renderer._drawArrows = () => { /* drawn with the lines */ }
+}
