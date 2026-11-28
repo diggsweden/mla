@@ -70,12 +70,13 @@ export default function SearchTool (props: Props) {
         if (e.Max === e.Min) {
           params.push(`${e.Min} ${config.Name.toLowerCase()}`)
         } else if (e.Max != null) {
-          params.push(`${e.Min} ${t('to')} ${e.Max} ${config.Name.toLowerCase()}`)
+          params.push(`${e.Min} ${t('up to')} ${e.Max} ${config.Name.toLowerCase()}`)
         } else {
-          params.push(`${'at least'} ${e.Min} ${config.Name.toLowerCase()}`)
+          params.push(`${t('at least').toLowerCase()} ${e.Min} ${config.Name.toLowerCase()}`)
         }
       })
-      text += params.join(` ${t(service.Parameters.EntityConfiguration === 'OR' ? 'or' : 'and')} `)
+      // The small words of the sentence, in lower case in the middle of it
+      text += params.join(t(service.Parameters.EntityConfiguration === 'OR' ? 'types or' : 'types and'))
     }
 
     if (service.Parameters.GeoData === true) {
