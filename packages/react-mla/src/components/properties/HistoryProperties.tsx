@@ -226,7 +226,7 @@ function HistoryProperties (props: Props) {
     return null
   }
 
-  const field = 'm:w-full m:box-border m:bg-white m:border m:border-gray-300 m:text-gray-900 m:text-[13px] m:rounded-md m:px-2 m:h-8 m:disabled:opacity-50'
+  const field = 'm:w-full m:box-border m:bg-white m:border m:border-gray-300 m:text-gray-900 m:text-[13px] m:rounded-md m:px-2 m:h-8 m:disabled:bg-gray-50 m:disabled:text-gray-400'
   const label = 'm:text-[12px] m:font-semibold m:text-gray-900'
   const configs = configService.getProperties(current).map(p => p.propertyConfiguration)
   // Newest first, as the latest is the one that holds now
@@ -270,23 +270,24 @@ function HistoryProperties (props: Props) {
   }
 
   return (
-    <section aria-label={t('time and history')} className={'m:px-3 m:mt-4 m:mb-3 ' + (props.className ?? '')}>
-      <div className="m:border m:border-gray-300 m:rounded-lg">
+    <section aria-label={t('time and history')} className={'m:mt-3 m:mb-3 m:border-t m:border-gray-200 ' + (props.className ?? '')}>
+      <div>
         <button type="button" aria-expanded={open} onClick={() => { setOpen(!open) }}
-          className="m:w-full m:flex m:items-center m:gap-2 m:px-3 m:py-2.5 m:text-left m:cursor-pointer m:rounded-lg m:hover:bg-gray-50">
+          className="m:w-full m:flex m:items-center m:gap-2 m:px-4 m:py-3 m:text-left m:cursor-pointer m:hover:bg-gray-50">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={'m:text-gray-600 m:shrink-0 m:transition-transform ' + (open ? 'm:rotate-90' : '')}><path d="M9 6l6 6-6 6" /></svg>
-          <span className="m:text-[13px] m:font-bold">{t('time and history')}</span>
+          <span className="m:text-[12px] m:font-bold m:tracking-wider m:uppercase m:text-gray-600">{t('time and history')}</span>
           <span className="m:ml-auto m:text-[12px] m:text-gray-600 m:truncate">{open ? (isEvent ? t('moment') : t('validity')) : summary}</span>
         </button>
 
         {open && (
-          <div className="m:flex m:flex-col m:gap-3 m:px-3 m:pb-3 m:pt-1 m:border-t m:border-gray-200">
-            <div role="radiogroup" aria-label={t('kind of time')} className="m:grid m:grid-cols-2 m:mt-2 m:border m:border-gray-300 m:rounded-md m:overflow-hidden">
+          <div className="m:flex m:flex-col m:gap-3 m:px-4 m:pb-1">
+            {/* A calm choice, so that the direction of a relation is the only strong color in the panel */}
+            <div role="radiogroup" aria-label={t('kind of time')} className="m:grid m:grid-cols-2 m:gap-1 m:p-[3px] m:bg-gray-100 m:rounded-md">
               <button type="button" role="radio" aria-checked={isEvent} disabled={!isEvent && !canBeMoment} title={!isEvent && !canBeMoment ? t('moment needs one version') : undefined}
                 onClick={() => { if (!isEvent) setEvent(current) }}
-                className={'m:text-[12px] m:font-semibold m:py-1.5 m:cursor-pointer m:disabled:opacity-40 m:disabled:cursor-default ' + (isEvent ? 'm:bg-primary m:text-white' : 'm:bg-white m:text-gray-700 m:enabled:hover:bg-gray-100')}>{t('moment')}</button>
+                className={'m:text-[12px] m:font-semibold m:py-1 m:rounded m:cursor-pointer m:disabled:opacity-40 m:disabled:cursor-default ' + (isEvent ? 'm:bg-white m:text-gray-900 m:shadow-sm' : 'm:text-gray-600 m:enabled:hover:text-gray-900')}>{t('moment')}</button>
               <button type="button" role="radio" aria-checked={!isEvent} onClick={() => { if (isEvent) setHistory(current) }}
-                className={'m:text-[12px] m:font-semibold m:py-1.5 m:border-l m:border-gray-300 m:cursor-pointer ' + (!isEvent ? 'm:bg-primary m:text-white' : 'm:bg-white m:text-gray-700 m:hover:bg-gray-100')}>{t('validity')}</button>
+                className={'m:text-[12px] m:font-semibold m:py-1 m:rounded m:cursor-pointer ' + (!isEvent ? 'm:bg-white m:text-gray-900 m:shadow-sm' : 'm:text-gray-600 m:hover:text-gray-900')}>{t('validity')}</button>
             </div>
             <p className="m:-mt-1 m:text-[12px] m:text-gray-600">{isEvent ? t('moment help') : t('validity help')}</p>
 

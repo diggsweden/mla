@@ -15,10 +15,11 @@ const RADIUS = 34
 // gets a light blue background, so that it is seen which of the selected it is
 export function useFocusHighlight (network: Network | undefined) {
   const focusedId = useAppStore((state) => state.focusedId)
-  const selectedCount = useMainStore((state) => state.selectedIds.length)
+  const selectedIds = useMainStore((state) => state.selectedIds)
 
   useEffect(() => {
-    if (network == null || focusedId == null || selectedCount < 2) {
+    // One selected is already shown as selected. Something else in the panel, like an end of a selected relation, is shown too
+    if (network == null || focusedId == null || (selectedIds.length < 2 && selectedIds.includes(focusedId))) {
       return
     }
     const id = focusedId
@@ -40,5 +41,5 @@ export function useFocusHighlight (network: Network | undefined) {
       network.off('afterDrawing', after)
       network.redraw()
     }
-  }, [network, focusedId, selectedCount])
+  }, [network, focusedId, selectedIds])
 }

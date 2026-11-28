@@ -300,5 +300,7 @@
   "show on map": "Show on map",
   "two entities": "2 entities",
   "types or": " or ",
-  "line type": "Line type"
+  "line type": "Line type",
+  "open entity": "Open {{name}}",
+  "a relation": "Relation"
 }

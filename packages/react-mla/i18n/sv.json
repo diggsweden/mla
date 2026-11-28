@@ -300,5 +300,7 @@
   "show on map": "Visa på kartan",
   "two entities": "2 entiteter",
   "types or": " eller ",
-  "line type": "Strecktyp"
+  "line type": "Strecktyp",
+  "open entity": "Öppna {{name}}",
+  "a relation": "Relation"
 }

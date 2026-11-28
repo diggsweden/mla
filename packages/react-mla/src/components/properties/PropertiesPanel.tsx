@@ -35,6 +35,8 @@ interface Described {
   icon: string
   color?: string
   source?: string
+  // What the header says under the name, when it is not the type
+  subtitle?: string
 }
 
 function describe (id: string, t: (key: string) => string): Described | undefined {
@@ -57,7 +59,10 @@ function describe (id: string, t: (key: string) => string): Described | undefine
     const name = own ? own : typeName
     const arrow = link.Direction === 'TO' ? ' → ' : link.Direction === 'FROM' ? ' ← ' : link.Direction === 'BOTH' ? ' ↔ ' : ' – '
     const between = from != null && to != null ? nameOf(from) + arrow + nameOf(to) : typeName
-    return { id, kind: 'link', name, type: own && own !== typeName ? typeName + ' · ' + between : between, icon: 'link', source: link.SourceSystemId }
+    // In the header, where the panel shows whom it is between, the type is enough. It does not say the name again,
+    // as for a type that is called Relation, and then says whom it is between
+    const kind = own && own !== typeName ? typeName : t('a relation')
+    return { id, kind: 'link', name, type: own && own !== typeName ? typeName + ' · ' + between : between, subtitle: kind !== name ? kind : between, icon: 'link', source: link.SourceSystemId }
   }
   const computed = state.computedLinks.find(l => getId(l) === id)
   if (computed != null) {
@@ -193,7 +198,7 @@ function PropertiesPanel (props: Props) {
       <Badge icon={described.icon} color={described.color} size={34} />
       <div className="m:flex m:flex-col m:min-w-0 m:flex-1">
         <span className="m:text-[15px] m:font-bold m:leading-tight m:truncate" title={described.name}>{described.name}</span>
-        <span className="m:text-[12px] m:text-gray-600 m:truncate">{described.type}</span>
+        <span className="m:text-[12px] m:text-gray-600 m:truncate">{described.subtitle ?? described.type}</span>
       </div>
       {described.source && <span title={t('source system')} className="m:text-[11px] m:font-semibold m:text-gray-600 m:bg-gray-100 m:rounded-full m:px-2 m:py-0.5 m:max-w-24 m:truncate">{described.source}</span>}
     </>
