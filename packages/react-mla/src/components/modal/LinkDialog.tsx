@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import type { ILinkConfiguration } from '../../interfaces/configuration'
 import type { IEntity, ILink } from '../../interfaces/data-models'
 import { type LinkDirection, buildLink, defaultDirection, directionOf } from './link-utils'
-import { DirectionButtons, DirectionLine, EntityChip } from './link-parts'
+import { DirectionButtons, EntityChip } from './link-parts'
 import Modal from '../common/Modal'
 import LinkCreator from './LinkCreator'
 
@@ -54,23 +54,17 @@ function LinkDialog (props: Props) {
     <Modal mode="save" show={true} valid={valid} title={t('new link')} positiveLabel={t('create link')} fitScreen
       footerNote={!valid && missing.length > 0 ? <span className="m:text-[13px] m:text-red-700">{t('fill in', { names: missing.join(', ') })}</span> : undefined}
       onNegative={props.onCancel} onPositive={() => { props.onSave(link) }}>
-      {/* Who it is between and which way it points are always seen */}
-      <div className="m:shrink-0 m:flex m:flex-col m:gap-4 m:text-left m:px-6 m:pt-5 m:pb-4 m:border-b m:border-gray-200">
-        <section aria-label={t('between')} className="m:grid m:grid-cols-[minmax(0,1fr)_minmax(80px,140px)_minmax(0,1fr)] m:items-center m:gap-3">
-          <EntityChip entity={first} />
-          <div className="m:flex m:flex-col m:items-center m:gap-1 m:text-primary">
-            <span className="m:text-[12px] m:font-semibold m:text-gray-700 m:text-center">{type.Name}</span>
-            <DirectionLine direction={direction} />
-          </div>
-          <EntityChip entity={second} />
-        </section>
-
-        <DirectionButtons direction={direction} first={first} second={second} onChange={chooseDirection} />
-      </div>
+      {/* Who it is between and which way it points are always seen, on one row: the buttons of the direction are the arrow between them */}
+      <section aria-label={t('between')} className="m:shrink-0 m:flex m:items-center m:gap-3 m:text-left m:px-6 m:py-4 m:border-b m:border-gray-200">
+        <EntityChip oneRow entity={first} />
+        <DirectionButtons onlyButtons direction={direction} first={first} second={second} onChange={chooseDirection} />
+        <EntityChip oneRow entity={second} />
+      </section>
 
       {/* The type and the details scroll when they do not fit */}
       <div className="mla-form-fields m:min-h-0 m:flex-1 m:overflow-y-auto">
-        {types.length > 1 && (
+        {/* Also the only type there can be is shown as the choice, chosen, so that the dialog looks the same and it is seen what is made */}
+        {types.length > 0 && (
           <div className="m:flex m:flex-col m:gap-1.5 m:text-left m:px-6 m:pt-4">
             {types.length > 3
               // Many types are a list, with the description of the one chosen below it

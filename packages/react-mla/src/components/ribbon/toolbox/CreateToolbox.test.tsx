@@ -100,12 +100,17 @@ describe('a relation drawn between two entities', () => {
     expect(pointsTo()).toBe('BOTH')
   })
 
-  test('between two of a kind has no choice of type when there is only one', async () => {
+  test('between two of a kind shows the only type there can be as chosen', async () => {
     const screen = await render(<Ribbon />)
     useAppStore.getState().setDrawnLink({ from: 'annaperson', to: 'boperson', drawn: true })
     await expect.element(screen.getByRole('heading', { name: 'New relation' })).toBeInTheDocument()
-    expect(screen.getByRole('radio', { name: /^Relation/ }).elements()).toHaveLength(0)
-    await expect.element(screen.getByRole('region', { name: 'Between' }).getByText('Relation', { exact: true })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: /^Relation/ }).elements()).toHaveLength(1)
+    await expect.element(screen.getByRole('radio', { name: /^Relation/ })).toBeChecked()
+    // Who it is between, and which way it points, on one row
+    const between = screen.getByRole('region', { name: 'Between' })
+    await expect.element(between.getByText('Anna', { exact: true })).toBeInTheDocument()
+    await expect.element(between.getByText('Bo', { exact: true })).toBeInTheDocument()
+    await expect.element(between.getByRole('radiogroup', { name: 'Direction' })).toBeInTheDocument()
   })
 
   test('that no type of relation can be between tells the user so, and makes nothing', async () => {
