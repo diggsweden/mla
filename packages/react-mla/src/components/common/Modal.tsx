@@ -27,6 +27,9 @@ interface ModalProps {
   footerNote?: React.ReactNode
 }
 
+// The buttons at the bottom of a dialog: the same size wherever the dialog is opened, and wide enough to be easy to hit
+const footerButton = 'm:text-[14px] m:leading-5 m:min-w-20 m:py-1.5'
+
 function Modal (props: ModalProps) {
   const { t } = useTranslation() 
   function onPositive () {
@@ -81,23 +84,24 @@ function Modal (props: ModalProps) {
                 </div>}
                 <div className={'m:grow m:flex m:flex-col m:justify-between' + (props.fitScreen ? ' m:min-h-0' : '')}>
                   {props.children}
+                  {/* The buttons have their own size of text, as a dialog takes the size of where it is opened, like the smaller one of the ribbon */}
                   {props.mode !== 'ok' && props.onPositive && props.onNegative &&
                     <div className="m:flex m:justify-end m:items-center m:p-3 m:gap-x-2 m:border-t m:border-gray-200 m:shrink-0">
                       {props.footerNote != null && <div className="m:mr-auto m:text-left">{props.footerNote}</div>}
-                      <Button dataModalHide='defaultModal' disabled={props.valid != null ? !props.valid : false} onClick={props.onPositive}>
+                      <Button dataModalHide='defaultModal' disabled={props.valid != null ? !props.valid : false} onClick={props.onPositive} className={footerButton}>
                         {props.positiveLabel ?? (props.mode === 'save' ? t('save') : t('yes'))}
                       </Button>
                       {/* Cancelling is always possible, also when what is filled in is not valid */}
-                      <Button dataModalHide='defaultModal' onClick={props.onNegative} type="secondary">
+                      <Button dataModalHide='defaultModal' onClick={props.onNegative} type="secondary" className={footerButton}>
                         {props.mode === 'save' ? t('cancel') : t('no')}
                       </Button>
                     </div>
                   }
                   {props.mode === 'ok' &&
                     <div className="m:flex m:justify-end m:p-3 m:gap-x-2 m:border-t m:border-gray-200">
-                      <button data-modal-hide="defaultModal" type="button" onClick={props.onNegative} className="m:text-white m:bg-primary m:enabled:hover:bg-blue-800 m:disabled:opacity-50 m:focus:ring-4 m:focus:outline-none m:focus:ring-blue-300 m:font-medium m:rounded-lg m:text-sm m:px-5 m:py-2 m:text-center">
+                      <Button dataModalHide='defaultModal' onClick={() => { props.onNegative?.() }} className={footerButton}>
                         {t('ok')}
-                      </button>
+                      </Button>
                     </div>
                   }
                 </div>
