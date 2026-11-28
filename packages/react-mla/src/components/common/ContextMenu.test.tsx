@@ -7,6 +7,7 @@ import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
 import React from 'react'
 import ContextMenu from './ContextMenu'
+import EntityMaker from '../modal/EntityMaker'
 import useAppStore from '../../store/app-store'
 import useMainStore from '../../store/main-store'
 import useSearchStore from '../../store/search-state'
@@ -35,7 +36,7 @@ const relation: ILink = {
 
 beforeEach(() => {
   useMainStore.setState({ entities: {}, links: {} })
-  useAppStore.setState({ linkTool: false, linkFrom: undefined, drawnLink: undefined, propertiesClosed: false, selectedGeoFeature: undefined })
+  useAppStore.setState({ linkTool: false, linkFrom: undefined, drawnLink: undefined, entityRequest: undefined, propertiesClosed: false, selectedGeoFeature: undefined })
   useMainStore.getState().addEntity(
     person('anna', { personE2: 'Anna' }, { LabelChart: 'Anna' }),
     person('bo', { personE2: 'Bo' }, { LabelChart: 'Bo' }),
@@ -128,11 +129,18 @@ describe('the style of the line of a relation', () => {
 })
 
 describe('the menu of the empty chart', () => {
-  test('makes an entity where it was opened', async () => {
+  test('opens the dialog of the type, and makes the entity where the menu was opened', async () => {
     const { screen } = await open([])
     await screen.getByRole('menuitem', { name: 'Bolag' }).click()
-    const made = Object.values(useMainStore.getState().entities).map(e => e[0]).find(e => e.TypeId === 'organisation' && e.Id !== 'acme')
-    expect(made).toMatchObject({ PosX: 40, PosY: 60 })
+    expect(useAppStore.getState().entityRequest).toMatchObject({ typeId: 'organisation', position: { x: 40, y: 60 } })
+    // Nothing is made until the dialog is saved
+    const made = () => Object.values(useMainStore.getState().entities).map(e => e[0]).find(e => e.TypeId === 'organisation' && e.Id !== 'acme')
+    expect(made()).toBeUndefined()
+
+    const dialog = await render(<EntityMaker />)
+    await dialog.getByRole('button', { name: 'Create bolag' }).click()
+    expect(made()).toMatchObject({ PosX: 40, PosY: 60 })
+    expect(useAppStore.getState().entityRequest).toBeUndefined()
   })
 
   test('is used with the keys: up and down between the choices, and Escape closes it', async () => {

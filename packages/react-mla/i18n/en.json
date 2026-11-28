@@ -304,5 +304,14 @@
   "open entity": "Open {{name}}",
   "a relation": "Relation",
   "explain field": "Explanation of {{name}}",
-  "show explanations": "Show explanations"
+  "show explanations": "Show explanations",
+  "new entity": "New entity",
+  "create named": "Create {{name}}",
+  "clear field": "Clear {{name}}",
+  "versions": "Versions",
+  "Date": "Date",
+  "events as table": "Show the events as a table",
+  "to fetch information": " to fetch information",
+  "up to": "to",
+  "types and": " and "
 }

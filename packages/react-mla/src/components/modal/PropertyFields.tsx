@@ -3,29 +3,32 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { useEffect, useEffectEvent, useRef, useState } from 'react'
-import { type ILink } from '../../interfaces/data-models'
+import { type IEntity, type ILink } from '../../interfaces/data-models'
 import configService from '../../services/configurationService'
 import Property from '../common/Property'
 import { produce } from 'immer'
 import { IPropertyConfiguration } from '../../interfaces/configuration'
 import useAppStore from '../../store/app-store'
 
-interface Props {
-  link: ILink
+interface Props<T extends IEntity | ILink> {
+  // The entity or relation that is made, whose properties are filled in
+  item: T
   validChanged: (valid: boolean) => void
   // The properties that are not filled in as they must be, by their type
   invalidChanged?: (typeIds: string[]) => void
-  onChange: (entity: ILink) => void
+  onChange: (item: T) => void
 }
 
-function LinkCreator (props: Props) {
+// The fields of what is made, two to a row: a text of more lines has a row of its own, a yes or no lines up with the field beside it,
+// and the explanations are under the fields so that fields side by side stay level
+function PropertyFields<T extends IEntity | ILink> (props: Props<T>) {
   // The explanations of the fields are shown as the panel shows them
   const fieldHelp = useAppStore((state) => state.fieldHelp)
-  const { link, onChange } = props
+  const { item, onChange } = props
 
-  const [properties, setProperties] = useState(configService.getProperties(link))
+  const [properties, setProperties] = useState(configService.getProperties(item))
   function setProperty (prop: IPropertyConfiguration, value?: string | number | boolean) {
-    const up = produce(link, draft => {
+    const up = produce(item, (draft: IEntity | ILink) => {
       const existing = draft.Properties.find(p => p.TypeId === prop.TypeId)
       if (existing) {
         existing.Value = value
@@ -52,10 +55,10 @@ function LinkCreator (props: Props) {
     props.invalidChanged?.(Object.keys(validMap.current).filter(key => !validMap.current[key]))
   }
 
-  // Report the initial link to the parent when mounting
-  const reportLink = useEffectEvent(() => { onChange(link) })
+  // Report what is made to the parent when mounting
+  const reportItem = useEffectEvent(() => { onChange(item) })
   useEffect(() => {
-    reportLink()
+    reportItem()
   }, [])
 
   let first = -1
@@ -88,7 +91,7 @@ function LinkCreator (props: Props) {
               helpOpen={fieldHelp}
               helpBelow
               fieldClassName={alone.has(config.TypeId) ? 'm:w-[calc(50%-0.375rem)]' : undefined}
-              value={e.property?.Value ?? ''}
+              value={e.property?.Value}
               // A field that must be filled in has a star after its name
               config={config.Required ? { ...config, Name: config.Name + ' *' } : config}
               autofocus={first === 0}
@@ -101,4 +104,4 @@ function LinkCreator (props: Props) {
   )
 }
 
-export default LinkCreator
+export default PropertyFields

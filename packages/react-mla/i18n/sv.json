@@ -304,5 +304,14 @@
   "open entity": "Öppna {{name}}",
   "a relation": "Relation",
   "explain field": "Förklaring av {{name}}",
-  "show explanations": "Visa förklaringar"
+  "show explanations": "Visa förklaringar",
+  "new entity": "Ny entitet",
+  "create named": "Skapa {{name}}",
+  "clear field": "Töm {{name}}",
+  "versions": "Versioner",
+  "Date": "Datum",
+  "events as table": "Visa händelserna som en tabell",
+  "to fetch information": " för att hämta uppgifter",
+  "up to": "till",
+  "types and": " och "
 }

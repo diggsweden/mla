@@ -13,7 +13,6 @@ import type { IEntity, ILink, LinkDashStyle } from '../../interfaces/data-models
 import type { IColor } from '../../interfaces/configuration/theme-configuration'
 import { getId } from '../../utils/utils'
 import { shortestPath } from '../../utils/dijkstra'
-import { newEntity } from '../../utils/new-entity'
 import {
   endsOf, neighboursOf, selectType, serviceChoices, setContourColor, setIconColor, setLinkStyle, setShownOnMap
 } from '../../utils/chart-actions'
@@ -182,6 +181,7 @@ export default function ContextMenu (props: Props) {
   const setPropertiesClosed = useAppStore((state) => state.setPropertiesClosed)
   const startLinkFrom = useAppStore((state) => state.startLinkFrom)
   const setDrawnLink = useAppStore((state) => state.setDrawnLink)
+  const requestEntity = useAppStore((state) => state.requestEntity)
 
   const selectedIds = useMainStore((state) => state.selectedIds)
   const selectedEntities = useMainStore((state) => state.selectedEntities)
@@ -192,7 +192,6 @@ export default function ContextMenu (props: Props) {
   const data = useMainStore((state) => state.data)
   const network = useMainStore((state) => state.network)
   const setSelected = useMainStore((state) => state.setSelected)
-  const addEntity = useMainStore((state) => state.addEntity)
   const updateLink = useMainStore((state) => state.updateLink)
   const setExploreTool = useSearchStore((state) => state.setExploreTool)
   const performExplore = useSearchStore((state) => state.explore)
@@ -484,11 +483,8 @@ export default function ContextMenu (props: Props) {
             const view = viewService.getView(type.TypeId, type.GlobalType)
             return (
               <Item key={type.TypeId} icon={view.Icon} iconColor={view.Color} label={type.Name} title={type.Description}
-                onClick={run(() => {
-                  const entity = newEntity(type, chartPosition)
-                  addEntity(entity)
-                  window.setTimeout(() => { setSelected([getId(entity)]) }, 100)
-                })} />
+                // The dialog of the type opens, and the entity is placed where the menu was opened when it is made
+                onClick={run(() => { requestEntity({ typeId: type.TypeId, position: chartPosition }) })} />
             )
           })}
           <Separator />

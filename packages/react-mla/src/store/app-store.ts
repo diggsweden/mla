@@ -18,6 +18,10 @@ export type Tool = 'search' | 'explore' | 'import' | 'activity'
 // and it can be of the types given, or else of any type that can be between the two
 export interface LinkRequest { from: string, to: string, typeIds?: string[], drawn?: boolean }
 
+// An entity to be made. Every request has its own key, so that the dialog starts over also for the same type
+export interface EntityRequest { typeId: string, position?: { x: number, y: number }, key: number }
+let entityRequests = 0
+
 interface AppState {
   contextmenuPosition: { x: number, y: number } | undefined
   // Where in the chart the menu was opened, for what is made there
@@ -69,6 +73,9 @@ interface AppState {
   // The entities a relation is to be made between, by their ids in the chart, until it is made or cancelled
   drawnLink: LinkRequest | undefined
   setDrawnLink: (link?: LinkRequest) => void
+  // An entity to be made, by its type, and where in the chart when it was asked for from there, until it is made or cancelled
+  entityRequest: EntityRequest | undefined
+  requestEntity: (request?: { typeId: string, position?: { x: number, y: number } }) => void
   editingShapeId: string | undefined
   setEditingShapeId: (id?: string) => void
 
@@ -233,6 +240,10 @@ const useAppStore = create<AppState>((set) => ({
   linkFrom: undefined,
   startLinkFrom: (id: string) => {
     set(() => ({ linkTool: true, shapeTool: undefined, linkFrom: id }))
+  },
+  entityRequest: undefined,
+  requestEntity: (request) => {
+    set(() => ({ entityRequest: request != null ? { ...request, key: ++entityRequests } : undefined }))
   },
   drawnLink: undefined,
   setDrawnLink: (link?: LinkRequest) => {

@@ -19,6 +19,7 @@ import configService from '../../services/configurationService'
 
 import ContextMenu from "./ContextMenu"
 import LinkMaker from "../modal/LinkMaker"
+import EntityMaker from "../modal/EntityMaker"
 import { useTranslation } from 'react-i18next'
 
 interface Props {
@@ -143,6 +144,7 @@ function AppShortcuts (props: Props) {
     <>
       <ContextMenu copy={copy} paste={paste} delete={() => { setDelete(true) }}></ContextMenu>
       <LinkMaker />
+      <EntityMaker />
       <Modal mode="accept" show={showDelete} title={t('delete')} onNegative={() => { setDelete(false) }} onPositive={performDelete}>
         <Delete entities={selectedEntities} links={selectedLinks} shapes={selectedShapes} />
       </Modal>

@@ -25,13 +25,13 @@ test("should add entity", async () => {
     await expect.element(personButton).toBeInTheDocument()
 
     await personButton.click()
-    await expect.element(page.getByText("Create: Person")).toBeInTheDocument()
+    await expect.element(page.getByText("New entity")).toBeInTheDocument()
 
     await page.getByLabelText("Förnamn").fill("First")
     await new Promise(resolve => setTimeout(resolve, 250));
     await page.getByLabelText("Efternamn").fill("Last")
     await new Promise(resolve => setTimeout(resolve, 250));
-    await page.getByRole('button', { name: 'Save' }).click()
+    await page.getByRole('button', { name: 'Create person' }).click()
 
     await expect.element(page.getByLabelText("Förnamn")).toHaveValue("First")
 })
